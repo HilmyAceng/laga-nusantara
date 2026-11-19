@@ -1,0 +1,1285 @@
+<!doctype html>
+<html lang="id"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#140d24">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);box-sizing:border-box;height:100%}[hidden]{display:none!important}</style>
+</head><body>
+<title>Laga Nusantara</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Teko:wght@500;600;700&family=Nunito:wght@600;700;800&display=swap">
+<style>
+/* Layout: peta top-down layar penuh; HUD karakter kiri-atas, koin & peta mini kanan-atas, kontrol sentuh di bawah, dialog NPC di bawah layar. Satu tampilan gelap, disengaja. */
+:root {
+  --bg: #13101f;
+  --ink: #f7efe3;
+  --ink-dim: #c9bfd6;
+  --gold: #f4b942;
+  --hp: #5ad17a;
+  --xp: #7fb2ff;
+  --red: #e5484d;
+  --panel: rgba(20, 14, 34, 0.88);
+  --line: rgba(244, 185, 66, 0.32);
+  --font-display: "Teko", "Arial Narrow", "Roboto Condensed", system-ui, sans-serif;
+  --font-body: "Nunito", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: dark;
+}
+html, body { height: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-body);
+  overflow: hidden; touch-action: none; user-select: none; -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.stage { position: relative; width: 100%; height: 100%; overflow: hidden; }
+#cv { display: block; width: 100%; height: 100%; }
+button { font-family: inherit; color: inherit; }
+button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+
+/* ---------- HUD ---------- */
+.hud {
+  position: absolute; top: 0; left: 0; right: 0; pointer-events: none;
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;
+  padding-block: 10px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.me { display: grid; gap: 5px; width: min(250px, 46vw); padding: 8px 10px; border-radius: 14px; background: var(--panel); border: 1px solid var(--line); }
+.me-top { display: flex; align-items: baseline; gap: 8px; line-height: 1; }
+.me-top b { font-family: var(--font-display); font-size: 1.35rem; font-weight: 600; }
+.lv { font-family: var(--font-display); font-size: 1.15rem; color: var(--gold); margin-left: auto; font-variant-numeric: tabular-nums; }
+.bar { position: relative; height: 12px; border-radius: 6px; background: rgba(255, 255, 255, 0.1); overflow: hidden; }
+.bar i { position: absolute; inset: 0 auto 0 0; width: 100%; background: var(--hp); transition: width 0.12s linear; }
+.bar.xp { height: 5px; }
+.bar.xp i { background: var(--xp); }
+.bar.low i { background: var(--red); }
+.bar span { position: relative; display: block; font-size: 0.62rem; font-weight: 800; line-height: 12px; text-align: center; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8); font-variant-numeric: tabular-nums; }
+.quest { font-size: 0.72rem; line-height: 1.3; color: var(--ink-dim); }
+.quest b { color: var(--gold); display: block; font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.right { display: grid; justify-items: end; gap: 8px; }
+.chips { display: flex; gap: 6px; align-items: center; }
+.chip { display: flex; align-items: center; gap: 5px; padding: 6px 10px; border-radius: 10px; background: var(--panel); border: 1px solid var(--line); font-weight: 800; font-size: 0.8rem; font-variant-numeric: tabular-nums; }
+.coin { width: 11px; height: 11px; border-radius: 50%; background: var(--gold); box-shadow: inset -2px -2px 0 rgba(0, 0, 0, 0.25); }
+.jamu { width: 9px; height: 12px; border-radius: 3px 3px 4px 4px; background: #c0563a; box-shadow: inset 0 3px 0 #e9d3a9; }
+.icon-btn { pointer-events: auto; width: 36px; height: 36px; border-radius: 10px; cursor: pointer; background: var(--panel); border: 1px solid var(--line); font-weight: 800; }
+#mini { width: 128px; height: 88px; border-radius: 10px; border: 1px solid var(--line); background: #000; image-rendering: pixelated; }
+.boss { position: absolute; left: 50%; top: 10px; transform: translateX(-50%); width: min(360px, 40vw); text-align: center; pointer-events: none; }
+.boss b { font-family: var(--font-display); font-size: 1.3rem; color: #ff8b8e; letter-spacing: 0.02em; }
+.boss .bar i { background: var(--red); }
+.toasts { position: absolute; left: 50%; top: 22%; transform: translateX(-50%); display: grid; gap: 6px; justify-items: center; pointer-events: none; }
+.toast { padding: 6px 14px; border-radius: 10px; background: var(--panel); border: 1px solid var(--line); font-weight: 800; font-size: 0.85rem; white-space: nowrap; animation: pop 0.25s ease-out; }
+.toast.big { font-family: var(--font-display); font-size: 1.8rem; font-weight: 600; color: var(--gold); padding: 4px 18px 0; }
+@keyframes pop { from { transform: scale(0.85); } to { transform: scale(1); } }
+
+/* ---------- Kontrol sentuh ---------- */
+.touch { position: absolute; inset: auto 0 0 0; height: 0; pointer-events: none; }
+.stick {
+  position: absolute; bottom: calc(22px + env(safe-area-inset-bottom, 0px)); left: max(26px, env(safe-area-inset-left, 0px));
+  width: 124px; height: 124px; border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08); border: 2px solid rgba(255, 255, 255, 0.2);
+  pointer-events: auto; touch-action: none;
+}
+.knob { position: absolute; left: 50%; top: 50%; width: 54px; height: 54px; margin: -27px 0 0 -27px; border-radius: 50%; background: rgba(247, 239, 227, 0.35); border: 2px solid rgba(247, 239, 227, 0.6); }
+.pad { position: absolute; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); right: max(14px, env(safe-area-inset-right, 0px)); width: 220px; height: 180px; }
+.tb {
+  position: absolute; width: 60px; height: 60px; border-radius: 50%; pointer-events: auto; touch-action: none;
+  border: 2px solid rgba(255, 255, 255, 0.25); background: rgba(20, 14, 34, 0.62);
+  font-weight: 800; font-size: 0.7rem; display: grid; place-items: center; overflow: hidden;
+}
+.tb.pressed { background: rgba(244, 185, 66, 0.45); }
+.tb span { position: relative; z-index: 1; }
+.tb.atk { width: 84px; height: 84px; right: 0; bottom: 0; background: rgba(229, 72, 77, 0.6); font-size: 0.85rem; }
+.tb.skill { right: 92px; bottom: 2px; background: rgba(61, 139, 253, 0.55); }
+.tb.roll { right: 6px; bottom: 94px; }
+.tb.pot { right: 84px; bottom: 76px; }
+.tb.talk { right: 150px; bottom: 112px; background: rgba(244, 185, 66, 0.7); color: #1b1208; }
+.tb.cd::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(rgba(5, 3, 12, 0.72) calc(var(--cd, 0) * 360deg), transparent 0); }
+
+/* ---------- Overlay & dialog ---------- */
+.overlay {
+  position: absolute; inset: 0; display: grid; place-items: safe center; overflow-y: auto; touch-action: pan-y;
+  padding-block: 16px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  background: radial-gradient(ellipse at center, rgba(19, 16, 31, 0.55), rgba(19, 16, 31, 0.93));
+}
+.panel { width: min(880px, 100%); box-sizing: border-box; padding: 20px; display: grid; gap: 14px; background: var(--panel); border: 1px solid var(--line); border-radius: 20px; box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45); }
+.panel.small { width: min(420px, 100%); text-align: center; }
+.head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 8px 16px; }
+.eyebrow { margin: 0; font-size: 0.7rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); }
+h1 { margin: 0; font-family: var(--font-display); font-weight: 700; font-size: 3rem; line-height: 0.85; text-wrap: balance; }
+h1 span { color: var(--gold); }
+.lead { margin: 0; color: var(--ink-dim); font-size: 0.9rem; line-height: 1.45; max-width: 60ch; }
+.heroes { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+@media (max-width: 640px) { .heroes { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.hero { display: grid; gap: 6px; padding: 10px; border-radius: 14px; cursor: pointer; text-align: left; background: rgba(255, 255, 255, 0.04); border: 2px solid rgba(255, 255, 255, 0.08); }
+.hero[aria-pressed="true"] { border-color: var(--gold); background: rgba(244, 185, 66, 0.1); }
+.hero canvas { width: 100%; height: 90px; display: block; border-radius: 10px; background: #2f5e2c; }
+.hero b { font-family: var(--font-display); font-size: 1.5rem; font-weight: 600; line-height: 0.9; }
+.role { font-size: 0.7rem; color: var(--gold); font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
+.desc { font-size: 0.75rem; color: var(--ink-dim); line-height: 1.35; margin: 0; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: flex-end; }
+.go {
+  border: 0; cursor: pointer; padding: 14px 24px 10px; border-radius: 14px; background: var(--red);
+  font-family: var(--font-display); font-size: 1.6rem; line-height: 1; font-weight: 600;
+  box-shadow: 0 5px 0 #8e2226; transition: transform 0.08s ease, box-shadow 0.08s ease;
+}
+.go:active { transform: translateY(3px); box-shadow: 0 2px 0 #8e2226; }
+.go.alt { background: rgba(255, 255, 255, 0.1); box-shadow: 0 5px 0 rgba(0, 0, 0, 0.35); }
+.go:disabled { opacity: 0.45; cursor: default; }
+.keys { font-size: 0.75rem; color: var(--ink-dim); margin: 0; }
+.keys kbd { font-family: inherit; font-weight: 800; color: var(--ink); padding: 1px 5px; border-radius: 4px; background: rgba(255, 255, 255, 0.1); }
+.btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+
+.dialog {
+  position: absolute; left: 0; right: 0; bottom: 0; display: grid; justify-items: center;
+  padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.dlg { width: min(640px, 100%); box-sizing: border-box; padding: 14px 16px; border-radius: 16px; background: var(--panel); border: 1px solid var(--line); display: grid; gap: 8px; box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.4); }
+.dlg-name { font-family: var(--font-display); font-size: 1.4rem; color: var(--gold); line-height: 1; }
+.dlg-text { margin: 0; font-size: 0.92rem; line-height: 1.45; }
+.dlg-actions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
+.dlg-actions button { border: 1px solid var(--line); background: rgba(255, 255, 255, 0.08); border-radius: 10px; padding: 9px 14px; cursor: pointer; font-weight: 800; font-size: 0.85rem; }
+.dlg-actions button.primary { background: var(--gold); color: #1b1208; border-color: transparent; }
+.dlg-actions button:disabled { opacity: 0.4; cursor: default; }
+.rotate { position: absolute; left: 50%; bottom: calc(170px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); padding: 6px 12px; border-radius: 10px; background: var(--panel); border: 1px solid var(--line); font-size: 0.75rem; font-weight: 700; white-space: nowrap; pointer-events: none; }
+
+@media (max-height: 520px) {
+  .panel { padding: 14px; gap: 10px; }
+  h1 { font-size: 2.3rem; }
+  .lead, .desc { display: none; }
+  .hero { padding: 8px; gap: 4px; }
+  .hero canvas { height: 62px; }
+  .hero b { font-size: 1.25rem; }
+  .heroes { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .me { padding: 6px 8px; gap: 4px; }
+  .quest { font-size: 0.66rem; }
+  #mini { width: 100px; height: 69px; }
+}
+@media (prefers-reduced-motion: reduce) { .go, .bar i { transition: none; } .toast { animation: none; } }
+</style>
+
+<div class="stage">
+  <canvas id="cv" aria-label="Peta petualangan Laga Nusantara"></canvas>
+
+  <div class="hud" id="hud" hidden>
+    <div class="me">
+      <div class="me-top"><b id="hName">Pendekar</b><span class="lv" id="hLv">Lv 1</span></div>
+      <div class="bar" id="hpBar"><i id="hpFill"></i><span id="hpText">120 / 120</span></div>
+      <div class="bar xp" aria-label="EXP"><i id="xpFill"></i></div>
+      <div class="quest" id="questBox"></div>
+    </div>
+    <div class="right">
+      <div class="chips">
+        <span class="chip" aria-label="Koin"><i class="coin"></i><span id="gold">0</span></span>
+        <span class="chip" aria-label="Jamu"><i class="jamu"></i><span id="pots">0</span></span>
+        <button class="icon-btn" id="btnPause" type="button" aria-label="Jeda">❚❚</button>
+      </div>
+      <canvas id="mini" width="128" height="88" aria-label="Peta mini"></canvas>
+    </div>
+  </div>
+  <div class="boss" id="bossBar" hidden><b>Genderuwo</b><div class="bar"><i id="bossFill"></i></div></div>
+  <div class="toasts" id="toasts"></div>
+  <div class="rotate" id="rotate" hidden>Putar HP ke mode lanskap biar lebih leluasa</div>
+
+  <div class="touch" id="touch" hidden>
+    <div class="stick" id="stick"><div class="knob" id="knob"></div></div>
+    <div class="pad">
+      <button class="tb talk" id="bTalk" type="button" hidden><span>Bicara</span></button>
+      <button class="tb roll cd" id="bRoll" type="button"><span>Hindar</span></button>
+      <button class="tb pot" id="bPot" type="button"><span>Jamu</span></button>
+      <button class="tb skill cd" id="bSkill" type="button"><span>Jurus</span></button>
+      <button class="tb atk" id="bAtk" type="button"><span>Serang</span></button>
+    </div>
+  </div>
+
+  <div class="dialog" id="dialog" hidden>
+    <div class="dlg">
+      <div class="dlg-name" id="dlgName"></div>
+      <p class="dlg-text" id="dlgText"></p>
+      <div class="dlg-actions" id="dlgActions"></div>
+    </div>
+  </div>
+
+  <!-- Layar judul & pilih hero -->
+  <div class="overlay" id="select">
+    <div class="panel">
+      <div class="head">
+        <div>
+          <p class="eyebrow">Petualangan aksi</p>
+          <h1>Laga <span>Nusantara</span></h1>
+        </div>
+        <p class="lead">Desa Wanasari diganggu makhluk hutan. Pilih jagoanmu, bantu Ki Lurah, naikkan level, dan kalahkan penunggu gua di timur.</p>
+      </div>
+      <div class="heroes" id="heroes"></div>
+      <div class="row">
+        <button class="go alt" id="btnNew" type="button">Mulai baru</button>
+        <button class="go" id="btnCont" type="button" hidden>Lanjutkan</button>
+      </div>
+      <p class="keys" id="keysHint"></p>
+    </div>
+  </div>
+
+  <div class="overlay" id="pauseBox" hidden>
+    <div class="panel small">
+      <p class="eyebrow">Jeda</p>
+      <h1>Istirahat <span>sejenak</span></h1>
+      <p class="lead" id="pauseStats"></p>
+      <div class="btns">
+        <button class="go" id="btnResume" type="button">Lanjut</button>
+        <button class="go alt" id="btnMenu" type="button">Menu utama</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="win" hidden>
+    <div class="panel small">
+      <p class="eyebrow">Misi utama selesai</p>
+      <h1>Desa <span>selamat</span></h1>
+      <p class="lead" id="winStats"></p>
+      <div class="btns"><button class="go" id="btnWin" type="button">Lanjut bertualang</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- Semua angka & teks yang bisa diubah ada di config.js -->
+<script src="config.js"></script>
+<script>
+(() => {
+  "use strict";
+  const $ = (id) => document.getElementById(id);
+  const cv = $("cv"), ctx = cv.getContext("2d");
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const lerp = (a, b, t) => a + (b - a) * clamp(t, 0, 1);
+  const rand = (a, b) => a + Math.random() * (b - a);
+  const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+  const angDiff = (a, b) => Math.abs(Math.atan2(Math.sin(a - b), Math.cos(a - b)));
+  const store = {
+    get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+    set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
+  };
+
+  // =====================================================================
+  // 1. DATA — semua angka & teks ada di config.js (KONTROL, ATURAN,
+  //    CLASSES, MONSTERS, SPAWN, QUESTS). Di sini hanya rumusnya.
+  // =====================================================================
+  const L = ATURAN.level;
+  const expNeed = (lv) => Math.round(L.expDasar * Math.pow(lv, L.expPangkat));
+  const maxHp = () => CLASSES[S.cls].hp + (S.lv - 1) * L.nyawaPerLevel;
+  const atkPower = () => CLASSES[S.cls].atk + (S.lv - 1) * L.seranganPerLevel + S.weapon * L.seranganPerSenjata;
+
+  // =====================================================================
+  // 2. PETA — dibuat dari kode dengan angka acak ber-"seed" (selalu sama)
+  // =====================================================================
+  const T = 40, MW = 64, MH = 44;
+  const G = 0, PATH = 1, WATER = 2, BRIDGE = 3, TREE = 4, ROCK = 5, HOUSE = 6, CAVE = 7, FLOWER = 8, WALL = 9;
+  const SOLID = new Set([WATER, TREE, ROCK, HOUSE, WALL]);
+  const map = new Uint8Array(MW * MH);
+  const houses = [];
+  const ZONES = {
+    village: { x0: 3, y0: 14, x1: 20, y1: 32 },
+    forest: { x0: 28, y0: 15, x1: 46, y1: 29 },
+    north: { x0: 28, y0: 3, x1: 60, y1: 12 },
+    south: { x0: 28, y0: 32, x1: 60, y1: 40 },
+    cave: { x0: 49, y0: 15, x1: 61, y1: 29 },
+  };
+  function seeded(a) { return () => { a |= 0; a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+  const tileAt = (tx, ty) => (tx < 0 || ty < 0 || tx >= MW || ty >= MH ? TREE : map[ty * MW + tx]);
+  const setT = (tx, ty, v) => { if (tx >= 0 && ty >= 0 && tx < MW && ty < MH) map[ty * MW + tx] = v; };
+  const inZone = (z, tx, ty) => tx >= z.x0 && tx <= z.x1 && ty >= z.y0 && ty <= z.y1;
+
+  function buildMap() {
+    const r = seeded(ATURAN.petaSeed);
+    map.fill(G);
+    for (let y = 0; y < MH; y++) for (let x = 0; x < MW; x++) {
+      if (x < 2 || y < 2 || x >= MW - 2 || y >= MH - 2) setT(x, y, TREE);
+      else if (r() < 0.035) setT(x, y, FLOWER);
+    }
+    // sungai + jembatan
+    for (let y = 0; y < MH; y++) for (const x of [24, 25]) setT(x, y, y >= 21 && y <= 23 ? BRIDGE : WATER);
+    // hutan, utara, selatan
+    for (let y = 2; y < MH - 2; y++) for (let x = 26; x < MW - 2; x++) {
+      if (inZone(ZONES.forest, x, y) && r() < 0.17) setT(x, y, TREE);
+      else if (inZone(ZONES.north, x, y)) { const v = r(); if (v < 0.06) setT(x, y, ROCK); else if (v < 0.13) setT(x, y, TREE); }
+      else if (inZone(ZONES.south, x, y)) { const v = r(); if (v < 0.05) setT(x, y, TREE); else if (v < 0.13) setT(x, y, FLOWER); }
+      else if (!inZone(ZONES.cave, x, y) && x > 26 && r() < 0.05) setT(x, y, TREE);
+    }
+    // pepohonan acak di sisi barat di luar desa
+    for (let y = 2; y < MH - 2; y++) for (let x = 2; x < 24; x++) if (!inZone(ZONES.village, x, y) && r() < 0.14) setT(x, y, TREE);
+    // gua bos
+    const c = ZONES.cave;
+    for (let y = c.y0; y <= c.y1; y++) for (let x = c.x0; x <= c.x1; x++) {
+      const edge = x === c.x0 || x === c.x1 || y === c.y0 || y === c.y1;
+      setT(x, y, edge ? WALL : CAVE);
+    }
+    for (let y = 18; y <= c.y1 - 3; y += 5) { setT(53, y, WALL); setT(58, y + 2, WALL); }
+    // jalan
+    for (let x = 4; x <= c.x0; x++) for (let y = 21; y <= 23; y++) if (map[y * MW + x] !== BRIDGE) setT(x, y, y === 22 || x < 22 ? PATH : (r() < 0.75 ? PATH : G));
+    for (let y = 21; y <= 23; y++) setT(c.x0, y, CAVE);
+    for (let y = 4; y <= 38; y++) setT(40, y, PATH);
+    for (let y = ZONES.village.y0; y <= ZONES.village.y1; y++) setT(12, y, PATH);
+    // rumah-rumah desa (3x2 petak, padat)
+    for (const [hx, hy] of [[5, 16], [15, 16], [5, 27], [15, 27]]) {
+      const yy = Math.floor(hy);
+      houses.push({ x: hx, y: yy });
+      for (let y = yy; y < yy + 2; y++) for (let x = hx; x < hx + 3; x++) setT(x, y, HOUSE);
+    }
+    // bersihkan area di sekitar NPC & titik mulai
+    for (const [x, y] of [[12, 20], [9, 25], [12, 24]]) for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) if (SOLID.has(tileAt(x + dx, y + dy)) && tileAt(x + dx, y + dy) !== HOUSE) setT(x + dx, y + dy, G);
+  }
+  buildMap();
+
+  function solidAt(px, py) { return SOLID.has(tileAt(Math.floor(px / T), Math.floor(py / T))); }
+  function moveEnt(e, dx, dy, fly) {
+    const r = e.r * 0.8;
+    if (fly) { e.x = clamp(e.x + dx, 2 * T, (MW - 2) * T); e.y = clamp(e.y + dy, 2 * T, (MH - 2) * T); return; }
+    if (dx) { const nx = e.x + dx, sx = nx + Math.sign(dx) * r; if (!solidAt(sx, e.y - r * 0.6) && !solidAt(sx, e.y + r * 0.4)) e.x = nx; }
+    if (dy) { const ny = e.y + dy, sy = ny + Math.sign(dy) * r * 0.6; if (!solidAt(e.x - r, sy) && !solidAt(e.x + r, sy)) e.y = ny; }
+  }
+  function freeSpot(z) {
+    for (let i = 0; i < 200; i++) {
+      const tx = Math.floor(rand(z.x0 + 1, z.x1)), ty = Math.floor(rand(z.y0 + 1, z.y1));
+      if (!SOLID.has(tileAt(tx, ty))) return { x: tx * T + T / 2, y: ty * T + T / 2 };
+    }
+    return { x: (z.x0 + 2) * T, y: (z.y0 + 2) * T };
+  }
+
+  // =====================================================================
+  // 3. STATUS PERMAINAN & SIMPANAN
+  // =====================================================================
+  const SAVE_KEY = "laga.rpg.save";
+  let S = null;              // progres yang disimpan
+  let P = null;              // tubuh pemain di peta
+  let mode = "select", chosen = "pendekar";
+  let monsters = [], projs = [], effects = [], parts = [], numbers = [], pickups = [];
+  let freeze = 0, shake = 0, saveTimer = 0, nearNpc = null;
+  const START = { x: 12 * T + T / 2, y: 23 * T + T / 2 };
+  const NPCS = [
+    { id: "lurah", name: "Ki Lurah", x: 12 * T + T / 2, y: 19 * T + T / 2, color: "#6d597a", accent: "#f4b942", face: Math.PI / 2 },
+    { id: "dagang", name: "Mbok Darmi", x: 9 * T + T / 2, y: 25 * T + T / 2, color: "#c0563a", accent: "#e9d3a9", face: 0 },
+  ];
+  const cam = { x: START.x, y: START.y };
+
+  function newSave(cls) {
+    return { cls, lv: 1, exp: 0, gold: ATURAN.awal.koin, potions: ATURAN.awal.jamu, weapon: 0, q: { idx: 0, prog: 0, status: "none" }, items: { taring: 0 }, kills: 0, bossDown: false };
+  }
+  function save() { if (S) store.set(SAVE_KEY, S); }
+
+  function makePlayer() {
+    return { x: START.x, y: START.y, r: 12, face: 0, run: 0, moving: false, hp: maxHp(), inv: 1, flash: 0,
+      atkCd: 0, skillCd: 0, rollCd: 0, roll: 0, rdx: 0, rdy: 0, dash: 0, dashHit: null, combo: 0, comboT: 0,
+      swing: 0, swingDur: 0.18, kbx: 0, kby: 0, dead: false, deadT: 0 };
+  }
+
+  function makeMonster(type, spot) {
+    const d = MONSTERS[type];
+    return { type, d, x: spot.x, y: spot.y, home: { ...spot }, r: d.r, hp: d.hp, state: "idle", st: 0, cd: rand(0, 1), wt: rand(0, 2),
+      wx: 0, wy: 0, ang: 0, kbx: 0, kby: 0, flash: 0, dead: false, respawn: 0, aggro: false, seen: 0, hitP: false, next: "swipe", run: Math.random() * 6 };
+  }
+  function spawnMonsters() {
+    monsters = [];
+    for (const sp of SPAWN) for (let i = 0; i < sp.jumlah; i++) monsters.push(makeMonster(sp.monster, freeSpot(ZONES[sp.zona])));
+    ensureBoss();
+  }
+  function ensureBoss() {
+    const need = S.q.idx === 2 && S.q.status === "active";
+    if (need && !monsters.some((m) => m.d.boss)) monsters.push(makeMonster("genderuwo", { x: 56 * T, y: 22 * T + T / 2 }));
+  }
+
+  function startGame(fresh) {
+    if (fresh) { S = newSave(chosen); save(); }
+    P = makePlayer();
+    projs = []; effects = []; parts = []; numbers = []; pickups = [];
+    spawnMonsters();
+    cam.x = P.x; cam.y = P.y;
+    mode = "play"; showUI(); refreshHud(true);
+    tone(392, 0.12, "triangle"); setTimeout(() => tone(587, 0.2, "triangle"), 110);
+    if (fresh) toast("Temui Ki Lurah di utara desa", false);
+  }
+
+  // =====================================================================
+  // 4. AUDIO
+  // =====================================================================
+  let actx = null;
+  function tone(freq, dur, type = "sine", vol = 0.05, slide = 1) {
+    try {
+      actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+      const t = actx.currentTime, o = actx.createOscillator(), g = actx.createGain();
+      o.type = type; o.frequency.setValueAtTime(freq, t);
+      if (slide !== 1) o.frequency.exponentialRampToValueAtTime(Math.max(20, freq * slide), t + dur);
+      g.gain.setValueAtTime(vol, t); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(g).connect(actx.destination); o.start(t); o.stop(t + dur);
+    } catch (e) {}
+  }
+  const sfx = {
+    swing: () => tone(320, 0.07, "triangle", 0.03, 0.5),
+    shoot: () => tone(700, 0.07, "triangle", 0.03, 1.6),
+    hit: () => tone(190, 0.1, "square", 0.04, 0.5),
+    crit: () => tone(260, 0.16, "square", 0.05, 0.4),
+    hurt: () => tone(140, 0.2, "sawtooth", 0.05, 0.5),
+    skill: () => tone(240, 0.3, "sawtooth", 0.04, 2.2),
+    coin: () => tone(1320, 0.06, "triangle", 0.03),
+    level: () => { [523, 659, 784, 1047].forEach((f, i) => setTimeout(() => tone(f, 0.16, "triangle", 0.05), i * 90)); },
+    quest: () => { [392, 523, 659].forEach((f, i) => setTimeout(() => tone(f, 0.18, "triangle", 0.05), i * 110)); },
+    drink: () => tone(500, 0.25, "sine", 0.05, 1.8),
+  };
+
+  // =====================================================================
+  // 5. INPUT (keyboard + joystick + tombol sentuh)
+  // =====================================================================
+  const keys = { up: false, down: false, left: false, right: false, attack: false };
+  const press = { skill: false, roll: false, potion: false, talk: false };
+  const stick = { x: 0, y: 0 };
+  let touchAttack = false;
+  // Tombol dibaca dari KONTROL di config.js → peta "tombol → aksi".
+  const ACTION_OF = {};
+  for (const [act, list] of Object.entries(KONTROL)) for (const k of list) ACTION_OF[k.length === 1 ? k.toLowerCase() : k] = act;
+  const HOLD = { atas: "up", bawah: "down", kiri: "left", kanan: "right", serang: "attack" };
+  const keyName = (e) => (e.key.length === 1 ? e.key.toLowerCase() : e.key);
+  addEventListener("keydown", (e) => {
+    const act = ACTION_OF[keyName(e)];
+    if (!act) return;
+    if (HOLD[act]) { keys[HOLD[act]] = true; e.preventDefault(); }
+    if (e.repeat) return;
+    if (act === "jurus") press.skill = true;
+    if (act === "hindar") press.roll = true;
+    if (act === "jamu") press.potion = true;
+    if (act === "bicara") { if (mode === "dialog") closeDialog(); else press.talk = true; }
+    if (act === "jeda") { if (mode === "dialog") closeDialog(); else togglePause(); }
+  });
+  addEventListener("keyup", (e) => { const act = ACTION_OF[keyName(e)]; if (HOLD[act]) keys[HOLD[act]] = false; });
+
+  // Teks petunjuk tombol di layar judul juga dibuat dari KONTROL.
+  const KEY_LABEL = { ArrowUp: "↑", ArrowDown: "↓", ArrowLeft: "←", ArrowRight: "→", Escape: "Esc", " ": "Spasi" };
+  const kb = (act) => KONTROL[act].map((k) => `<kbd>${KEY_LABEL[k] || (k.length === 1 ? k.toUpperCase() : k)}</kbd>`).join("/");
+  $("keysHint").innerHTML = `${kb("kiri")}${kb("atas")}${kb("kanan")}${kb("bawah")} gerak · ${kb("serang")} serang (tahan) · ${kb("jurus")} jurus · ${kb("hindar")} hindar · ${kb("jamu")} minum jamu · ${kb("bicara")} bicara · ${kb("jeda")} jeda`;
+
+  const stickEl = $("stick"), knob = $("knob");
+  let stickId = null;
+  function stickMove(e) {
+    const r = stickEl.getBoundingClientRect();
+    let dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
+    const len = Math.hypot(dx, dy), max = 46;
+    if (len > max) { dx = dx / len * max; dy = dy / len * max; }
+    knob.style.transform = `translate(${dx}px, ${dy}px)`;
+    const l = Math.hypot(dx, dy) / max;
+    stick.x = l > 0.2 ? dx / max : 0; stick.y = l > 0.2 ? dy / max : 0;
+  }
+  stickEl.addEventListener("pointerdown", (e) => { stickId = e.pointerId; stickEl.setPointerCapture(e.pointerId); stickMove(e); });
+  stickEl.addEventListener("pointermove", (e) => { if (e.pointerId === stickId) stickMove(e); });
+  const stickEnd = (e) => { if (e.pointerId !== stickId) return; stickId = null; stick.x = stick.y = 0; knob.style.transform = ""; };
+  stickEl.addEventListener("pointerup", stickEnd); stickEl.addEventListener("pointercancel", stickEnd);
+
+  function bindBtn(id, down, up) {
+    const el = $(id);
+    el.addEventListener("pointerdown", (e) => { e.preventDefault(); el.setPointerCapture(e.pointerId); el.classList.add("pressed"); down(); });
+    const end = () => { el.classList.remove("pressed"); up && up(); };
+    el.addEventListener("pointerup", end); el.addEventListener("pointercancel", end);
+    el.addEventListener("contextmenu", (e) => e.preventDefault());
+  }
+  bindBtn("bAtk", () => (touchAttack = true), () => (touchAttack = false));
+  bindBtn("bSkill", () => (press.skill = true));
+  bindBtn("bRoll", () => (press.roll = true));
+  bindBtn("bPot", () => (press.potion = true));
+  bindBtn("bTalk", () => (press.talk = true));
+
+  const isTouch = ("ontouchstart" in window) || matchMedia("(pointer: coarse)").matches;
+  if (isTouch) $("keysHint").hidden = true;
+
+  function readInput() {
+    let mx = (keys.right ? 1 : 0) - (keys.left ? 1 : 0), my = (keys.down ? 1 : 0) - (keys.up ? 1 : 0);
+    if (!mx && !my) { mx = stick.x; my = stick.y; }
+    const l = Math.hypot(mx, my);
+    if (l > 1) { mx /= l; my /= l; }
+    const inp = { mx, my, attack: keys.attack || touchAttack, ...press };
+    press.skill = press.roll = press.potion = press.talk = false;
+    return inp;
+  }
+
+  // =====================================================================
+  // 6. PERTARUNGAN
+  // =====================================================================
+  function nearestMonster(range) {
+    let best = null, bd = range;
+    for (const m of monsters) { if (m.dead) continue; const d = dist(P, m) - m.r; if (d < bd) { bd = d; best = m; } }
+    return best;
+  }
+  function aimAngle(range) {
+    const m = nearestMonster(range);
+    return m ? Math.atan2(m.y - P.y, m.x - P.x) : P.face;
+  }
+
+  function playerAttack() {
+    const C = CLASSES[S.cls], A = C.attack;
+    if (A.type === "melee") {
+      const ang = aimAngle(A.range + 70); P.face = ang;
+      P.combo = P.comboT > 0 ? (P.combo + 1) % 3 : 0; P.comboT = 0.6;
+      const mult = A.combo[P.combo], last = P.combo === 2;
+      P.swing = P.swingDur = last ? 0.24 : 0.16; P.atkCd = A.cd * (last ? 1.5 : 1);
+      P.kbx += Math.cos(ang) * 140; P.kby += Math.sin(ang) * 140;
+      effects.push({ kind: "slash", x: P.x, y: P.y - 18, ang, r: A.range, arc: A.arc, t: 0, dur: 0.14, big: last });
+      sfx.swing();
+      for (const m of monsters) {
+        if (m.dead) continue;
+        const d = dist(P, m);
+        if (d <= A.range + m.r && (d < m.r + 14 || angDiff(Math.atan2(m.y - P.y, m.x - P.x), ang) <= A.arc)) {
+          damageMonster(m, atkPower() * mult, ang, last ? 320 : 150);
+        }
+      }
+    } else {
+      const ang = aimAngle(A.range); P.face = ang;
+      P.swing = P.swingDur = 0.12; P.atkCd = A.cd;
+      fire(A.proj, ang, A.speed, A.range, atkPower(), A.splash || 0);
+    }
+  }
+  function fire(kind, ang, speed, range, dmg, splash) {
+    sfx.shoot();
+    projs.push({ kind, x: P.x + Math.cos(ang) * 14, y: P.y + Math.sin(ang) * 14, vx: Math.cos(ang) * speed, vy: Math.sin(ang) * speed, life: range / speed, dmg, splash });
+  }
+  function playerSkill() {
+    const C = CLASSES[S.cls], K = C.skill;
+    P.skillCd = K.cd; sfx.skill();
+    if (K.type === "dash") {
+      const ang = aimAngle(K.dist); P.face = ang;
+      P.dash = 0.2; P.rdx = Math.cos(ang); P.rdy = Math.sin(ang); P.dashHit = new Set(); P.inv = Math.max(P.inv, 0.3);
+    } else if (K.type === "volley") {
+      const ang = aimAngle(C.attack.range); P.face = ang; P.swing = P.swingDur = 0.15;
+      for (const a of [-0.28, -0.14, 0, 0.14, 0.28]) fire("arrow", ang + a, C.attack.speed, C.attack.range, atkPower() * K.mult, 0);
+    } else if (K.type === "quake") {
+      P.swing = P.swingDur = 0.3; shake = Math.max(shake, 0.45);
+      effects.push({ kind: "ring", x: P.x, y: P.y, r: K.r, t: 0, dur: 0.5 });
+      for (let i = 0; i < 24; i++) { const a = rand(0, 6.28), rr = rand(0, K.r); parts.push({ x: P.x + Math.cos(a) * rr, y: P.y + Math.sin(a) * rr, z: 0, vz: rand(150, 380), vx: 0, vy: 0, life: 0.6, max: 0.6, color: "#c9a26b" }); }
+      for (const m of monsters) if (!m.dead && dist(P, m) <= K.r + m.r) damageMonster(m, atkPower() * K.mult, Math.atan2(m.y - P.y, m.x - P.x), 360);
+    } else if (K.type === "pillar") {
+      const tgt = nearestMonster(K.dist + 120);
+      const ang = tgt ? Math.atan2(tgt.y - P.y, tgt.x - P.x) : P.face; P.face = ang; P.swing = P.swingDur = 0.2;
+      const x = tgt ? tgt.x : P.x + Math.cos(ang) * K.dist, y = tgt ? tgt.y : P.y + Math.sin(ang) * K.dist;
+      effects.push({ kind: "pillar", x, y, r: K.r, t: 0, delay: 0.3, dur: 0.45, done: false, dmg: atkPower() * K.mult });
+    }
+  }
+
+  function damageMonster(m, amount, ang, kb) {
+    if (m.dead) return;
+    const crit = Math.random() < ATURAN.kritis.peluang;
+    const dmg = Math.max(1, Math.round(amount * rand(0.9, 1.1) * (crit ? ATURAN.kritis.kali : 1)));
+    m.hp -= dmg; m.flash = 0.12; m.aggro = true; m.seen = 4;
+    if (!m.d.boss) { m.kbx = Math.cos(ang) * kb; m.kby = Math.sin(ang) * kb; if (kb > 250 && m.state === "windup") { m.state = "recover"; m.st = 0.5; } }
+    numbers.push({ x: m.x + rand(-8, 8), y: m.y - m.d.h - 10, v: dmg, life: 0.8, color: crit ? "#ffd166" : "#fff6e8", size: crit ? 30 : 22 });
+    spark(m.x, m.y - m.d.h * 0.5, crit ? "#ffd166" : "#fff2c4", crit ? 14 : 8);
+    freeze = Math.max(freeze, crit ? 0.06 : 0.035);
+    (crit ? sfx.crit : sfx.hit)();
+    if (m.hp <= 0) killMonster(m);
+  }
+
+  function killMonster(m) {
+    m.dead = true; m.respawn = ATURAN.monster.munculLagi; S.kills++;
+    spark(m.x, m.y - m.d.h * 0.5, "#c9bfd6", 18);
+    const coins = Math.round(rand(m.d.gold[0], m.d.gold[1]));
+    for (let i = 0; i < Math.min(6, coins); i++) pickups.push({ kind: "coin", v: Math.ceil(coins / Math.min(6, coins)), x: m.x + rand(-16, 16), y: m.y + rand(-12, 12), t: 0 });
+    if (Math.random() < ATURAN.monster.dropJamu) pickups.push({ kind: "jamu", x: m.x, y: m.y + 6, t: 0 });
+    const q = QUESTS[S.q.idx];
+    if (q && S.q.status === "active") {
+      if (q.type === "kill" && q.target === m.type) progressQuest(1);
+      if (q.type === "collect" && m.type === "babi" && Math.random() < ATURAN.monster.dropTaring) pickups.push({ kind: "taring", x: m.x - 8, y: m.y, t: 0 });
+    }
+    gainExp(m.d.exp);
+    if (m.d.boss) { S.bossDown = true; shake = 0.6; toast("Genderuwo tumbang!", true); }
+    saveSoon();
+  }
+
+  function hurtPlayer(amount, ang) {
+    if (P.inv > 0 || P.dead) return;
+    const dmg = Math.max(1, Math.round(amount * rand(0.9, 1.1)));
+    P.hp -= dmg; P.inv = 0.6; P.flash = 0.15; P.kbx = Math.cos(ang) * 280; P.kby = Math.sin(ang) * 280;
+    shake = Math.max(shake, 0.25); sfx.hurt();
+    numbers.push({ x: P.x, y: P.y - 56, v: dmg, life: 0.8, color: "#ff8b8e", size: 22 });
+    if (navigator.vibrate) { try { navigator.vibrate(40); } catch (e) {} }
+    if (P.hp <= 0) {
+      P.hp = 0; P.dead = true; P.deadT = ATURAN.pingsan.lama;
+      const lost = Math.floor(S.gold * ATURAN.pingsan.koinHilang); S.gold -= lost;
+      toast(`Kamu pingsan... dibawa pulang ke desa (−${lost} koin)`, false);
+      saveSoon();
+    }
+  }
+
+  function spark(x, y, color, n) {
+    for (let i = 0; i < n; i++) { const a = rand(0, 6.28), s = rand(60, 260); parts.push({ x, y, z: 0, vz: 0, vx: Math.cos(a) * s, vy: Math.sin(a) * s, life: rand(0.2, 0.45), max: 0.45, color }); }
+  }
+
+  // =====================================================================
+  // 7. PROGRES: EXP, LEVEL, MISI, TOKO
+  // =====================================================================
+  function gainExp(v) {
+    S.exp += v;
+    while (S.exp >= expNeed(S.lv)) {
+      S.exp -= expNeed(S.lv); S.lv++;
+      P.hp = maxHp();
+      toast(`Naik level! Lv ${S.lv}`, true); sfx.level();
+      for (let i = 0; i < 26; i++) { const a = rand(0, 6.28); parts.push({ x: P.x + Math.cos(a) * 20, y: P.y + Math.sin(a) * 10, z: 0, vz: rand(120, 300), vx: 0, vy: 0, life: 0.8, max: 0.8, color: "#ffd166" }); }
+    }
+    saveSoon();
+  }
+  function progressQuest(n) {
+    const q = QUESTS[S.q.idx];
+    S.q.prog = Math.min(q.need, S.q.prog + n);
+    if (S.q.prog >= q.need) { S.q.status = "done"; toast(`Misi selesai: ${q.title}. Lapor ke Ki Lurah`, false); sfx.quest(); }
+    saveSoon();
+  }
+  function saveSoon() { saveTimer = 0.6; }
+
+  const dlg = { box: $("dialog"), name: $("dlgName"), text: $("dlgText"), actions: $("dlgActions") };
+  function openDialog(name, text, actions) {
+    dlg.name.textContent = name; dlg.text.textContent = text; dlg.actions.innerHTML = "";
+    for (const a of actions) {
+      const b = document.createElement("button"); b.type = "button"; b.textContent = a.label;
+      if (a.primary) b.className = "primary";
+      if (a.disabled) b.disabled = true;
+      b.addEventListener("click", a.run);
+      dlg.actions.appendChild(b);
+    }
+    mode = "dialog"; showUI();
+    const first = dlg.actions.querySelector("button:not(:disabled)"); first && first.focus({ preventScroll: true });
+  }
+  function closeDialog() { if (mode === "dialog") { mode = "play"; showUI(); } }
+
+  function talk(npc) {
+    if (npc.id === "lurah") {
+      const q = QUESTS[S.q.idx];
+      if (!q) return openDialog(npc.name, "Berkat kamu, Wanasari kembali tenang. Hutan masih luas, silakan terus berlatih.", [{ label: "Tutup", run: closeDialog, primary: true }]);
+      if (S.q.status === "none") {
+        return openDialog(npc.name, q.offer + ` (Hadiah: ${q.reward.gold} koin, ${q.reward.exp} EXP)`, [
+          { label: "Nanti dulu", run: closeDialog },
+          { label: "Terima misi", primary: true, run: () => { S.q.status = "active"; S.q.prog = q.type === "collect" ? Math.min(q.need, S.items[q.item] || 0) : 0; if (S.q.prog >= q.need) S.q.status = "done"; ensureBoss(); saveSoon(); refreshHud(true); sfx.quest(); closeDialog(); } },
+        ]);
+      }
+      if (S.q.status === "active") return openDialog(npc.name, `${q.title}: ${S.q.prog} dari ${q.need}. Hati-hati di luar sana.`, [{ label: "Siap", run: closeDialog, primary: true }]);
+      if (S.q.status === "done") {
+        return openDialog(npc.name, "Luar biasa! Terimalah hadiah ini dari warga desa.", [{ label: "Terima hadiah", primary: true, run: () => {
+          if (q.type === "collect") S.items[q.item] = Math.max(0, (S.items[q.item] || 0) - q.need);
+          S.gold += q.reward.gold; S.potions += q.reward.potion || 0;
+          S.q = { idx: S.q.idx + 1, prog: 0, status: "none" };
+          closeDialog(); gainExp(q.reward.exp); sfx.quest();
+          toast(`+${q.reward.gold} koin · +${q.reward.exp} EXP`, false);
+          refreshHud(true); saveSoon();
+          if (S.q.idx >= QUESTS.length) showWin();
+        } }]);
+      }
+    } else if (npc.id === "dagang") {
+      const T0 = ATURAN.toko, wCost = T0.hargaAsah * (S.weapon + 1);
+      openDialog(npc.name, `Mau beli apa, Nak? Koinmu ${S.gold}. Jamu memulihkan ${Math.round(ATURAN.jamuPulih * 100)}% nyawa. Senjatamu sekarang tingkat ${S.weapon}.`, [
+        { label: `Beli jamu (${T0.hargaJamu})`, disabled: S.gold < T0.hargaJamu, run: () => { S.gold -= T0.hargaJamu; S.potions++; sfx.coin(); saveSoon(); talk(npc); } },
+        { label: `Asah senjata +${L.seranganPerSenjata} serangan (${wCost})`, disabled: S.gold < wCost, run: () => { S.gold -= wCost; S.weapon++; sfx.level(); toast(`Senjata tingkat ${S.weapon}`, false); saveSoon(); talk(npc); } },
+        { label: "Tutup", primary: true, run: closeDialog },
+      ]);
+    }
+  }
+
+  // =====================================================================
+  // 8. UPDATE
+  // =====================================================================
+  function updatePlayer(dt) {
+    if (P.dead) {
+      P.deadT -= dt;
+      if (P.deadT <= 0) { const keepFace = P.face; P = makePlayer(); P.face = keepFace; P.inv = 2; cam.x = P.x; cam.y = P.y; }
+      return;
+    }
+    const C = CLASSES[S.cls];
+    const inp = readInput();
+    P.inv = Math.max(0, P.inv - dt); P.flash = Math.max(0, P.flash - dt);
+    P.atkCd = Math.max(0, P.atkCd - dt); P.skillCd = Math.max(0, P.skillCd - dt); P.rollCd = Math.max(0, P.rollCd - dt);
+    P.comboT = Math.max(0, P.comboT - dt); P.swing = Math.max(0, P.swing - dt);
+    P.moving = false;
+
+    if (P.dash > 0) {
+      P.dash -= dt;
+      moveEnt(P, P.rdx * 1150 * dt, P.rdy * 1150 * dt);
+      for (const m of monsters) if (!m.dead && !P.dashHit.has(m) && dist(P, m) < m.r + 26) { P.dashHit.add(m); damageMonster(m, atkPower() * C.skill.mult, Math.atan2(P.rdy, P.rdx), 300); }
+      if (Math.random() < 0.8) parts.push({ x: P.x, y: P.y - rand(5, 35), z: 0, vz: 0, vx: -P.rdx * 60, vy: -P.rdy * 60, life: 0.25, max: 0.25, color: C.color });
+      return;
+    }
+    if (P.roll > 0) { P.roll -= dt; moveEnt(P, P.rdx * ATURAN.hindar.kecepatan * dt, P.rdy * ATURAN.hindar.kecepatan * dt); P.run += dt * 30; return; }
+
+    const slow = P.swing > 0 ? 0.35 : 1;
+    if (inp.mx || inp.my) {
+      moveEnt(P, inp.mx * C.speed * slow * dt, inp.my * C.speed * slow * dt);
+      P.moving = true; P.run += dt * 11;
+      if (P.swing <= 0) P.face = Math.atan2(inp.my, inp.mx);
+    }
+    if (P.kbx || P.kby) { moveEnt(P, P.kbx * dt, P.kby * dt); const k = Math.exp(-12 * dt); P.kbx *= k; P.kby *= k; if (Math.abs(P.kbx) + Math.abs(P.kby) < 5) P.kbx = P.kby = 0; }
+
+    if (inp.roll && P.rollCd <= 0) {
+      const l = Math.hypot(inp.mx, inp.my);
+      P.rdx = l ? inp.mx / l : Math.cos(P.face); P.rdy = l ? inp.my / l : Math.sin(P.face);
+      P.roll = ATURAN.hindar.lama; P.rollCd = ATURAN.hindar.jeda; P.inv = Math.max(P.inv, ATURAN.hindar.kebal); tone(260, 0.08, "triangle", 0.03, 1.5);
+      return;
+    }
+    if (inp.skill && P.skillCd <= 0) playerSkill();
+    else if (inp.attack && P.atkCd <= 0) playerAttack();
+    if (inp.potion) {
+      if (S.potions > 0 && P.hp < maxHp()) { S.potions--; const h = Math.round(maxHp() * ATURAN.jamuPulih); P.hp = Math.min(maxHp(), P.hp + h); numbers.push({ x: P.x, y: P.y - 56, v: "+" + h, life: 0.9, color: "#5ad17a", size: 22 }); sfx.drink(); saveSoon(); }
+      else if (S.potions <= 0) toast("Jamu habis. Beli di Mbok Darmi", false);
+    }
+    nearNpc = null;
+    for (const n of NPCS) if (dist(P, n) < ATURAN.jarakBicara) nearNpc = n;
+    if (inp.talk && nearNpc) talk(nearNpc);
+  }
+
+  function updateMonster(m, dt) {
+    const d = m.d;
+    if (m.dead) {
+      if (!d.boss) { m.respawn -= dt; if (m.respawn <= 0 && dist(P, m.home) > 420) Object.assign(m, makeMonster(m.type, m.home)); }
+      return;
+    }
+    m.flash = Math.max(0, m.flash - dt); m.cd = Math.max(0, m.cd - dt); m.seen = Math.max(0, m.seen - dt); m.run += dt * 8;
+    if (m.kbx || m.kby) { moveEnt(m, m.kbx * dt, m.kby * dt, d.fly); const k = Math.exp(-10 * dt); m.kbx *= k; m.kby *= k; if (Math.abs(m.kbx) + Math.abs(m.kby) < 5) m.kbx = m.kby = 0; }
+    const alive = !P.dead, dp = dist(m, P), toP = Math.atan2(P.y - m.y, P.x - m.x);
+    const reach = d.range + d.r + P.r;
+    switch (m.state) {
+      case "idle": {
+        m.wt -= dt;
+        if (m.wt <= 0) { m.wt = rand(1, 3); const a = rand(0, 6.28); const go = Math.random() < 0.6; m.wx = go ? Math.cos(a) : 0; m.wy = go ? Math.sin(a) : 0; }
+        if (dist(m, m.home) > 140) { const a = Math.atan2(m.home.y - m.y, m.home.x - m.x); m.wx = Math.cos(a); m.wy = Math.sin(a); }
+        moveEnt(m, m.wx * d.speed * 0.35 * dt, m.wy * d.speed * 0.35 * dt, d.fly);
+        if (alive && (dp < d.aggro || m.aggro)) { m.state = "chase"; m.aggro = true; }
+        break;
+      }
+      case "chase": {
+        if (!alive || dist(m, m.home) > (d.boss ? 380 : 560)) { m.state = "return"; break; }
+        m.seen = 4;
+        const wob = d.fly ? Math.sin(m.run * 0.6) * 0.8 : 0;
+        if (dp > reach - 6) moveEnt(m, Math.cos(toP + wob) * d.speed * dt, Math.sin(toP + wob) * d.speed * dt, d.fly);
+        if (dp <= reach && m.cd <= 0) {
+          m.state = "windup"; m.ang = toP;
+          if (d.boss) { m.next = m.next === "slam" ? "swipe" : "slam"; m.st = m.next === "slam" ? 0.9 : d.wind; }
+          else m.st = d.wind;
+        }
+        break;
+      }
+      case "windup": {
+        m.st -= dt;
+        if (!d.charge && !d.boss) m.ang = toP;
+        if (m.st <= 0) {
+          if (d.charge) { m.state = "charge"; m.st = 0.55; m.hitP = false; tone(160, 0.2, "sawtooth", 0.03, 1.4); break; }
+          if (d.boss && m.next === "slam") {
+            shake = 0.5; effects.push({ kind: "ring", x: m.x, y: m.y, r: 130, t: 0, dur: 0.5, red: true });
+            if (dp < 130 + P.r) hurtPlayer(d.atk * 1.5, toP);
+          } else if (dp <= reach + 10 && angDiff(toP, m.ang) < 1.2) hurtPlayer(d.atk, m.ang);
+          effects.push({ kind: "claw", x: m.x, y: m.y - d.h * 0.4, ang: m.ang, r: d.range + d.r, t: 0, dur: 0.15 });
+          m.state = "recover"; m.st = 0.35; m.cd = d.cd;
+        }
+        break;
+      }
+      case "charge": {
+        m.st -= dt;
+        const bx = m.x, by = m.y;
+        moveEnt(m, Math.cos(m.ang) * 400 * dt, Math.sin(m.ang) * 400 * dt);
+        if (!m.hitP && dist(m, P) < d.r + P.r + 4) { m.hitP = true; hurtPlayer(d.atk, m.ang); }
+        if (m.st <= 0 || (bx === m.x && by === m.y)) { m.state = "recover"; m.st = 0.6; m.cd = d.cd; }
+        break;
+      }
+      case "recover": m.st -= dt; if (m.st <= 0) m.state = alive ? "chase" : "return"; break;
+      case "return": {
+        const a = Math.atan2(m.home.y - m.y, m.home.x - m.x);
+        moveEnt(m, Math.cos(a) * d.speed * dt, Math.sin(a) * d.speed * dt, d.fly);
+        m.hp = Math.min(d.hp, m.hp + d.hp * 0.5 * dt);
+        if (dist(m, m.home) < 20) { m.state = "idle"; m.aggro = false; m.hp = d.hp; }
+        break;
+      }
+    }
+  }
+
+  function update(dt) {
+    if (mode !== "play") return;
+    if (freeze > 0) { freeze -= dt; return; }
+    updatePlayer(dt);
+    for (const m of monsters) updateMonster(m, dt);
+
+    for (const p of projs) {
+      p.x += p.vx * dt; p.y += p.vy * dt; p.life -= dt;
+      const t = tileAt(Math.floor(p.x / T), Math.floor(p.y / T));
+      if (t === TREE || t === ROCK || t === HOUSE || t === WALL) p.life = 0;
+      if (p.life <= 0) { if (p.kind === "fire") explode(p); continue; }
+      for (const m of monsters) {
+        if (m.dead) continue;
+        if (Math.hypot(m.x - p.x, m.y - p.y) < m.r + 10) {
+          if (p.kind === "fire") explode(p); else damageMonster(m, p.dmg, Math.atan2(p.vy, p.vx), 120);
+          p.life = 0; break;
+        }
+      }
+      if (p.kind === "fire" && Math.random() < 0.7) parts.push({ x: p.x, y: p.y, z: 18, vz: 30, vx: rand(-20, 20), vy: rand(-20, 20), life: 0.3, max: 0.3, color: "#ffb347" });
+    }
+    projs = projs.filter((p) => p.life > 0);
+
+    for (const e of effects) {
+      e.t += dt;
+      if (e.kind === "pillar" && !e.done && e.t >= e.delay) {
+        e.done = true; shake = Math.max(shake, 0.25);
+        for (const m of monsters) if (!m.dead && Math.hypot(m.x - e.x, m.y - e.y) < e.r + m.r) damageMonster(m, e.dmg, Math.atan2(m.y - e.y, m.x - e.x), 200);
+      }
+      if (e.kind === "pillar" && e.t >= e.delay && e.t <= e.delay + e.dur) for (let i = 0; i < 3; i++) parts.push({ x: e.x + rand(-e.r * 0.6, e.r * 0.6), y: e.y + rand(-10, 10), z: rand(0, 40), vz: rand(180, 380), vx: 0, vy: 0, life: 0.4, max: 0.4, color: Math.random() < 0.5 ? "#ff7b39" : "#ffd166" });
+    }
+    effects = effects.filter((e) => e.t < (e.delay || 0) + e.dur);
+
+    for (const k of pickups) {
+      k.t += dt;
+      const d = dist(k, P);
+      if (!P.dead && d < 90 && k.t > 0.3) { const a = Math.atan2(P.y - k.y, P.x - k.x); k.x += Math.cos(a) * 320 * dt; k.y += Math.sin(a) * 320 * dt; }
+      if (!P.dead && d < 22 && k.t > 0.3) {
+        k.got = true;
+        if (k.kind === "coin") { S.gold += k.v; sfx.coin(); }
+        else if (k.kind === "jamu") { S.potions++; toast("Dapat jamu", false); sfx.coin(); }
+        else if (k.kind === "taring") { S.items.taring = (S.items.taring || 0) + 1; sfx.coin(); const q = QUESTS[S.q.idx]; if (q && q.type === "collect" && S.q.status === "active") progressQuest(1); else toast("Dapat taring babi", false); }
+        saveSoon();
+      }
+      if (k.t > 40) k.got = true;
+    }
+    pickups = pickups.filter((k) => !k.got);
+
+    for (const p of parts) { p.x += p.vx * dt; p.y += p.vy * dt; p.vz -= 900 * dt; p.z = Math.max(0, p.z + p.vz * dt); p.life -= dt; }
+    parts = parts.filter((p) => p.life > 0);
+    for (const n of numbers) { n.y -= 36 * dt; n.life -= dt; }
+    numbers = numbers.filter((n) => n.life > 0);
+    if (shake > 0) shake -= dt;
+    if (saveTimer > 0) { saveTimer -= dt; if (saveTimer <= 0) save(); }
+  }
+  function explode(p) {
+    effects.push({ kind: "boom", x: p.x, y: p.y, r: p.splash, t: 0, dur: 0.3 });
+    spark(p.x, p.y, "#ff9f43", 10);
+    for (const m of monsters) if (!m.dead && Math.hypot(m.x - p.x, m.y - p.y) < p.splash + m.r) damageMonster(m, p.dmg, Math.atan2(m.y - p.y, m.x - p.x), 160);
+  }
+
+  // =====================================================================
+  // 9. GAMBAR
+  // =====================================================================
+  let W = 0, H = 0, DPR = 1;
+  function resize() {
+    const r = cv.getBoundingClientRect();
+    DPR = Math.min(2, window.devicePixelRatio || 1);
+    W = Math.max(1, r.width); H = Math.max(1, r.height);
+    cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR);
+    $("rotate").hidden = !(isTouch && H > W && mode === "play");
+  }
+  const hash = (x, y) => ((x * 73856093) ^ (y * 19349663)) >>> 0;
+
+  function drawGround(tx, ty, time) {
+    const x = tx * T, y = ty * T, t = tileAt(tx, ty), h = hash(tx, ty);
+    if (t === WATER || t === BRIDGE) {
+      ctx.fillStyle = "#2d6a96"; ctx.fillRect(x, y, T, T);
+      ctx.strokeStyle = "rgba(255,255,255,0.18)"; ctx.lineWidth = 2; ctx.beginPath();
+      const o = Math.sin(time * 2 + ty) * 6; ctx.moveTo(x + 6 + o, y + 14); ctx.lineTo(x + 18 + o, y + 14); ctx.moveTo(x + 20 - o, y + 30); ctx.lineTo(x + 32 - o, y + 30); ctx.stroke();
+      if (t === BRIDGE) {
+        ctx.fillStyle = "#8b5e3c"; ctx.fillRect(x, y + 2, T, T - 4);
+        ctx.fillStyle = "rgba(0,0,0,0.25)"; for (let i = 0; i < 4; i++) ctx.fillRect(x + i * 10, y + 2, 2, T - 4);
+      }
+      return;
+    }
+    if (t === CAVE || t === WALL) {
+      ctx.fillStyle = "#3a3142"; ctx.fillRect(x, y, T, T);
+      ctx.fillStyle = "rgba(255,255,255,0.04)"; if (h % 3 === 0) ctx.fillRect(x + (h % 30), y + (h % 23), 4, 3);
+      if (t === WALL) { ctx.fillStyle = "#231c2b"; ctx.fillRect(x, y + 8, T, T - 8); ctx.fillStyle = "#4e4258"; ctx.fillRect(x, y, T, 10); }
+      return;
+    }
+    ctx.fillStyle = h % 5 === 0 ? "#3d7a37" : "#428340"; ctx.fillRect(x, y, T, T);
+    if (t === PATH) {
+      ctx.fillStyle = "#c8a46e"; ctx.fillRect(x, y, T, T);
+      ctx.fillStyle = "rgba(90,60,30,0.25)"; ctx.fillRect(x + (h % 31), y + (h % 29), 3, 3); ctx.fillRect(x + (h % 17) + 10, y + (h % 13) + 20, 2, 2);
+    } else if (t === FLOWER) {
+      for (let i = 0; i < 3; i++) { ctx.fillStyle = ["#ffd166", "#ef476f", "#f7efe3"][(h + i) % 3]; ctx.beginPath(); ctx.arc(x + 8 + ((h >> (i * 3)) % 24), y + 8 + ((h >> (i * 4)) % 24), 2.5, 0, 6.28); ctx.fill(); }
+    } else if (t === ROCK) {
+      ctx.fillStyle = "#6f6a75"; ctx.beginPath(); ctx.ellipse(x + T / 2, y + T / 2 + 4, 16, 12, 0, 0, 6.28); ctx.fill();
+      ctx.fillStyle = "#8d8894"; ctx.beginPath(); ctx.ellipse(x + T / 2 - 3, y + T / 2, 10, 7, 0, 0, 6.28); ctx.fill();
+    } else if (h % 7 === 0) {
+      ctx.strokeStyle = "rgba(20,60,20,0.5)"; ctx.lineWidth = 2; ctx.beginPath();
+      ctx.moveTo(x + 12, y + 26); ctx.lineTo(x + 14, y + 19); ctx.moveTo(x + 16, y + 26); ctx.lineTo(x + 18, y + 18); ctx.stroke();
+    }
+  }
+  function drawTree(tx, ty, time) {
+    const x = tx * T + T / 2, y = ty * T + T, h = hash(tx, ty), sway = Math.sin(time * 1.5 + tx) * 1.5;
+    ctx.fillStyle = "rgba(0,0,0,0.25)"; ctx.beginPath(); ctx.ellipse(x, y - 4, 18, 6, 0, 0, 6.28); ctx.fill();
+    ctx.fillStyle = "#5b3a24"; ctx.fillRect(x - 4, y - 20, 8, 18);
+    ctx.fillStyle = h % 2 ? "#2e6b34" : "#2a6230"; ctx.beginPath(); ctx.arc(x + sway, y - 34, 20, 0, 6.28); ctx.fill();
+    ctx.fillStyle = h % 2 ? "#3a8a40" : "#367f3b"; ctx.beginPath(); ctx.arc(x - 6 + sway, y - 40, 12, 0, 6.28); ctx.fill();
+    ctx.fillStyle = "rgba(255,255,255,0.08)"; ctx.beginPath(); ctx.arc(x - 8 + sway, y - 44, 6, 0, 6.28); ctx.fill();
+  }
+  function drawHouse(hs) {
+    const x = hs.x * T, y = hs.y * T, w = 3 * T;
+    ctx.fillStyle = "rgba(0,0,0,0.25)"; ctx.fillRect(x + 4, y + 2 * T - 6, w, 8);
+    ctx.fillStyle = "#e1c699"; ctx.fillRect(x + 6, y + 18, w - 12, 2 * T - 20);
+    ctx.fillStyle = "#8b5e3c"; ctx.fillRect(x + 6, y + 18, 5, 2 * T - 20); ctx.fillRect(x + w - 11, y + 18, 5, 2 * T - 20);
+    ctx.fillStyle = "#5b3a24"; ctx.fillRect(x + w / 2 - 9, y + 2 * T - 30, 18, 28);
+    ctx.fillStyle = "#7da2c4"; ctx.fillRect(x + 20, y + 40, 14, 12); ctx.fillRect(x + w - 34, y + 40, 14, 12);
+    // atap joglo bertingkat
+    ctx.fillStyle = "#7a3b2e"; ctx.beginPath(); ctx.moveTo(x - 6, y + 24); ctx.lineTo(x + w + 6, y + 24); ctx.lineTo(x + w - 22, y - 6); ctx.lineTo(x + 22, y - 6); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = "#93493a"; ctx.beginPath(); ctx.moveTo(x + 20, y - 4); ctx.lineTo(x + w - 20, y - 4); ctx.lineTo(x + w - 40, y - 30); ctx.lineTo(x + 40, y - 30); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = "rgba(0,0,0,0.18)"; ctx.fillRect(x - 6, y + 20, w + 12, 4);
+  }
+
+  function roundRect(c, x, y, w, h, r) { c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); }
+
+  function drawWeapon(c, weapon, pull) {
+    if (weapon === "golok") {
+      c.strokeStyle = "#5b3a24"; c.lineWidth = 4; c.beginPath(); c.moveTo(0, 12); c.lineTo(0, 20); c.stroke();
+      c.fillStyle = "#dfe6ee"; c.beginPath(); c.moveTo(-3, 20); c.lineTo(-3, 44); c.quadraticCurveTo(4, 50, 7, 40); c.lineTo(3, 20); c.closePath(); c.fill();
+    } else if (weapon === "hammer") {
+      c.strokeStyle = "#5b3a24"; c.lineWidth = 4; c.beginPath(); c.moveTo(0, 6); c.lineTo(0, 44); c.stroke();
+      c.fillStyle = "#8a8f99"; c.fillRect(-12, 38, 24, 17); c.fillStyle = "#5c616b"; c.fillRect(-12, 38, 24, 4);
+    } else if (weapon === "bow") {
+      c.strokeStyle = "#7a4b2a"; c.lineWidth = 3.5; c.beginPath(); c.arc(0, 6, 20, 0.25, Math.PI - 0.25); c.stroke();
+      c.strokeStyle = "rgba(255,255,255,0.7)"; c.lineWidth = 1.2; c.beginPath(); c.moveTo(19, 11); c.lineTo(0, 14 - pull); c.lineTo(-19, 11); c.stroke();
+    } else if (weapon === "staff") {
+      c.strokeStyle = "#6d4c2f"; c.lineWidth = 4; c.beginPath(); c.moveTo(0, -8); c.lineTo(0, 40); c.stroke();
+      c.fillStyle = "rgba(255,140,60,0.3)"; c.beginPath(); c.arc(0, 45, 10, 0, 6.28); c.fill();
+      c.fillStyle = "#ff9f43"; c.beginPath(); c.arc(0, 45, 5.5, 0, 6.28); c.fill();
+    }
+  }
+
+  // Karakter manusia (pemain, NPC, pratinjau). e: {x,y,face,run,moving,swing,swingDur,inv,flash}
+  function drawPerson(c, e, look, time, opts = {}) {
+    c.save(); c.translate(e.x, e.y);
+    c.fillStyle = "rgba(0,0,0,0.3)"; c.beginPath(); c.ellipse(0, 0, 12, 4.5, 0, 0, 6.28); c.fill();
+    if (e.inv > 0 && !opts.preview && Math.floor(time * 18) % 2 === 0) c.globalAlpha = 0.45;
+    const flip = Math.cos(e.face) < -0.05 ? -1 : 1;
+    const bob = e.moving ? Math.abs(Math.sin(e.run)) * 2 : 0, leg = e.moving ? Math.sin(e.run) * 3 : 0;
+    const white = e.flash > 0;
+    c.scale(flip, 1);
+    c.fillStyle = "#2b2238"; c.fillRect(-7, -11 - bob + leg, 5, 11 - leg); c.fillRect(2, -11 - bob - leg, 5, 11 + leg);
+    const up = Math.sin(e.face) < -0.5;
+    const drawArm = () => {
+      if (!look.weapon) return;
+      let a = flip > 0 ? e.face : Math.PI - e.face;
+      if (e.swing > 0 && (look.weapon === "golok" || look.weapon === "hammer")) a += lerp(-1.5, 1.4, 1 - e.swing / e.swingDur);
+      c.save(); c.translate(3, -22 - bob); c.rotate(a - Math.PI / 2);
+      c.strokeStyle = white ? "#fff" : "#e3ae7f"; c.lineWidth = 5; c.lineCap = "round"; c.beginPath(); c.moveTo(0, 0); c.lineTo(0, 12); c.stroke();
+      drawWeapon(c, look.weapon, e.swing > 0 && look.weapon === "bow" ? 6 : 0);
+      c.restore();
+    };
+    if (up) drawArm();
+    c.fillStyle = white ? "#fff" : look.color; roundRect(c, -10, -31 - bob, 20, 21, 6); c.fill();
+    c.fillStyle = look.accent; c.fillRect(-10, -15 - bob, 20, 4);
+    c.fillStyle = white ? "#fff" : "#e3ae7f"; c.beginPath(); c.arc(0, -41 - bob, 12, 0, 6.28); c.fill();
+    c.fillStyle = look.hair || "#1f1a2a"; c.beginPath(); c.arc(0, -43 - bob, 12.5, Math.PI, Math.PI * 2); c.fill();
+    if (look.hat) { c.fillStyle = look.hat; c.beginPath(); c.ellipse(0, -52 - bob, 16, 5, 0, 0, 6.28); c.fill(); c.fillRect(-7, -60 - bob, 14, 8); }
+    else { c.fillStyle = look.accent; c.fillRect(-12.5, -48 - bob, 25, 4); c.beginPath(); c.moveTo(-12, -47 - bob); c.lineTo(-22, -44 - bob + Math.sin(time * 8 + e.x) * 2); c.lineTo(-20, -50 - bob); c.closePath(); c.fill(); }
+    if (!up) { c.fillStyle = "#1f1a2a"; c.fillRect(3, -42 - bob, 2.5, 3.5); c.fillRect(8, -42 - bob, 2.5, 3.5); }
+    if (!up) drawArm();
+    c.restore();
+  }
+
+  function drawMonster(m, time) {
+    const d = m.d, w = m.flash > 0;
+    const flip = (m.state === "idle" ? m.wx : Math.cos(Math.atan2(P.y - m.y, P.x - m.x))) < 0 ? -1 : 1;
+    ctx.save(); ctx.translate(m.x, m.y);
+    // tanda serangan (telegraph)
+    if (m.state === "windup") {
+      const k = 1 - m.st / (d.boss && m.next === "slam" ? 0.9 : d.wind);
+      ctx.fillStyle = `rgba(229,72,77,${0.15 + 0.35 * k})`;
+      if (d.boss && m.next === "slam") { ctx.beginPath(); ctx.ellipse(0, 0, 130, 78, 0, 0, 6.28); ctx.fill(); }
+      else if (d.charge) { ctx.save(); ctx.rotate(m.ang); ctx.fillRect(0, -d.r * 0.8, 200, d.r * 1.6); ctx.restore(); }
+      else { ctx.beginPath(); ctx.moveTo(0, 0); ctx.arc(0, 0, d.range + d.r + 8, m.ang - 1, m.ang + 1); ctx.closePath(); ctx.fill(); }
+    }
+    ctx.fillStyle = "rgba(0,0,0,0.3)"; ctx.beginPath(); ctx.ellipse(0, 0, d.r, d.r * 0.38, 0, 0, 6.28); ctx.fill();
+    ctx.scale(flip, 1);
+    if (m.type === "kera") {
+      const b = Math.abs(Math.sin(m.run)) * 3;
+      ctx.strokeStyle = w ? "#fff" : "#6b4429"; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(-10, -10 - b); ctx.quadraticCurveTo(-24, -14, -20, -28 - b); ctx.stroke();
+      ctx.fillStyle = w ? "#fff" : "#8a5a3b"; ctx.beginPath(); ctx.ellipse(0, -13 - b, 12, 11, 0, 0, 6.28); ctx.fill();
+      ctx.beginPath(); ctx.arc(2, -28 - b, 9, 0, 6.28); ctx.fill();
+      ctx.fillStyle = w ? "#fff" : "#d9a77a"; ctx.beginPath(); ctx.ellipse(5, -27 - b, 6, 5, 0, 0, 6.28); ctx.fill();
+      ctx.fillStyle = "#1f1a2a"; ctx.fillRect(4, -30 - b, 2, 2.5); ctx.fillRect(8, -30 - b, 2, 2.5);
+    } else if (m.type === "kelelawar") {
+      const hover = -30 + Math.sin(m.run * 0.7) * 4, flap = Math.sin(m.run * 3) * 10;
+      ctx.fillStyle = w ? "#fff" : "#3c2a52";
+      ctx.beginPath(); ctx.moveTo(0, hover); ctx.lineTo(-24, hover - 6 - flap); ctx.lineTo(-14, hover + 4); ctx.lineTo(-6, hover + 2); ctx.closePath(); ctx.fill();
+      ctx.beginPath(); ctx.moveTo(0, hover); ctx.lineTo(24, hover - 6 - flap); ctx.lineTo(14, hover + 4); ctx.lineTo(6, hover + 2); ctx.closePath(); ctx.fill();
+      ctx.beginPath(); ctx.ellipse(0, hover, 8, 9, 0, 0, 6.28); ctx.fill();
+      ctx.fillStyle = "#ff5c5c"; ctx.fillRect(1, hover - 3, 2, 2); ctx.fillRect(4, hover - 3, 2, 2);
+    } else if (m.type === "babi") {
+      const b = m.state === "charge" ? Math.abs(Math.sin(m.run * 3)) * 3 : Math.abs(Math.sin(m.run)) * 1.5;
+      ctx.fillStyle = w ? "#fff" : "#2b211b"; ctx.fillRect(-12, -8, 5, 8); ctx.fillRect(6, -8, 5, 8);
+      ctx.fillStyle = w ? "#fff" : "#4a3a30"; ctx.beginPath(); ctx.ellipse(0, -15 - b, 20, 12, 0, 0, 6.28); ctx.fill();
+      ctx.fillStyle = w ? "#fff" : "#3a2c24"; ctx.beginPath(); ctx.moveTo(-14, -26 - b); ctx.lineTo(4, -28 - b); ctx.lineTo(-4, -22 - b); ctx.fill();
+      ctx.fillStyle = w ? "#fff" : "#8c6a5a"; ctx.beginPath(); ctx.ellipse(20, -14 - b, 6, 5, 0, 0, 6.28); ctx.fill();
+      ctx.fillStyle = "#f2ead8"; ctx.beginPath(); ctx.moveTo(16, -10 - b); ctx.lineTo(22, -20 - b); ctx.lineTo(19, -9 - b); ctx.fill();
+      ctx.fillStyle = "#ff5c5c"; ctx.fillRect(10, -20 - b, 2.5, 2.5);
+    } else if (m.type === "genderuwo") {
+      const b = Math.sin(m.run * 0.5) * 2, raise = m.state === "windup" ? 1 - m.st / 0.9 : 0;
+      ctx.fillStyle = w ? "#fff" : "#2b2420";
+      ctx.beginPath(); ctx.ellipse(0, -42 - b, 28, 38, 0, 0, 6.28); ctx.fill();
+      for (let i = 0; i < 10; i++) { const a = -Math.PI + (i / 9) * Math.PI; ctx.beginPath(); ctx.moveTo(Math.cos(a) * 26, -42 - b + Math.sin(a) * 36); ctx.lineTo(Math.cos(a) * 34, -42 - b + Math.sin(a) * 44); ctx.lineTo(Math.cos(a + 0.2) * 26, -42 - b + Math.sin(a + 0.2) * 36); ctx.fill(); }
+      ctx.strokeStyle = w ? "#fff" : "#2b2420"; ctx.lineWidth = 10; ctx.lineCap = "round";
+      ctx.beginPath(); ctx.moveTo(18, -50 - b); ctx.lineTo(34, -30 - b - raise * 40); ctx.moveTo(-18, -50 - b); ctx.lineTo(-30, -24 - b - raise * 40); ctx.stroke();
+      ctx.fillStyle = "#ff3b3b"; ctx.shadowColor = "#ff3b3b"; ctx.shadowBlur = 10;
+      ctx.beginPath(); ctx.arc(6, -62 - b, 3.5, 0, 6.28); ctx.arc(16, -62 - b, 3.5, 0, 6.28); ctx.fill(); ctx.shadowBlur = 0;
+      ctx.fillStyle = "#e9d3a9"; ctx.beginPath(); ctx.moveTo(6, -50 - b); ctx.lineTo(9, -44 - b); ctx.lineTo(12, -50 - b); ctx.fill();
+    }
+    ctx.restore();
+    if ((m.seen > 0 || m.hp < d.hp) && !d.boss) {
+      const y = m.y - d.h - 14;
+      ctx.fillStyle = "rgba(0,0,0,0.55)"; ctx.fillRect(m.x - 21, y, 42, 5);
+      ctx.fillStyle = "#e5484d"; ctx.fillRect(m.x - 20, y + 1, 40 * clamp(m.hp / d.hp, 0, 1), 3);
+      ctx.font = "700 10px Nunito, sans-serif"; ctx.textAlign = "center"; ctx.fillStyle = "rgba(247,239,227,0.9)";
+      ctx.fillText(`${d.name} Lv${d.lv}`, m.x, y - 3);
+    }
+  }
+
+  function drawNpc(n, time) {
+    const look = n.id === "lurah" ? { color: n.color, accent: n.accent, hat: "#2b2238", hair: "#d9d4cc" } : { color: n.color, accent: n.accent, hair: "#3b2a22" };
+    const face = Math.atan2(P.y - n.y, P.x - n.x);
+    drawPerson(ctx, { x: n.x, y: n.y, face: dist(P, n) < 160 ? face : n.face, run: 0, moving: false, swing: 0, inv: 0, flash: 0 }, look, time);
+    ctx.font = "800 11px Nunito, sans-serif"; ctx.textAlign = "center"; ctx.fillStyle = "#f4b942";
+    ctx.fillText(n.name, n.x, n.y - 66);
+    let mark = "";
+    if (n.id === "lurah" && QUESTS[S.q.idx]) mark = S.q.status === "none" ? "!" : S.q.status === "done" ? "?" : "";
+    if (mark) {
+      const by = n.y - 84 + Math.sin(time * 4) * 3;
+      ctx.fillStyle = "#f4b942"; ctx.beginPath(); ctx.arc(n.x, by, 10, 0, 6.28); ctx.fill();
+      ctx.fillStyle = "#1b1208"; ctx.font = "700 18px Teko, sans-serif"; ctx.fillText(mark, n.x, by + 6);
+    }
+    if (nearNpc === n && !isTouch) { ctx.font = "800 11px Nunito, sans-serif"; ctx.fillStyle = "#f7efe3"; ctx.fillText("[E] Bicara", n.x, n.y + 18); }
+  }
+
+  function drawPickup(k, time) {
+    const by = Math.sin(time * 5 + k.x) * 2 - 6;
+    ctx.fillStyle = "rgba(0,0,0,0.25)"; ctx.beginPath(); ctx.ellipse(k.x, k.y, 6, 2.5, 0, 0, 6.28); ctx.fill();
+    if (k.kind === "coin") { ctx.fillStyle = "#f4b942"; ctx.beginPath(); ctx.arc(k.x, k.y + by, 5, 0, 6.28); ctx.fill(); ctx.fillStyle = "#ffe08a"; ctx.fillRect(k.x - 1, k.y + by - 3, 2, 4); }
+    else if (k.kind === "jamu") { ctx.fillStyle = "#c0563a"; roundRect(ctx, k.x - 5, k.y + by - 8, 10, 13, 3); ctx.fill(); ctx.fillStyle = "#e9d3a9"; ctx.fillRect(k.x - 4, k.y + by - 10, 8, 4); }
+    else if (k.kind === "taring") { ctx.fillStyle = "#f2ead8"; ctx.beginPath(); ctx.moveTo(k.x - 5, k.y + by + 4); ctx.quadraticCurveTo(k.x - 4, k.y + by - 10, k.x + 6, k.y + by - 10); ctx.quadraticCurveTo(k.x, k.y + by - 4, k.x + 1, k.y + by + 4); ctx.fill(); }
+  }
+
+  function render(now) {
+    const time = now / 1000;
+    const scale = clamp(Math.min(W / 720, H / 420), 0.75, 2.2);
+    const vw = W / scale, vh = H / scale;
+    let tx, ty;
+    if (P && mode !== "select") { tx = P.x; ty = P.y - 20; }
+    else { tx = 12 * T + Math.sin(time * 0.12) * 300; ty = 22 * T; }
+    cam.x += (tx - cam.x) * 0.12; cam.y += (ty - cam.y) * 0.12;
+    if (mode === "select") { cam.x = tx; cam.y = ty; }
+    const cx = clamp(cam.x, vw / 2, MW * T - vw / 2), cy = clamp(cam.y, vh / 2, MH * T - vh / 2);
+    let sx = 0, sy = 0;
+    if (shake > 0) { sx = rand(-7, 7) * shake; sy = rand(-7, 7) * shake; }
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    ctx.fillStyle = "#1d3b1b"; ctx.fillRect(0, 0, W, H);
+    ctx.setTransform(DPR * scale, 0, 0, DPR * scale, DPR * (W / 2 - cx * scale + sx), DPR * (H / 2 - cy * scale + sy));
+
+    const x0 = Math.max(0, Math.floor((cx - vw / 2) / T) - 1), x1 = Math.min(MW - 1, Math.ceil((cx + vw / 2) / T) + 1);
+    const y0 = Math.max(0, Math.floor((cy - vh / 2) / T) - 1), y1 = Math.min(MH - 1, Math.ceil((cy + vh / 2) / T) + 2);
+    for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) drawGround(x, y, time);
+
+    // efek di tanah
+    for (const e of effects) {
+      const k = e.t / e.dur;
+      if (e.kind === "ring") { ctx.strokeStyle = e.red ? `rgba(229,72,77,${1 - k})` : `rgba(232,190,130,${1 - k})`; ctx.lineWidth = 6; ctx.beginPath(); ctx.ellipse(e.x, e.y, e.r * k, e.r * k * 0.6, 0, 0, 6.28); ctx.stroke(); }
+      else if (e.kind === "pillar" && e.t < e.delay) { ctx.fillStyle = `rgba(255,120,50,${0.25 + 0.25 * Math.sin(time * 30)})`; ctx.beginPath(); ctx.ellipse(e.x, e.y, e.r, e.r * 0.55, 0, 0, 6.28); ctx.fill(); }
+      else if (e.kind === "boom") { ctx.fillStyle = `rgba(255,150,60,${0.5 * (1 - k)})`; ctx.beginPath(); ctx.ellipse(e.x, e.y, e.r * (0.5 + k * 0.5), e.r * 0.6 * (0.5 + k * 0.5), 0, 0, 6.28); ctx.fill(); }
+    }
+    for (const k of pickups) drawPickup(k, time);
+
+    // benda tinggi & makhluk diurutkan berdasarkan y (yang di bawah digambar belakangan)
+    const list = [];
+    for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) if (tileAt(x, y) === TREE) list.push({ y: (y + 1) * T - 2, f: () => drawTree(x, y, time) });
+    for (const hs of houses) if (hs.x + 3 >= x0 && hs.x <= x1 && hs.y + 2 >= y0 && hs.y - 1 <= y1) list.push({ y: (hs.y + 2) * T - 1, f: () => drawHouse(hs) });
+    if (mode !== "select" && P) {
+      for (const n of NPCS) list.push({ y: n.y, f: () => drawNpc(n, time) });
+      for (const m of monsters) if (!m.dead) list.push({ y: m.y, f: () => drawMonster(m, time) });
+      if (!P.dead) { const C = CLASSES[S.cls]; list.push({ y: P.y, f: () => drawPerson(ctx, P, { color: C.color, accent: C.accent, weapon: C.weapon }, time) }); }
+    }
+    list.sort((a, b) => a.y - b.y);
+    for (const o of list) o.f();
+
+    // efek di udara
+    for (const e of effects) {
+      const k = e.t / e.dur;
+      if (e.kind === "slash") { ctx.strokeStyle = `rgba(255,248,220,${0.85 * (1 - k)})`; ctx.lineWidth = e.big ? 7 : 5; ctx.beginPath(); ctx.arc(e.x, e.y, e.r * 0.85, e.ang - e.arc * (1 - k * 0.3), e.ang + e.arc * (0.4 + k * 0.6)); ctx.stroke(); }
+      else if (e.kind === "claw") { ctx.strokeStyle = `rgba(255,90,90,${1 - k})`; ctx.lineWidth = 4; for (const o of [-8, 0, 8]) { ctx.beginPath(); ctx.arc(e.x, e.y + o, e.r * 0.7, e.ang - 0.6, e.ang + 0.6); ctx.stroke(); } }
+      else if (e.kind === "pillar" && e.t >= e.delay) {
+        const kk = (e.t - e.delay) / e.dur, h = 150 * Math.min(1, kk * 4);
+        const g = ctx.createLinearGradient(0, e.y - h, 0, e.y);
+        g.addColorStop(0, "rgba(255,209,102,0)"); g.addColorStop(0.4, "rgba(255,140,60,0.85)"); g.addColorStop(1, "rgba(255,80,40,0.95)");
+        ctx.globalAlpha = 1 - Math.max(0, kk - 0.7) / 0.3; ctx.fillStyle = g;
+        ctx.beginPath(); ctx.ellipse(e.x, e.y - h / 2, e.r * 0.55 + Math.sin(time * 40) * 3, h / 2, 0, 0, 6.28); ctx.fill(); ctx.globalAlpha = 1;
+      }
+    }
+    for (const p of projs) {
+      if (p.kind === "arrow") {
+        const a = Math.atan2(p.vy, p.vx); ctx.save(); ctx.translate(p.x, p.y - 18); ctx.rotate(a);
+        ctx.strokeStyle = "#e8d6b5"; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.moveTo(-18, 0); ctx.lineTo(6, 0); ctx.stroke();
+        ctx.fillStyle = "#dfe6ee"; ctx.beginPath(); ctx.moveTo(11, 0); ctx.lineTo(4, -3.5); ctx.lineTo(4, 3.5); ctx.closePath(); ctx.fill(); ctx.restore();
+      } else {
+        ctx.fillStyle = "rgba(255,140,60,0.3)"; ctx.beginPath(); ctx.arc(p.x, p.y - 18, 15, 0, 6.28); ctx.fill();
+        ctx.fillStyle = "#ff7b39"; ctx.beginPath(); ctx.arc(p.x, p.y - 18, 8, 0, 6.28); ctx.fill();
+        ctx.fillStyle = "#ffe08a"; ctx.beginPath(); ctx.arc(p.x, p.y - 18, 3.5, 0, 6.28); ctx.fill();
+      }
+    }
+    for (const p of parts) { ctx.globalAlpha = Math.max(0, p.life / p.max); ctx.fillStyle = p.color; ctx.fillRect(p.x - 2, p.y - p.z - 2, 4, 4); }
+    ctx.globalAlpha = 1;
+    ctx.textAlign = "center";
+    for (const n of numbers) {
+      ctx.font = `700 ${n.size}px Teko, sans-serif`; ctx.globalAlpha = Math.min(1, n.life * 2);
+      ctx.fillStyle = "rgba(0,0,0,0.6)"; ctx.fillText(n.v, n.x + 1.5, n.y + 1.5); ctx.fillStyle = n.color; ctx.fillText(n.v, n.x, n.y);
+    }
+    ctx.globalAlpha = 1;
+    if (P && P.dead) {
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0); ctx.fillStyle = "rgba(10,6,20,0.55)"; ctx.fillRect(0, 0, W, H);
+    }
+  }
+
+  // peta mini: digambar sekali, lalu titik pemain/NPC/bos di atasnya
+  const miniBase = document.createElement("canvas"); miniBase.width = MW; miniBase.height = MH;
+  (() => {
+    const c = miniBase.getContext("2d");
+    const col = { [G]: "#3f7d3a", [FLOWER]: "#3f7d3a", [PATH]: "#c8a46e", [WATER]: "#2d6a96", [BRIDGE]: "#8b5e3c", [TREE]: "#24502a", [ROCK]: "#6f6a75", [HOUSE]: "#7a3b2e", [CAVE]: "#3a3142", [WALL]: "#1a1420" };
+    for (let y = 0; y < MH; y++) for (let x = 0; x < MW; x++) { c.fillStyle = col[map[y * MW + x]]; c.fillRect(x, y, 1, 1); }
+  })();
+  const mini = $("mini"), mctx = mini.getContext("2d");
+  function drawMini() {
+    const sx = mini.width / MW, sy = mini.height / MH;
+    mctx.imageSmoothingEnabled = false;
+    mctx.drawImage(miniBase, 0, 0, mini.width, mini.height);
+    const dot = (x, y, c, r) => { mctx.fillStyle = c; mctx.beginPath(); mctx.arc(x / T * sx, y / T * sy, r, 0, 6.28); mctx.fill(); };
+    for (const n of NPCS) dot(n.x, n.y, "#f4b942", 2.5);
+    for (const m of monsters) if (m.d.boss && !m.dead) dot(m.x, m.y, "#ff3b3b", 3.5);
+    dot(P.x, P.y, "#ffffff", 3);
+  }
+
+  // =====================================================================
+  // 10. UI
+  // =====================================================================
+  const ui = {
+    hud: $("hud"), touch: $("touch"), select: $("select"), pause: $("pauseBox"), win: $("win"),
+    hpFill: $("hpFill"), hpText: $("hpText"), hpBar: $("hpBar"), xpFill: $("xpFill"), lv: $("hLv"), name: $("hName"),
+    quest: $("questBox"), gold: $("gold"), pots: $("pots"), boss: $("bossBar"), bossFill: $("bossFill"),
+    bSkill: $("bSkill"), bRoll: $("bRoll"), bTalk: $("bTalk"),
+  };
+  const last = {};
+  function setText(el, key, v) { if (last[key] !== v) { last[key] = v; el.textContent = v; } }
+  function refreshHud(force) {
+    if (!S || !P) return;
+    if (force) for (const k in last) delete last[k];
+    const mh = maxHp(), hp = Math.max(0, Math.ceil(P.hp));
+    if (last.hp !== hp || last.mh !== mh) {
+      last.hp = hp; last.mh = mh;
+      ui.hpFill.style.width = (100 * hp / mh) + "%"; ui.hpText.textContent = `${hp} / ${mh}`;
+      ui.hpBar.classList.toggle("low", hp < mh * 0.3);
+    }
+    const xp = Math.round(100 * S.exp / expNeed(S.lv));
+    if (last.xp !== xp) { last.xp = xp; ui.xpFill.style.width = xp + "%"; }
+    setText(ui.lv, "lv", "Lv " + S.lv);
+    setText(ui.name, "name", CLASSES[S.cls].name);
+    setText(ui.gold, "gold", String(S.gold));
+    setText(ui.pots, "pots", String(S.potions));
+    const q = QUESTS[S.q.idx];
+    let qh = "";
+    if (!q) qh = "<b>Bebas bertualang</b>Semua misi selesai";
+    else if (S.q.status === "none") qh = "<b>Misi baru</b>Temui Ki Lurah (tanda !)";
+    else if (S.q.status === "active") qh = `<b>${q.title}</b>${q.type === "kill" ? "Kalahkan" : "Kumpulkan"} ${S.q.prog} / ${q.need}`;
+    else qh = `<b>${q.title}</b>Selesai! Lapor ke Ki Lurah`;
+    if (last.q !== qh) { last.q = qh; ui.quest.innerHTML = qh; }
+    const boss = monsters.find((m) => m.d.boss && !m.dead && m.aggro);
+    ui.boss.hidden = !boss || mode === "select";
+    if (boss) ui.bossFill.style.width = (100 * boss.hp / boss.d.hp) + "%";
+    const sc = Math.round(P.skillCd / CLASSES[S.cls].skill.cd * 40) / 40;
+    if (last.sc !== sc) { last.sc = sc; ui.bSkill.style.setProperty("--cd", sc); }
+    const rc = Math.round(P.rollCd / ATURAN.hindar.jeda * 20) / 20;
+    if (last.rc !== rc) { last.rc = rc; ui.bRoll.style.setProperty("--cd", rc); }
+    const talkable = !!nearNpc && mode === "play";
+    if (last.talk !== talkable) { last.talk = talkable; ui.bTalk.hidden = !talkable; }
+  }
+  function toast(text, big) {
+    const el = document.createElement("div"); el.className = "toast" + (big ? " big" : ""); el.textContent = text;
+    const box = $("toasts"); box.appendChild(el);
+    while (box.children.length > 3) box.firstChild.remove();
+    setTimeout(() => el.remove(), big ? 2200 : 3200);
+  }
+  function showUI() {
+    ui.select.hidden = mode !== "select";
+    ui.pause.hidden = mode !== "pause";
+    ui.win.hidden = mode !== "win";
+    dlg.box.hidden = mode !== "dialog";
+    ui.hud.hidden = mode === "select";
+    ui.touch.hidden = !(isTouch && mode === "play");
+    if (mode === "select") ui.boss.hidden = true;
+    resize();
+  }
+  function togglePause() {
+    if (mode === "play") {
+      mode = "pause";
+      $("pauseStats").textContent = `${CLASSES[S.cls].name} Lv ${S.lv} · ${S.kills} monster dikalahkan · serangan ${atkPower()} · senjata tingkat ${S.weapon}. Progres tersimpan otomatis.`;
+    } else if (mode === "pause") mode = "play";
+    else return;
+    showUI();
+  }
+  function showWin() {
+    mode = "win";
+    $("winStats").textContent = `${CLASSES[S.cls].name} mencapai Lv ${S.lv} dan mengalahkan ${S.kills} makhluk. Warga Wanasari berterima kasih padamu.`;
+    showUI(); save();
+  }
+  function toMenu() { save(); mode = "select"; buildSelect(); showUI(); }
+
+  function buildSelect() {
+    const wrap = $("heroes"); wrap.innerHTML = "";
+    for (const [id, c] of Object.entries(CLASSES)) {
+      const b = document.createElement("button"); b.type = "button"; b.className = "hero"; b.dataset.id = id;
+      b.setAttribute("aria-pressed", String(id === chosen));
+      b.innerHTML = `<canvas width="240" height="180"></canvas><b>${c.name}</b><span class="role">${c.role} · Nyawa ${c.hp}</span><p class="desc">${c.desc}</p>`;
+      b.addEventListener("click", () => { chosen = id; wrap.querySelectorAll(".hero").forEach((x) => x.setAttribute("aria-pressed", String(x.dataset.id === id))); });
+      wrap.appendChild(b);
+    }
+    const saved = store.get(SAVE_KEY, null);
+    const cont = $("btnCont");
+    if (saved && CLASSES[saved.cls]) { cont.hidden = false; cont.textContent = `Lanjutkan (${CLASSES[saved.cls].name} Lv ${saved.lv})`; $("btnNew").textContent = "Mulai baru (progres lama terhapus)"; }
+    else { cont.hidden = true; $("btnNew").textContent = "Mulai petualangan"; $("btnNew").className = "go"; }
+  }
+  const previews = {};
+  for (const id of Object.keys(CLASSES)) previews[id] = { x: 70, y: 96, face: 0.3, run: 0, moving: false, swing: 0, swingDur: 0.3, inv: 0, flash: 0 };
+  function drawPreviews(time) {
+    if (mode !== "select") return;
+    document.querySelectorAll(".hero").forEach((b) => {
+      const c = b.querySelector("canvas").getContext("2d"), id = b.dataset.id, C = CLASSES[id], e = previews[id];
+      c.setTransform(1, 0, 0, 1, 0, 0); c.clearRect(0, 0, 240, 180);
+      c.fillStyle = "#3d7a37"; c.fillRect(0, 0, 240, 180);
+      c.setTransform(1.75, 0, 0, 1.75, 0, 0);
+      const sel = id === chosen;
+      e.moving = sel; e.run = time * 10;
+      const ph = (time * 0.8) % 1.6;
+      e.swing = sel && ph < 0.3 ? 0.3 - ph : 0;
+      drawPerson(c, e, { color: C.color, accent: C.accent, weapon: C.weapon }, time, { preview: true });
+    });
+  }
+
+  $("btnNew").addEventListener("click", () => startGame(true));
+  $("btnCont").addEventListener("click", () => { const s = store.get(SAVE_KEY, null); if (s && CLASSES[s.cls]) { S = Object.assign(newSave(s.cls), s); chosen = S.cls; startGame(false); } });
+  $("btnPause").addEventListener("click", togglePause);
+  $("btnResume").addEventListener("click", togglePause);
+  $("btnMenu").addEventListener("click", toMenu);
+  $("btnWin").addEventListener("click", () => { mode = "play"; showUI(); });
+  document.addEventListener("visibilitychange", () => { if (document.hidden) { save(); if (mode === "play") togglePause(); } });
+  addEventListener("resize", resize);
+
+  // =====================================================================
+  // 11. LOOP UTAMA
+  // =====================================================================
+  let prev = performance.now(), miniT = 0;
+  function frame(now) {
+    const dt = Math.min(0.033, (now - prev) / 1000); prev = now;
+    update(dt);
+    render(now);
+    drawPreviews(now / 1000);
+    if (mode !== "select" && P) { refreshHud(false); miniT -= dt; if (miniT <= 0) { miniT = 0.2; drawMini(); } }
+    requestAnimationFrame(frame);
+  }
+  const saved0 = store.get(SAVE_KEY, null);
+  if (saved0 && CLASSES[saved0.cls]) chosen = saved0.cls;
+  buildSelect(); showUI();
+  requestAnimationFrame(frame);
+})();
+</script>
+<script>if("serviceWorker" in navigator){addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}</script>
+</body></html>

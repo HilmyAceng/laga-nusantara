@@ -1,0 +1,17 @@
+{
+  "name": "Laga Nusantara",
+  "short_name": "Laga",
+  "description": "Action RPG top-down: jelajahi hutan, naik level, selesaikan misi, kalahkan Genderuwo.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#140d24",
+  "theme_color": "#140d24",
+  "lang": "id",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
