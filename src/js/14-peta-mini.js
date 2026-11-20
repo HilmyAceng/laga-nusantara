@@ -7,12 +7,14 @@
 // peta mini: digambar sekali, lalu titik pemain/NPC/bos di atasnya
 // peta mini: dibuat ulang setiap pindah area
 const miniBase = document.createElement("canvas");
-function buildMiniBase() {
-  miniBase.width = MW; miniBase.height = MH;
-  const c = miniBase.getContext("2d");
-  const col = { [G]: "#3f7d3a", [FLOWER]: "#3f7d3a", [PATH]: "#c8a46e", [WATER]: "#2d6a96", [BRIDGE]: "#8b5e3c", [TREE]: "#24502a", [ROCK]: "#6f6a75", [HOUSE]: "#7a3b2e", [CAVE]: "#3a3142", [WALL]: "#1a1420" };
-  for (let y = 0; y < MH; y++) for (let x = 0; x < MW; x++) { c.fillStyle = col[map[y * MW + x]]; c.fillRect(x, y, 1, 1); }
+const TILE_COLOR = { [G]: "#3f7d3a", [FLOWER]: "#3f7d3a", [PATH]: "#c8a46e", [WATER]: "#2d6a96", [BRIDGE]: "#8b5e3c", [TREE]: "#24502a", [ROCK]: "#6f6a75", [HOUSE]: "#7a3b2e", [CAVE]: "#3a3142", [WALL]: "#1a1420" };
+// Gambar petak peta (1 petak = 1 piksel) ke sebuah kanvas. Dipakai juga oleh peta dunia.
+function paintTiles(cv, w, h, tiles) {
+  cv.width = w; cv.height = h;
+  const c = cv.getContext("2d");
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) { c.fillStyle = TILE_COLOR[tiles[y * w + x]]; c.fillRect(x, y, 1, 1); }
 }
+function buildMiniBase() { paintTiles(miniBase, MW, MH, map); }
 const mini = $("mini"), mctx = mini.getContext("2d");
 function drawMini() {
   // perbandingan lebar-tinggi peta dijaga, sisanya hitam

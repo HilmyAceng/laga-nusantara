@@ -39,18 +39,12 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
   padding-left: max(16px, env(safe-area-inset-left, 0px));
   padding-right: max(16px, env(safe-area-inset-right, 0px));
 }
-.me { display: grid; gap: 6px; width: min(320px, 50vw); padding: 10px 13px; border-radius: 14px; background: var(--panel); border: 1px solid var(--line); }
-.me-top { display: flex; align-items: baseline; gap: 8px; line-height: 1; }
-.me-top b { font-family: var(--font-display); font-size: 1.65rem; font-weight: 600; }
-.lv { font-family: var(--font-display); font-size: 1.4rem; color: var(--gold); margin-left: auto; font-variant-numeric: tabular-nums; }
+.me { display: grid; gap: 6px; width: min(280px, 46vw); padding: 10px 13px; border-radius: 14px; background: var(--panel); border: 1px solid var(--line); }
 .bar { position: relative; height: 16px; border-radius: 6px; background: rgba(255, 255, 255, 0.1); overflow: hidden; }
 .bar i { position: absolute; inset: 0 auto 0 0; width: 100%; background: var(--hp); transition: width 0.12s linear; }
-.bar.xp { height: 7px; }
-.bar.xp i { background: var(--xp); }
-.bar.low i { background: var(--red); }
 .bar span { position: relative; display: block; font-size: 0.76rem; font-weight: 800; line-height: 16px; text-align: center; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8); font-variant-numeric: tabular-nums; }
-.quest { font-size: 0.86rem; line-height: 1.3; color: var(--ink-dim); }
-.quest b { color: var(--gold); display: block; font-size: 0.76rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.quest { font-size: 0.95rem; line-height: 1.3; color: var(--ink-dim); }
+.quest b { color: var(--gold); display: block; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; }
 .right { display: grid; justify-items: end; gap: 6px; }
 .area-name { font-family: var(--font-display); font-size: 1.1rem; line-height: 1; padding: 4px 10px 1px; border-radius: 8px; background: var(--panel); color: var(--gold); }
 /* layar transisi antar area */
@@ -66,7 +60,17 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 .coin { width: 14px; height: 14px; border-radius: 50%; background: var(--gold); box-shadow: inset -2px -2px 0 rgba(0, 0, 0, 0.25); }
 .jamu { width: 11px; height: 15px; border-radius: 3px 3px 4px 4px; background: #c0563a; box-shadow: inset 0 3px 0 #e9d3a9; }
 .icon-btn { pointer-events: auto; width: 44px; height: 44px; border-radius: 12px; cursor: pointer; background: var(--panel); border: 1px solid var(--line); font-weight: 800; font-size: 1.05rem; }
-#mini { width: 176px; height: 120px; border-radius: 10px; border: 1px solid var(--line); background: #000; image-rendering: pixelated; }
+#mini { width: 176px; height: 120px; border-radius: 10px; border: 1px solid var(--line); background: #000; image-rendering: pixelated; pointer-events: auto; cursor: zoom-in; }
+#mini:hover { border-color: var(--gold); }
+/* Peta besar */
+.map-panel { width: min(900px, 100%); gap: 10px; }
+.map-panel h1 { font-size: 2.4rem; }
+.map-panel .icon-btn { flex: none; }
+.map-panel .tabs { width: min(320px, 100%); }
+#bigMap { display: block; width: 100%; height: min(62vh, 560px); border-radius: 12px; background: #120d18; }
+.map-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 0.8rem; font-weight: 700; color: var(--ink-dim); }
+.map-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
+.map-hint { margin: 0; font-size: 0.75rem; color: var(--ink-dim); }
 .boss { position: absolute; left: 50%; top: 10px; transform: translateX(-50%); width: min(360px, 40vw); text-align: center; pointer-events: none; }
 .boss b { font-family: var(--font-display); font-size: 1.3rem; color: #ff8b8e; letter-spacing: 0.02em; }
 .boss .bar i { background: var(--red); }
@@ -236,6 +240,9 @@ h1 span { color: var(--gold); }
   .me { padding: 6px 8px; gap: 4px; }
   .quest { font-size: 0.66rem; }
   #mini { width: 132px; height: 90px; }
+  .map-panel h1 { font-size: 1.7rem; }
+  #bigMap { height: 58vh; }
+  .map-legend { font-size: 0.7rem; }
 }
 @media (prefers-reduced-motion: reduce) { .go, .bar i { transition: none; } .toast { animation: none; } }
 </style>
@@ -245,9 +252,6 @@ h1 span { color: var(--gold); }
 
   <div class="hud" id="hud" hidden>
     <div class="me">
-      <div class="me-top"><b id="hName">Pendekar</b><span class="lv" id="hLv">Lv 1</span></div>
-      <div class="bar" id="hpBar"><i id="hpFill"></i><span id="hpText">120 / 120</span></div>
-      <div class="bar xp" aria-label="EXP"><i id="xpFill"></i></div>
       <div class="quest" id="questBox"></div>
     </div>
     <div class="right">
@@ -256,7 +260,7 @@ h1 span { color: var(--gold); }
         <span class="chip" aria-label="Jamu"><i class="jamu"></i><span id="pots">0</span></span>
         <button class="icon-btn" id="btnPause" type="button" aria-label="Jeda">❚❚</button>
       </div>
-      <canvas id="mini" width="176" height="120" aria-label="Peta mini"></canvas>
+      <canvas id="mini" width="176" height="120" role="button" tabindex="-1" aria-label="Peta mini — klik untuk buka peta besar"></canvas>
       <span class="area-name" id="areaName">Desa Wanasari</span>
     </div>
   </div>
@@ -393,6 +397,37 @@ h1 span { color: var(--gold); }
     </div>
   </div>
 
+  <!-- Peta besar: tombol M atau klik peta mini (lihat js/15-peta-besar.js) -->
+  <div class="overlay" id="mapBox" hidden>
+    <div class="panel map-panel">
+      <div class="head">
+        <div>
+          <p class="eyebrow" id="mapSub">Peta</p>
+          <h1 id="mapName">Desa <span>Wanasari</span></h1>
+        </div>
+        <button class="icon-btn" id="btnMapClose" type="button" aria-label="Tutup peta">✕</button>
+      </div>
+      <div class="tabs" role="tablist">
+        <button type="button" role="tab" id="tabArea" aria-selected="true">Area ini</button>
+        <button type="button" role="tab" id="tabWorld" aria-selected="false">Peta dunia</button>
+      </div>
+      <canvas id="bigMap" aria-label="Peta"></canvas>
+      <div class="map-legend" id="legendArea">
+        <span><i style="background:#fff"></i>Kamu</span>
+        <span><i style="background:#f4b942"></i>Warga</span>
+        <span><i style="background:#8fd3ff"></i>Jalan keluar</span>
+        <span><i style="background:#e98a7a"></i>Monster</span>
+        <span><i style="background:#ff3b3b"></i>Bos</span>
+      </div>
+      <div class="map-legend" id="legendWorld" hidden>
+        <span><i style="background:#fff"></i>Kamu</span>
+        <span><i style="background:#8fd3ff"></i>Jalan antar-area</span>
+        <span><i style="background:#f4b942"></i>Tujuan misi</span>
+      </div>
+      <p class="map-hint" id="mapHint"></p>
+    </div>
+  </div>
+
   <div class="overlay" id="win" hidden>
     <div class="panel small">
       <p class="eyebrow">Misi utama selesai</p>
@@ -420,7 +455,8 @@ h1 span { color: var(--gold); }
 <script src="js/12-update.js"></script>
 <script src="js/13-gambar.js"></script>
 <script src="js/14-peta-mini.js"></script>
-<script src="js/15-hud.js"></script>
-<script src="js/16-menu-jeda.js"></script>
-<script src="js/17-layar-judul.js"></script>
-<script src="js/18-main.js"></script>
+<script src="js/15-peta-besar.js"></script>
+<script src="js/16-hud.js"></script>
+<script src="js/17-menu-jeda.js"></script>
+<script src="js/18-layar-judul.js"></script>
+<script src="js/19-main.js"></script>

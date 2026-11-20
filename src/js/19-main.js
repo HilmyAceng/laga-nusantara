@@ -11,6 +11,7 @@ function frame(now) {
   update(dt);
   render(now);
   drawPreviews(now / 1000);
+  if (mode === "map") drawBigMap(now / 1000);
   if (actx) playMusic(pickMusic());
   if (mode !== "select" && P) { refreshHud(false); miniT -= dt; if (miniT <= 0) { miniT = 0.2; drawMini(); } }
   requestAnimationFrame(frame);

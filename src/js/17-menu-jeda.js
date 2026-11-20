@@ -28,6 +28,7 @@ function buildControls() {
     [keys("hindar"), `Hindar <small>— guling cepat, kebal sesaat</small>`],
     [keys("jamu"), `Minum jamu <small>— pulihkan ${pulih}% nyawa</small>`],
     [keys("bicara"), `Bicara <small>— saat dekat NPC, juga menutup dialog</small>`],
+    [keys("peta"), "Buka / tutup peta besar <small>— bisa juga klik peta mini</small>"],
     [keys("jeda"), "Jeda / lanjut"],
     [keys("musik"), "Musik nyala / mati"],
   ];
@@ -39,6 +40,7 @@ function buildControls() {
     `<b>Hindar</b> — guling ke arah joystick, kebal sesaat`,
     `<b>Jamu</b> — pulihkan ${pulih}% nyawa`,
     `<b>Bicara</b> — hanya muncul saat dekat NPC`,
+    `<b>Peta mini</b> kanan atas — ketuk untuk buka peta besar`,
     `<b>❚❚</b> kanan atas — jeda. <small>Putar HP ke mode lanskap biar leluasa.</small>`,
   ].map((t) => `<li>${t}</li>`).join("");
   showCtlTab(ctlTab);

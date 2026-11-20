@@ -24,9 +24,11 @@ addEventListener("keydown", (e) => {
   if (act === "bicara") { if (mode === "dialog") closeDialog(); else press.talk = true; }
   if (act === "jeda") {
     if (mode === "dialog") closeDialog();
+    else if (mode === "map") closeMap();
     else if (mode === "pause" && PAUSE_BACK[pauseView]) showPauseView(PAUSE_BACK[pauseView]);
     else togglePause();
   }
+  if (act === "peta") toggleMap();
   if (act === "musik") { setAudio("musik", !audioOn.musik); if (mode !== "select") toast(`Musik ${audioOn.musik ? "nyala" : "mati"}`, false); }
 });
 addEventListener("keyup", (e) => { const act = ACTION_OF[keyName(e)]; if (HOLD[act]) keys[HOLD[act]] = false; });
@@ -34,7 +36,7 @@ addEventListener("keyup", (e) => { const act = ACTION_OF[keyName(e)]; if (HOLD[a
 // Teks petunjuk tombol di layar judul juga dibuat dari KONTROL.
 const KEY_LABEL = { ArrowUp: "↑", ArrowDown: "↓", ArrowLeft: "←", ArrowRight: "→", Escape: "Esc", " ": "Spasi" };
 const kb = (act) => KONTROL[act].map((k) => `<kbd>${KEY_LABEL[k] || (k.length === 1 ? k.toUpperCase() : k)}</kbd>`).join("/");
-$("keysHint").innerHTML = `${kb("kiri")}${kb("atas")}${kb("kanan")}${kb("bawah")} gerak · ${kb("serang")} serang (tahan) · ${kb("jurus")} jurus · ${kb("hindar")} hindar · ${kb("jamu")} minum jamu · ${kb("bicara")} bicara · ${kb("jeda")} jeda · ${kb("musik")} musik`;
+$("keysHint").innerHTML = `${kb("kiri")}${kb("atas")}${kb("kanan")}${kb("bawah")} gerak · ${kb("serang")} serang (tahan) · ${kb("jurus")} jurus · ${kb("hindar")} hindar · ${kb("jamu")} minum jamu · ${kb("bicara")} bicara · ${kb("peta")} peta · ${kb("jeda")} jeda · ${kb("musik")} musik`;
 
 const stickEl = $("stick"), knob = $("knob");
 let stickId = null;

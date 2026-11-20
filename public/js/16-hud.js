@@ -1,13 +1,12 @@
 // =====================================================================
 // HUD
-// Panel status, koin & jamu, kotak cooldown, pesan singkat (toast),
+// Kotak misi, koin & jamu, kotak cooldown, pesan singkat (toast),
 // serta showUI() yang mengatur layar mana yang tampil.
 // =====================================================================
 "use strict";
 
 const ui = {
   hud: $("hud"), touch: $("touch"), select: $("select"), pause: $("pauseBox"), win: $("win"),
-  hpFill: $("hpFill"), hpText: $("hpText"), hpBar: $("hpBar"), xpFill: $("xpFill"), lv: $("hLv"), name: $("hName"),
   quest: $("questBox"), gold: $("gold"), pots: $("pots"), boss: $("bossBar"), bossFill: $("bossFill"),
   bSkill: $("bSkill"), bRoll: $("bRoll"), bTalk: $("bTalk"),
   skills: $("skills"), sSkill: $("sSkill"), sRoll: $("sRoll"), sSkillSec: $("sSkillSec"), sRollSec: $("sRollSec"),
@@ -29,16 +28,7 @@ function setText(el, key, v) { if (last[key] !== v) { last[key] = v; el.textCont
 function refreshHud(force) {
   if (!S || !P) return;
   if (force) for (const k in last) delete last[k];
-  const mh = maxHp(), hp = Math.max(0, Math.ceil(P.hp));
-  if (last.hp !== hp || last.mh !== mh) {
-    last.hp = hp; last.mh = mh;
-    ui.hpFill.style.width = (100 * hp / mh) + "%"; ui.hpText.textContent = `${hp} / ${mh}`;
-    ui.hpBar.classList.toggle("low", hp < mh * 0.3);
-  }
-  const xp = Math.round(100 * S.exp / expNeed(S.lv));
-  if (last.xp !== xp) { last.xp = xp; ui.xpFill.style.width = xp + "%"; }
-  setText(ui.lv, "lv", "Lv " + S.lv);
-  setText(ui.name, "name", CLASSES[S.cls].name);
+  // Nama, level, nyawa & EXP hero digambar di atas kepalanya: lihat drawPlayerTag() di 13-gambar.js
   setText(ui.gold, "gold", String(S.gold));
   setText(ui.pots, "pots", String(S.potions));
   const q = QUESTS[S.q.idx];
@@ -77,6 +67,7 @@ function toast(text, big) {
 function showUI() {
   ui.select.hidden = mode !== "select";
   ui.pause.hidden = mode !== "pause";
+  $("mapBox").hidden = mode !== "map";
   ui.win.hidden = mode !== "win";
   dlg.box.hidden = mode !== "dialog";
   ui.hud.hidden = mode === "select";

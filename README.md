@@ -19,7 +19,7 @@ Bisa dimainkan di HP (joystick + tombol sentuh, mode lanskap) dan desktop (keybo
 ## Kontrol
 
 - HP: joystick kiri untuk gerak. Tombol Serang (tahan), Jurus, Hindar, Jamu, dan Bicara (muncul di dekat NPC)
-- Keyboard: tombol panah untuk gerak, `D` serang (tahan), `S` jurus, `A` hindar, `W` jamu, `E` bicara, `Esc` jeda, `M` musik nyala/mati
+- Keyboard: tombol panah untuk gerak, `D` serang (tahan), `S` jurus, `A` hindar, `W` jamu, `E` bicara, `M` buka peta besar (atau klik peta mini), `Esc` jeda, `N` musik nyala/mati
 
 ## Menu jeda
 
@@ -53,10 +53,11 @@ Semua menu memakai tombol. `Esc` = kembali satu halaman.
 | `12-update.js` | Logika tiap frame: gerak pemain, AI monster, peluru |
 | `13-gambar.js` | Menggambar dunia, karakter, monster, efek |
 | `14-peta-mini.js` | Peta mini |
-| `15-hud.js` | Panel status, cooldown, toast, layar mana yang tampil |
-| `16-menu-jeda.js` | Menu jeda, volume, panduan kontrol |
-| `17-layar-judul.js` | Layar pilih hero & mulai permainan |
-| `18-main.js` | Loop utama (dimuat paling akhir) |
+| `15-peta-besar.js` | Peta besar (tombol `M` / klik peta mini): tab "Area ini" dan "Peta dunia" (ketiga area + tujuan misi), game berhenti selama dibuka |
+| `16-hud.js` | Kotak misi, koin & jamu, cooldown, toast, layar mana yang tampil |
+| `17-menu-jeda.js` | Menu jeda, volume, panduan kontrol |
+| `18-layar-judul.js` | Layar pilih hero & mulai permainan |
+| `19-main.js` | Loop utama (dimuat paling akhir) |
 
 Kalau menambah file JS baru: taruh di `src/js/` dengan nomor urut, tambahkan `<script src="js/...">` di `src/game.html`, lalu jalankan `./build.sh` (daftar file offline di `sw.js` ikut diperbarui otomatis).
 

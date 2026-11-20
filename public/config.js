@@ -23,7 +23,8 @@ const KONTROL = {
   jamu: ["w"],
   bicara: ["e", "Enter"],
   jeda: ["Escape", "p"],
-  musik: ["m"],           // nyalakan / matikan musik
+  peta: ["m"],            // buka / tutup peta besar
+  musik: ["n"],           // nyalakan / matikan musik
 };
 
 // ---------------------------------------------------------------------

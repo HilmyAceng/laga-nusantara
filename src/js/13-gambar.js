@@ -191,6 +191,29 @@ function drawNpc(n, time) {
   if (nearNpc === n && !isTouch) { ctx.font = "800 11px Nunito, sans-serif"; ctx.fillStyle = "#f7efe3"; ctx.fillText("[E] Bicara", n.x, n.y + 18); }
 }
 
+// Status hero di atas kepalanya: nama + level, bar nyawa (dengan angka), bar EXP tipis.
+// Digambar dalam ukuran layar (tidak ikut zoom) supaya selalu terbaca.
+function drawPlayerTag(px, py) {
+  const mh = maxHp(), hp = Math.max(0, Math.ceil(P.hp)), w = 104, x = Math.round(px - w / 2);
+  let y = Math.round(py);
+  ctx.textAlign = "center"; ctx.lineJoin = "round";
+  // nama & level
+  ctx.font = "600 17px Teko, sans-serif";
+  const nm = CLASSES[S.cls].name, lv = "Lv " + S.lv, gap = 6;
+  const wn = ctx.measureText(nm).width, wl = ctx.measureText(lv).width, sx = px - (wn + gap + wl) / 2;
+  ctx.textAlign = "left"; ctx.lineWidth = 3; ctx.strokeStyle = "rgba(10,6,20,0.85)";
+  ctx.strokeText(nm, sx, y - 22); ctx.fillStyle = "#f7efe3"; ctx.fillText(nm, sx, y - 22);
+  ctx.strokeText(lv, sx + wn + gap, y - 22); ctx.fillStyle = "#f4b942"; ctx.fillText(lv, sx + wn + gap, y - 22);
+  // bar nyawa
+  ctx.fillStyle = "rgba(10,6,20,0.8)"; ctx.fillRect(x - 2, y - 18, w + 4, 18);
+  ctx.fillStyle = "rgba(255,255,255,0.12)"; ctx.fillRect(x, y - 16, w, 11);
+  ctx.fillStyle = hp < mh * 0.3 ? "#e5484d" : "#5ad17a"; ctx.fillRect(x, y - 16, w * clamp(hp / mh, 0, 1), 11);
+  ctx.font = "800 10px Nunito, sans-serif"; ctx.textAlign = "center"; ctx.fillStyle = "#fff";
+  ctx.fillText(`${hp} / ${mh}`, px, y - 7);
+  // bar EXP
+  ctx.fillStyle = "#7fb2ff"; ctx.fillRect(x, y - 4, w * clamp(S.exp / expNeed(S.lv), 0, 1), 3);
+}
+
 function drawPickup(k, time) {
   const by = Math.sin(time * 5 + k.x) * 2 - 6;
   ctx.fillStyle = "rgba(0,0,0,0.25)"; ctx.beginPath(); ctx.ellipse(k.x, k.y, 6, 2.5, 0, 0, 6.28); ctx.fill();
@@ -292,6 +315,10 @@ function render(now) {
     const g = ctx.createRadialGradient(px, py, 90 * scale, px, py, 330 * scale);
     g.addColorStop(0, "rgba(6,3,12,0)"); g.addColorStop(1, "rgba(6,3,12,0.82)");
     ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  }
+  if (P && !P.dead && mode !== "select") {
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    drawPlayerTag(W / 2 + (P.x - cx + sx) * scale, H / 2 + (P.y - 64 - cy + sy) * scale);
   }
   if (P && P.dead) {
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0); ctx.fillStyle = "rgba(10,6,20,0.55)"; ctx.fillRect(0, 0, W, H);
