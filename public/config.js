@@ -24,6 +24,7 @@ const KONTROL = {
   bicara: ["e", "Enter"],
   jeda: ["Escape", "p"],
   peta: ["m"],            // buka / tutup peta besar
+  misi: ["j"],            // buka / tutup daftar misi (pilih misi yang dilacak)
   musik: ["n"],           // nyalakan / matikan musik
 };
 
@@ -66,6 +67,11 @@ const ATURAN = {
 
   // Mesin Teleport (tiang bendera). Berdiri di dekatnya = nyawa pulih memakai energi mesin.
   // Klik mesin di peta besar (tombol M) untuk pindah ke sana.
+  // Peta besar: zoom paling dekat (1 = seluruh peta terlihat, 4 = 4 kali lebih dekat)
+  peta: {
+    zoomMaks: 4,
+  },
+
   // Tombol "Dukung Kami" di halaman Credit. Isi dengan link donasi kamu,
   // contoh "https://trakteer.id/namakamu" atau "https://saweria.co/namakamu".
   // Selama kosong, tombol tetap tampil tapi hanya memberi tahu bahwa link belum diisi.

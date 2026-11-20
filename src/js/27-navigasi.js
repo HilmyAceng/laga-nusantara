@@ -30,7 +30,7 @@ function jalurArea(dari, ke) {
 // Tujuan di area sekarang: titik tujuan itu sendiri, atau gerbang menuju area berikutnya.
 function tujuanDiArea() {
   if (!S || !P) return null;
-  const tg = ceritaTarget();
+  const tg = targetLacak();   // misi yang sedang dilacak (30-daftar-misi.js)
   if (!tg) return null;
   if (tg.area === areaId) return tg.x != null ? { x: tg.x, y: tg.y, npc: tg.npc } : null;
   const jalur = jalurArea(areaId, tg.area);

@@ -23,6 +23,7 @@ function showMapTab(tab) {
     $("mapName").innerHTML = `${words.join(" ")} <span>${last}</span>`;
     $("mapSub").textContent = t("peta.sub", { sub: area.sub });
   }
+  refreshZoomBtn();
   if (mode === "map") drawBigMap(performance.now() / 1000);
 }
 
@@ -32,6 +33,7 @@ function openMap() {
   const k = KONTROL.peta[0];
   $("mapHint").textContent = isTouch ? t("peta.hintSentuh") : t("peta.hintKey", { k: k.length === 1 ? k.toUpperCase() : k });
   showUI();
+  resetIkutPeta();
   showMapTab(mapTab);
 }
 function closeMap() {
@@ -57,7 +59,10 @@ function drawAreaMap(time) {
   c.fillStyle = area.tepi === WALL ? "#120d18" : "#1d3b1b"; c.fillRect(0, 0, cw, ch);
   // ukuran 1 petak di layar, perbandingan peta dijaga
   const pad = 14 * DPR;
-  const k = Math.min((cw - pad * 2) / MW, (ch - pad * 2) / MH), ox = (cw - MW * k) / 2, oy = (ch - MH * k) / 2;
+  const k0 = Math.min((cw - pad * 2) / MW, (ch - pad * 2) / MH), ox0 = (cw - MW * k0) / 2, oy0 = (ch - MH * k0) / 2;
+  // zoom (29-zoom-peta.js): tampilan berpusat di pemain, atau di tempat yang digeser
+  const v = tampilanPeta(cw, ch, ox0 + P.x / T * k0, oy0 + P.y / T * k0);
+  const k = k0 * v.z, ox = ox0 * v.z + v.ax, oy = oy0 * v.z + v.ay;
   c.imageSmoothingEnabled = false;
   c.drawImage(miniBase, ox, oy, MW * k, MH * k);
   c.strokeStyle = "rgba(255,255,255,0.15)"; c.lineWidth = DPR; c.strokeRect(ox, oy, MW * k, MH * k);
@@ -156,7 +161,7 @@ function buildWorld() {
 }
 
 // Area tujuan cerita sekarang (null = tidak ada / sudah tamat)
-function questArea() { const tg = ceritaTarget(); return tg ? tg.area : null; }
+function questArea() { const tg = targetLacak(); return tg ? tg.area : null; }
 const dikunjungi = (id) => !!(S && S.dikunjungi[id]);
 
 function drawWorldMap(time) {
@@ -170,8 +175,12 @@ function drawWorldMap(time) {
   // ruang untuk nama area di atas & bawah
   const padX = 16 * DPR, padTop = 40 * DPR, padBot = 30 * DPR;
   const ww = world.right - world.left, wh = world.bottom - world.top;
-  const k = Math.min((cw - padX * 2) / ww, (ch - padTop - padBot) / wh);
-  const ox = (cw - ww * k) / 2 - world.left * k, oy = padTop + (ch - padTop - padBot - wh * k) / 2 - world.top * k;
+  const k0 = Math.min((cw - padX * 2) / ww, (ch - padTop - padBot) / wh);
+  const ox0 = (cw - ww * k0) / 2 - world.left * k0, oy0 = padTop + (ch - padTop - padBot - wh * k0) / 2 - world.top * k0;
+  // zoom (29-zoom-peta.js): berpusat di posisi pemain di peta dunia
+  const pp = world.parts[areaId] || { x: 0, y: 0 };
+  const v = tampilanPeta(cw, ch, ox0 + (pp.x + P.x / T) * k0, oy0 + (pp.y + P.y / T) * k0);
+  const k = k0 * v.z, ox = ox0 * v.z + v.ax, oy = oy0 * v.z + v.ay;
   const X = (tx) => ox + tx * k, Y = (ty) => oy + ty * k;
   // layar sempit (HP tegak) → tulisan lebih kecil; tulisan tidak boleh keluar kotak
   const fs = clamp(cw / DPR / 600, 0.62, 1);
@@ -222,7 +231,7 @@ function drawWorldMap(time) {
     }
   }
   // titik tujuan cerita (bintang)
-  const tg = ceritaTarget();
+  const tg = targetLacak();
   if (tg && tg.x != null && world.parts[tg.area] && dikunjungi(tg.area)) bintang(c, X(world.parts[tg.area].x + tg.x / T), Y(world.parts[tg.area].y + tg.y / T), DPR * fs, time);
   // gerbang
   for (const l of world.links) if (dikunjungi(l.a) || dikunjungi(l.b)) for (const [gx, gy] of [[l.x1, l.y1], [l.x2, l.y2]]) {

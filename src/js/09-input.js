@@ -25,10 +25,12 @@ addEventListener("keydown", (e) => {
   if (act === "jeda") {
     if (mode === "dialog") closeDialog();
     else if (mode === "map") closeMap();
+    else if (mode === "misi") tutupMisi();
     else if (mode === "pause" && PAUSE_BACK[pauseView]) showPauseView(PAUSE_BACK[pauseView]);
     else togglePause();
   }
   if (act === "peta") toggleMap();
+  if (act === "misi") toggleMisi();
   if (act === "musik") { setAudio("musik", !audioOn.musik); if (mode !== "select") toast(t("toast.musik", { status: t(audioOn.musik ? "toast.nyala" : "toast.mati") }), false); }
 });
 addEventListener("keyup", (e) => { const act = ACTION_OF[keyName(e)]; if (HOLD[act]) keys[HOLD[act]] = false; });
@@ -38,7 +40,7 @@ const KEY_LABEL = { ArrowUp: "↑", ArrowDown: "↓", ArrowLeft: "←", ArrowRig
 const kb = (act) => KONTROL[act].map((k) => `<kbd>${KEY_LABEL[k] || (k.length === 1 ? k.toUpperCase() : k)}</kbd>`).join("/");
 function buildKeysHint() {
   $("keysHint").innerHTML = t("judul.keys", { gerak: kb("kiri") + kb("atas") + kb("kanan") + kb("bawah"), serang: kb("serang"), jurus: kb("jurus"),
-    hindar: kb("hindar"), jamu: kb("jamu"), bicara: kb("bicara"), peta: kb("peta"), jeda: kb("jeda"), musik: kb("musik") });
+    hindar: kb("hindar"), jamu: kb("jamu"), bicara: kb("bicara"), peta: kb("peta"), misi: kb("misi"), jeda: kb("jeda"), musik: kb("musik") });
 }
 buildKeysHint();
 

@@ -82,7 +82,9 @@ Semua menu memakai tombol. `Esc` = kembali satu halaman.
 | `26-monster-baru.js` | Perilaku monster baru, pola serangan 3 bos baru, bola api & zona bahaya, gambar makhluk baru |
 | `27-navigasi.js` | Panah tujuan, bintang di peta, jalur antar-area |
 | `28-dukung.js` | Tombol "Dukung Kami" di halaman Credit (link di `ATURAN.dukung.tautan`) |
-| `29-main.js` | Loop utama (dimuat paling akhir) |
+| `29-zoom-peta.js` | Zoom in / out & geser peta besar (tombol +/-, roda mouse, cubit di HP) |
+| `30-daftar-misi.js` | Popup daftar misi (judul, perintah, hadiah) & pilih misi yang dilacak |
+| `31-main.js` | Loop utama (dimuat paling akhir) |
 
 Kalau menambah file JS baru: taruh di `src/js/` dengan nomor urut, tambahkan `<script src="js/...">` di `src/game.html`, lalu jalankan `./build.sh` (daftar file offline di `sw.js` ikut diperbarui otomatis).
 

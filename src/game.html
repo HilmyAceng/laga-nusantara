@@ -39,14 +39,15 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
   padding-left: max(16px, env(safe-area-inset-left, 0px));
   padding-right: max(16px, env(safe-area-inset-right, 0px));
 }
-.me { display: grid; gap: 6px; width: min(280px, 46vw); padding: 10px 13px; border-radius: 14px; background: var(--panel); border: 1px solid var(--line); }
+.me { display: grid; gap: 4px; width: min(230px, 40vw); padding: 7px 10px; border-radius: 12px; pointer-events: auto; cursor: pointer; background: var(--panel); border: 1px solid var(--line); }
 .bar { position: relative; height: 16px; border-radius: 6px; background: rgba(255, 255, 255, 0.1); overflow: hidden; }
 .bar i { position: absolute; inset: 0 auto 0 0; width: 100%; background: var(--hp); transition: width 0.12s linear; }
 .bar span { position: relative; display: block; font-size: 0.76rem; font-weight: 800; line-height: 16px; text-align: center; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8); font-variant-numeric: tabular-nums; }
-.quest { font-size: 0.95rem; line-height: 1.3; color: var(--ink-dim); }
-.quest b { color: var(--gold); display: block; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.quest { font-size: 0.78rem; line-height: 1.25; color: var(--ink-dim); }
+.me:hover { border-color: var(--gold); }
+.quest b { color: var(--gold); display: block; font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase; }
 .right { display: grid; justify-items: end; gap: 6px; }
-.area-name { font-family: var(--font-display); font-size: 1.1rem; line-height: 1; padding: 4px 10px 1px; border-radius: 8px; background: var(--panel); color: var(--gold); }
+.area-name { font-family: var(--font-display); font-size: 0.95rem; line-height: 1; padding: 4px 10px 1px; border-radius: 8px; background: var(--panel); color: var(--gold); }
 /* layar transisi antar area */
 .overlay.bye { z-index: 30; background: #07050c; }
 .fade { position: absolute; inset: 0; z-index: 20; display: grid; place-items: center; background: #07050c; opacity: 0; pointer-events: none; transition: opacity 0.45s ease; }
@@ -57,11 +58,12 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 .fade-card b { font-family: var(--font-display); font-size: 3rem; font-weight: 700; line-height: 0.9; color: var(--gold); }
 .fade-card span { font-size: 0.9rem; color: var(--ink-dim); }
 .chips { display: flex; gap: 6px; align-items: center; }
-.chip { display: flex; align-items: center; gap: 6px; height: 44px; padding: 0 13px; border-radius: 12px; background: var(--panel); border: 1px solid var(--line); font-weight: 800; font-size: 1rem; font-variant-numeric: tabular-nums; }
+.chip { display: flex; align-items: center; gap: 5px; height: 32px; padding: 0 9px; border-radius: 9px; background: var(--panel); border: 1px solid var(--line); font-weight: 800; font-size: 0.85rem; font-variant-numeric: tabular-nums; }
 .coin { width: 14px; height: 14px; border-radius: 50%; background: var(--gold); box-shadow: inset -2px -2px 0 rgba(0, 0, 0, 0.25); }
 .jamu { width: 11px; height: 15px; border-radius: 3px 3px 4px 4px; background: #c0563a; box-shadow: inset 0 3px 0 #e9d3a9; }
 .icon-btn { pointer-events: auto; width: 44px; height: 44px; border-radius: 12px; cursor: pointer; background: var(--panel); border: 1px solid var(--line); font-weight: 800; font-size: 1.05rem; }
-#mini { width: 176px; height: 120px; border-radius: 10px; border: 1px solid var(--line); background: #000; image-rendering: pixelated; pointer-events: auto; cursor: zoom-in; }
+.hud .icon-btn { width: 32px; height: 32px; border-radius: 9px; font-size: 0.8rem; }
+#mini { width: 132px; height: 90px; border-radius: 8px; border: 1px solid var(--line); background: #000; image-rendering: pixelated; pointer-events: auto; cursor: zoom-in; }
 #mini:hover { border-color: var(--gold); }
 /* Peta besar */
 .map-panel { width: min(900px, 100%); gap: 10px; }
@@ -72,7 +74,29 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 .tele-ask { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(320px, 90%); box-sizing: border-box; padding: 16px; display: grid; gap: 12px; text-align: center; background: var(--panel); border: 1px solid #7dffa8; border-radius: 16px; box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6); }
 .tele-ask p { margin: 0; font-family: var(--font-display); font-size: 1.6rem; line-height: 1; }
 .tele-ask .btns { display: flex; gap: 10px; justify-content: center; }
-#bigMap { display: block; width: 100%; height: min(62vh, 560px); border-radius: 12px; background: #120d18; }
+#bigMap { display: block; width: 100%; height: min(62vh, 560px); border-radius: 12px; background: #120d18; touch-action: none; }
+.zoom-btns { position: absolute; right: 8px; top: 8px; display: grid; gap: 6px; }
+.zoom-btns .icon-btn { width: 36px; height: 36px; font-size: 1.3rem; line-height: 1; background: rgba(20, 14, 34, 0.85); }
+.zoom-btns .icon-btn:disabled { opacity: 0.35; cursor: default; }
+.zoom-btns .ring { display: inline-block; width: 12px; height: 12px; border-radius: 50%; border: 2px solid currentColor; box-shadow: inset 0 0 0 2px rgba(20, 14, 34, 0.85), inset 0 0 0 6px currentColor; vertical-align: middle; }
+/* Daftar misi */
+.misi-panel { width: min(560px, 100%); gap: 10px; }
+.misi-panel h1 { font-size: 2.4rem; }
+.misi-panel .icon-btn { flex: none; }
+.misi-lead { margin: 0; font-size: 0.85rem; color: var(--ink-dim); }
+.misi-list { display: grid; gap: 8px; max-height: min(60vh, 520px); overflow-y: auto; padding-right: 2px; }
+.misi-card { display: grid; gap: 3px; text-align: left; padding: 11px 13px; border-radius: 12px; cursor: pointer; color: inherit; font: inherit; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--line); }
+.misi-card:hover { border-color: rgba(244, 185, 66, 0.6); }
+.misi-card[aria-pressed="true"] { border-color: var(--gold); background: rgba(244, 185, 66, 0.12); }
+.misi-jenis { font-size: 0.66rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: #8fd3ff; }
+.misi-card.utama .misi-jenis { color: var(--gold); }
+.misi-judul { font-family: var(--font-display); font-size: 1.35rem; font-weight: 600; line-height: 1; color: var(--ink); }
+.misi-perintah { font-size: 0.88rem; line-height: 1.3; }
+.misi-hadiah { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; font-weight: 700; color: var(--gold); }
+.misi-hadiah .coin { flex: none; width: 11px; height: 11px; }
+.misi-lacak { justify-self: end; margin-top: 2px; font-size: 0.72rem; font-weight: 800; color: var(--ink-dim); }
+.misi-card[aria-pressed="true"] .misi-lacak { color: var(--gold); }
+.misi-kosong { margin: 0; padding: 16px; text-align: center; color: var(--ink-dim); }
 .map-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 0.8rem; font-weight: 700; color: var(--ink-dim); }
 .map-legend b { font-weight: inherit; }
 .map-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
@@ -256,8 +280,15 @@ h1 span { color: var(--gold); }
   .hero b { font-size: 1.25rem; }
   .heroes { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .me { padding: 6px 8px; gap: 4px; }
-  .quest { font-size: 0.66rem; }
-  #mini { width: 132px; height: 90px; }
+  .quest { font-size: 0.62rem; }
+  .quest b { font-size: 0.56rem; }
+  .me { width: min(200px, 36vw); padding: 5px 8px; }
+  .chip { height: 28px; padding: 0 7px; font-size: 0.75rem; }
+  .hud .icon-btn { width: 28px; height: 28px; }
+  #mini { width: 104px; height: 70px; }
+  .area-name { font-size: 0.8rem; }
+  .misi-lead { display: none; }
+  .misi-list { max-height: 62vh; }
   .map-panel h1 { font-size: 1.7rem; }
   #bigMap { height: 58vh; }
   .map-legend { font-size: 0.7rem; }
@@ -480,6 +511,21 @@ h1 span { color: var(--gold); }
   </div>
 
   <!-- Peta besar: tombol M atau klik peta mini (lihat js/18-peta-besar.js) -->
+  <!-- Daftar misi (js/30-daftar-misi.js) -->
+  <div class="overlay" id="misiBox" hidden>
+    <div class="panel misi-panel">
+      <div class="head">
+        <div>
+          <p class="eyebrow" data-t="h.misiEyebrow">Jurnal</p>
+          <h1 data-th="h.misiJudul">Daftar <span>Misi</span></h1>
+        </div>
+        <button class="icon-btn" id="btnMisiClose" type="button" data-ta="h.tutupMisi" aria-label="Tutup daftar misi">✕</button>
+      </div>
+      <p class="misi-lead" data-t="h.misiLead">Pilih misi yang ingin kamu lanjutkan. Panah emas dan bintang di peta akan menunjuk ke sana.</p>
+      <div class="misi-list" id="misiList"></div>
+    </div>
+  </div>
+
   <div class="overlay" id="mapBox" hidden>
     <div class="panel map-panel">
       <div class="head">
@@ -495,6 +541,12 @@ h1 span { color: var(--gold); }
       </div>
       <div class="map-wrap">
         <canvas id="bigMap" data-ta="h.peta" aria-label="Peta"></canvas>
+        <!-- zoom peta (js/29-zoom-peta.js) -->
+        <div class="zoom-btns">
+          <button class="icon-btn" id="zIn" type="button" data-ta="h.zIn" aria-label="Perbesar peta">+</button>
+          <button class="icon-btn" id="zOut" type="button" data-ta="h.zOut" aria-label="Perkecil peta">-</button>
+          <button class="icon-btn" id="zPusat" type="button" data-ta="h.zPusat" aria-label="Kembali ke posisimu"><i class="ring"></i></button>
+        </div>
         <!-- pertanyaan teleport (js/14-teleport.js) -->
         <div class="tele-ask" id="teleAsk" hidden>
           <p id="teleText">Pindah ke ...?</p>
@@ -571,4 +623,6 @@ h1 span { color: var(--gold); }
 <script src="js/26-monster-baru.js"></script>
 <script src="js/27-navigasi.js"></script>
 <script src="js/28-dukung.js"></script>
-<script src="js/29-main.js"></script>
+<script src="js/29-zoom-peta.js"></script>
+<script src="js/30-daftar-misi.js"></script>
+<script src="js/31-main.js"></script>

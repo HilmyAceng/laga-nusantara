@@ -32,6 +32,7 @@ function buildControls() {
     [keys("jamu"), t("ctl.jamu", { pulih })],
     [keys("bicara"), t("ctl.bicara")],
     [keys("peta"), t("ctl.peta")],
+    [keys("misi"), t("ctl.misi")],
     [keys("jeda"), t("ctl.jeda")],
     [keys("musik"), t("ctl.musik")],
   ];
@@ -44,6 +45,7 @@ function buildControls() {
     t("ctlT.jamu", { pulih }),
     t("ctlT.bicara"),
     t("ctlT.peta"),
+    t("ctlT.misi"),
     t("ctlT.jeda"),
   ].map((t) => `<li>${t}</li>`).join("");
   showCtlTab(ctlTab);

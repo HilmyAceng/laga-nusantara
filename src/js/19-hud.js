@@ -31,9 +31,8 @@ function refreshHud(force) {
   // Nama, level, nyawa & EXP hero digambar di atas kepalanya: lihat drawPlayerTag() di 16-gambar.js
   setText(ui.gold, "gold", String(S.gold));
   setText(ui.pots, "pots", String(S.potions));
-  // cerita utama (emas) + misi sampingan yang sedang berjalan (baris kecil)
-  const side = teksMisiSampingan();
-  const qh = teksMisiUtama() + (side ? `<small class="side">${side}</small>` : "");
+  // misi yang sedang dilacak + jumlah misi lain (30-daftar-misi.js)
+  const qh = teksKotakMisi();
   if (last.q !== qh) { last.q = qh; ui.quest.innerHTML = qh; }
   const boss = monsters.find((m) => m.d.boss && !m.dead && m.aggro);
   ui.boss.hidden = !boss || mode === "select";
@@ -65,6 +64,7 @@ function showUI() {
   ui.select.hidden = mode !== "select";
   ui.pause.hidden = mode !== "pause";
   $("mapBox").hidden = mode !== "map";
+  $("misiBox").hidden = mode !== "misi";
   ui.win.hidden = mode !== "win";
   dlg.box.hidden = mode !== "dialog";
   ui.hud.hidden = mode === "select";
