@@ -42,6 +42,7 @@ Semua menu memakai tombol. `Esc` = kembali satu halaman.
 
 | File | Fitur |
 |---|---|
+| `00-galat.js` | Layar galat: kalau game gagal dimuat/error, tampilkan pesan + tombol "Perbaiki & muat ulang" (dimuat paling awal) |
 | `01-alat.js` | Fungsi bantu kecil (`$`, `clamp`, `rand`, `store` untuk simpanan) |
 | `02-rumus.js` | Rumus EXP, nyawa, serangan |
 | `03-peta.js` | Jenis petak dan bentuk 4 area (`AREAS`: Desa, Hutan & Padang, Gua, Candi) |
