@@ -77,6 +77,7 @@ function damageMonster(m, amount, ang, kb) {
 }
 
 function killMonster(m) {
+  if (m.ulang) return bosUlangKalah(m);   // bos dari cermin gaib: hadiahnya lain (12-cermin.js)
   m.dead = true; m.respawn = ATURAN.monster.munculLagi; S.kills++; sfx.die();
   spark(m.x, m.y - m.d.h * 0.5, "#c9bfd6", 18);
   const coins = Math.round(rand(m.d.gold[0], m.d.gold[1]));
@@ -88,7 +89,7 @@ function killMonster(m) {
     if (q.type === "collect" && m.type === "babi" && Math.random() < ATURAN.monster.dropTaring) pickups.push({ kind: "taring", x: m.x - 8, y: m.y, t: 0 });
   }
   gainExp(m.d.exp);
-  if (m.d.boss) { S.bossDown = true; shake = 0.6; toast("Genderuwo tumbang!", true); }
+  if (m.d.boss) { S.bossDown = true; shake = 0.6; toast("Genderuwo tumbang!", true); victory(); }
   saveSoon();
 }
 

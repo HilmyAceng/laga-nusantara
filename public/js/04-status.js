@@ -22,7 +22,7 @@ let NPCS = NPC_DESA;       // NPC di area sekarang (hanya desa yang punya NPC)
 const cam = { x: START.x, y: START.y };
 
 function newSave(cls) {
-  return { cls, lv: 1, exp: 0, gold: ATURAN.awal.koin, potions: ATURAN.awal.jamu, weapon: 0, q: { idx: 0, prog: 0, status: "none" }, items: { taring: 0 }, kills: 0, bossDown: false, pos: null };
+  return { cls, lv: 1, exp: 0, gold: ATURAN.awal.koin, potions: ATURAN.awal.jamu, weapon: 0, q: { idx: 0, prog: 0, status: "none" }, items: { taring: 0 }, kills: 0, bossDown: false, pos: null, tele: {} };
 }
 // Simpan progres + posisi terakhir (area, titik, nyawa) supaya "Lanjutkan" mulai di tempat tadi.
 // Saat pindah area (transit) posisi lama dipertahankan; saat pingsan → nanti mulai di desa.
@@ -52,5 +52,5 @@ function spawnMonsters() {
 }
 function ensureBoss() {
   const need = S.q.idx === 2 && S.q.status === "active";
-  if (need && area.bos && !monsters.some((m) => m.d.boss)) monsters.push(makeMonster("genderuwo", { x: area.bos.x * T, y: area.bos.y * T }));
+  if (need && area.bos && !monsters.some((m) => m.d.boss)) monsters.push(makeMonster(area.bos.monster || "genderuwo", { x: area.bos.x * T, y: area.bos.y * T }));
 }

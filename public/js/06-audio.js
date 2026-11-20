@@ -127,5 +127,9 @@ const sfx = {
   claw:   () => hiss(0.12, 0.08, "bandpass", 1800, 900, 0, null, 2),
   die:    () => { hiss(0.3, 0.1, "lowpass", 1500, 200); tone(300, 0.25, "triangle", 0.04, 0.4); },
   faint:  () => [440, 392, 330, 262].forEach((f, i) => tone(f, 0.35, "triangle", 0.05, 1, i * 0.16)),
+  // pemanggilan bos: desis naik + dengung rendah; petir: gelegar; zap: sambaran kecil
+  summon: () => { hiss(1.3, 0.09, "bandpass", 250, 2600, 0, null, 2); tone(55, 1.5, "sawtooth", 0.05, 2.2); tone(110, 1.3, "sine", 0.05, 1.5, 0.2); },
+  thunder: () => { hiss(0.08, 0.3, "highpass", 3000, 3000); hiss(1.2, 0.25, "lowpass", 2500, 120, 0.03); tone(55, 1.0, "sine", 0.2, 0.5); },
+  zap:    () => hiss(0.15, 0.12, "highpass", 5000, 2000),
   win:    () => [392, 523, 659, 784, 1047].forEach((f, i) => tone(f, 0.45, "triangle", 0.06, 1, i * 0.12)),
 };

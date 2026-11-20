@@ -28,7 +28,7 @@ function setText(el, key, v) { if (last[key] !== v) { last[key] = v; el.textCont
 function refreshHud(force) {
   if (!S || !P) return;
   if (force) for (const k in last) delete last[k];
-  // Nama, level, nyawa & EXP hero digambar di atas kepalanya: lihat drawPlayerTag() di 13-gambar.js
+  // Nama, level, nyawa & EXP hero digambar di atas kepalanya: lihat drawPlayerTag() di 15-gambar.js
   setText(ui.gold, "gold", String(S.gold));
   setText(ui.pots, "pots", String(S.potions));
   const q = QUESTS[S.q.idx];

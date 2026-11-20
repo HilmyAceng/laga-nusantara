@@ -50,7 +50,7 @@ function updatePlayer(dt) {
     else if (S.potions <= 0) toast("Jamu habis. Beli di Mbok Darmi", false);
   }
   nearNpc = null;
-  for (const n of NPCS) if (!n.diam && dist(P, n) < ATURAN.jarakBicara) nearNpc = n;
+  for (const n of NPCS) if (bisaBicara(n) && dist(P, n) < ATURAN.jarakBicara) nearNpc = n;
   if (!P.dead) checkGates();
   if (inp.talk && nearNpc) talk(nearNpc);
 }
@@ -150,6 +150,8 @@ function update(dt) {
     if (e.kind === "pillar" && e.t >= e.delay && e.t <= e.delay + e.dur) for (let i = 0; i < 3; i++) parts.push({ x: e.x + rand(-e.r * 0.6, e.r * 0.6), y: e.y + rand(-10, 10), z: rand(0, 40), vz: rand(180, 380), vx: 0, vy: 0, life: 0.4, max: 0.4, color: Math.random() < 0.5 ? "#ff7b39" : "#ffd166" });
   }
   effects = effects.filter((e) => e.t < (e.delay || 0) + e.dur);
+  updateCermin(dt);
+  updateTeleport(dt);
 
   for (const k of pickups) {
     k.t += dt;
@@ -166,7 +168,7 @@ function update(dt) {
   }
   pickups = pickups.filter((k) => !k.got);
 
-  for (const p of parts) { p.x += p.vx * dt; p.y += p.vy * dt; p.vz -= 900 * dt; p.z = Math.max(0, p.z + p.vz * dt); p.life -= dt; }
+  for (const p of parts) { p.x += p.vx * dt; p.y += p.vy * dt; p.vz -= (p.float ? 0 : 900) * dt; p.z = Math.max(0, p.z + p.vz * dt); p.life -= dt; }
   parts = parts.filter((p) => p.life > 0);
   for (const n of numbers) { n.y -= 36 * dt; n.life -= dt; }
   numbers = numbers.filter((n) => n.life > 0);

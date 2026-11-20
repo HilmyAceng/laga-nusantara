@@ -176,6 +176,8 @@ function drawMonster(m, time) {
 }
 
 function drawNpc(n, time) {
+  if (n.kind === "cermin") return drawCermin(n, time);
+  if (n.kind === "teleport") return drawTeleport(n, time);
   const look = n.id === "lurah" ? { color: n.color, accent: n.accent, hat: "#2b2238", hair: "#d9d4cc" } : { color: n.color, accent: n.accent, hat: n.hat, hair: n.hair || "#3b2a22" };
   const face = Math.atan2(P.y - n.y, P.x - n.x);
   drawPerson(ctx, { x: n.x, y: n.y, face: dist(P, n) < 160 ? face : n.face, run: 0, moving: false, swing: 0, inv: 0, flash: 0 }, look, time);
@@ -250,6 +252,7 @@ function render(now) {
     const k = e.t / e.dur;
     if (e.kind === "ring") { ctx.strokeStyle = e.red ? `rgba(229,72,77,${1 - k})` : `rgba(232,190,130,${1 - k})`; ctx.lineWidth = 6; ctx.beginPath(); ctx.ellipse(e.x, e.y, e.r * k, e.r * k * 0.6, 0, 0, 6.28); ctx.stroke(); }
     else if (e.kind === "pillar" && e.t < e.delay) { ctx.fillStyle = `rgba(255,120,50,${0.25 + 0.25 * Math.sin(time * 30)})`; ctx.beginPath(); ctx.ellipse(e.x, e.y, e.r, e.r * 0.55, 0, 0, 6.28); ctx.fill(); }
+    else if (e.kind === "summon") drawSummonGround(e, time);
     else if (e.kind === "boom") { ctx.fillStyle = `rgba(255,150,60,${0.5 * (1 - k)})`; ctx.beginPath(); ctx.ellipse(e.x, e.y, e.r * (0.5 + k * 0.5), e.r * 0.6 * (0.5 + k * 0.5), 0, 0, 6.28); ctx.fill(); }
   }
   for (const k of pickups) drawPickup(k, time);
@@ -270,6 +273,8 @@ function render(now) {
   for (const e of effects) {
     const k = e.t / e.dur;
     if (e.kind === "slash") { ctx.strokeStyle = `rgba(255,248,220,${0.85 * (1 - k)})`; ctx.lineWidth = e.big ? 7 : 5; ctx.beginPath(); ctx.arc(e.x, e.y, e.r * 0.85, e.ang - e.arc * (1 - k * 0.3), e.ang + e.arc * (0.4 + k * 0.6)); ctx.stroke(); }
+    else if (e.kind === "summon") drawSummonAir(e);
+    else if (e.kind === "petir") drawPetir(e);
     else if (e.kind === "claw") { ctx.strokeStyle = `rgba(255,90,90,${1 - k})`; ctx.lineWidth = 4; for (const o of [-8, 0, 8]) { ctx.beginPath(); ctx.arc(e.x, e.y + o, e.r * 0.7, e.ang - 0.6, e.ang + 0.6); ctx.stroke(); } }
     else if (e.kind === "pillar" && e.t >= e.delay) {
       const kk = (e.t - e.delay) / e.dur, h = 150 * Math.min(1, kk * 4);
@@ -290,7 +295,10 @@ function render(now) {
       ctx.fillStyle = "#ffe08a"; ctx.beginPath(); ctx.arc(p.x, p.y - 18, 3.5, 0, 6.28); ctx.fill();
     }
   }
-  for (const p of parts) { ctx.globalAlpha = Math.max(0, p.life / p.max); ctx.fillStyle = p.color; ctx.fillRect(p.x - 2, p.y - p.z - 2, 4, 4); }
+  for (const p of parts) { ctx.globalAlpha = Math.max(0, p.life / p.max); ctx.fillStyle = p.color;
+    if (p.float) { ctx.globalAlpha *= 0.4; ctx.beginPath(); ctx.arc(p.x, p.y - p.z, p.s / 2, 0, 6.28); ctx.fill(); }   // kabut: bulat & tembus pandang
+    else { const ps = p.s || 4; ctx.fillRect(p.x - ps / 2, p.y - p.z - ps / 2, ps, ps); }
+  }
   ctx.globalAlpha = 1;
   ctx.textAlign = "center";
   for (const n of numbers) {
@@ -320,6 +328,8 @@ function render(now) {
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
     drawPlayerTag(W / 2 + (P.x - cx + sx) * scale, H / 2 + (P.y - 64 - cy + sy) * scale);
   }
+  // kilatan putih (pemanggilan bos dari cermin)
+  if (kilat > 0) { ctx.setTransform(DPR, 0, 0, DPR, 0, 0); ctx.fillStyle = `rgba(235,225,255,${0.75 * kilat})`; ctx.fillRect(0, 0, W, H); }
   if (P && P.dead) {
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0); ctx.fillStyle = "rgba(10,6,20,0.55)"; ctx.fillRect(0, 0, W, H);
   }

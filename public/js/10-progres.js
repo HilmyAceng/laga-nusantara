@@ -20,11 +20,13 @@ function progressQuest(n) {
   if (S.q.prog >= q.need) { S.q.status = "done"; toast(`Misi selesai: ${q.title}. Lapor ke Ki Lurah`, false); sfx.quest(); }
   saveSoon();
 }
+// Musik kemenangan (kalau musik dimatikan, cukup bunyi efek singkat)
+function victory() { if (audioOn.musik && audioOn.volMusik > 0) playJingle("menang"); else sfx.win(); }
 function saveSoon() { saveTimer = 0.6; }
 
 function showWin() {
   mode = "win";
   $("winStats").textContent = `${CLASSES[S.cls].name} mencapai Lv ${S.lv} dan mengalahkan ${S.kills} makhluk. Warga Wanasari berterima kasih padamu.`;
-  showUI(); save(); sfx.win();
+  showUI(); save(); victory();
 }
 $("btnWin").addEventListener("click", () => { mode = "play"; showUI(); });

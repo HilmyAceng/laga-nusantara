@@ -8,6 +8,9 @@
 function loadArea(id) {
   buildArea(id);
   NPCS = id === "desa" ? NPC_DESA : [];
+  summon = null;
+  if (cerminAktif()) NPCS = [...NPCS, makeCermin()];   // cermin gaib (12-cermin.js)
+  for (const tp of TELEPORTS) if (tp.areaId === id) NPCS = [...NPCS, makeTeleport(tp)];   // mesin teleport (13-teleport.js)
   projs = []; effects = []; parts = []; numbers = []; pickups = []; nearNpc = null;
   if (S) spawnMonsters();
   buildMiniBase();

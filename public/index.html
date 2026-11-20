@@ -78,6 +78,10 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 .map-panel h1 { font-size: 2.4rem; }
 .map-panel .icon-btn { flex: none; }
 .map-panel .tabs { width: min(320px, 100%); }
+.map-wrap { position: relative; }
+.tele-ask { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(320px, 90%); box-sizing: border-box; padding: 16px; display: grid; gap: 12px; text-align: center; background: var(--panel); border: 1px solid #7dffa8; border-radius: 16px; box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6); }
+.tele-ask p { margin: 0; font-family: var(--font-display); font-size: 1.6rem; line-height: 1; }
+.tele-ask .btns { display: flex; gap: 10px; justify-content: center; }
 #bigMap { display: block; width: 100%; height: min(62vh, 560px); border-radius: 12px; background: #120d18; }
 .map-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 0.8rem; font-weight: 700; color: var(--ink-dim); }
 .map-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
@@ -408,7 +412,7 @@ h1 span { color: var(--gold); }
     </div>
   </div>
 
-  <!-- Peta besar: tombol M atau klik peta mini (lihat js/15-peta-besar.js) -->
+  <!-- Peta besar: tombol M atau klik peta mini (lihat js/17-peta-besar.js) -->
   <div class="overlay" id="mapBox" hidden>
     <div class="panel map-panel">
       <div class="head">
@@ -422,18 +426,27 @@ h1 span { color: var(--gold); }
         <button type="button" role="tab" id="tabArea" aria-selected="true">Area ini</button>
         <button type="button" role="tab" id="tabWorld" aria-selected="false">Peta dunia</button>
       </div>
-      <canvas id="bigMap" aria-label="Peta"></canvas>
+      <div class="map-wrap">
+        <canvas id="bigMap" aria-label="Peta"></canvas>
+        <!-- pertanyaan teleport (js/13-teleport.js) -->
+        <div class="tele-ask" id="teleAsk" hidden>
+          <p id="teleText">Pindah ke ...?</p>
+          <div class="btns"><button class="go sm" id="btnTeleGo" type="button">Teleport</button><button class="go sm alt" id="btnTeleNo" type="button">Batal</button></div>
+        </div>
+      </div>
       <div class="map-legend" id="legendArea">
         <span><i style="background:#fff"></i>Kamu</span>
         <span><i style="background:#f4b942"></i>Warga</span>
         <span><i style="background:#8fd3ff"></i>Jalan keluar</span>
         <span><i style="background:#e98a7a"></i>Monster</span>
         <span><i style="background:#ff3b3b"></i>Bos</span>
+        <span><i style="background:#7dffa8"></i>Mesin teleport (klik)</span>
       </div>
       <div class="map-legend" id="legendWorld" hidden>
         <span><i style="background:#fff"></i>Kamu</span>
         <span><i style="background:#8fd3ff"></i>Jalan antar-area</span>
         <span><i style="background:#f4b942"></i>Tujuan misi</span>
+        <span><i style="background:#7dffa8"></i>Mesin teleport (klik)</span>
       </div>
       <p class="map-hint" id="mapHint"></p>
     </div>
@@ -463,13 +476,15 @@ h1 span { color: var(--gold); }
 <script src="js/09-tarung.js"></script>
 <script src="js/10-progres.js"></script>
 <script src="js/11-dialog.js"></script>
-<script src="js/12-update.js"></script>
-<script src="js/13-gambar.js"></script>
-<script src="js/14-peta-mini.js"></script>
-<script src="js/15-peta-besar.js"></script>
-<script src="js/16-hud.js"></script>
-<script src="js/17-menu-jeda.js"></script>
-<script src="js/18-layar-judul.js"></script>
-<script src="js/19-main.js"></script>
+<script src="js/12-cermin.js"></script>
+<script src="js/13-teleport.js"></script>
+<script src="js/14-update.js"></script>
+<script src="js/15-gambar.js"></script>
+<script src="js/16-peta-mini.js"></script>
+<script src="js/17-peta-besar.js"></script>
+<script src="js/18-hud.js"></script>
+<script src="js/19-menu-jeda.js"></script>
+<script src="js/20-layar-judul.js"></script>
+<script src="js/21-main.js"></script>
 <script>if("serviceWorker" in navigator){addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}</script>
 </body></html>

@@ -55,7 +55,24 @@ const ATURAN = {
 
   pingsan: { koinHilang: 0.2, lama: 2.2 },// saat nyawa habis: kehilangan 20% koin
 
-  jarakBicara: 84,                        // seberapa dekat ke NPC agar bisa bicara
+  jarakBicara: 84,
+
+  // Cermin Gaib di gua: muncul setelah bos pernah kalah & misi utama selesai.
+  // Sentuh cermin untuk memanggil bos lagi.
+  cermin: {
+    hadiahKoin: 10,                       // koin setiap bos dari cermin dikalahkan
+    jeda: 30,                             // detik sampai cermin bisa dipakai lagi
+  },
+
+  // Mesin Teleport (tiang bendera). Berdiri di dekatnya = nyawa pulih memakai energi mesin.
+  // Klik mesin di peta besar (tombol M) untuk pindah ke sana.
+  teleport: {
+    energiMaks: 1000,                     // energi maksimal tiap mesin (1 energi = 1 nyawa)
+    isiUlangPoin: 1,                      // energi bertambah sebanyak ini...
+    isiUlangDetik: 300,                   // ...setiap sekian detik (300 = 5 menit), walau game ditutup
+    pulihPerDetik: 30,                    // kecepatan nyawa pulih saat berdiri di dekat mesin
+    jarak: 70,                            // seberapa dekat (piksel) agar nyawa pulih
+  },                        // seberapa dekat ke NPC agar bisa bicara
 
   monster: {
     munculLagi: 16,                       // detik sampai monster biasa muncul lagi
@@ -158,39 +175,79 @@ const QUESTS = [
 
 // ---------------------------------------------------------------------
 // 6. MUSIK LATAR (gaya gamelan, dibuat oleh kode, tanpa file audio)
-// Musik berganti otomatis sesuai tempat: desa, luar (hutan & padang),
-// gua, dan bos (saat Genderuwo mengejar).
+// Musik berganti otomatis sesuai tempat:
+//   desa  = riang (juga di layar judul)     luar = tegang (hutan & padang)
+//   gua   = seram (gua & candi)             bos  = paling tegang (saat Genderuwo mengejar)
+//   menang = musik kemenangan, diputar sekali (bos tumbang & layar "Desa selamat")
+// Lagu mana dipakai di area mana: lihat `lagu` tiap area di js/03-peta.js.
 //
-// Cara menulis nada (notasi kepatihan, tangga nada slendro):
-//   1 2 3 5 6   = nada (slendro tidak punya 4 dan 7)
-//   .           = diam satu ketukan
+// Cara menulis nada:
+//   tangga  = "slendro" (nada 1 2 3 5 6, cerah) atau "pelog" (nada 1-7, gelap & seram)
+//   1 2 3 5 6   = nada          .  = diam satu ketukan
 //   6,  atau 1, = satu oktaf lebih rendah (tambah koma lagi: makin rendah)
 //   1'          = satu oktaf lebih tinggi
-// tempo   = kecepatan: berapa nada (termasuk ".") dimainkan per menit
-// suara   = "saron" (logam nyaring), "bonang" (gong kecil lembut), "gelap" (dengung rendah)
-// kendang = pola gendang: D = dhung (rendah), t = tak (tinggi), . = diam
-// gong    = gong berbunyi setiap berapa ketukan (0 = tanpa gong)
+// Tiap baris berulang sendiri-sendiri, jadi panjangnya boleh beda.
+//
+// tempo   = berapa ketukan (termasuk ".") per menit. Makin besar makin cepat
+// melodi  + suara      : nada utama
+// isian   + suaraIsian : nada kedua, menghias melodi (boleh dikosongkan)
+// bas     + suaraBas   : nada rendah (boleh dikosongkan)
+//   pilihan suara: "saron" (logam nyaring), "bonang" (gong kecil lembut),
+//   "peking" (logam kecil tinggi), "suling" (seruling), "gelap" (dengung berat),
+//   "bisik" (nada tinggi sumbang, seram), "bas" (bas menghentak), "dengung" (bas panjang)
+// kendang & perkusi = pola gendang (dua baris, berbunyi bersamaan):
+//   D = dhung (rendah)  t = tak (tinggi)  k = ketuk kayu  x = kecrek
+//   B = dentum besar    G = gong          . = diam
+// gong    = gong otomatis setiap berapa ketukan (0 = tanpa gong)
+// ulang   = false → lagu dimainkan sekali saja (untuk musik kemenangan)
+// keras   = pengali volume lagu ini saja (1 = biasa, 0.5 = setengah, 2 = dua kali)
 // Semua lagu di bawah ini ciptaan sendiri untuk game ini.
 // ---------------------------------------------------------------------
 const LAGU = {
+  // RIANG: cepat, melodi naik-turun, bas melompat oktaf, ketuk kayu di sela ketukan
   desa: {
-    tempo: 144, suara: "bonang", gong: 32,
-    melodi: "3 . 5 6 5 . 3 2 . 1 2 3 . 2 1 . 6, . 1 2 3 5 3 . 2 . 1 . 6, . 1 .",
-    kendang: "D . . . t . . . D . t . . . t .",
+    tempo: 300, suara: "saron", gong: 32, keras: 0.85,
+    melodi: "3 5 6 1' 6 5 3 5 6 . 5 3 2 3 5 . 2 3 5 6 5 3 2 1 2 . 3 2 1 6, 1 .",
+    isian: ". . 5' . . . 6' . . . 5' . 3' . . . . . 2' . . . 3' . 5' . . . 6' . 5' .", suaraIsian: "suling",
+    bas: "1,, . 1, . 5,, . 5, . 6,, . 6, . 2,, . 2, .", suaraBas: "bas",
+    kendang: "D . t . D t . t D . t . D t t t",
+    perkusi: ". k . k . k . k",
   },
+  // TEGANG: sangat cepat, bas menderu terus, kecrek tanpa henti
   luar: {
-    tempo: 192, suara: "saron", gong: 16,
-    melodi: "1 2 3 5 6 5 3 2 1 . 6, 1 2 3 2 . 3 5 6 1' 6 5 3 5 6 . 5 3 2 3 1 .",
-    kendang: "D . t D . t D t D . t D . t t t",
+    tempo: 380, suara: "saron", gong: 16, keras: 0.75,
+    melodi: "6, 1 2 1 6, 1 2 3 5 3 2 1 2 3 5 6 5 6 1' 6 5 3 5 6 5 3 2 3 2 1 6, 1",
+    isian: "6 . 5 . 3 . 5 . 6 . 1' . 6 . 5 .", suaraIsian: "peking",
+    bas: "6,, 6,, 6, 6,, 1, 6,, 3,, 5,,", suaraBas: "bas",
+    kendang: "D . t D . t D . D . t D . t t t",
+    perkusi: "x . x x x . x x",
   },
+  // SERAM: pelog, pelan & jarang, dengung panjang, bisikan sumbang,
+  // detak jantung (D D), dan tetesan air (k) yang tidak beraturan
   gua: {
-    tempo: 112, suara: "gelap", gong: 16,
-    melodi: "1, . . . 2, . 1, . . . 6,, . . . . . 3, . . . 2, . 1, . . . 6,, . . .",
-    kendang: "D . . . . . . . . . . . D . . .",
+    tempo: 200, tangga: "pelog", suara: "gelap", gong: 0, keras: 1.6,
+    melodi: "1, . . . . . 2, . . . . . 1, . . . 7,, . . . . . 4, . . . . . 5, . . . . . 4, . . . 2, . . . . . . . . .",
+    isian: ". . . . . . . . 2'' . . . . . . . . . . . 1'' . . . . . . 7' . . . . . . . . . . . . 4' . .", suaraIsian: "bisik",
+    bas: "1,, . . . . . . . . . . . . . . . 2,, . . . . . . . . . . . . . . .", suaraBas: "dengung",
+    kendang: "D D . . . . . . . . . . D D . . . . . . . . . . . . . . . . . . . . . .",
+    perkusi: ". . . . . . . k . . . . . . . . . . . . . . . . . . k . . . . . . . . . . . . . B . . . . . . . . . . . . . . . . . . . . . . .",
   },
+  // PALING TEGANG (bos): pelog, sangat cepat, gendang & kecrek rapat, gong tiap 8 ketukan
   bos: {
-    tempo: 280, suara: "saron", gong: 8,
-    melodi: "6, 1 6, 1 2 1 6, . 6, 1 2 3 2 1 6, . 3 2 3 5 3 2 1 2 6, 1 2 1 6, . 6, .",
-    kendang: "D t t D t D t t D t t D t D D t",
+    tempo: 420, tangga: "pelog", suara: "saron", gong: 8, keras: 0.85,
+    melodi: "1 2 1 7, 1 2 4 2 1 2 4 5 4 2 1 7, 5 4 2 4 5 6 5 4 2 1 2 4 2 1 7, 1",
+    isian: "1' . 7 . 5 . 4 . 5 . 7 . 1' . 2' .", suaraIsian: "peking",
+    bas: "1,, 1,, 1, 1,, 2,, 1,, 7,,, 7,,,", suaraBas: "bas",
+    kendang: "D t D t D D t . D t D t D t t t",
+    perkusi: "x x x . x x x .",
+  },
+  // KEMENANGAN: naik bertahap ke nada tinggi, gendang makin rapat, ditutup gong
+  menang: {
+    tempo: 300, suara: "saron", ulang: false,
+    melodi: "5, 6, 1 2 3 . 2 3 5 . 3 5 6 . 1' 6 1' 2' 3' . . 2' 1' . 6 . 1' . . . . . . . . .",
+    isian: ". . . . 3' . . . 5' . . . 6' . . . 1'' . . . . . . . . . . . 1'' . . . . . . . .", suaraIsian: "peking",
+    bas: "1,, . . . 1, . . . 5,, . . . 6,, . . . 1, . . . 5,, . . . 1,, . . . . . . . . .", suaraBas: "bas",
+    kendang: "G . t . D . t . D . t . D t D t D t D t D . . . D . . . G . . . . . . . . .",
+    perkusi: "x . x . x . x . x . x . x . x . x x x x x . . . . . . . x . . . . . . . . .",
   },
 };

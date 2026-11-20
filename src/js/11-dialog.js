@@ -19,7 +19,14 @@ function openDialog(name, text, actions) {
 }
 function closeDialog() { if (mode === "dialog") { mode = "play"; showUI(); } }
 
+// Bisa diajak bicara? (NPC "diam" belum bisa; cermin tidak bisa disentuh saat bos sedang ada)
+function bisaBicara(n) {
+  if (n.diam) return false;
+  if (n.id === "cermin") return !summon && !bosHidup();
+  return true;
+}
 function talk(npc) {
+  if (npc.id === "cermin") return talkCermin(npc);
   if (npc.id === "lurah") {
     const q = QUESTS[S.q.idx];
     if (!q) return openDialog(npc.name, "Berkat kamu, Wanasari kembali tenang. Hutan masih luas, silakan terus berlatih.", [{ label: "Tutup", run: closeDialog, primary: true }]);

@@ -36,13 +36,16 @@ function openMap() {
 }
 function closeMap() {
   if (mode !== "map") return;
+  if (!$("teleAsk").hidden) return batalTeleport();   // Esc/M saat ditanya teleport = batal dulu
   mode = "play";
   showUI();
 }
 function toggleMap() { if (mode === "map") closeMap(); else openMap(); }
 
 // Digambar tiap frame selama peta terbuka (supaya titik "kamu" berdenyut).
-function drawBigMap(time) { if (mapTab === "world") drawWorldMap(time); else drawAreaMap(time); }
+// mapHits = titik yang bisa diklik di kanvas (mesin teleport), diisi saat menggambar.
+let mapHits = [];
+function drawBigMap(time) { mapHits = []; if (mapTab === "world") drawWorldMap(time); else drawAreaMap(time); }
 
 function drawAreaMap(time) {
   // kanvas mengikuti ukuran tampilnya, dikali DPR supaya tajam
@@ -78,7 +81,14 @@ function drawAreaMap(time) {
     else dot(X(m.x), Y(m.y), "#e98a7a", 3);
   }
   // warga
-  for (const n of NPCS) { dot(X(n.x), Y(n.y), "#f4b942", 5); label(n.name, X(n.x), Y(n.y) - 9 * DPR, "#f4b942"); }
+  for (const n of NPCS) {
+    if (n.kind === "teleport") {
+      drawTeleportIcon(c, X(n.x), Y(n.y), DPR, time); label(n.name, X(n.x), Y(n.y) - 16 * DPR, "#7dffa8");
+      mapHits.push({ x: X(n.x), y: Y(n.y), r: 20 * DPR, tele: n.tele });
+      continue;
+    }
+    dot(X(n.x), Y(n.y), "#f4b942", 5); label(n.name, X(n.x), Y(n.y) - 9 * DPR, "#f4b942");
+  }
   // kamu: titik putih berdenyut + panah arah hadap
   const px = X(P.x), py = Y(P.y), pulse = 0.5 + 0.5 * Math.sin(time * 5);
   c.strokeStyle = `rgba(255,255,255,${0.25 + 0.5 * pulse})`; c.lineWidth = 2 * DPR;
@@ -201,6 +211,13 @@ function drawWorldMap(time) {
   for (const l of world.links) for (const [gx, gy] of [[l.x1, l.y1], [l.x2, l.y2]]) {
     c.fillStyle = "#8fd3ff"; c.beginPath(); c.arc(X(gx), Y(gy), 4 * DPR, 0, 6.28); c.fill();
   }
+  // mesin teleport di semua area (bisa diklik)
+  for (const tp of TELEPORTS) {
+    const p = world.parts[tp.areaId]; if (!p) continue;
+    const tx = X(p.x + tp.x), ty = Y(p.y + tp.y);
+    drawTeleportIcon(c, tx, ty, DPR * fs, time);
+    mapHits.push({ x: tx, y: ty, r: 20 * DPR, tele: tp });
+  }
   for (const [t, x, y, col] of names) text(t, x, y, col, 15, 900);
   // posisi kamu di area sekarang
   const p = world.parts[areaId];
@@ -219,6 +236,13 @@ addEventListener("keydown", (e) => {
 });
 $("tabWorld").addEventListener("click", () => showMapTab("world"));
 $("mini").addEventListener("click", openMap);
+// klik/ketuk mesin teleport di peta → tanya "Pindah ke ...?"
+const mapHitAt = (e) => {
+  const r = bigMap.getBoundingClientRect(), x = (e.clientX - r.left) * DPR, y = (e.clientY - r.top) * DPR;
+  return mapHits.find((h) => Math.hypot(h.x - x, h.y - y) <= h.r);
+};
+bigMap.addEventListener("click", (e) => { const h = mapHitAt(e); if (h && $("teleAsk").hidden) tanyaTeleport(h.tele); });
+bigMap.addEventListener("pointermove", (e) => { bigMap.style.cursor = mapHitAt(e) ? "pointer" : ""; });
 $("btnMapClose").addEventListener("click", closeMap);
 // klik di luar kotak peta = tutup
 $("mapBox").addEventListener("click", (e) => { if (e.target === e.currentTarget) closeMap(); });

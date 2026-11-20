@@ -56,7 +56,7 @@ const AREAS = {
     gerbang: [
       { x0: 0, y0: 21, x1: 0, y1: 23, ke: "desa", masuk: { x: 19.5, y: 11.5 }, label: "← Desa" },
       { x0: 25, y0: 21, x1: 26, y1: 23, ke: "gua", masuk: { x: 2.5, y: 8.5 }, label: "Gua →" },
-      { x0: 15, y0: 0, x1: 17, y1: 0, ke: "candi", masuk: { x: 15.5, y: 23.5 }, label: "↑ Candi" },
+      { x0: 15, y0: 0, x1: 17, y1: 0, ke: "candi", masuk: { x: 15.5, y: 23.5 }, label: "Ke Candi" },
     ],
     build(r) {
       for (let y = 0; y < MH; y++) for (let x = 0; x < MW; x++) {
@@ -87,7 +87,9 @@ const AREAS = {
     nama: "Candi Wingit", sub: "Reruntuhan angker di utara hutan", lagu: "gua", tepi: WALL, w: 30, h: 26, gelap: true,
     // monster hanya di aula tengah & bilik utara; aula masuk (selatan) aman
     zona: { candi: { x0: 2, y0: 1, x1: 27, y1: 15 } },
-    gerbang: [{ x0: 14, y0: 25, x1: 16, y1: 25, ke: "alam", masuk: { x: 16.5, y: 2.5 }, label: "↓ Hutan" }],
+    gerbang: [{ x0: 14, y0: 25, x1: 16, y1: 25, ke: "alam", masuk: { x: 16.5, y: 2.5 }, label: "Ke Hutan" }],
+    // mesin teleport (13-teleport.js), dekat pintu masuk dari hutan
+    teleport: { id: "candi", x: 18.5, y: 22.5 },
     build() {
       fillRect(0, 0, MW - 1, MH - 1, WALL);
       fillRect(1, 1, MW - 2, MH - 2, CAVE);
@@ -104,7 +106,7 @@ const AREAS = {
     nama: "Gua Genderuwo", sub: "Sarang penunggu hutan", lagu: "gua", tepi: WALL, w: 22, h: 17, gelap: true,
     zona: {},
     gerbang: [{ x0: 0, y0: 7, x1: 0, y1: 9, ke: "alam", masuk: { x: 23.5, y: 22.5 }, label: "← Keluar" }],
-    bos: { x: 16.5, y: 8.5 },
+    bos: { x: 16.5, y: 8.5, monster: "genderuwo" },   // titik bos & jenisnya (cermin gaib juga di sini)
     build() {
       fillRect(0, 0, MW - 1, MH - 1, WALL);
       fillRect(1, 1, MW - 2, MH - 2, CAVE);
