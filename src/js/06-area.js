@@ -41,5 +41,5 @@ function goArea(id, spot, after) {
 }
 function checkGates() {
   const tx = Math.floor(P.x / T), ty = Math.floor(P.y / T);
-  for (const g of area.gerbang) if (inZone(g, tx, ty)) { goArea(g.ke, g.masuk); return; }
+  for (const g of area.gerbang) if (inZone(g, tx, ty) && gerbangTerbuka(g)) { goArea(g.ke, g.masuk); return; }
 }

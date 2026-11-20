@@ -24,9 +24,11 @@ cd "$(dirname "$0")"
 } > public/index.html
 cp src/config.js public/config.js
 rm -rf public/js && cp -r src/js public/js
+rm -rf public/cerita && cp -r src/cerita public/cerita
 
 # Daftar file yang disimpan untuk main offline (baris FILES di sw.js dibuat ulang otomatis)
 files='"./", "./index.html", "./config.js", "./manifest.webmanifest", "./icons/icon-192.png", "./icons/icon-512.png"'
+for f in src/cerita/*.js; do files="$files, \"./cerita/$(basename "$f")\""; done
 for f in src/js/*.js; do files="$files, \"./js/$(basename "$f")\""; done
 sed -i "s|^const FILES = .*|const FILES = [$files];|" public/sw.js
 

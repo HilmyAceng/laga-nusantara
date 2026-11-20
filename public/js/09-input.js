@@ -26,6 +26,7 @@ addEventListener("keydown", (e) => {
     if (mode === "dialog") closeDialog();
     else if (mode === "map") closeMap();
     else if (mode === "misi") tutupMisi();
+    else if (mode === "tantang") tutupTantangan();
     else if (mode === "pause" && PAUSE_BACK[pauseView]) showPauseView(PAUSE_BACK[pauseView]);
     else togglePause();
   }

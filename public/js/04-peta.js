@@ -9,7 +9,15 @@ const T = 40;
 const G = 0, PATH = 1, WATER = 2, BRIDGE = 3, TREE = 4, ROCK = 5, HOUSE = 6, CAVE = 7, FLOWER = 8, WALL = 9;
 // petak baru: pasir pantai, lava (tidak bisa dilewati), abu vulkanik, lumpur rawa, ilalang rawa (tidak bisa dilewati)
 const SAND = 10, LAVA = 11, ASH = 12, MUD = 13, REED = 14;
-const SOLID = new Set([WATER, TREE, ROCK, HOUSE, WALL, LAVA, REED]);
+// petak dunia 2 & 3: awan (tidak bisa dilewati), lantai batu, karang laut (tidak bisa dilewati)
+const CLOUD = 15, STONE = 16, CORAL = 17;
+const SOLID = new Set([WATER, TREE, ROCK, HOUSE, WALL, LAVA, REED, CLOUD, CORAL]);
+// Tiga dunia. Area mana masuk dunia mana: `dunia` di tiap area.
+const DUNIA = [
+  { id: 1, nama: "Tanah Wanasari", namaEn: "Wanasari Lands" },
+  { id: 2, nama: "Kepulauan Segara", namaEn: "Segara Isles" },
+  { id: 3, nama: "Negeri Awan", namaEn: "Cloud Highlands" },
+];
 // Peta yang sedang aktif. Isinya diganti setiap pindah area (lihat loadArea).
 let MW = 0, MH = 0, map = new Uint8Array(0), houses = [], ZONES = {}, area = null, areaId = "";
 function seeded(a) { return () => { a |= 0; a = (a + 0x6d2b79f5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
@@ -27,11 +35,15 @@ const fillRect = (x0, y0, x1, y1, v) => { for (let y = y0; y <= y1; y++) for (le
 //   teleport = mesin teleport (14-teleport.js)
 //   objek    = benda teka-teki: obor, prasasti, batu pitutur, altar (25-teka-teki.js)
 //   kabut / panas / gelap = efek layar (rawa berkabut, kawah panas, gua gelap)
+//   dunia    = 1, 2, atau 3 (peta dunia dikelompokkan per dunia)
+//   aman     = true → seluruh area adalah zona aman (33-zona-aman.js)
+//   gerbang.kunci = gerbang tertutup sampai S.buka[kunci] (dibuka cerita), atau "bos:<jenis>"
+//                   (terbuka setelah bos itu kalah)
 // build() boleh membaca S (progres) untuk membuka pintu/jembatan yang sudah dibuka pemain.
 // ---------------------------------------------------------------------
 const AREAS = {
   desa: {
-    nama: "Desa Wanasari", sub: "Tempat aman — tidak ada monster", lagu: "desa", tepi: TREE, w: 24, h: 24,
+    dunia: 1, nama: "Desa Wanasari", sub: "Tempat aman — tidak ada monster", aman: true, lagu: "desa", tepi: TREE, w: 24, h: 24,
     zona: { village: { x0: 3, y0: 3, x1: 20, y1: 21 } },
     gerbang: [{ x0: 23, y0: 10, x1: 23, y1: 12, ke: "alam", masuk: { x: 3.5, y: 22.5 }, label: "Hutan →" }],
     teleport: { id: "desa", x: 19.5, y: 14.5 },
@@ -54,7 +66,7 @@ const AREAS = {
     },
   },
   alam: {
-    nama: "Hutan & Padang", sub: "Hati-hati, banyak monster", lagu: "luar", tepi: TREE, w: 40, h: 44,
+    dunia: 1, nama: "Hutan & Padang", sub: "Hati-hati, banyak monster", lagu: "luar", tepi: TREE, w: 40, h: 44,
     zona: {
       forest: { x0: 7, y0: 15, x1: 22, y1: 29 },
       north: { x0: 6, y0: 3, x1: 36, y1: 12 },
@@ -94,7 +106,7 @@ const AREAS = {
     },
   },
   candi: {
-    nama: "Candi Wingit", sub: "Reruntuhan angker di utara hutan · Lv 5+", lagu: "gua", tepi: WALL, w: 30, h: 26, gelap: true,
+    dunia: 1, nama: "Candi Wingit", sub: "Reruntuhan angker di utara hutan · Lv 5+", lagu: "gua", tepi: WALL, w: 30, h: 26, gelap: true,
     // monster di aula tengah; aula masuk (selatan) aman; ruang dalam (utara) = sarang Dwarapala
     zona: { candi: { x0: 3, y0: 10, x1: 26, y1: 16 } },
     gerbang: [
@@ -125,7 +137,7 @@ const AREAS = {
     },
   },
   rawa: {
-    nama: "Rawa Kabut", sub: "Air hitam & suara-suara lirih · Lv 7+", lagu: "gua", tepi: TREE, w: 40, h: 34, kabut: true,
+    dunia: 1, nama: "Rawa Kabut", sub: "Air hitam & suara-suara lirih · Lv 7+", lagu: "gua", tepi: TREE, w: 40, h: 34, kabut: true,
     zona: {
       rawaUtara: { x0: 3, y0: 10, x1: 36, y1: 16 },
       rawaSelatan: { x0: 33, y0: 19, x1: 37, y1: 31 },
@@ -166,12 +178,16 @@ const AREAS = {
     },
   },
   pesisir: {
-    nama: "Kampung Nelayan", sub: "Kampung di tepi laut · Lv 7+", lagu: "pesisir", tepi: TREE, w: 44, h: 30,
+    dunia: 1, nama: "Kampung Nelayan", sub: "Kampung di tepi laut · Lv 7+", lagu: "pesisir", tepi: TREE, w: 44, h: 30,
     zona: {
       kampungLuar: { x0: 3, y0: 19, x1: 16, y1: 24 },
       pantai: { x0: 22, y0: 21, x1: 36, y1: 24 },
     },
-    gerbang: [{ x0: 0, y0: 15, x1: 0, y1: 17, ke: "rawa", masuk: { x: 37.5, y: 16.5 }, label: "← Rawa" }],
+    gerbang: [
+      { x0: 0, y0: 15, x1: 0, y1: 17, ke: "rawa", masuk: { x: 37.5, y: 16.5 }, label: "← Rawa" },
+      // perahu Pak Jala ke Kepulauan Segara (dibuka cerita bab 2)
+      { x0: 43, y0: 12, x1: 43, y1: 13, ke: "bandar", masuk: { x: 3.5, y: 14.5 }, label: "Berlayar →", labelEn: "Set sail →", kunci: "kapal" },
+    ],
     teleport: { id: "pesisir", x: 24.5, y: 12.5 },
     build(r) {
       for (let y = 0; y < MH; y++) for (let x = 0; x < MW; x++) {
@@ -186,15 +202,16 @@ const AREAS = {
       for (let x = 0; x <= 33; x++) for (let y = 15; y <= 17; y++) setT(x, y, PATH);
       for (let y = 6; y <= 21; y++) setT(19, y, PATH);
       for (let x = 19; x <= 35; x++) setT(x, 12, PATH);
-      // dermaga
+      // dermaga (ujungnya tersambung ke perahu setelah Pak Jala siap berlayar)
       fillRect(36, 12, 42, 13, BRIDGE);
+      if (S && S.buka && S.buka.kapal) fillRect(43, 12, 43, 13, BRIDGE);
       // rumah-rumah nelayan
       for (const [hx, hy] of [[7, 4], [13, 4], [22, 4], [7, 10], [27, 7]]) { houses.push({ x: hx, y: hy }); fillRect(hx, hy, hx + 2, hy + 1, HOUSE); }
       for (const [x, y] of [[30, 12], [17, 8], [33, 20], [24, 12], [1, 16]]) for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) if (SOLID.has(tileAt(x + dx, y + dy)) && tileAt(x + dx, y + dy) !== HOUSE && tileAt(x + dx, y + dy) !== WATER) setT(x + dx, y + dy, tileAt(x + dx, y + dy) === TREE && x + dx >= 33 ? SAND : G);
     },
   },
   kawah: {
-    nama: "Kawah Geni", sub: "Puncak gunung berapi · Lv 11+", lagu: "kawah", tepi: WALL, w: 34, h: 30, panas: true,
+    dunia: 1, nama: "Kawah Geni", sub: "Puncak gunung berapi · Lv 11+", lagu: "kawah", tepi: WALL, w: 34, h: 30, panas: true,
     zona: { kawahTengah: { x0: 3, y0: 17, x1: 30, y1: 23 } },
     gerbang: [{ x0: 16, y0: 29, x1: 18, y1: 29, ke: "candi", masuk: { x: 15.5, y: 1.5 }, label: "Ke Candi" }],
     teleport: { id: "kawah", x: 13.5, y: 26.5 },
@@ -217,7 +234,7 @@ const AREAS = {
     },
   },
   gua: {
-    nama: "Gua Genderuwo", sub: "Sarang penunggu hutan", lagu: "gua", tepi: WALL, w: 22, h: 17, gelap: true,
+    dunia: 1, nama: "Gua Genderuwo", sub: "Sarang penunggu hutan", lagu: "gua", tepi: WALL, w: 22, h: 17, gelap: true,
     zona: {},
     gerbang: [{ x0: 0, y0: 7, x1: 0, y1: 9, ke: "alam", masuk: { x: 23.5, y: 22.5 }, label: "← Keluar" }],
     bos: { x: 16.5, y: 8.5, monster: "genderuwo" },   // titik bos & jenisnya (cermin gaib juga di sini)
@@ -235,7 +252,28 @@ function buildArea(id) {
   MW = area.w; MH = area.h; map = new Uint8Array(MW * MH); houses = []; ZONES = area.zona;
   area.build(seeded(ATURAN.petaSeed + id.length * 7919));
 }
-buildArea("desa");
+// (buildArea("desa") pertama dipanggil di 04b-dunia-awan.js, setelah semua area terdaftar)
+
+// Gerbang terbuka? (lihat gerbang.kunci)
+function gerbangTerbuka(g) {
+  if (!g.kunci) return true;
+  if (!S) return false;
+  if (g.kunci.startsWith("bos:")) return !!S.bos[g.kunci.slice(4)];
+  return !!(S.buka && S.buka[g.kunci]);
+}
+// Buka kunci (dari cerita). Kalau sedang di area yang terpengaruh, petanya dibangun ulang.
+function bukaKunci(k) {
+  S.buka = S.buka || {};
+  if (S.buka[k]) return;
+  S.buka[k] = true;
+  bangunUlangArea();
+}
+function bangunUlangArea() {
+  if (!area || mode === "select") return;
+  buildArea(areaId);
+  buildMiniBase();
+  resetPetaDunia();   // peta dunia digambar ulang (18-peta-besar.js)
+}
 
 function solidAt(px, py) { return SOLID.has(tileAt(Math.floor(px / T), Math.floor(py / T))); }
 function moveEnt(e, dx, dy, fly) {

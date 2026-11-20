@@ -1,9 +1,9 @@
 // =====================================================================
 // CERMIN GAIB
-// Cermin oval melayang di sarang bos. Muncul hanya kalau bos pernah
-// dikalahkan DAN misi utama sudah selesai. Disentuh → "Munculkan bos?"
-// → efek pemanggilan (cahaya, kabut, kilat) → bos muncul untuk dilawan lagi.
-// Hadiah & jeda ada di ATURAN.cermin (config.js).
+// Cermin oval melayang di sarang bos. Muncul setelah bos itu pernah dikalahkan
+// (Genderuwo: setelah semua misi Ki Lurah selesai). Disentuh → pilih tingkat
+// kesulitan (34-tantangan-bos.js) → efek pemanggilan (cahaya, kabut, kilat)
+// → bos muncul untuk dilawan lagi. Hadiah & jeda ada di ATURAN.cermin (config.js).
 // =====================================================================
 "use strict";
 
@@ -12,11 +12,11 @@ let summon = null;         // pemanggilan yang sedang berjalan
 let kilat = 0;             // kilatan putih satu layar (0..1)
 const SUMMON_MUNCUL = 1.3; // detik dari mulai pemanggilan sampai bos muncul
 
-// Area ini punya cermin? (area dengan bos, bos pernah kalah, misi utama selesai)
+// Area ini punya cermin? (area dengan bos, dan bos itu pernah kalah)
 function cerminAktif() {
   if (!area.bos || !S || !S.bos[area.bos.monster]) return false;
-  // Genderuwo: setelah misi Ki Lurah selesai. Bos cerita: setelah cerita utama tamat.
-  return area.bos.monster === "genderuwo" ? S.q.idx >= QUESTS.length : ceritaTamat();
+  // Genderuwo: setelah misi Ki Lurah selesai. Bos cerita: langsung setelah dikalahkan.
+  return area.bos.monster === "genderuwo" ? S.q.idx >= QUESTS.length : true;
 }
 // Cermin dipasang di titik bos.
 function makeCermin() {
@@ -30,18 +30,16 @@ function talkCermin(npc) {
   if (cerminJeda > 0) {
     return openDialog(npc.name, t("cermin.redup", { detik: Math.ceil(cerminJeda) }), [{ label: t("dlg.tutup"), run: closeDialog, primary: true }]);
   }
-  openDialog(npc.name, t("cermin.tanya", { nama }), [
-    { label: t("cermin.jangan"), run: closeDialog },
-    { label: t("cermin.munculkan", { nama }), primary: true, run: () => { closeDialog(); startSummon(npc); } },
-  ]);
+  if (bosHidup()) return;
+  bukaTantangan(npc);   // pilih tingkat kesulitan (34-tantangan-bos.js)
 }
 
 // Bos muncul di sisi cermin yang menjauhi pemain (supaya tidak muncul di atas pemain).
-function startSummon(npc) {
+function startSummon(npc, tingkat = 1) {
   const a = Math.atan2(npc.y - P.y, npc.x - P.x);
   let x = npc.x + Math.cos(a) * 1.6 * T, y = npc.y + Math.sin(a) * 1.6 * T;
   if (solidAt(x, y)) { x = npc.x; y = npc.y + 0.6 * T; }
-  summon = { t: 0, x, y, done: false };
+  summon = { t: 0, x, y, done: false, tingkat };
   effects.push({ kind: "summon", x: summon.x, y: summon.y, t: 0, dur: SUMMON_MUNCUL + 0.6 });
   sfx.summon();
 }
@@ -67,13 +65,14 @@ function updateCermin(dt) {
     monsters = monsters.filter((m) => !(m.d.boss && m.dead));     // buang bos lama yang sudah kalah
     const b = makeMonster(bosCermin(), { x: s.x, y: s.y });
     b.ulang = true;       // tanda bos tantangan ulang: hadiahnya beda (lihat killMonster)
+    b.tingkat = s.tingkat; b.d = statTingkat(b.type, s.tingkat); b.hp = b.d.hp;   // diperkuat sesuai tingkat
     monsters.push(b);
     petir(s.x, s.y, 1); kilat = 1; shake = 0.8;
     P.inv = Math.max(P.inv, 1);   // pemain kebal sebentar saat bos muncul
     effects.push({ kind: "ring", x: s.x, y: s.y, r: 170, t: 0, dur: 0.6 });
     spark(s.x, s.y - 40, "#d9c8ff", 30);
     sfx.thunder(); sfx.growl();
-    toast(t("toast.bosMuncul", { nama: MONSTERS[bosCermin()].name }), true);
+    toast(t("toast.bosMuncul", { nama: b.d.name }), true);
   }
   if (s.t >= SUMMON_MUNCUL + 0.6) summon = null;
 }
@@ -87,15 +86,19 @@ function petir(x, y, kuat) {
   if (kuat < 1) sfx.zap();
 }
 
-// Bos tantangan ulang dikalahkan: hanya koin, lalu cermin redup selama ATURAN.cermin.jeda
+// Bos tantangan dikalahkan: hadiah sesuai tingkat, tingkat berikutnya terbuka,
+// lalu cermin redup selama ATURAN.cermin.jeda
 function bosUlangKalah(m) {
   m.dead = true; sfx.die();
   spark(m.x, m.y - m.d.h * 0.5, "#d9c8ff", 24);
-  const koin = ATURAN.cermin.hadiahKoin;
-  S.gold += koin;
+  const n = m.tingkat || 1, h = hadiahTingkat(m.type, n), baru = n > tingkatMenang(m.type);
+  S.cermin[m.type] = Math.max(tingkatMenang(m.type), n);
+  S.gold += h.gold; S.potions += h.potion;
   cerminJeda = ATURAN.cermin.jeda;
   shake = 0.6;
-  toast(t("toast.bosUlang", { nama: m.d.name, koin }), true);
+  toast(t("toast.bosUlang", { nama: m.d.name, hadiah: teksHadiah(h) }), true);
+  if (baru && n < ATURAN.cermin.tingkat) setTimeout(() => toast(t("tantang.terbuka", { n: n + 1 }), false), 900);
+  gainExp(h.exp);
   victory(); saveSoon();
 }
 

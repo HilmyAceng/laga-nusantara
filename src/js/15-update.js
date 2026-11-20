@@ -15,6 +15,7 @@ function updatePlayer(dt) {
   }
   const C = CLASSES[S.cls];
   const inp = readInput();
+  if (punyaDebuff("bingung")) { inp.mx = -inp.mx; inp.my = -inp.my; }   // debuff bingung: arah terbalik
   P.inv = Math.max(0, P.inv - dt); P.flash = Math.max(0, P.flash - dt);
   P.atkCd = Math.max(0, P.atkCd - dt); P.skillCd = Math.max(0, P.skillCd - dt); P.rollCd = Math.max(0, P.rollCd - dt);
   P.comboT = Math.max(0, P.comboT - dt); P.swing = Math.max(0, P.swing - dt);
@@ -29,7 +30,7 @@ function updatePlayer(dt) {
   }
   if (P.roll > 0) { P.roll -= dt; moveEnt(P, P.rdx * ATURAN.hindar.kecepatan * dt, P.rdy * ATURAN.hindar.kecepatan * dt); P.run += dt * 30; return; }
 
-  const slow = P.swing > 0 ? 0.35 : 1;
+  const slow = (P.swing > 0 ? 0.35 : 1) * kaliGerak();   // debuff lambat (32-debuff.js)
   if (inp.mx || inp.my) {
     moveEnt(P, inp.mx * C.speed * slow * dt, inp.my * C.speed * slow * dt);
     P.moving = true; P.run += dt * 11;
@@ -46,7 +47,9 @@ function updatePlayer(dt) {
   if (inp.skill && P.skillCd <= 0) playerSkill();
   else if (inp.attack && P.atkCd <= 0) playerAttack();
   if (inp.potion) {
-    if (S.potions > 0 && P.hp < maxHp()) { S.potions--; const h = Math.round(maxHp() * ATURAN.jamuPulih); P.hp = Math.min(maxHp(), P.hp + h); numbers.push({ x: P.x, y: P.y - 56, v: "+" + h, life: 0.9, color: "#5ad17a", size: 22 }); sfx.drink(); saveSoon(); }
+    // jamu: pulihkan nyawa; setelah belajar resep penawar (Pak Joko) juga menyembuhkan semua debuff
+    const obati = S.penawar && adaDebuff();
+    if (S.potions > 0 && (P.hp < maxHp() || obati)) { S.potions--; const h = Math.round(maxHp() * ATURAN.jamuPulih); P.hp = Math.min(maxHp(), P.hp + h); numbers.push({ x: P.x, y: P.y - 56, v: "+" + h, life: 0.9, color: "#5ad17a", size: 22 }); sfx.drink(); if (obati) sembuhkanDebuff("jamu"); saveSoon(); }
     else if (S.potions <= 0) toast(t("toast.jamuHabis"), false);
   }
   nearNpc = null;
@@ -63,7 +66,7 @@ function updateMonster(m, dt) {
   }
   m.flash = Math.max(0, m.flash - dt); m.cd = Math.max(0, m.cd - dt); m.seen = Math.max(0, m.seen - dt); m.run += dt * 8;
   if (m.kbx || m.kby) { moveEnt(m, m.kbx * dt, m.kby * dt, d.fly); const k = Math.exp(-10 * dt); m.kbx *= k; m.kby *= k; if (Math.abs(m.kbx) + Math.abs(m.kby) < 5) m.kbx = m.kby = 0; }
-  const alive = !P.dead, dp = dist(m, P), toP = Math.atan2(P.y - m.y, P.x - m.x);
+  const alive = !P.dead && !pAman, dp = dist(m, P), toP = Math.atan2(P.y - m.y, P.x - m.x);   // pemain di zona aman = tidak dikejar
   const reach = d.range + d.r + P.r;
   if (d.ai) { AI_BOS[d.ai](m, dt, dp, toP); return; }   // bos baru punya pola sendiri (26-monster-baru.js)
   perilakuMonster(m, dt, dp, toP);                       // kedip / tembak
@@ -130,7 +133,10 @@ function update(dt) {
   if (mode !== "play") return;
   if (freeze > 0) { freeze -= dt; return; }
   updatePlayer(dt);
-  for (const m of monsters) updateMonster(m, dt);
+  for (const m of monsters) { musuhAktif = m; updateMonster(m, dt); if (!m.dead) jagaZonaAman(m); }
+  musuhAktif = null;
+  updateDebuff(dt);       // 32-debuff.js
+  updateZonaAman(dt);     // 33-zona-aman.js
 
   for (const p of projs) {
     p.x += p.vx * dt; p.y += p.vy * dt; p.life -= dt;

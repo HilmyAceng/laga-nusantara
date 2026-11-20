@@ -5,8 +5,15 @@ Bisa dimainkan di HP (joystick + tombol sentuh, mode lanskap) dan desktop (keybo
 
 ## Fitur
 
-- **Cerita utama "Kabut dari Gunung Geni"** (4 bab, 18 langkah) dengan percakapan, hadiah, dan layar TAMAT. Diberi oleh Resi Wening
-- **Tujuh peta terpisah** dengan layar transisi (gelap + nama area) saat pindah:
+- **Cerita utama "Kabut dari Gunung Geni"**: 5 bab × 10 episode (119 langkah) di `src/cerita/`, dengan percakapan panjang, hadiah, dan layar TAMAT. Simpanan versi lama otomatis dipindahkan ke langkah yang sama
+- **Tiga dunia**, peta dunia punya tombol pilih dunia:
+  - **Tanah Wanasari** (7 area di bawah)
+  - **Kepulauan Segara** (naik perahu Pak Jala): Bandar Segara (kota aman), Hutan Bakau, Hutan Larangan (bos **Siluman Ular**), Kuil Samudra (bos **Panglima Karang**)
+  - **Negeri Awan** (lewat Tangga Pelangi): Kampung Awan (aman), Hutan Batu (bos **Kelabang Raksasa**), Puncak Naga (peta 60×60, bos terakhir **Naga Kencana** yang besar: semburan api, hujan meteor, kibasan ekor, terbang lalu menukik)
+- **Debuff** dari monster tertentu & bos: racun, terbakar, lambat, lemah, bingung (ikon di atas kepala). Sembuh sendiri, di zona aman, atau dengan jamu setelah misi **Pak Joko** (Ramuan Penawar)
+- **Zona aman**: kota/desa dan lingkaran di sekitar tiap mesin teleport. Monster tak bisa masuk, debuff hilang, nyawa pulih pelan
+- **Tantangan bos** di Cermin Gaib: tingkat kesulitan 1-7, level karakter yang disarankan, hadiah per tingkat; tingkat berikutnya terbuka setelah tingkat sebelumnya dimenangkan
+- **Peta Tanah Wanasari** dengan layar transisi (gelap + nama area) saat pindah:
   - **Desa Wanasari**: aman. Ki Lurah (misi sampingan), Mbok Darmi (toko), Resi Wening (cerita), Pak Wowo (belum bisa diajak bicara), Mesin Teleport
   - **Hutan & Padang**: monster biasa. Jalan ke Gua (timur), Candi (utara), Rawa (selatan)
   - **Gua Genderuwo**: sarang bos Genderuwo (misi Ki Lurah)
@@ -16,13 +23,13 @@ Bisa dimainkan di HP (joystick + tombol sentuh, mode lanskap) dan desktop (keybo
   - **Kawah Geni** (baru): lava & Banaspati, altar tiga mustika, bos terakhir **Raja Banaspati**
 - **Teka-teki**: nyalakan obor sesuai petunjuk prasasti, jawab 3 teka-teki Batu Pitutur (salah = hantu muncul), letakkan 3 mustika di altar
 - **Mesin Teleport** di Desa, Candi, Rawa, Kampung & Kawah: pulihkan nyawa (energi 1000, terisi 1 tiap 5 menit), dan pindah cepat lewat peta besar (aktif setelah areanya didatangi)
-- **Cermin Gaib** di sarang tiap bos (Genderuwo: setelah misi Ki Lurah selesai; bos lain: setelah cerita tamat): panggil bosnya lagi, hadiah 10 koin, jeda 30 detik
+- **Cermin Gaib** di sarang tiap bos (Genderuwo: setelah misi Ki Lurah selesai; bos lain: setelah bos itu dikalahkan): tantang lagi dengan tingkat 1-7, jeda 30 detik
 - **Navigasi nyaman**: panah emas di tepi layar menuju tujuan cerita (lengkap dengan jarak & nama area berikutnya), bintang tujuan di peta mini & peta besar, jalur emas di peta dunia, area yang belum didatangi tertutup kabut "???", tanda **!** / **?** di atas NPC (emas = cerita, biru = misi sampingan)
 - **4 kelas hero**: Pendekar, Pemanah, Pendobrak, Penyihir. Masing-masing punya serangan dan jurus sendiri
 - **Monster**: Kera Liar, Kelelawar (terbang), Babi Hutan (menyeruduk), Hantu Kabut (berteleportasi), Buaya Rawa (menerjang), Tuyul (mencopet koin lalu kabur), Kepiting Karang (keras), Banaspati (menembak bola api)
 - **Bos**: Genderuwo, Dwarapala (hujan batu), Buaya Putih (terjangan & memanggil anak buaya), Raja Banaspati (semburan api, hujan api). Bos marah di bawah 50% nyawa
 - **Progres**: EXP & naik level (nyawa dan serangan bertambah), koin, jamu, tingkat senjata
-- **Misi sampingan**: rantai misi Ki Lurah, Bang Kardi (Kepiting Nakal), Mbah Tirto (Sisik Buaya: hadiah naik tingkat senjata). **Toko** Mbok Darmi & Mak Inah
+- **Misi sampingan**: rantai misi Ki Lurah, Bang Kardi, Mbah Tirto, Pak Joko (resep penawar debuff), Bayu, Pak Rimba, Nyi Laras, Kirana, Empu Gora (naik tingkat senjata), Ki Angon. **Toko** Mbok Darmi, Mak Inah, Mbak Sari, Empu Gora
 - **Musik gamelan & efek suara** yang dibuat oleh kode (tanpa file audio). Lima lagu dengan suasana berbeda: riang (desa), tegang (hutan), seram (gua & candi), paling tegang (bos), dan musik kemenangan. Lagu punya lapisan melodi, isian, bas, kendang & kecrek, dengan tangga nada slendro atau pelog
 - **Peta mini**, serangan auto-bidik, guling menghindar (kebal sesaat), tanda merah sebelum musuh menyerang
 
@@ -57,7 +64,9 @@ Semua menu memakai tombol. `Esc` = kembali satu halaman.
 | `01-alat.js` | Fungsi bantu kecil (`$`, `clamp`, `rand`, `store` untuk simpanan) |
 | `02-bahasa.js` | Bahasa Indonesia / English: kamus teks (`TEKS`), terjemahan data game (`DATA_EN`), fungsi `t()` |
 | `03-rumus.js` | Rumus EXP, nyawa, serangan |
-| `04-peta.js` | Jenis petak dan bentuk 4 area (`AREAS`: Desa, Hutan & Padang, Gua, Candi) |
+| `04-peta.js` | Jenis petak, daftar `DUNIA`, area dunia 1 (`AREAS`), gerbang berkunci |
+| `04a-dunia-segara.js` | Area dunia 2: Bandar Segara, Hutan Bakau, Hutan Larangan, Kuil Samudra |
+| `04b-dunia-awan.js` | Area dunia 3: Kampung Awan, Hutan Batu, Puncak Naga |
 | `05-status.js` | Variabel utama (progres `S`, pemain `P`, monster), NPC desa, simpan |
 | `06-area.js` | Pindah area + layar gelap (fade) + gerbang |
 | `07-audio.js` | Mesin suara, volume, resep efek suara (`sfx`) |
@@ -84,7 +93,14 @@ Semua menu memakai tombol. `Esc` = kembali satu halaman.
 | `28-dukung.js` | Tombol "Dukung Kami" di halaman Credit (link di `ATURAN.dukung.tautan`) |
 | `29-zoom-peta.js` | Zoom in / out & geser peta besar (tombol +/-, roda mouse, cubit di HP) |
 | `30-daftar-misi.js` | Popup daftar misi (judul, perintah, hadiah) & pilih misi yang dilacak |
-| `31-main.js` | Loop utama (dimuat paling akhir) |
+| `32-debuff.js` | Debuff dari serangan monster (racun, terbakar, lambat, lemah, bingung) & ikonnya |
+| `33-zona-aman.js` | Zona aman di kota & sekitar mesin teleport |
+| `34-tantangan-bos.js` | Popup tingkat kesulitan 1-7 di Cermin Gaib |
+| `35-monster-dunia-baru.js` | Pola serangan bos "umum" & gambar monster dunia 2 dan 3 |
+| `36-naga.js` | Pola serangan & gambar Naga Kencana |
+| `37-main.js` | Loop utama (dimuat paling akhir) |
+
+Cerita utama ada di folder `src/cerita/`: `bab-1.js` ... `bab-5.js` (satu file per bab), digabung di `semua.js`.
 
 Kalau menambah file JS baru: taruh di `src/js/` dengan nomor urut, tambahkan `<script src="js/...">` di `src/game.html`, lalu jalankan `./build.sh` (daftar file offline di `sw.js` ikut diperbarui otomatis).
 
@@ -93,12 +109,12 @@ Kalau menambah file JS baru: taruh di `src/js/` dengan nomor urut, tambahkan `<s
 | Bagian | Isi |
 |---|---|
 | `KONTROL` | Tombol keyboard untuk tiap aksi |
-| `ATURAN` | Modal awal, rumus level, harga toko, jamu, hindar, kritis, pingsan, drop, seed peta, hadiah & jeda Cermin Gaib (`ATURAN.cermin`), energi Mesin Teleport (`ATURAN.teleport`) |
+| `ATURAN` | Modal awal, rumus level, harga toko, jamu, hindar, kritis, pingsan, drop, seed peta, tingkat & hadiah tantangan bos (`ATURAN.cermin`), debuff (`ATURAN.debuff`), zona aman (`ATURAN.zonaAman`), energi Mesin Teleport (`ATURAN.teleport`) |
 | `CLASSES` | Stat hero: `hp`, `atk`, `speed`, serangan, jurus |
 | `MONSTERS` | Stat monster: `hp`, `atk`, `exp`, `gold`, `aggro` (jarak mulai mengejar), `wind` (lama ancang-ancang) |
 | `SPAWN` | Berapa banyak monster di tiap zona |
 | `QUESTS` | Misi sampingan Ki Lurah: tipe `kill` / `collect`, jumlah, teks, hadiah |
-| `CERITA` | Cerita utama langkah demi langkah: tipe `bicara` / `datang` / `kill` / `collect` / `teka` / `bos`, tujuan, percakapan, hadiah |
+| (`src/cerita/`) | Cerita utama per bab: tipe `bicara` / `datang` / `kill` / `collect` / `teka` / `bos`, episode, tujuan, percakapan, hadiah, terjemahan `en` |
 | `SAMPINGAN` | Misi sampingan dari NPC lain |
 | `LAGU` | Musik latar tiap tempat: melodi (notasi slendro `1 2 3 5 6`), tempo, suara, pola kendang, gong |
 | `ATURAN.audio` | Volume awal musik dan efek suara (pemain bisa mengubahnya di Pengaturan › Volume) |
@@ -112,7 +128,12 @@ Semua nama di bawah ini dibuat sementara. Ganti di tempat yang disebut, lalu jal
 | Apa | Nama sekarang | Diubah di |
 |---|---|---|
 | Judul cerita | Kabut dari Gunung Geni | `game.html` (layar tamat), `CERITA[].bab` |
-| Bab | Kabut Pertama · Rawa Kabut · Kampung Nelayan · Kawah Geni | `CERITA[].bab` di `config.js` |
+| Bab | Kabut Pertama · Tiga Mustika · Layar ke Segara · Kuil Samudra · Naga Kencana | `bab` di `src/cerita/bab-N.js` |
+| Dunia | Tanah Wanasari · Kepulauan Segara · Negeri Awan | `DUNIA` di `04-peta.js` |
+| NPC dunia 2 & 3 | Pak Joko, Datuk Bahar, Nyi Laras, Bayu, Mbak Sari, Pak Rimba, Eyang Sukma, Kirana, Empu Gora, Ki Angon | `NPC_DATA` di `05-status.js` |
+| Area dunia 2 & 3 | Bandar Segara, Hutan Bakau, Hutan Larangan, Kuil Samudra, Kampung Awan, Hutan Batu, Puncak Naga | `04a-dunia-segara.js`, `04b-dunia-awan.js` |
+| Monster dunia 2 & 3 | Ular Welang, Ubur-ubur Api, Harimau Kumbang, Hantu Bajak Laut, Arca Hidup, Elang Batu, Anak Naga | `MONSTERS` di `config.js` |
+| Bos dunia 2 & 3 | Siluman Ular, Panglima Karang, Kelabang Raksasa, Naga Kencana | `MONSTERS` di `config.js` |
 | NPC cerita | Resi Wening, Mbah Tirto, Pak Jala, Mak Inah, Bang Kardi | `NPC_DATA` di `05-status.js` |
 | Area baru | Rawa Kabut, Kampung Nelayan, Kawah Geni | `AREAS` di `04-peta.js` |
 | Monster baru | Hantu Kabut, Buaya Rawa, Tuyul, Kepiting Karang, Banaspati | `MONSTERS` di `config.js` |

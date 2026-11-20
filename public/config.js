@@ -58,19 +58,52 @@ const ATURAN = {
 
   jarakBicara: 84,
 
-  // Cermin Gaib di gua: muncul setelah bos pernah kalah & misi utama selesai.
-  // Sentuh cermin untuk memanggil bos lagi.
+  // Cermin Gaib di sarang bos: muncul setelah bos pernah dikalahkan.
+  // Sentuh cermin → pilih tingkat kesulitan 1-7 → bos muncul lagi.
+  // Tingkat N baru bisa dipilih setelah tingkat N-1 dimenangkan.
   cermin: {
-    hadiahKoin: 10,                       // koin setiap bos dari cermin dikalahkan
     jeda: 30,                             // detik sampai cermin bisa dipakai lagi
+    tingkat: 7,                           // jumlah tingkat kesulitan
+    nyawaTambah: 0.45,                    // tiap tingkat: nyawa bos +45%
+    seranganTambah: 0.18,                 // tiap tingkat: serangan bos +18%
+    cepatTambah: 0.04,                    // tiap tingkat: gerak bos +4%
+    levelTambah: 2,                       // level karakter yang disarankan naik 2 tiap tingkat
+    koin: 0.2,                            // hadiah koin = koin bos × 0.2 × tingkat
+    exp: 0.3,                             // hadiah EXP  = EXP bos × 0.3 × tingkat
+    jamuMulai: 4,                         // tingkat 4 ke atas: bonus jamu (tingkat - 3)
   },
 
-  // Mesin Teleport (tiang bendera). Berdiri di dekatnya = nyawa pulih memakai energi mesin.
-  // Klik mesin di peta besar (tombol M) untuk pindah ke sana.
+  // Debuff = efek buruk dari serangan monster tertentu (lihat `debuff` di MONSTERS).
+  //   racun    : nyawa berkurang pelan (bagian dari nyawa maksimal per detik)
+  //   terbakar : seperti racun tapi lebih cepat
+  //   lambat   : jalan lebih pelan
+  //   lemah    : serangan lebih lemah
+  //   bingung  : arah gerak terbalik
+  // Debuff hilang sendiri setelah beberapa detik, di zona aman, atau dengan jamu
+  // (setelah belajar resep penawar dari Pak Joko).
+  debuff: {
+    racun:    { warna: "#7bd64a", perDetik: 0.012 },
+    terbakar: { warna: "#ff7b39", perDetik: 0.025 },
+    lambat:   { warna: "#7fb2ff", kali: 0.55 },
+    lemah:    { warna: "#b88cff", kali: 0.6 },
+    bingung:  { warna: "#ff8fd8" },
+  },
+
+  // Zona aman: monster tidak bisa masuk, peluru musuh lenyap, debuff hilang, nyawa pulih pelan.
+  // Ada di area aman (desa, kota) dan di sekitar setiap mesin teleport.
+  zonaAman: {
+    radius: 3.2,                          // jari-jari di sekitar mesin teleport (petak)
+    pulihPerDetik: 0.03,                  // nyawa pulih 3% per detik
+  },
+
   // Peta besar: zoom paling dekat (1 = seluruh peta terlihat, 4 = 4 kali lebih dekat)
   peta: {
     zoomMaks: 4,
   },
+
+  // Mesin Teleport (tiang bendera). Berdiri di dekatnya = nyawa pulih memakai energi mesin.
+  // Klik mesin di peta besar (tombol M) untuk pindah ke sana.
+  // (pengaturan mesin teleport ada di bawah)
 
   // Tombol "Dukung Kami" di halaman Credit. Isi dengan link donasi kamu,
   // contoh "https://trakteer.id/namakamu" atau "https://saweria.co/namakamu".
@@ -93,6 +126,7 @@ const ATURAN = {
     dropTaring: 0.6,                      // peluang babi menjatuhkan taring (saat misi 2)
     dropKantong: 0.45,                    // peluang tuyul menjatuhkan kantong curian (cerita bab 3)
     dropSisik: 0.5,                       // peluang buaya rawa menjatuhkan sisik (misi Mbah Tirto)
+    // barang misi lain diatur di langkah cerita / misi sampingan: `dari` (monster) & `peluang`
   },
 
   petaSeed: 20251119,                     // ganti angka ini = bentuk peta berubah
@@ -150,26 +184,46 @@ const CLASSES = {
 // wind = lama ancang-ancang (tanda merah), cd = jeda antar serangan,
 // aggro = jarak mulai mengejar. fly/charge/boss = perilaku khusus.
 // ---------------------------------------------------------------------
+// debuff = { jenis, peluang (0-1) tiap kena serangan, lama (detik) } → lihat ATURAN.debuff
 const MONSTERS = {
   kera:      { name: "Kera Liar",  lv: 1, hp: 32,  atk: 6,  speed: 115, r: 14, h: 34, exp: 9,   gold: [1, 4],    range: 26,  wind: 0.4,  cd: 1.1, aggro: 190 },
   kelelawar: { name: "Kelelawar",  lv: 3, hp: 30,  atk: 8,  speed: 165, r: 12, h: 48, exp: 13,  gold: [2, 5],    range: 22,  wind: 0.3,  cd: 1.0, aggro: 230, fly: true },
   babi:      { name: "Babi Hutan", lv: 4, hp: 75,  atk: 12, speed: 95,  r: 18, h: 30, exp: 20,  gold: [3, 8],    range: 160, wind: 0.6,  cd: 1.6, aggro: 200, charge: true },
-  genderuwo: { name: "Genderuwo",  lv: 8, hp: 700, atk: 20, speed: 85,  r: 30, h: 84, exp: 220, gold: [90, 130], range: 50,  wind: 0.75, cd: 1.3, aggro: 330, boss: true },
+  genderuwo: { name: "Genderuwo",  lv: 8, hp: 700, atk: 20, speed: 85,  r: 30, h: 84, exp: 220, gold: [90, 130], range: 50,  wind: 0.75, cd: 1.3, aggro: 330, boss: true, debuff: { jenis: "lemah", peluang: 0.35, lama: 5 } },
 
   // ---- monster baru (cerita utama) ----
   // kedip  = berteleportasi ke dekat pemain setiap sekian detik
   // copet  = [min, max] koin yang dicuri saat memukul; dikembalikan kalau tuyulnya kalah
   // tembak = menembak bola api: cd (detik), speed, jarak
-  hantuKabut: { name: "Hantu Kabut",     lv: 6,  hp: 55,  atk: 11, speed: 115, r: 14, h: 46, exp: 24, gold: [3, 8],   range: 24,  wind: 0.45, cd: 1.2, aggro: 220, fly: true, kedip: 3.5 },
-  buaya:      { name: "Buaya Rawa",      lv: 7,  hp: 110, atk: 15, speed: 75,  r: 20, h: 22, exp: 30, gold: [4, 10],  range: 170, wind: 0.7,  cd: 1.8, aggro: 200, charge: true },
+  hantuKabut: { name: "Hantu Kabut",     lv: 6,  hp: 55,  atk: 11, speed: 115, r: 14, h: 46, exp: 24, gold: [3, 8],   range: 24,  wind: 0.45, cd: 1.2, aggro: 220, fly: true, kedip: 3.5, debuff: { jenis: "lambat", peluang: 0.3, lama: 3 } },
+  buaya:      { name: "Buaya Rawa",      lv: 7,  hp: 110, atk: 15, speed: 75,  r: 20, h: 22, exp: 30, gold: [4, 10],  range: 170, wind: 0.7,  cd: 1.8, aggro: 200, charge: true, debuff: { jenis: "lambat", peluang: 0.3, lama: 2.5 } },
   tuyul:      { name: "Tuyul",           lv: 5,  hp: 38,  atk: 5,  speed: 170, r: 10, h: 28, exp: 16, gold: [1, 3],   range: 20,  wind: 0.25, cd: 0.9, aggro: 210, copet: [3, 7] },
   kepiting:   { name: "Kepiting Karang", lv: 8,  hp: 150, atk: 14, speed: 65,  r: 18, h: 22, exp: 34, gold: [5, 12],  range: 30,  wind: 0.55, cd: 1.4, aggro: 170 },
-  banaspati:  { name: "Banaspati",       lv: 11, hp: 85,  atk: 17, speed: 105, r: 14, h: 48, exp: 46, gold: [8, 15],  range: 24,  wind: 0.4,  cd: 1.3, aggro: 300, fly: true, tembak: { cd: 2.2, speed: 260, jarak: 330 } },
+  banaspati:  { name: "Banaspati",       lv: 11, hp: 85,  atk: 17, speed: 105, r: 14, h: 48, exp: 46, gold: [8, 15],  range: 24,  wind: 0.4,  cd: 1.3, aggro: 300, fly: true, tembak: { cd: 2.2, speed: 260, jarak: 330 }, debuff: { jenis: "terbakar", peluang: 0.3, lama: 3 } },
 
   // ---- bos baru (pola serangannya ada di js/26-monster-baru.js, lihat `ai`) ----
-  dwarapala:     { name: "Dwarapala",      lv: 10, hp: 1100, atk: 22, speed: 70, r: 34, h: 100, exp: 300, gold: [120, 160], range: 56, wind: 0.8, cd: 1.4, aggro: 340, boss: true, ai: "dwarapala" },
-  buayaPutih:    { name: "Buaya Putih",    lv: 13, hp: 1500, atk: 26, speed: 90, r: 36, h: 44,  exp: 450, gold: [150, 200], range: 60, wind: 0.8, cd: 1.3, aggro: 360, boss: true, ai: "buayaPutih" },
-  rajaBanaspati: { name: "Raja Banaspati", lv: 16, hp: 2400, atk: 30, speed: 85, r: 34, h: 110, exp: 800, gold: [250, 320], range: 60, wind: 0.7, cd: 1.2, aggro: 400, boss: true, ai: "rajaBanaspati", fly: true },
+  dwarapala:     { name: "Dwarapala",      lv: 10, hp: 1100, atk: 22, speed: 70, r: 34, h: 100, exp: 300, gold: [120, 160], range: 56, wind: 0.8, cd: 1.4, aggro: 340, boss: true, ai: "dwarapala", debuff: { jenis: "lambat", peluang: 0.35, lama: 3 } },
+  buayaPutih:    { name: "Buaya Putih",    lv: 13, hp: 1500, atk: 26, speed: 90, r: 36, h: 44,  exp: 450, gold: [150, 200], range: 60, wind: 0.8, cd: 1.3, aggro: 360, boss: true, ai: "buayaPutih", debuff: { jenis: "lambat", peluang: 0.4, lama: 3 } },
+  rajaBanaspati: { name: "Raja Banaspati", lv: 16, hp: 2400, atk: 30, speed: 85, r: 34, h: 110, exp: 800, gold: [250, 320], range: 60, wind: 0.7, cd: 1.2, aggro: 400, boss: true, ai: "rajaBanaspati", fly: true, debuff: { jenis: "terbakar", peluang: 0.45, lama: 4 } },
+
+  // ---- Dunia 2 · Kepulauan Segara ----
+  ularWelang:     { name: "Ular Welang",      nameEn: "Banded Krait",      lv: 13, hp: 120, atk: 18, speed: 130, r: 13, h: 20, exp: 55,  gold: [8, 16],  range: 110, wind: 0.45, cd: 1.3, aggro: 220, charge: true, debuff: { jenis: "racun", peluang: 0.4, lama: 5 } },
+  uburUbur:       { name: "Ubur-ubur Api",    nameEn: "Fire Jellyfish",    lv: 14, hp: 110, atk: 16, speed: 80,  r: 14, h: 46, exp: 60,  gold: [8, 15],  range: 26,  wind: 0.5,  cd: 1.4, aggro: 200, fly: true, kedip: 4.5, debuff: { jenis: "bingung", peluang: 0.35, lama: 3 } },
+  harimauKumbang: { name: "Harimau Kumbang",  nameEn: "Black Panther",     lv: 15, hp: 200, atk: 24, speed: 150, r: 18, h: 34, exp: 75,  gold: [10, 20], range: 30,  wind: 0.35, cd: 1.0, aggro: 260, debuff: { jenis: "lemah", peluang: 0.3, lama: 5 } },
+  hantuBajak:     { name: "Hantu Bajak Laut", nameEn: "Ghost Pirate",      lv: 16, hp: 160, atk: 20, speed: 95,  r: 15, h: 48, exp: 80,  gold: [12, 24], range: 26,  wind: 0.4,  cd: 1.2, aggro: 300, tembak: { cd: 2.4, speed: 280, jarak: 320, warna: "#c9d6e3" }, debuff: { jenis: "lambat", peluang: 0.35, lama: 3 } },
+  silumanUlar:    { name: "Siluman Ular",     nameEn: "Serpent Spirit",    lv: 18, hp: 4000, atk: 34, speed: 95, r: 34, h: 74,  exp: 1100, gold: [300, 380], range: 60, wind: 0.8, cd: 1.2, aggro: 380, boss: true, ai: "umum",
+    pola: ["sembur", "terjang", "hujan"], anak: "ularWelang", jenisHujan: "racun", warnaPeluru: "#7bd64a", debuff: { jenis: "racun", peluang: 0.5, lama: 6 } },
+  panglimaKarang: { name: "Panglima Karang",  nameEn: "Coral Warlord",     lv: 21, hp: 5200, atk: 38, speed: 85, r: 36, h: 96,  exp: 1500, gold: [380, 460], range: 62, wind: 0.8, cd: 1.2, aggro: 380, boss: true, ai: "umum",
+    pola: ["hantam", "hujan", "terjang", "sembur"], anak: "hantuBajak", jenisHujan: "air", warnaPeluru: "#6fd3ff", debuff: { jenis: "lambat", peluang: 0.45, lama: 3 } },
+
+  // ---- Dunia 3 · Negeri Awan ----
+  arcaHidup:      { name: "Arca Hidup",       nameEn: "Living Statue",     lv: 20, hp: 380, atk: 30, speed: 60,  r: 20, h: 58, exp: 120, gold: [15, 30], range: 150, wind: 0.7,  cd: 1.8, aggro: 220, charge: true, debuff: { jenis: "lemah", peluang: 0.4, lama: 5 } },
+  elangBatu:      { name: "Elang Batu",       nameEn: "Stone Eagle",       lv: 21, hp: 150, atk: 26, speed: 190, r: 14, h: 52, exp: 105, gold: [12, 25], range: 24,  wind: 0.3,  cd: 0.9, aggro: 300, fly: true, debuff: { jenis: "bingung", peluang: 0.2, lama: 2.5 } },
+  anakNaga:       { name: "Anak Naga",        nameEn: "Dragon Whelp",      lv: 23, hp: 240, atk: 30, speed: 110, r: 16, h: 54, exp: 140, gold: [18, 34], range: 26,  wind: 0.4,  cd: 1.2, aggro: 320, fly: true, tembak: { cd: 2, speed: 300, jarak: 340 }, debuff: { jenis: "terbakar", peluang: 0.35, lama: 3 } },
+  kelabang:       { name: "Kelabang Raksasa", nameEn: "Giant Centipede",   lv: 25, hp: 6500, atk: 42, speed: 120, r: 34, h: 44, exp: 2000, gold: [450, 560], range: 60, wind: 0.7, cd: 1.1, aggro: 400, boss: true, ai: "umum",
+    pola: ["terjang", "sembur", "terjang", "hujan"], anak: "elangBatu", jenisHujan: "racun", warnaPeluru: "#7bd64a", debuff: { jenis: "racun", peluang: 0.5, lama: 6 } },
+  naga:           { name: "Naga Kencana",     nameEn: "Kencana the Golden Dragon", lv: 28, hp: 10000, atk: 46, speed: 90, r: 58, h: 150, exp: 4000, gold: [700, 900], range: 80, wind: 0.8, cd: 1.1, aggro: 520, boss: true, ai: "naga", jarakPulang: 900,
+    anak: "anakNaga", debuff: { jenis: "terbakar", peluang: 0.5, lama: 4 } },
 };
 
 // Berapa banyak monster di tiap zona peta.
@@ -192,6 +246,20 @@ const SPAWN = [
   { monster: "kepiting", zona: "pantai", jumlah: 7 },
   // Kawah Geni
   { monster: "banaspati", zona: "kawahTengah", jumlah: 7 },
+  // Dunia 2 · Kepulauan Segara
+  { monster: "ularWelang", zona: "bakauBarat", jumlah: 6 },
+  { monster: "uburUbur", zona: "bakauPantai", jumlah: 6 },
+  { monster: "harimauKumbang", zona: "laranganTengah", jumlah: 6 },
+  { monster: "ularWelang", zona: "laranganSelatan", jumlah: 5 },
+  { monster: "hantuBajak", zona: "kuilAula", jumlah: 7 },
+  { monster: "uburUbur", zona: "kuilKolam", jumlah: 4 },
+  // Dunia 3 · Negeri Awan
+  { monster: "arcaHidup", zona: "batuSelatan", jumlah: 6 },
+  { monster: "elangBatu", zona: "batuUtara", jumlah: 7 },
+  { monster: "anakNaga", zona: "batuTimur", jumlah: 3 },
+  { monster: "anakNaga", zona: "nagaLereng", jumlah: 7 },
+  { monster: "elangBatu", zona: "nagaTebing", jumlah: 5 },
+  { monster: "arcaHidup", zona: "nagaGerbang", jumlah: 4 },
 ];
 
 // ---------------------------------------------------------------------
@@ -311,170 +379,66 @@ const LAGU = {
 };
 
 // ---------------------------------------------------------------------
-// 7. CERITA UTAMA: "Kabut dari Gunung Geni" (urut dari atas ke bawah)
-// Tiap langkah punya `tipe`:
-//   "bicara" : bicara dengan NPC `npc`
-//   "datang" : masuk ke area `area`
-//   "kill"   : kalahkan `need` monster `target`
-//   "collect": kumpulkan `need` barang `item` (dijatuhkan monster)
-//   "teka"   : selesaikan teka-teki `id` ("obor", "pitutur", "altar")
-//   "bos"    : kalahkan bos `monster` (bos baru muncul saat langkah ini aktif)
-// tujuan = tulisan di kotak misi. teks = percakapan yang muncul saat langkah
-// SELESAI: [pembicara, kalimat]. Pembicara "narasi" = narator.
-// hadiah = { gold, exp, potion, item } diberikan saat langkah selesai.
-// Langkah terakhir selesai = layar TAMAT.
+// 7. CERITA UTAMA: "Kabut dari Gunung Geni" — 5 bab × 10 episode
+// Ada di folder src/cerita/ (bab-1.js ... bab-5.js, digabung di semua.js).
 // ---------------------------------------------------------------------
-const CERITA = [
-  // ===== BAB 1 =====
-  { bab: "Bab 1 · Kabut Pertama", tipe: "bicara", npc: "resi",
-    tujuan: "Temui Resi Wening di tepi alun-alun desa",
-    teks: [
-      ["resi", "Akhirnya kau datang, Nak. Namaku Resi Wening, pertapa dari lereng Gunung Geni."],
-      ["resi", "Tiga malam lalu, gunung itu memuntahkan kabut merah. Sejak itu makhluk hutan menjadi beringas, dan arwah-arwah tua terbangun."],
-      ["resi", "Di Candi Wingit, utara hutan, tersimpan Mustika Bumi, satu dari tiga mustika penjaga. Aku khawatir ia dalam bahaya."],
-      ["resi", "Pergilah ke sana dan periksa. Ikuti panah emas di layarmu kalau bingung arah."],
-    ],
-    hadiah: { exp: 30 } },
-  { bab: "Bab 1 · Kabut Pertama", tipe: "datang", area: "candi",
-    tujuan: "Pergi ke Candi Wingit (utara Hutan & Padang)",
-    teks: [
-      ["narasi", "Udara Candi Wingit dingin dan berbau dupa tua. Pintu ke ruang dalam tertutup dinding batu."],
-      ["narasi", "Di aula masuk berdiri sebuah prasasti. Mungkin ada petunjuk di sana."],
-    ],
-    hadiah: { exp: 40 } },
-  { bab: "Bab 1 · Kabut Pertama", tipe: "teka", id: "obor",
-    tujuan: "Nyalakan keempat obor di aula tengah sesuai petunjuk prasasti",
-    teks: [
-      ["narasi", "Api keempat menyala. Dinding batu di utara bergemuruh, lalu bergeser terbuka."],
-      ["narasi", "Dari kegelapan ruang dalam, sepasang mata batu menyala merah..."],
-    ],
-    hadiah: { exp: 80 } },
-  { bab: "Bab 1 · Kabut Pertama", tipe: "bos", monster: "dwarapala",
-    tujuan: "Kalahkan Dwarapala, arca penjaga Candi Wingit",
-    teks: [
-      ["narasi", "Arca penjaga itu runtuh berkeping-keping. Di antara puingnya, sebutir batu hijau berdenyut pelan."],
-      ["narasi", "Kamu mendapatkan Mustika Bumi! Di belakang ruangan, sebuah lorong menuju puncak kini terbuka."],
-    ],
-    hadiah: { gold: 120, exp: 200, item: "mustikaBumi" } },
-  { bab: "Bab 1 · Kabut Pertama", tipe: "bicara", npc: "resi",
-    tujuan: "Bawa Mustika Bumi kepada Resi Wening di desa",
-    teks: [
-      ["resi", "Mustika Bumi... syukurlah. Tapi lihat retakan ini. Ada yang mencoba mencurinya."],
-      ["resi", "Dwarapala tak pernah menyerang tamu biasa. Ia dikendalikan kabut merah itu."],
-      ["resi", "Dahulu, Raja Banaspati, roh api penguasa kawah, disegel leluhur kita dengan tiga mustika: Bumi, Tirta, dan Bayu. Kini segel itu melemah."],
-      ["resi", "Mustika Tirta disimpan di Rawa Kabut, di selatan hutan. Pergilah sebelum kabut menelannya. Bawalah jamu ini."],
-    ],
-    hadiah: { exp: 80, potion: 2 } },
-
-  // ===== BAB 2 =====
-  { bab: "Bab 2 · Rawa Kabut", tipe: "datang", area: "rawa",
-    tujuan: "Pergi ke Rawa Kabut (selatan Hutan & Padang)",
-    teks: [
-      ["narasi", "Kabut tebal menggantung di atas air hitam. Suara-suara lirih seperti memanggil namamu."],
-      ["narasi", "Di dekat pintu masuk ada gubuk tua. Asap tipis keluar dari dapurnya."],
-    ],
-    hadiah: { exp: 60 } },
-  { bab: "Bab 2 · Rawa Kabut", tipe: "bicara", npc: "tirto",
-    tujuan: "Temui Mbah Tirto di gubuk tepi rawa",
-    teks: [
-      ["tirto", "Hehe... jarang ada orang berani masuk ke sini, Le."],
-      ["tirto", "Mustika Tirta ada di pulau tengah rawa, dijaga Buaya Putih yang sudah ratusan tahun hidup. Tapi kini matanya merah, seperti dirasuki."],
-      ["tirto", "Jembatan ke pulau itu ditenggelamkan leluhur. Hanya yang bisa menjawab teka-teki Batu Pitutur yang mampu memunculkannya kembali."],
-      ["tirto", "Tapi hantu kabut berkeliaran di sekitar rawa utara. Usir dulu lima ekor, biar kau tenang berpikir di depan batu itu."],
-    ],
-    hadiah: { exp: 40 } },
-  { bab: "Bab 2 · Rawa Kabut", tipe: "kill", target: "hantuKabut", need: 5,
-    tujuan: "Usir Hantu Kabut di rawa utara",
-    teks: [["narasi", "Kabut sedikit menipis. Batu Pitutur di tepi air kini terlihat jelas, tulisannya berpendar."]],
-    hadiah: { exp: 120, gold: 40 } },
-  { bab: "Bab 2 · Rawa Kabut", tipe: "teka", id: "pitutur",
-    tujuan: "Jawab tiga teka-teki Batu Pitutur",
-    teks: [["narasi", "Air rawa bergolak. Sebuah jembatan batu muncul perlahan dari dalam lumpur, menuju pulau di tengah rawa."]],
-    hadiah: { exp: 120 } },
-  { bab: "Bab 2 · Rawa Kabut", tipe: "bos", monster: "buayaPutih",
-    tujuan: "Kalahkan Buaya Putih di pulau tengah rawa",
-    teks: [
-      ["narasi", "Buaya Putih terkulai, lalu matanya kembali jernih. Ia menatapmu sebentar, kemudian menyelam pergi."],
-      ["narasi", "Di tepian pulau tertinggal sebutir batu biru yang dingin. Kamu mendapatkan Mustika Tirta!"],
-      ["narasi", "Dari timur rawa tercium bau laut. Mungkin Mustika Bayu ada di sana."],
-    ],
-    hadiah: { gold: 150, exp: 300, item: "mustikaTirta" } },
-
-  // ===== BAB 3 =====
-  { bab: "Bab 3 · Kampung Nelayan", tipe: "datang", area: "pesisir",
-    tujuan: "Ikuti jalan di timur rawa menuju Kampung Nelayan",
-    teks: [
-      ["narasi", "Angin laut menyambutmu. Tapi kampung ini sepi, pintu-pintu tertutup rapat."],
-      ["narasi", "Seorang lelaki bertopi caping melambai dari dermaga."],
-    ],
-    hadiah: { exp: 80 } },
-  { bab: "Bab 3 · Kampung Nelayan", tipe: "bicara", npc: "jala",
-    tujuan: "Temui Pak Jala, kepala Kampung Nelayan",
-    teks: [
-      ["jala", "Kau pembawa mustika? Resi Wening sudah mengirim kabar lewat burung."],
-      ["jala", "Mustika Bayu dijaga turun-temurun oleh keluarga kami... tapi semalam, gerombolan tuyul menyelinap dan mencurinya!"],
-      ["jala", "Mereka berlarian di sekitar kampung. Tangkap mereka dan rebut kembali kantong-kantong curian itu."],
-      ["jala", "Awas, tuyul suka mencopet koin orang yang lengah. Kalahkan mereka supaya koinmu kembali."],
-    ],
-    hadiah: { exp: 40 } },
-  { bab: "Bab 3 · Kampung Nelayan", tipe: "collect", item: "kantong", need: 3,
-    tujuan: "Rebut kantong curian dari Tuyul",
-    teks: [["narasi", "Kantong ketiga terasa berat. Di dalamnya ada sesuatu yang berhembus dingin seperti angin."]],
-    hadiah: { exp: 100 } },
-  { bab: "Bab 3 · Kampung Nelayan", tipe: "bicara", npc: "jala",
-    tujuan: "Kembalikan kantong curian kepada Pak Jala",
-    teks: [
-      ["jala", "Ini dia! Mustika Bayu, utuh! Leluhur kami pasti tersenyum."],
-      ["jala", "Terimalah, Nak. Bawa ketiga mustika ke Kawah Geni, di puncak gunung, lewat lorong terdalam Candi Wingit."],
-      ["jala", "Mesin teleport di kampung ini sudah menyala. Buka peta kalau ingin pulang cepat."],
-    ],
-    hadiah: { gold: 100, exp: 200, potion: 3, item: "mustikaBayu" } },
-
-  // ===== BAB 4 =====
-  { bab: "Bab 4 · Kawah Geni", tipe: "datang", area: "kawah",
-    tujuan: "Naik ke Kawah Geni lewat lorong utara Candi Wingit",
-    teks: [
-      ["narasi", "Panas menyengat kulit. Sungai lava membelah kawah, dan di seberangnya bara raksasa berdenyut seperti jantung."],
-      ["narasi", "Di tepi lava berdiri sebuah altar dengan tiga cekungan."],
-    ],
-    hadiah: { exp: 100 } },
-  { bab: "Bab 4 · Kawah Geni", tipe: "teka", id: "altar",
-    tujuan: "Letakkan ketiga mustika di altar",
-    teks: [
-      ["narasi", "Ketiga mustika bersinar: hijau, biru, dan putih. Lava di depanmu mendesis, lalu mengeras menjadi jembatan batu."],
-      ["raja", "Siapa berani menginjak kawahku? Datanglah, anak manusia. Akan kujadikan kau abu!"],
-    ],
-    hadiah: { exp: 150 } },
-  { bab: "Bab 4 · Kawah Geni", tipe: "bos", monster: "rajaBanaspati",
-    tujuan: "Kalahkan Raja Banaspati",
-    teks: [
-      ["raja", "Mustahil... dikalahkan... anak manusia..."],
-      ["narasi", "Api raksasa itu meredup menjadi bara kecil, lalu padam. Kabut merah di langit perlahan menghilang."],
-      ["narasi", "Kembalilah ke Resi Wening di Desa Wanasari."],
-    ],
-    hadiah: { gold: 300, exp: 500 } },
-  { bab: "Bab 4 · Kawah Geni", tipe: "bicara", npc: "resi",
-    tujuan: "Kembali ke Resi Wening di Desa Wanasari",
-    teks: [
-      ["resi", "Kabut sudah hilang. Dengar, burung-burung kembali bernyanyi."],
-      ["resi", "Segel sudah kupulihkan dengan ketiga mustika. Seluruh Nusantara berutang padamu, Nak."],
-      ["resi", "Tapi ingat: api tak pernah benar-benar padam. Tetaplah berlatih. Cermin-cermin gaib kini terbangun di sarang para penjaga, bila kau ingin menguji diri lagi."],
-    ],
-    hadiah: { exp: 300 } },
-];
 
 // ---------------------------------------------------------------------
 // 8. MISI SAMPINGAN LAIN (dari NPC selain Ki Lurah)
 // npc = siapa yang memberi. type & isi sama seperti misi Ki Lurah.
-// hadiah.weapon = naik tingkat senjata gratis.
+// reward.weapon = naik tingkat senjata gratis. reward.penawar = belajar resep jamu penawar.
+// collect: barang jatuh dari monster `dari` (satu jenis atau daftar) dengan `peluang`, hanya saat misinya aktif.
+// en = terjemahan bahasa Inggris.
 // ---------------------------------------------------------------------
 const SAMPINGAN = [
   { id: "kepiting", npc: "kardi", title: "Kepiting Nakal", type: "kill", target: "kepiting", need: 6,
     offer: "Kepiting karang merusak jaring kami di pantai selatan. Bisa kau usir enam ekor?",
     done: "Pantai aman lagi! Ini upah dari para nelayan.",
     reward: { gold: 70, exp: 120, potion: 2 } },
-  { id: "sisik", npc: "tirto", title: "Sisik Buaya", type: "collect", item: "sisik", need: 3,
+  { id: "sisik", npc: "tirto", title: "Sisik Buaya", type: "collect", item: "sisik", need: 3, dari: "buaya", peluang: 0.5,
     offer: "Mbah butuh tiga sisik buaya rawa untuk menempa ulang senjatamu. Buaya-buaya itu ada di rawa selatan.",
     done: "Sisik yang bagus. Sini, Mbah tempa senjatamu sebentar... nah, lebih tajam!",
     reward: { gold: 40, exp: 150, weapon: 1 } },
+  { id: "penawar", npc: "joko", title: "Ramuan Penawar", type: "collect", item: "daunSambiloto", need: 5, dari: ["kera", "babi", "kelelawar"], peluang: 0.5,
+    offer: "Racun, luka bakar, rasa lemas, kepala pening... itu ulah makhluk berkabut, Nak. Cara menyembuhkannya ada dua: beristirahat di zona aman dekat mesin teleport, atau minum jamu yang diracik dengan sambiloto. Bawakan lima daun sambiloto dari monster di Hutan & Padang, nanti kuajari resepnya.",
+    done: "Daun yang segar! Perhatikan: tumbuk, seduh, campur ke jamu. Mulai sekarang setiap jamu yang kau minum juga menyembuhkan SEMUA debuff.",
+    reward: { gold: 30, exp: 80, potion: 3, penawar: true },
+    en: { title: "Antidote Brew", offer: "Poison, burns, weakness, dizziness... that's the work of the mist creatures, my child. There are two cures: rest in a safe zone near a teleport beacon, or drink jamu brewed with sambiloto. Bring me five sambiloto leaves from monsters in the Forest & Meadow and I'll teach you the recipe.",
+      done: "Fresh leaves! Watch closely: grind, steep, mix into jamu. From now on every jamu you drink also cures ALL debuffs." } },
+  { id: "kerang", npc: "bayu", title: "Kerang Bercahaya", type: "collect", item: "kerangLaut", need: 4, dari: "uburUbur", peluang: 0.5,
+    offer: "Kak, ubur-ubur api di pantai bakau suka menelan kerang bercahaya. Ibuku butuh empat buat lampu rumah. Tolong ya, Kak!",
+    done: "Wah, terang sekali! Ibu pasti senang. Ini tabunganku, Kak... jangan bilang siapa-siapa.",
+    reward: { gold: 120, exp: 300, potion: 2 },
+    en: { title: "Glowing Shells", offer: "The fire jellyfish on the mangrove shore keep swallowing glowing shells. My mom needs four for our house lamps. Please help!",
+      done: "Wow, so bright! Mom will love it. Here are my savings... don't tell anyone." } },
+  { id: "kumbang", npc: "rimba", title: "Raja Hutan Hitam", type: "kill", target: "harimauKumbang", need: 6,
+    offer: "Harimau kumbang di Hutan Larangan makin berani mendekati kebun warga. Usir enam ekor. Hati-hati, cakarnya membuat lengan lemas.",
+    done: "Jejak mereka sudah menjauh. Kau pemburu yang baik. Terimalah ini.",
+    reward: { gold: 150, exp: 420, potion: 1 },
+    en: { title: "Kings of the Black Forest", offer: "The black panthers in the Forbidden Forest are getting bold, creeping toward our gardens. Drive off six. Careful, their claws leave your arms weak.",
+      done: "Their tracks lead away now. You're a fine hunter. Take this." } },
+  { id: "bajak", npc: "laras", title: "Arwah Pelaut", type: "kill", target: "hantuBajak", need: 8,
+    offer: "Arwah bajak laut berkeliaran di aula Kuil Samudra. Bebaskan delapan dari mereka agar mereka bisa beristirahat.",
+    done: "Laut terasa lebih tenang. Terima kasih, mereka akhirnya pulang.",
+    reward: { gold: 180, exp: 520, potion: 3 },
+    en: { title: "Sailors' Souls", offer: "Pirate ghosts wander the halls of the Sea Temple. Free eight of them so they can finally rest.",
+      done: "The sea feels calmer. Thank you, they have finally gone home." } },
+  { id: "langit", npc: "kirana", title: "Langit Bersih", type: "kill", target: "elangBatu", need: 8,
+    offer: "Elang batu mengacau jalur gembala. Aku bisa sendiri sih... tapi kalau kau mau ikut, kalahkan delapan. Kita lihat siapa lebih cepat.",
+    done: "Hmph. Lumayan. Baiklah, kau menang kali ini. Ambil hadiahnya.",
+    reward: { gold: 220, exp: 700 },
+    en: { title: "Clear Skies", offer: "Stone eagles keep raiding the shepherd trails. I could do it alone... but if you want in, take down eight. Let's see who's faster.",
+      done: "Hmph. Not bad. Fine, you win this time. Take the reward." } },
+  { id: "arca", npc: "gora", title: "Pecahan Arca", type: "collect", item: "pecahanArca", need: 5, dari: "arcaHidup", peluang: 0.5,
+    offer: "Pecahan arca hidup itu logam langit, Kisanak. Bawakan lima, akan kutempa senjatamu jadi lebih tajam.",
+    done: "Dengar dentingnya! Senjatamu sekarang setara pusaka. Gunakan dengan bijak.",
+    reward: { gold: 100, exp: 600, weapon: 1 },
+    en: { title: "Statue Shards", offer: "Those living-statue shards are sky metal, traveler. Bring me five and I'll forge your weapon sharper.",
+      done: "Hear that ring! Your weapon is fit for an heirloom now. Use it wisely." } },
+  { id: "anakNaga", npc: "angon", title: "Kambing Awan Ketakutan", type: "kill", target: "anakNaga", need: 5,
+    offer: "Kambing-kambingku tidak mau keluar kandang, anak naga terus menyembur di padang! Usir lima ekor, nanti kubuatkan susu kambing awan. Enak lho.",
+    done: "Mbeeek! Eh, maksudku, terima kasih! Kambingku sudah berani merumput lagi.",
+    reward: { gold: 260, exp: 900, potion: 3 },
+    en: { title: "Frightened Cloud Goats", offer: "My goats won't leave the pen, the dragon whelps keep breathing fire in the pasture! Drive off five and I'll make you cloud-goat milk. It's tasty.",
+      done: "Baaah! I mean, thank you! My goats are brave enough to graze again." } },
 ];

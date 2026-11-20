@@ -15,7 +15,7 @@ function sampinganBicara(npc) {
   if (!q) return false;
   const st = sideState(q), r = q.reward;
   if (st.status === "none") {
-    const hadiah = [r.gold && t("cerita.hKoin", { n: r.gold }), r.exp && r.exp + " EXP", r.potion && t("cerita.hJamu", { n: r.potion }), r.weapon && t("side.hSenjata")].filter(Boolean).join(", ");
+    const hadiah = [r.gold && t("cerita.hKoin", { n: r.gold }), r.exp && r.exp + " EXP", r.potion && t("cerita.hJamu", { n: r.potion }), r.weapon && t("side.hSenjata"), r.penawar && t("side.hPenawar")].filter(Boolean).join(", ");
     openDialog(npc.name, `${q.offer} (${t("side.hadiah")}: ${hadiah})`, [
       { label: t("dlg.nanti"), run: closeDialog },
       { label: t("dlg.terima"), primary: true, run: () => {
@@ -32,6 +32,7 @@ function sampinganBicara(npc) {
       if (q.type === "collect") S.items[q.item] = Math.max(0, (S.items[q.item] || 0) - q.need);
       st.status = "selesai";
       S.gold += r.gold || 0; S.potions += r.potion || 0; S.weapon += r.weapon || 0;
+      if (r.penawar) { S.penawar = true; setTimeout(() => toast(t("toast.penawar"), true), 600); }
       closeDialog(); if (r.exp) gainExp(r.exp); sfx.quest();
       toast(t("toast.hadiah", { koin: r.gold || 0, exp: r.exp || 0 }) + (r.weapon ? " · " + t("toast.senjata", { lv: S.weapon }) : ""), false);
       refreshHud(true); saveSoon();
@@ -53,11 +54,14 @@ function sampinganKill(m) {
 function sampinganItem(item) {
   for (const q of SAMPINGAN) if (q.type === "collect" && q.item === item && sideState(q).status === "active") majuSampingan(q, S.items[item] || 0);
 }
-// sisik buaya hanya jatuh saat misinya aktif
+// barang misi (collect) hanya jatuh dari monster `dari` saat misinya aktif
 function sampinganDrop(m) {
-  const q = SAMPINGAN.find((x) => x.item === "sisik");
-  if (q && m.type === "buaya" && sideState(q).status === "active" && Math.random() < ATURAN.monster.dropSisik)
-    pickups.push({ kind: "sisik", x: m.x - 8, y: m.y, t: 0 });
+  for (const q of SAMPINGAN) {
+    if (q.type !== "collect" || !q.dari || sideState(q).status !== "active") continue;
+    if (![].concat(q.dari).includes(m.type)) continue;
+    const peluang = q.item === "sisik" ? ATURAN.monster.dropSisik : q.peluang != null ? q.peluang : 0.5;
+    if (Math.random() < peluang) pickups.push({ kind: q.item, x: m.x - 8, y: m.y, t: 0 });
+  }
 }
 
 // Tanda biru: "!" ada misi baru, "?" misi selesai & tinggal lapor

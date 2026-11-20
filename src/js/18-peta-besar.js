@@ -17,12 +17,17 @@ function showMapTab(tab) {
   $("legendArea").hidden = tab !== "area";
   $("legendWorld").hidden = tab !== "world";
   // judul: nama area sekarang, atau "Peta Dunia"
-  if (tab === "world") { $("mapName").innerHTML = t("peta.dunia"); $("mapSub").textContent = t("peta.kamuDi", { area: area.nama }); }
-  else {
+  if (tab === "world") {
+    const dn = DUNIA.find((x) => x.id === duniaPeta);
+    const kata = dn.nama.split(" "), akhir = kata.pop();
+    $("mapName").innerHTML = `${kata.join(" ")} <span>${akhir}</span>`;
+    $("mapSub").textContent = t("peta.duniaSub", { area: area.nama });
+  } else {
     const words = area.nama.split(" "), last = words.pop();
     $("mapName").innerHTML = `${words.join(" ")} <span>${last}</span>`;
     $("mapSub").textContent = t("peta.sub", { sub: area.sub });
   }
+  isiTabDunia();
   refreshZoomBtn();
   if (mode === "map") drawBigMap(performance.now() / 1000);
 }
@@ -33,6 +38,7 @@ function openMap() {
   const k = KONTROL.peta[0];
   $("mapHint").textContent = isTouch ? t("peta.hintSentuh") : t("peta.hintKey", { k: k.length === 1 ? k.toUpperCase() : k });
   showUI();
+  duniaPeta = area.dunia || 1;      // peta dunia: mulai dari dunia tempat pemain berada
   resetIkutPeta();
   showMapTab(mapTab);
 }
@@ -117,17 +123,21 @@ function drawAreaMap(time) {
 // Semua area digambar berdampingan. Letaknya dihitung otomatis dari gerbang:
 // kalau gerbang balik di area B ada di tepi kiri, B ditaruh di kanan A;
 // tepi bawah → B di atas A; dst. Gerbang yang tersambung dibuat sejajar.
-// Tambah area baru? Masukkan id-nya ke WORLD_ORDER (area pertama = pusat).
+// Ada 3 dunia (DUNIA di 04-peta.js); tiap dunia digambar terpisah, pilih lewat
+// tombol dunia di atas peta. Gerbang ke dunia lain ditandai panah ungu.
+// Tambah area baru? Masukkan id-nya ke WORLD_ORDER (area pertama tiap dunia = pusat).
 // ---------------------------------------------------------------------
-const WORLD_ORDER = ["desa", "alam", "gua", "candi", "rawa", "pesisir", "kawah"];
+const WORLD_ORDER = ["desa", "alam", "gua", "candi", "rawa", "pesisir", "kawah", "bandar", "bakau", "larangan", "kuil", "awan", "hutanBatu", "puncakNaga"];
 const WORLD_GAP = 7; // jarak antar-area (dalam petak)
-let world = null;
+let worlds = {}, world = null, duniaPeta = 1;
+function resetPetaDunia() { worlds = {}; world = null; }
 const gateMid = (g) => ({ x: (g.x0 + g.x1 + 1) / 2, y: (g.y0 + g.y1 + 1) / 2 });
-// Bangun petak semua area sekali saja (petanya selalu sama karena pakai seed).
-function buildWorld() {
+// Bangun petak semua area satu dunia (petanya selalu sama karena pakai seed; dibangun ulang kalau ada gerbang terbuka).
+function buildWorld(dunia) {
   const keep = { MW, MH, map, houses, ZONES, area, areaId };
   const parts = {};
-  for (const id of WORLD_ORDER) {
+  const ids = WORLD_ORDER.filter((id) => AREAS[id].dunia === dunia);
+  for (const id of ids) {
     buildArea(id);
     const cv = document.createElement("canvas");
     paintTiles(cv, MW, MH, map);
@@ -135,11 +145,12 @@ function buildWorld() {
   }
   ({ MW, MH, map, houses, ZONES, area, areaId } = keep); // kembalikan area yang aktif
   // susun mulai dari area pertama, menyebar lewat gerbang
-  const placed = new Set([WORLD_ORDER[0]]), queue = [WORLD_ORDER[0]], links = [];
+  const placed = new Set([ids[0]]), queue = [ids[0]], links = [], keluar = [];
   while (queue.length) {
     const A = parts[queue.shift()];
     for (const g of A.a.gerbang) {
-      const B = parts[g.ke]; if (!B) continue;
+      const B = parts[g.ke];
+      if (!B) { keluar.push({ a: A.id, ke: g.ke, ...gateMid(g), g }); continue; }   // gerbang ke dunia lain
       const back = B.a.gerbang.find((b) => b.ke === A.id); if (!back) continue;
       const p = gateMid(g), q = gateMid(back);
       if (!placed.has(B.id)) {
@@ -153,8 +164,8 @@ function buildWorld() {
     }
   }
   const all = Object.values(parts).filter((p) => placed.has(p.id));
-  world = {
-    parts, links, list: all.map((p) => p.id),
+  worlds[dunia] = {
+    parts, links, keluar, list: all.map((p) => p.id),
     left: Math.min(...all.map((p) => p.x)), right: Math.max(...all.map((p) => p.x + p.w)),
     top: Math.min(...all.map((p) => p.y)), bottom: Math.max(...all.map((p) => p.y + p.h)),
   };
@@ -165,7 +176,8 @@ function questArea() { const tg = targetLacak(); return tg ? tg.area : null; }
 const dikunjungi = (id) => !!(S && S.dikunjungi[id]);
 
 function drawWorldMap(time) {
-  if (!world) buildWorld();
+  if (!worlds[duniaPeta]) buildWorld(duniaPeta);
+  world = worlds[duniaPeta];
   const cw = Math.round(bigMap.clientWidth * DPR), ch = Math.round(bigMap.clientHeight * DPR);
   if (!cw || !ch) return;
   if (bigMap.width !== cw || bigMap.height !== ch) { bigMap.width = cw; bigMap.height = ch; }
@@ -191,8 +203,9 @@ function drawWorldMap(time) {
     c.lineWidth = 3 * DPR; c.strokeStyle = "rgba(10,6,20,0.9)"; c.strokeText(t, x, y); c.fillStyle = col; c.fillText(t, x, y);
   };
   // jalan antar-area: garis putus-putus (emas = jalur menuju tujuan cerita)
-  const goal = questArea(), names = [];
-  const jalur = goal ? jalurArea(areaId, goal) || [] : [];
+  const goal0 = questArea(), names = [];
+  const goal = goal0 && AREAS[goal0].dunia === duniaPeta ? goal0 : null;
+  const jalur = goal0 ? jalurArea(areaId, goal0) || [] : [];
   const diJalur = (l) => { const i = jalur.indexOf(l.a), j = jalur.indexOf(l.b); return i >= 0 && j >= 0 && Math.abs(i - j) === 1; };
   c.setLineDash([6 * DPR, 5 * DPR]);
   for (const l of world.links) {
@@ -238,6 +251,14 @@ function drawWorldMap(time) {
     c.fillStyle = "#8fd3ff"; c.beginPath(); c.arc(X(gx), Y(gy), 4 * DPR, 0, 6.28); c.fill();
   }
   // mesin teleport di semua area (bisa diklik)
+  // gerbang ke dunia lain: panah ungu + nama dunia tujuan
+  for (const k of world.keluar) {
+    const p = world.parts[k.a]; if (!p || !dikunjungi(k.a) || !gerbangTerbuka(k.g)) continue;
+    const gx = X(p.x + k.x), gy = Y(p.y + k.y), dn = DUNIA.find((x) => x.id === AREAS[k.ke].dunia);
+    c.fillStyle = "#c9a6ff"; c.beginPath(); c.arc(gx, gy, 7 * DPR, 0, 6.28); c.fill();
+    c.fillStyle = "#1b1208"; c.font = `900 ${10 * DPR}px Nunito, sans-serif`; c.textAlign = "center"; c.fillText("»", gx, gy + 3.5 * DPR);
+    text("» " + dn.nama, gx, gy + 20 * DPR, "#c9a6ff", 11);
+  }
   for (const tp of TELEPORTS) {
     const p = world.parts[tp.areaId]; if (!p || !dikunjungi(tp.areaId)) continue;   // teleport aktif setelah areanya didatangi
     const tx = X(p.x + tp.x), ty = Y(p.y + tp.y);
@@ -245,6 +266,8 @@ function drawWorldMap(time) {
     mapHits.push({ x: tx, y: ty, r: 20 * DPR, tele: tp });
   }
   for (const [t, x, y, col] of names) text(t, x, y, col, 15, 900);
+  // tujuan cerita ada di dunia lain
+  if (goal0 && !goal) text(t("peta.tujuanDunia", { dunia: DUNIA.find((x) => x.id === AREAS[goal0].dunia).nama }), cw / 2, ch - 10 * DPR, "#f4b942", 13);
   // posisi kamu di area sekarang
   const p = world.parts[areaId];
   if (p) {
@@ -261,6 +284,17 @@ addEventListener("keydown", (e) => {
   if (mode === "map" && e.key === "Tab") { e.preventDefault(); showMapTab(mapTab === "area" ? "world" : "area"); }
 });
 $("tabWorld").addEventListener("click", () => showMapTab("world"));
+// tombol pilih dunia (hanya dunia yang pernah didatangi)
+function isiTabDunia() {
+  const box = $("duniaTabs");
+  const ada = DUNIA.filter((dn) => WORLD_ORDER.some((id) => AREAS[id].dunia === dn.id && dikunjungi(id)));
+  box.hidden = mapTab !== "world" || ada.length < 2;
+  box.innerHTML = ada.map((dn) => `<button type="button" role="tab" data-dunia="${dn.id}" aria-selected="${dn.id === duniaPeta}">${dn.nama}</button>`).join("");
+}
+$("duniaTabs").addEventListener("click", (e) => {
+  const b = e.target.closest("[data-dunia]"); if (!b) return;
+  duniaPeta = +b.dataset.dunia; sfx.click(); resetIkutPeta(); showMapTab("world");
+});
 $("mini").addEventListener("click", openMap);
 // klik/ketuk mesin teleport di peta → tanya "Pindah ke ...?"
 const mapHitAt = (e) => {

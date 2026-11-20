@@ -17,6 +17,7 @@ function teksHadiah(h) {
     h.exp && "+" + h.exp + " EXP",
     h.potion && t("cerita.hJamu", { n: h.potion }),
     h.weapon && t("side.hSenjata"),
+    h.penawar && t("side.hPenawar"),
     h.item && t("item." + h.item),
   ].filter(Boolean).join(" · ");
 }
@@ -37,7 +38,7 @@ function perintahMisi(q, prog, selesai, npcId) {
   };
   return {
     perintah: t("misi.kumpulkan", { n: q.need, nama: t("item." + q.item) }) + ` (${prog}/${q.need})`,
-    target: () => tempatMonster(SUMBER_BARANG[q.item]),
+    target: () => tempatMonster([].concat(q.dari || SUMBER_BARANG[q.item])[0]),
   };
 }
 
@@ -50,7 +51,7 @@ function daftarMisi() {
     let prog = "";
     if (l.tipe === "kill") prog = ` (${S.cerita.prog}/${l.need})`;
     if (l.tipe === "collect") prog = ` (${S.items[l.item] || 0}/${l.need})`;
-    out.push({ id: "utama", jenis: t("misi.jUtama"), judul: l.bab, perintah: l.tujuan + prog, hadiah: teksHadiah(l.hadiah), target: ceritaTarget });
+    out.push({ id: "utama", jenis: t("misi.jUtama") + " · " + l.bab, judul: judulEpisode(l), perintah: l.tujuan + prog, hadiah: teksHadiah(l.hadiah), target: ceritaTarget });
   }
   const q = QUESTS[S.q.idx];
   if (q && (S.q.status === "active" || S.q.status === "done")) {

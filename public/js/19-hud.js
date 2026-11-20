@@ -65,6 +65,7 @@ function showUI() {
   ui.pause.hidden = mode !== "pause";
   $("mapBox").hidden = mode !== "map";
   $("misiBox").hidden = mode !== "misi";
+  $("tantangBox").hidden = mode !== "tantang";
   ui.win.hidden = mode !== "win";
   dlg.box.hidden = mode !== "dialog";
   ui.hud.hidden = mode === "select";

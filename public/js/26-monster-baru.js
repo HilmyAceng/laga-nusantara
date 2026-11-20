@@ -13,32 +13,37 @@
 let tembakan = [];   // peluru musuh: { x, y, vx, vy, life, dmg, r }
 let bahaya = [];     // lingkaran merah: meledak setelah `dur` detik { x, y, r, t, dur, dmg, jenis }
 
+// peluru & bahaya membawa debuff monster penembaknya (32-debuff.js)
 function tembak(m, ang, speed, dmg, r = 9) {
-  tembakan.push({ x: m.x, y: m.y - 30, vx: Math.cos(ang) * speed, vy: Math.sin(ang) * speed, life: 2.4, dmg, r });
+  const warna = m.d.warnaPeluru || (m.d.tembak && m.d.tembak.warna) || null;
+  tembakan.push({ x: m.x, y: m.y - 30, vx: Math.cos(ang) * speed, vy: Math.sin(ang) * speed, life: 2.4, dmg, r, deb: m.d.debuff || null, warna });
 }
-function tandaBahaya(x, y, r, dur, dmg, jenis) { bahaya.push({ x, y, r, t: 0, dur, dmg, jenis }); }
+function tandaBahaya(x, y, r, dur, dmg, jenis) { bahaya.push({ x, y, r, t: 0, dur, dmg, jenis, deb: musuhAktif ? musuhAktif.d.debuff || null : null }); }
 
 function updateMusuhKhusus(dt) {
   for (const s of tembakan) {
     s.x += s.vx * dt; s.y += s.vy * dt; s.life -= dt;
     const tl = tileAt(Math.floor(s.x / T), Math.floor((s.y + 30) / T));
     if (tl === TREE || tl === ROCK || tl === HOUSE || tl === WALL) s.life = 0;
-    if (!P.dead && Math.hypot(P.x - s.x, P.y - 30 - s.y) < s.r + 12) { hurtPlayer(s.dmg, Math.atan2(s.vy, s.vx)); s.life = 0; spark(s.x, s.y, "#ff9f43", 8); }
-    if (Math.random() < 0.6) parts.push({ x: s.x, y: s.y + 30, z: 30, vz: 20, vx: rand(-15, 15), vy: rand(-15, 15), life: 0.3, max: 0.3, color: "#ffb347" });
+    if (diZonaAman(s.x, s.y + 30)) { s.life = 0; spark(s.x, s.y, "#7dffa8", 6); continue; }   // lenyap di zona aman
+    if (!P.dead && Math.hypot(P.x - s.x, P.y - 30 - s.y) < s.r + 12) { hurtPlayer(s.dmg, Math.atan2(s.vy, s.vx), s.deb); s.life = 0; spark(s.x, s.y, s.warna || "#ff9f43", 8); }
+    if (Math.random() < 0.6) parts.push({ x: s.x, y: s.y + 30, z: 30, vz: 20, vx: rand(-15, 15), vy: rand(-15, 15), life: 0.3, max: 0.3, color: s.warna || "#ffb347" });
   }
   tembakan = tembakan.filter((s) => s.life > 0);
   for (const b of bahaya) {
     b.t += dt;
     if (b.t >= b.dur && !b.done) {
       b.done = true; shake = Math.max(shake, 0.3);
-      if (!P.dead && Math.hypot(P.x - b.x, P.y - b.y) < b.r + P.r) hurtPlayer(b.dmg, Math.atan2(P.y - b.y, P.x - b.x));
-      const warna = b.jenis === "api" ? "#ff7b39" : "#8d8894";
+      if (!P.dead && Math.hypot(P.x - b.x, P.y - b.y) < b.r + P.r) hurtPlayer(b.dmg, Math.atan2(P.y - b.y, P.x - b.x), b.deb);
+      const warna = WARNA_BAHAYA[b.jenis] || "#8d8894";
       for (let i = 0; i < 14; i++) { const a = rand(0, 6.28), rr = rand(0, b.r); parts.push({ x: b.x + Math.cos(a) * rr, y: b.y + Math.sin(a) * rr, z: 0, vz: rand(150, 330), vx: 0, vy: 0, life: 0.5, max: 0.5, color: warna }); }
-      b.jenis === "api" ? sfx.boom() : sfx.slam();
+      b.jenis === "api" ? sfx.boom() : b.jenis === "air" ? sfx.roll() : sfx.slam();
     }
   }
   bahaya = bahaya.filter((b) => b.t < b.dur + 0.3);
 }
+
+const WARNA_BAHAYA = { api: "#ff7b39", batu: "#8d8894", racun: "#7bd64a", air: "#6fd3ff" };
 
 // ---------- Perilaku monster biasa (dipanggil tiap frame dari updateMonster) ----------
 function perilakuMonster(m, dt, dp, toP) {
@@ -91,14 +96,14 @@ function bosUmum(m, dt, dp, toP) {
     if (dist(m, m.home) < 20) { m.state = "idle"; m.aggro = false; m.hp = d.hp; m.fase2 = false; }
     return true;
   }
-  if (P.dead || dist(m, m.home) > 520) { m.state = "pulang"; return true; }
+  if (P.dead || pAman || dist(m, m.home) > (d.jarakPulang || 520)) { m.state = "pulang"; return true; }
   m.seen = 4;
   if (!m.fase2 && m.hp < d.hp * 0.5) { m.fase2 = true; fase2(m); }
   return false;
 }
 function fase2(m) {
   shake = 0.6; sfx.growl(); toast(t("toast.bosMarah", { nama: m.d.name }), true);
-  const anak = { buayaPutih: "buaya", rajaBanaspati: "banaspati" }[m.type];
+  const anak = m.d.anak || { buayaPutih: "buaya", rajaBanaspati: "banaspati" }[m.type];
   if (anak) for (let i = 0; i < 2; i++) {
     const a = rand(0, 6.28), spot = { x: m.x + Math.cos(a) * 90, y: m.y + Math.sin(a) * 90 };
     if (!solidAt(spot.x, spot.y)) { const c = makeMonster(anak, spot); c.aggro = true; c.state = "chase"; monsters.push(c); spark(spot.x, spot.y - 20, "#c9bfd6", 12); }
@@ -207,6 +212,11 @@ function drawMusuhKhusus(time) {
       ctx.fillStyle = `rgba(229,72,77,${0.12 + 0.3 * k})`; ctx.beginPath(); ctx.ellipse(b.x, b.y, b.r, b.r * 0.6, 0, 0, 6.28); ctx.fill();
       ctx.strokeStyle = "rgba(255,120,120,0.8)"; ctx.lineWidth = 2; ctx.beginPath(); ctx.ellipse(b.x, b.y, b.r * k, b.r * 0.6 * k, 0, 0, 6.28); ctx.stroke();
       if (b.jenis === "batu") { const h = (1 - k) * 260; ctx.fillStyle = "#6f6a75"; ctx.beginPath(); ctx.ellipse(b.x, b.y - h - 10, 14, 11, 0, 0, 6.28); ctx.fill(); }
+    } else if (b.jenis === "racun" || b.jenis === "air") {
+      const k2 = (b.t - b.dur) / 0.3, w = WARNA_BAHAYA[b.jenis];
+      ctx.globalAlpha = 1 - k2; ctx.fillStyle = w; ctx.beginPath(); ctx.ellipse(b.x, b.y, b.r * (0.6 + k2 * 0.5), b.r * 0.6 * (0.6 + k2 * 0.5), 0, 0, 6.28); ctx.fill();
+      if (b.jenis === "air") { ctx.fillRect(b.x - 5, b.y - 70 * (1 - k2), 10, 70 * (1 - k2)); }
+      ctx.globalAlpha = 1;
     } else if (b.jenis === "api") {
       const g = ctx.createLinearGradient(0, b.y - 120, 0, b.y);
       g.addColorStop(0, "rgba(255,209,102,0)"); g.addColorStop(1, "rgba(255,90,40,0.9)");
@@ -214,6 +224,12 @@ function drawMusuhKhusus(time) {
     }
   }
   for (const s of tembakan) {
+    if (s.warna) {   // peluru berwarna (racun, air, peluru hantu)
+      ctx.fillStyle = s.warna; ctx.globalAlpha = 0.35; ctx.beginPath(); ctx.arc(s.x, s.y, s.r + 6, 0, 6.28); ctx.fill(); ctx.globalAlpha = 1;
+      ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, 6.28); ctx.fill();
+      ctx.fillStyle = "rgba(255,255,255,0.75)"; ctx.beginPath(); ctx.arc(s.x - s.r * 0.3, s.y - s.r * 0.3, s.r * 0.35, 0, 6.28); ctx.fill();
+      continue;
+    }
     ctx.fillStyle = "rgba(255,120,50,0.35)"; ctx.beginPath(); ctx.arc(s.x, s.y, s.r + 6, 0, 6.28); ctx.fill();
     ctx.fillStyle = "#ff5a2a"; ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, 6.28); ctx.fill();
     ctx.fillStyle = "#ffe08a"; ctx.beginPath(); ctx.arc(s.x, s.y, s.r * 0.45, 0, 6.28); ctx.fill();

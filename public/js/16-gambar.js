@@ -53,13 +53,34 @@ function drawGround(tx, ty, time) {
     }
     return;
   }
+  if (t === CLOUD) {
+    // gumpalan awan putih yang bergerak pelan
+    ctx.fillStyle = "#c9d6ea"; ctx.fillRect(x, y, T, T);
+    const o = Math.sin(time * 0.6 + tx * 0.9 + ty * 0.5) * 4;
+    ctx.fillStyle = "#eef3fb"; ctx.beginPath(); ctx.arc(x + 12 + o, y + 16, 13, 0, 6.28); ctx.arc(x + 28 - o, y + 24, 14, 0, 6.28); ctx.fill();
+    ctx.fillStyle = "rgba(255,255,255,0.8)"; ctx.beginPath(); ctx.arc(x + 14 + o, y + 12, 6, 0, 6.28); ctx.fill();
+    return;
+  }
+  if (t === STONE) {
+    ctx.fillStyle = h % 5 === 0 ? "#76737f" : "#7d7a86"; ctx.fillRect(x, y, T, T);
+    ctx.strokeStyle = "rgba(30,25,40,0.35)"; ctx.lineWidth = 1.5; ctx.strokeRect(x + 1, y + 1, T - 2, T - 2);
+    if (h % 4 === 0) { ctx.fillStyle = "rgba(255,255,255,0.08)"; ctx.fillRect(x + (h % 26) + 4, y + (h % 22) + 6, 6, 3); }
+    return;
+  }
+  if (t === CORAL) {
+    ctx.fillStyle = "#2d6a96"; ctx.fillRect(x, y, T, T);
+    ctx.fillStyle = h % 2 ? "#e0708a" : "#f09a6a";
+    for (let i = 0; i < 4; i++) { const cx = x + 8 + ((h >> (i * 3)) % 24), cy = y + 10 + ((h >> (i * 4)) % 22); ctx.beginPath(); ctx.arc(cx, cy, 5 + (i % 2) * 2, 0, 6.28); ctx.fill(); ctx.fillRect(cx - 1.5, cy, 3, 9); }
+    return;
+  }
   if (t === CAVE || t === WALL) {
     ctx.fillStyle = "#3a3142"; ctx.fillRect(x, y, T, T);
     ctx.fillStyle = "rgba(255,255,255,0.04)"; if (h % 3 === 0) ctx.fillRect(x + (h % 30), y + (h % 23), 4, 3);
     if (t === WALL) { ctx.fillStyle = "#231c2b"; ctx.fillRect(x, y + 8, T, T - 8); ctx.fillStyle = "#4e4258"; ctx.fillRect(x, y, T, 10); }
     return;
   }
-  ctx.fillStyle = h % 5 === 0 ? "#3d7a37" : "#428340"; ctx.fillRect(x, y, T, T);
+  // alas batu besar: rumput, atau warna lantai area (area.alasBatu) di hutan batu / puncak naga
+  ctx.fillStyle = t === ROCK && area.alasBatu ? area.alasBatu : h % 5 === 0 ? "#3d7a37" : "#428340"; ctx.fillRect(x, y, T, T);
   if (t === PATH) {
     ctx.fillStyle = "#c8a46e"; ctx.fillRect(x, y, T, T);
     ctx.fillStyle = "rgba(90,60,30,0.25)"; ctx.fillRect(x + (h % 31), y + (h % 29), 3, 3); ctx.fillRect(x + (h % 17) + 10, y + (h % 13) + 20, 2, 2);
@@ -246,11 +267,21 @@ function drawPlayerTag(px, py) {
   ctx.fillStyle = "#7fb2ff"; ctx.fillRect(x, y - 4, w * clamp(S.exp / expNeed(S.lv), 0, 1), 3);
 }
 
+// warna barang misi yang jatuh dari monster
+const WARNA_BARANG = { kantong: "#c9a26b", sisik: "#9cc46a", daunSambiloto: "#5ad17a", kristalKabut: "#c9d6ff", taringUlar: "#e9e2c8", cakarKumbang: "#8d8894",
+  mutiara: "#ffe6f0", kerangLaut: "#7fe3ff", koinBajak: "#f4b942", intiArca: "#b88cff", pecahanArca: "#a7a2b5", buluElang: "#d9b47a", sisikApi: "#ff7b39" };
 function drawPickup(k, time) {
   const by = Math.sin(time * 5 + k.x) * 2 - 6;
   ctx.fillStyle = "rgba(0,0,0,0.25)"; ctx.beginPath(); ctx.ellipse(k.x, k.y, 6, 2.5, 0, 0, 6.28); ctx.fill();
   if (k.kind === "coin") { ctx.fillStyle = "#f4b942"; ctx.beginPath(); ctx.arc(k.x, k.y + by, 5, 0, 6.28); ctx.fill(); ctx.fillStyle = "#ffe08a"; ctx.fillRect(k.x - 1, k.y + by - 3, 2, 4); }
   else if (k.kind === "jamu") { ctx.fillStyle = "#c0563a"; roundRect(ctx, k.x - 5, k.y + by - 8, 10, 13, 3); ctx.fill(); ctx.fillStyle = "#e9d3a9"; ctx.fillRect(k.x - 4, k.y + by - 10, 8, 4); }
+  else if (k.kind !== "taring") {
+    // barang misi lain: kantong bercahaya berwarna (warna dari WARNA_BARANG)
+    const col = WARNA_BARANG[k.kind] || "#f4b942", g = 0.5 + 0.5 * Math.sin(time * 6 + k.x);
+    ctx.fillStyle = col; ctx.globalAlpha = 0.25 + 0.2 * g; ctx.beginPath(); ctx.arc(k.x, k.y + by - 3, 11, 0, 6.28); ctx.fill(); ctx.globalAlpha = 1;
+    ctx.beginPath(); ctx.moveTo(k.x, k.y + by - 10); ctx.lineTo(k.x + 6, k.y + by - 3); ctx.lineTo(k.x, k.y + by + 4); ctx.lineTo(k.x - 6, k.y + by - 3); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = "rgba(255,255,255,0.7)"; ctx.fillRect(k.x - 2, k.y + by - 7, 2, 3);
+  }
   else if (k.kind === "taring") { ctx.fillStyle = "#f2ead8"; ctx.beginPath(); ctx.moveTo(k.x - 5, k.y + by + 4); ctx.quadraticCurveTo(k.x - 4, k.y + by - 10, k.x + 6, k.y + by - 10); ctx.quadraticCurveTo(k.x, k.y + by - 4, k.x + 1, k.y + by + 4); ctx.fill(); }
 }
 
@@ -285,6 +316,7 @@ function render(now) {
     else if (e.kind === "summon") drawSummonGround(e, time);
     else if (e.kind === "boom") { ctx.fillStyle = `rgba(255,150,60,${0.5 * (1 - k)})`; ctx.beginPath(); ctx.ellipse(e.x, e.y, e.r * (0.5 + k * 0.5), e.r * 0.6 * (0.5 + k * 0.5), 0, 0, 6.28); ctx.fill(); }
   }
+  drawZonaAman(time);                        // lingkaran zona aman di sekitar teleport (33-zona-aman.js)
   for (const k of pickups) drawPickup(k, time);
 
   // benda tinggi & makhluk diurutkan berdasarkan y (yang di bawah digambar belakangan)
@@ -376,6 +408,7 @@ function render(now) {
   if (P && !P.dead && mode !== "select") {
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
     drawPlayerTag(W / 2 + (P.x - cx + sx) * scale, H / 2 + (P.y - 64 - cy + sy) * scale);
+    drawIkonDebuff(W / 2 + (P.x - cx + sx) * scale, H / 2 + (P.y - 64 - cy + sy) * scale);   // 32-debuff.js
     // panah penunjuk tujuan (27-navigasi.js)
     if (mode === "play") drawPanahTujuan((x, y) => [W / 2 + (x - cx + sx) * scale, H / 2 + (y - cy + sy) * scale], time);
   }

@@ -79,6 +79,25 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 .zoom-btns .icon-btn { width: 36px; height: 36px; font-size: 1.3rem; line-height: 1; background: rgba(20, 14, 34, 0.85); }
 .zoom-btns .icon-btn:disabled { opacity: 0.35; cursor: default; }
 .zoom-btns .ring { display: inline-block; width: 12px; height: 12px; border-radius: 50%; border: 2px solid currentColor; box-shadow: inset 0 0 0 2px rgba(20, 14, 34, 0.85), inset 0 0 0 6px currentColor; vertical-align: middle; }
+.map-tabs { display: flex; flex-wrap: wrap; gap: 8px; }
+.dunia-tabs { width: auto; }
+.dunia-tabs button[aria-selected="true"] { background: #c9a6ff; }
+/* Tantangan bos */
+.tk-card { display: grid; gap: 3px; text-align: left; padding: 10px 13px; border-radius: 12px; cursor: pointer; color: inherit; font: inherit; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--line); }
+.tk-card:hover { border-color: rgba(201, 166, 255, 0.7); }
+.tk-card.menang { border-color: rgba(90, 209, 122, 0.6); }
+.tk-card.kunci { opacity: 0.5; cursor: not-allowed; }
+.tk-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.tk-head b { font-family: var(--font-display); font-size: 1.35rem; font-weight: 600; line-height: 1; color: var(--ink); }
+.tk-titik { display: flex; gap: 3px; }
+.tk-titik i { width: 9px; height: 9px; border-radius: 50%; background: rgba(255, 255, 255, 0.15); }
+.tk-titik i.on { background: #c9a6ff; }
+.tk-saran { font-size: 0.85rem; }
+.tk-saran.kurang { color: #ff8b8e; }
+.tk-hadiah { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; font-weight: 700; color: var(--gold); }
+.tk-hadiah .coin { flex: none; width: 11px; height: 11px; }
+.tk-status { justify-self: end; font-size: 0.72rem; font-weight: 800; color: var(--ink-dim); }
+.tk-card.menang .tk-status { color: #5ad17a; }
 /* Daftar misi */
 .misi-panel { width: min(560px, 100%); gap: 10px; }
 .misi-panel h1 { font-size: 2.4rem; }
@@ -526,6 +545,21 @@ h1 span { color: var(--gold); }
     </div>
   </div>
 
+  <!-- Tantangan bos di cermin gaib (js/34-tantangan-bos.js) -->
+  <div class="overlay" id="tantangBox" hidden>
+    <div class="panel misi-panel">
+      <div class="head">
+        <div>
+          <p class="eyebrow" data-t="h.tantangEyebrow">Cermin Gaib · Tantangan</p>
+          <h1 id="tantangNama">Genderuwo</h1>
+        </div>
+        <button class="icon-btn" id="btnTantangClose" type="button" data-ta="h.tutupTantang" aria-label="Tutup tantangan">✕</button>
+      </div>
+      <p class="misi-lead" data-t="h.tantangLead">Pilih tingkat kesulitan. Menangkan satu tingkat untuk membuka tingkat berikutnya.</p>
+      <div class="misi-list" id="tantangList"></div>
+    </div>
+  </div>
+
   <div class="overlay" id="mapBox" hidden>
     <div class="panel map-panel">
       <div class="head">
@@ -535,9 +569,13 @@ h1 span { color: var(--gold); }
         </div>
         <button class="icon-btn" id="btnMapClose" type="button" data-ta="h.tutupPeta" aria-label="Tutup peta">✕</button>
       </div>
+      <div class="map-tabs">
       <div class="tabs" role="tablist">
         <button type="button" role="tab" id="tabArea" aria-selected="true" data-t="h.areaIni">Area ini</button>
         <button type="button" role="tab" id="tabWorld" aria-selected="false" data-t="h.petaDunia">Peta dunia</button>
+      </div>
+      <!-- pilih dunia 1/2/3 (js/18-peta-besar.js) -->
+      <div class="tabs dunia-tabs" role="tablist" id="duniaTabs" hidden></div>
       </div>
       <div class="map-wrap">
         <canvas id="bigMap" data-ta="h.peta" aria-label="Peta"></canvas>
@@ -594,11 +632,19 @@ h1 span { color: var(--gold); }
 <!-- Semua angka & teks yang bisa diubah ada di config.js -->
 <script src="js/00-galat.js"></script>
 <script src="config.js"></script>
+<script src="cerita/bab-1.js"></script>
+<script src="cerita/bab-2.js"></script>
+<script src="cerita/bab-3.js"></script>
+<script src="cerita/bab-4.js"></script>
+<script src="cerita/bab-5.js"></script>
+<script src="cerita/semua.js"></script>
 <!-- Kode game dipecah per fitur di folder js/. Urutan penting: file atas dimuat lebih dulu. -->
 <script src="js/01-alat.js"></script>
 <script src="js/02-bahasa.js"></script>
 <script src="js/03-rumus.js"></script>
 <script src="js/04-peta.js"></script>
+<script src="js/04a-dunia-segara.js"></script>
+<script src="js/04b-dunia-awan.js"></script>
 <script src="js/05-status.js"></script>
 <script src="js/06-area.js"></script>
 <script src="js/07-audio.js"></script>
@@ -625,4 +671,9 @@ h1 span { color: var(--gold); }
 <script src="js/28-dukung.js"></script>
 <script src="js/29-zoom-peta.js"></script>
 <script src="js/30-daftar-misi.js"></script>
-<script src="js/31-main.js"></script>
+<script src="js/32-debuff.js"></script>
+<script src="js/33-zona-aman.js"></script>
+<script src="js/34-tantangan-bos.js"></script>
+<script src="js/35-monster-dunia-baru.js"></script>
+<script src="js/36-naga.js"></script>
+<script src="js/37-main.js"></script>

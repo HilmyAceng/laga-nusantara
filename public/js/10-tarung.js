@@ -64,7 +64,7 @@ function playerSkill() {
 }
 
 function damageMonster(m, amount, ang, kb) {
-  if (m.dead) return;
+  if (m.dead || m.kebal) return;   // kebal: misalnya naga yang sedang terbang
   const crit = Math.random() < ATURAN.kritis.peluang;
   const dmg = Math.max(1, Math.round(amount * rand(0.9, 1.1) * (crit ? ATURAN.kritis.kali : 1)));
   m.hp -= dmg; m.flash = 0.12; m.aggro = true; m.seen = 4;
@@ -100,8 +100,10 @@ function killMonster(m) {
   saveSoon();
 }
 
-function hurtPlayer(amount, ang) {
-  if (P.inv > 0 || P.dead) return;
+// deb = debuff dari serangan ini; kosong = debuff milik monster yang sedang menyerang
+function hurtPlayer(amount, ang, deb) {
+  if (P.inv > 0 || P.dead || pAman) return;
+  const sumber = deb !== undefined ? deb : musuhAktif ? musuhAktif.d.debuff : null;
   const dmg = Math.max(1, Math.round(amount * rand(0.9, 1.1)));
   P.hp -= dmg; P.inv = 0.6; P.flash = 0.15; P.kbx = Math.cos(ang) * 280; P.kby = Math.sin(ang) * 280;
   shake = Math.max(shake, 0.25); sfx.hurt();
@@ -112,7 +114,7 @@ function hurtPlayer(amount, ang) {
     const lost = Math.floor(S.gold * ATURAN.pingsan.koinHilang); S.gold -= lost;
     toast(t("toast.pingsan", { koin: lost }), false);
     saveSoon();
-  }
+  } else beriDebuff(sumber);
 }
 
 function spark(x, y, color, n) {

@@ -19,6 +19,8 @@ function ceritaButuhBos(jenis) {
 function namaPembicara(who) {
   if (who === "narasi") return t("cerita.narator");
   if (who === "raja") return MONSTERS.rajaBanaspati.name;
+  if (who === "hero") return CLASSES[S.cls].name;
+  if (MONSTERS[who]) return MONSTERS[who].name;
   const n = npcById(who);
   return n ? n.name : who;
 }
@@ -48,6 +50,7 @@ function selesaiLangkah(putarTeks = true) {
   if (!l) return;
   S.cerita.idx++; S.cerita.prog = 0;
   beriHadiah(l.hadiah);
+  if (l.buka) bukaKunci(l.buka);        // gerbang baru terbuka (kapal, kuil, pelangi)
   sfx.quest(); saveSoon();
   const lanjut = () => {
     refreshHud(true); ensureBoss();
@@ -102,8 +105,21 @@ function ceritaTeka(id) {               // 25-teka-teki.js
 // Barang cerita yang dijatuhkan monster (hanya saat langkahnya aktif)
 function ceritaDrop(m) {
   const l = langkahCerita();
-  if (l && l.tipe === "collect" && l.item === "kantong" && m.type === "tuyul" && Math.random() < ATURAN.monster.dropKantong)
-    pickups.push({ kind: "kantong", x: m.x + 8, y: m.y, t: 0 });
+  if (!l || l.tipe !== "collect" || (l.dari || SUMBER_BARANG[l.item]) !== m.type) return;
+  const peluang = l.peluang != null ? l.peluang : l.item === "kantong" ? ATURAN.monster.dropKantong : 0.5;
+  if (Math.random() < peluang) pickups.push({ kind: l.item, x: m.x + 8, y: m.y, t: 0 });
+}
+// Judul episode untuk kotak misi & daftar misi: "Ep 3 · Hutan yang Beringas"
+const judulEpisode = (l) => (l.ep ? t("cerita.ep", { n: l.ep }) + (l.judul ? " · " + l.judul : "") : l.bab);
+
+// Simpanan dari versi lama (cerita 18 langkah) → pindahkan ke langkah yang sama di cerita baru.
+function migrasiCerita() {
+  S.buka = S.buka || {}; S.cermin = S.cermin || {};
+  if (S.ceritaV === 2) return;
+  const lama = S.cerita.idx;
+  const i = lama >= 18 ? CERITA.findIndex((c) => c.lama === 17) + 1 : CERITA.findIndex((c) => c.lama === lama);
+  if (i >= 0) S.cerita.idx = i;
+  S.ceritaV = 2;
 }
 
 // ---------- Kotak misi & tanda NPC ----------
@@ -114,7 +130,7 @@ function teksMisiUtama() {
   let prog = "";
   if (l.tipe === "kill") prog = ` (${S.cerita.prog}/${l.need})`;
   if (l.tipe === "collect") prog = ` (${S.items[l.item] || 0}/${l.need})`;
-  return `<b>${l.bab}</b>${l.tujuan}${prog}`;
+  return `<b>${judulEpisode(l)}</b>${l.tujuan}${prog}`;
 }
 // "!" emas = NPC ini bagian cerita sekarang. Kalau bukan, cek misi sampingan (biru).
 function tandaNpc(n) {
@@ -139,8 +155,8 @@ function ceritaTarget() {
   if (!l) return null;
   if (l.tipe === "bicara") { const n = npcById(l.npc); return n && { area: n.area, x: n.x, y: n.y, npc: true }; }
   if (l.tipe === "datang") return { area: l.area };
-  if (l.tipe === "kill") return zonaMonster(l.target);
-  if (l.tipe === "collect") return zonaMonster(SUMBER_BARANG[l.item]);
+  if (l.tipe === "collect") return tempatMonster(l.dari || SUMBER_BARANG[l.item]);
+  if (l.tipe === "kill") return tempatMonster(l.target);
   if (l.tipe === "teka") {
     for (const [id, a] of Object.entries(AREAS)) for (const o of a.objek || []) if (o.id === l.id) return { area: id, x: o.x * T, y: o.y * T };
   }

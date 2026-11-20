@@ -19,7 +19,7 @@ function jalurArea(dari, ke) {
   while (antre.length) {
     const a = antre.shift();
     for (const g of AREAS[a].gerbang) {
-      if (g.ke in prev) continue;
+      if (g.ke in prev || !gerbangTerbuka(g)) continue;
       prev[g.ke] = a;
       if (g.ke === ke) { const j = [ke]; let x = a; while (x) { j.unshift(x); x = prev[x]; } return j; }
       antre.push(g.ke);

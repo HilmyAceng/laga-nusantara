@@ -8,7 +8,8 @@
 // peta mini: dibuat ulang setiap pindah area
 const miniBase = document.createElement("canvas");
 const TILE_COLOR = { [G]: "#3f7d3a", [FLOWER]: "#3f7d3a", [PATH]: "#c8a46e", [WATER]: "#2d6a96", [BRIDGE]: "#8b5e3c", [TREE]: "#24502a", [ROCK]: "#6f6a75", [HOUSE]: "#7a3b2e", [CAVE]: "#3a3142", [WALL]: "#1a1420",
-  [SAND]: "#e2c891", [LAVA]: "#d2461f", [ASH]: "#4a4040", [MUD]: "#434d34", [REED]: "#5e6b33" };
+  [SAND]: "#e2c891", [LAVA]: "#d2461f", [ASH]: "#4a4040", [MUD]: "#434d34", [REED]: "#5e6b33",
+  [CLOUD]: "#dfe8f5", [STONE]: "#7d7a86", [CORAL]: "#e0708a" };
 // Gambar petak peta (1 petak = 1 piksel) ke sebuah kanvas. Dipakai juga oleh peta dunia.
 function paintTiles(cv, w, h, tiles) {
   cv.width = w; cv.height = h;

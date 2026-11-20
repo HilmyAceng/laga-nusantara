@@ -28,6 +28,37 @@ const NPC_DATA = [
   { id: "inah", name: "Mak Inah", area: "pesisir", x: 17.5, y: 8.5, color: "#a0436b", accent: "#f4d58a", face: 0, toko: true },
   { id: "kardi", name: "Bang Kardi", area: "pesisir", x: 33.5, y: 20.5, color: "#4e7f52", accent: "#e1c699", hair: "#1f1a24", face: Math.PI / 2,
     obrolan: ["Ombak hari ini cocok buat melaut.", "Kepiting karang itu cangkangnya keras. Pukul terus jangan kasih ampun!"] },
+  // tabib desa: misi sampingan "Ramuan Penawar" (cara menyembuhkan debuff)
+  { id: "joko", name: "Pak Joko", area: "desa", x: 6.5, y: 19.4, color: "#4f7a5a", accent: "#e9d3a9", hat: "#3b2a22", hair: "#8d8894", face: 0,
+    obrolan: ["Kalau kena racun, cepat cari zona aman di dekat mesin teleport.", "Sambiloto itu pahit, tapi pahit yang menyembuhkan.", "Jangan remehkan rasa pening, Nak. Bisa-bisa kau berjalan ke arah yang salah."],
+    obrolanEn: ["If you're poisoned, find a safe zone near a teleport beacon quickly.", "Sambiloto is bitter, but it's a healing bitterness.", "Don't shrug off dizziness, my child. You might walk the wrong way."] },
+
+  // ---- Dunia 2 · Bandar Segara ----
+  { id: "bahar", name: "Datuk Bahar", area: "bandar", x: 11.5, y: 12.4, color: "#1f4e79", accent: "#f4b942", hat: "#1b1208", hair: "#d9d4cc", face: Math.PI / 2,
+    obrolan: ["Setiap kapal yang masuk, aku catat. Setiap kabut yang datang, aku curigai.", "Pelabuhan ini tak pernah tidur, Kisanak."],
+    obrolanEn: ["Every ship that docks, I log. Every mist that rolls in, I suspect.", "This harbor never sleeps, traveler."] },
+  { id: "laras", name: "Nyi Laras", area: "bandar", x: 27.5, y: 17.4, color: "#2a9d8f", accent: "#e9f5f2", hair: "#1f1a2a", face: Math.PI,
+    obrolan: ["Laut menyimpan semua cerita. Kita hanya perlu mendengar.", "Air tenang bukan berarti tak berarus."],
+    obrolanEn: ["The sea keeps every story. We only have to listen.", "Calm water doesn't mean there's no current."] },
+  { id: "bayu", name: "Bayu", area: "bandar", x: 8.5, y: 17.4, color: "#e07a3a", accent: "#f7efe3", hair: "#1f1a2a", face: 0,
+    obrolan: ["Kak, ajari aku jurus dong!", "Suatu hari aku juga mau jadi pendekar keliling!"],
+    obrolanEn: ["Teach me a move, please!", "Someday I'll be a wandering hero too!"] },
+  { id: "sari", name: "Mbak Sari", area: "bandar", x: 15.5, y: 17.4, color: "#b5466b", accent: "#f4d58a", face: 0, toko: true },
+  { id: "rimba", name: "Pak Rimba", area: "bandar", x: 22.5, y: 3.4, color: "#5a4a2a", accent: "#9c7a3a", hat: "#3a2c1a", hair: "#8d8894", face: Math.PI / 2,
+    obrolan: ["Hutan Larangan itu bukan tempat main-main.", "Dengarkan hutan. Kalau burung diam, ada pemangsa dekat."],
+    obrolanEn: ["The Forbidden Forest is no playground.", "Listen to the forest. When the birds go quiet, a predator is near."] },
+
+  // ---- Dunia 3 · Kampung Awan ----
+  { id: "sukma", name: "Eyang Sukma", area: "awan", x: 17.5, y: 9.4, color: "#f2efe6", accent: "#8fd3ff", hair: "#ffffff", face: Math.PI / 2,
+    obrolan: ["Dari sini, dunia di bawah tampak kecil sekali. Masalahnya tidak.", "Wening masih suka jambu? Hihihi."],
+    obrolanEn: ["From up here the world below looks tiny. Its troubles don't.", "Does Wening still love guavas? Hee hee."] },
+  { id: "kirana", name: "Kirana", area: "awan", x: 24.5, y: 16.4, color: "#7a3b8f", accent: "#f4b942", hair: "#2a1a1a", face: Math.PI,
+    obrolan: ["Aku tidak butuh bantuan. ...Tapi terima kasih.", "Busurku belum pernah meleset. Hampir."],
+    obrolanEn: ["I don't need help. ...But thanks.", "My bow has never missed. Almost."] },
+  { id: "gora", name: "Empu Gora", area: "awan", x: 9.5, y: 12.4, color: "#5c3a2a", accent: "#ff9f43", hair: "#2a201b", face: 0, toko: true },
+  { id: "angon", name: "Ki Angon", area: "awan", x: 27.5, y: 21.4, color: "#9c8a5a", accent: "#f7efe3", hat: "#c9a26b", face: Math.PI,
+    obrolan: ["Kambing awan itu lembut seperti awan, galak seperti petir.", "Mau coba keju kambing awan? Baunya... luar biasa."],
+    obrolanEn: ["Cloud goats are soft as clouds and fierce as thunder.", "Want to try cloud-goat cheese? The smell is... remarkable."] },
 ];
 for (const n of NPC_DATA) { n.x *= T; n.y *= T; }
 const npcDi = (id) => NPC_DATA.filter((n) => n.area === id);
@@ -42,6 +73,9 @@ function newSave(cls) {
     bos: {},                        // bos yang pernah dikalahkan
     side: {},                       // misi sampingan lain (24-sampingan.js)
     dikunjungi: { desa: true },     // area yang pernah didatangi (peta dunia & teleport)
+    buka: {},                       // gerbang yang sudah dibuka cerita (kapal, kuil, pelangi)
+    cermin: {},                     // tingkat tantangan bos tertinggi yang sudah dimenangkan (34-tantangan-bos.js)
+    ceritaV: 2,                     // versi cerita (lihat migrasi di 23-cerita.js)
   };
 }
 // Simpan progres + posisi terakhir (area, titik, nyawa) supaya "Lanjutkan" mulai di tempat tadi.
@@ -57,7 +91,7 @@ function save() {
 function makePlayer() {
   return { x: START.x, y: START.y, r: 12, face: 0, run: 0, moving: false, hp: maxHp(), inv: 1, flash: 0,
     atkCd: 0, skillCd: 0, rollCd: 0, roll: 0, rdx: 0, rdy: 0, dash: 0, dashHit: null, combo: 0, comboT: 0,
-    swing: 0, swingDur: 0.18, kbx: 0, kby: 0, dead: false, deadT: 0 };
+    swing: 0, swingDur: 0.18, kbx: 0, kby: 0, dead: false, deadT: 0, debuff: {} };
 }
 
 function makeMonster(type, spot) {

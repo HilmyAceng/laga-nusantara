@@ -40,7 +40,7 @@ const TEKS = {
     "toast.lanjut": "Melanjutkan di {area}",
     "toast.pulihPenuh": "Nyawa pulih penuh",
     "toast.bosMuncul": "{nama} muncul dari cermin!",
-    "toast.bosUlang": "{nama} tumbang! +{koin} koin",
+    "toast.bosUlang": "{nama} tumbang! {hadiah}",
     // dialog NPC
     "dlg.tutup": "Tutup", "dlg.nanti": "Nanti dulu", "dlg.terima": "Terima misi", "dlg.siap": "Siap",
     "dlg.terimaHadiah": "Terima hadiah",
@@ -105,6 +105,27 @@ const TEKS = {
     "fs.tidakBisa": "Browser ini belum mendukung layar penuh. Di iPhone, pasang game lewat Bagikan › Tambahkan ke Layar Utama agar tampil penuh.",
     "fs.ketuk": "Ketuk layar sekali untuk masuk layar penuh lagi.",
     // cerita utama, misi sampingan, teka-teki
+    "cerita.ep": "Ep {n}",
+    "item.daunSambiloto": "Daun sambiloto", "item.kristalKabut": "Kristal kabut", "item.taringUlar": "Taring ular", "item.cakarKumbang": "Cakar kumbang",
+    "item.mutiara": "Mutiara bercahaya", "item.koinBajak": "Koin bajak laut", "item.intiArca": "Inti arca", "item.buluElang": "Bulu elang batu",
+    "item.sisikApi": "Sisik api", "item.kerangLaut": "Kerang bercahaya", "item.pecahanArca": "Pecahan arca", "item.kompasLaut": "Kompas Laut",
+    "item.sisikNaga": "Sisik Naga", "item.batuPelangi": "Batu Pelangi", "item.mustikaKencana": "Mustika Kencana",
+    "side.hPenawar": "resep jamu penawar",
+    "toast.penawar": "Resep penawar dipelajari! Jamu kini juga menyembuhkan semua debuff",
+    "toast.jalanTerbuka": "Jalan baru terbuka!",
+    "debuff.racun": "Racun", "debuff.terbakar": "Terbakar", "debuff.lambat": "Lambat", "debuff.lemah": "Lemah", "debuff.bingung": "Bingung",
+    "debuff.info.racun": "Kena racun: nyawa berkurang pelan. Cari zona aman atau tanya Pak Joko",
+    "debuff.info.terbakar": "Terbakar: nyawa berkurang cepat. Cari zona aman atau tanya Pak Joko",
+    "debuff.info.lambat": "Lambat: gerakanmu melambat sebentar",
+    "debuff.info.lemah": "Lemah: seranganmu melemah sebentar",
+    "debuff.info.bingung": "Bingung: arah gerakmu terbalik sebentar!",
+    "debuff.sembuhJamu": "Jamu penawar: semua debuff sembuh", "debuff.sembuhAman": "Zona aman: semua debuff sembuh",
+    "aman.masuk": "Zona aman · monster tidak bisa masuk",
+    "tantang.tk": "Tingkat {n}", "tantang.saran": "Level disarankan: Lv {lv}",
+    "tantang.terkunci": "Terkunci · menangkan Tingkat {n} dulu", "tantang.menang": "Sudah menang ✓ · tantang lagi", "tantang.mulai": "Tantang ›",
+    "tantang.kunciToast": "Menangkan Tingkat {n} dulu", "tantang.terbuka": "Tingkat {n} terbuka!",
+    "naga.mengamuk": "Naga Kencana mengamuk!",
+    "peta.duniaSub": "Peta dunia · Kamu di {area}", "peta.tujuanDunia": "Tujuan misi ada di {dunia} »",
     "cerita.narator": "Cerita",
     "cerita.lanjut": "Lanjut ›",
     "cerita.hKoin": "+{n} koin",
@@ -173,7 +194,7 @@ const TEKS = {
     "toast.lanjut": "Continuing in {area}",
     "toast.pulihPenuh": "Fully healed",
     "toast.bosMuncul": "{nama} emerges from the mirror!",
-    "toast.bosUlang": "{nama} defeated! +{koin} coins",
+    "toast.bosUlang": "{nama} defeated! {hadiah}",
     "dlg.tutup": "Close", "dlg.nanti": "Maybe later", "dlg.terima": "Accept quest", "dlg.siap": "Got it",
     "dlg.terimaHadiah": "Take reward",
     "dlg.lurahSelesai": "Thanks to you, Wanasari is peaceful again. The forest is still vast, keep training.",
@@ -231,6 +252,28 @@ const TEKS = {
     "fs.aplikasi": "The game is running as an installed app, so it is already full screen.",
     "fs.tidakBisa": "This browser does not support full screen yet. On iPhone, install the game via Share › Add to Home Screen to play full screen.",
     "fs.ketuk": "Tap the screen once to go full screen again.",
+    "cerita.ep": "Ep {n}",
+    "item.daunSambiloto": "Sambiloto leaf", "item.kristalKabut": "Mist crystal", "item.taringUlar": "Snake fang", "item.cakarKumbang": "Panther claw",
+    "item.mutiara": "Glowing pearl", "item.koinBajak": "Pirate coin", "item.intiArca": "Statue core", "item.buluElang": "Stone eagle feather",
+    "item.sisikApi": "Fire scale", "item.kerangLaut": "Glowing shell", "item.pecahanArca": "Statue shard", "item.kompasLaut": "Sea Compass",
+    "item.sisikNaga": "Dragon Scale", "item.batuPelangi": "Rainbow Stone", "item.mustikaKencana": "Kencana Gem",
+    "side.hPenawar": "antidote recipe",
+    "toast.penawar": "Antidote recipe learned! Jamu now also cures all debuffs",
+    "toast.jalanTerbuka": "A new path has opened!",
+    "debuff.racun": "Poison", "debuff.terbakar": "Burn", "debuff.lambat": "Slow", "debuff.lemah": "Weak", "debuff.bingung": "Confused",
+    "debuff.info.racun": "Poisoned: health drains slowly. Find a safe zone or ask Pak Joko",
+    "debuff.info.terbakar": "Burning: health drains fast. Find a safe zone or ask Pak Joko",
+    "debuff.info.lambat": "Slowed: you move slower for a while",
+    "debuff.info.lemah": "Weakened: your attacks are weaker for a while",
+    "debuff.info.bingung": "Confused: your movement is reversed for a moment!",
+    "debuff.sembuhJamu": "Antidote jamu: all debuffs cured", "debuff.sembuhAman": "Safe zone: all debuffs cured",
+    "aman.masuk": "Safe zone · monsters can't enter",
+    "tantang.tk": "Level {n}", "tantang.saran": "Recommended: Lv {lv}",
+    "tantang.terkunci": "Locked · win Level {n} first", "tantang.menang": "Won ✓ · fight again", "tantang.mulai": "Challenge ›",
+    "tantang.kunciToast": "Win Level {n} first", "tantang.terbuka": "Level {n} unlocked!",
+    "naga.mengamuk": "The Golden Dragon is enraged!",
+    "peta.duniaSub": "World map · You are in {area}", "peta.tujuanDunia": "Quest goal is in {dunia} »",
+    "h.tantangEyebrow": "Spirit Mirror · Challenge", "h.tantangLead": "Choose a difficulty. Win a level to unlock the next one.", "h.tutupTantang": "Close challenge",
     "cerita.narator": "Story",
     "cerita.lanjut": "Next ›",
     "cerita.hKoin": "+{n} coins",
@@ -352,72 +395,8 @@ const DATA_EN = {
     pesisir: { nama: "Fishing Village", sub: "A village by the sea · Lv 7+", gerbang: ["← Swamp"] },
     kawah: { nama: "Geni Crater", sub: "Summit of the volcano · Lv 11+", gerbang: ["To Temple"] },
   },
-  // Cerita utama (urutan sama dengan CERITA di config.js). teks: hanya kalimatnya, pembicaranya tetap.
-  cerita: [
-    { bab: "Chapter 1 · The First Mist", tujuan: "Meet Resi Wening by the village square", teks: [
-      "At last you've come, child. I am Resi Wening, a hermit from the slopes of Mount Geni.",
-      "Three nights ago the mountain spewed a red mist. Since then the forest creatures have turned savage, and old spirits have woken.",
-      "In Wingit Temple, north of the forest, lies the Earth Gem, one of the three guardian gems. I fear it is in danger.",
-      "Go there and see. Follow the gold arrow on your screen if you lose your way."] },
-    { bab: "Chapter 1 · The First Mist", tujuan: "Go to Wingit Temple (north of Forest & Meadow)", teks: [
-      "The air in Wingit Temple is cold and smells of old incense. A stone wall seals the way to the inner chamber.",
-      "An inscription stands in the entrance hall. Perhaps it holds a clue."] },
-    { bab: "Chapter 1 · The First Mist", tujuan: "Light the four torches in the middle hall as the inscription says", teks: [
-      "The fourth flame catches. The stone wall to the north rumbles and slides open.",
-      "From the darkness of the inner chamber, a pair of stone eyes glows red..."] },
-    { bab: "Chapter 1 · The First Mist", tujuan: "Defeat Dwarapala, the stone guardian of Wingit Temple", teks: [
-      "The guardian statue crumbles to pieces. Among the rubble, a green stone pulses softly.",
-      "You got the Earth Gem! Behind the chamber, a passage to the summit is now open."] },
-    { bab: "Chapter 1 · The First Mist", tujuan: "Bring the Earth Gem to Resi Wening in the village", teks: [
-      "The Earth Gem... thank goodness. But look at this crack. Someone tried to steal it.",
-      "Dwarapala never attacks ordinary visitors. It was controlled by that red mist.",
-      "Long ago, the Banaspati King, fire spirit of the crater, was sealed by our ancestors with three gems: Earth, Water and Wind. Now the seal is weakening.",
-      "The Water Gem is kept in the Misty Swamp, south of the forest. Go before the mist swallows it. Take this jamu."] },
-    { bab: "Chapter 2 · Misty Swamp", tujuan: "Go to the Misty Swamp (south of Forest & Meadow)", teks: [
-      "Thick mist hangs over black water. Faint voices seem to call your name.",
-      "Near the entrance stands an old hut. Thin smoke drifts from its kitchen."] },
-    { bab: "Chapter 2 · Misty Swamp", tujuan: "Meet Mbah Tirto at the hut by the swamp", teks: [
-      "Heh heh... not many dare to come in here, young one.",
-      "The Water Gem lies on the island in the middle of the swamp, guarded by the White Crocodile, centuries old. But now its eyes are red, as if possessed.",
-      "Our ancestors sank the bridge to that island. Only one who answers the riddles of the Pitutur Stone can raise it again.",
-      "But mist ghosts roam the northern swamp. Drive off five of them first, so you can think in peace at that stone."] },
-    { bab: "Chapter 2 · Misty Swamp", tujuan: "Drive off the Mist Ghosts in the northern swamp", teks: [
-      "The mist thins a little. The Pitutur Stone by the water is clear now, its writing glowing."] },
-    { bab: "Chapter 2 · Misty Swamp", tujuan: "Answer the three riddles of the Pitutur Stone", teks: [
-      "The swamp water churns. A stone bridge slowly rises from the mud toward the island in the middle."] },
-    { bab: "Chapter 2 · Misty Swamp", tujuan: "Defeat the White Crocodile on the swamp island", teks: [
-      "The White Crocodile slumps, then its eyes clear again. It gazes at you a moment, then dives away.",
-      "A cold blue stone is left on the shore. You got the Water Gem!",
-      "The smell of the sea drifts in from east of the swamp. Perhaps the Wind Gem is there."] },
-    { bab: "Chapter 3 · Fishing Village", tujuan: "Follow the path east of the swamp to the Fishing Village", teks: [
-      "The sea breeze greets you. But the village is quiet, every door shut tight.",
-      "A man in a woven hat waves from the pier."] },
-    { bab: "Chapter 3 · Fishing Village", tujuan: "Meet Pak Jala, head of the Fishing Village", teks: [
-      "You carry the gems? Resi Wening sent word by bird.",
-      "Our family has guarded the Wind Gem for generations... but last night a gang of tuyul sneaked in and stole it!",
-      "They run around the village. Catch them and take back the stolen pouches.",
-      "Careful, tuyul love to pick careless pockets. Beat them to get your coins back."] },
-    { bab: "Chapter 3 · Fishing Village", tujuan: "Take the stolen pouches back from the Tuyul", teks: [
-      "The third pouch feels heavy. Something inside breathes cold, like the wind."] },
-    { bab: "Chapter 3 · Fishing Village", tujuan: "Return the stolen pouches to Pak Jala", teks: [
-      "Here it is! The Wind Gem, unharmed! Our ancestors must be smiling.",
-      "Take it, child. Bring all three gems to Geni Crater, at the mountain's peak, through the deepest passage of Wingit Temple.",
-      "The teleport beacon in this village is lit now. Open the map if you want a quick trip home."] },
-    { bab: "Chapter 4 · Geni Crater", tujuan: "Climb to Geni Crater through the north passage of Wingit Temple", teks: [
-      "The heat stings your skin. A river of lava splits the crater, and beyond it a giant ember beats like a heart.",
-      "By the lava stands an altar with three hollows."] },
-    { bab: "Chapter 4 · Geni Crater", tujuan: "Place the three gems on the altar", teks: [
-      "The three gems shine: green, blue and white. The lava before you hisses, then hardens into a stone bridge.",
-      "Who dares set foot in my crater? Come, child of man. I shall turn you to ash!"] },
-    { bab: "Chapter 4 · Geni Crater", tujuan: "Defeat the Banaspati King", teks: [
-      "Impossible... beaten... by a child of man...",
-      "The giant flame dims to a small ember, then goes out. The red mist in the sky slowly fades.",
-      "Return to Resi Wening in Wanasari Village."] },
-    { bab: "Chapter 4 · Geni Crater", tujuan: "Return to Resi Wening in Wanasari Village", teks: [
-      "The mist is gone. Listen, the birds are singing again.",
-      "I have restored the seal with the three gems. All of Nusantara owes you, child.",
-      "But remember: fire never truly dies. Keep training. Mystic mirrors have woken in the guardians' lairs, should you wish to test yourself again."] },
-  ],
+  // Cerita utama: terjemahannya ada di tiap langkah (`en`) di src/cerita/
+
   sampingan: {
     kepiting: { title: "Naughty Crabs", offer: "Reef crabs are wrecking our nets on the south beach. Could you drive off six of them?", done: "The beach is safe again! Here's a reward from the fishermen." },
     sisik: { title: "Crocodile Scales", offer: "Bring me three swamp crocodile scales and I'll reforge your weapon. The crocodiles live in the southern swamp.", done: "Fine scales. Let me reforge your weapon a moment... there, sharper!" },
@@ -457,7 +436,8 @@ function terapkanData() {
       monster: Object.fromEntries(Object.entries(MONSTERS).map(([k, m]) => [k, m.name])),
       misi: QUESTS.map((q) => ({ title: q.title, offer: q.offer })),
       area: Object.fromEntries(Object.entries(AREAS).map(([k, a]) => [k, { nama: a.nama, sub: a.sub, gerbang: a.gerbang.map((g) => g.label) }])),
-      cerita: CERITA.map((c) => ({ bab: c.bab, tujuan: c.tujuan, teks: (c.teks || []).map((x) => x[1]) })),
+      cerita: CERITA.map((c) => ({ bab: c.bab, judul: c.judul, tujuan: c.tujuan, teks: (c.teks || []).map((x) => x[1]) })),
+      dunia: DUNIA.map((d) => d.nama),
       sampingan: Object.fromEntries(SAMPINGAN.map((q) => [q.id, { title: q.title, offer: q.offer, done: q.done }])),
       obrolan: Object.fromEntries(NPC_DATA.filter((n) => n.obrolan).map((n) => [n.id, [...n.obrolan]])),
     };
@@ -467,20 +447,22 @@ function terapkanData() {
     const s = (en && DATA_EN.kelas[k]) || dataAsli.kelas[k];
     c.name = s.name; c.role = s.role; c.desc = s.desc; c.skill.name = s.skill;
   }
-  for (const [k, m] of Object.entries(MONSTERS)) m.name = (en && DATA_EN.monster[k]) || dataAsli.monster[k];
+  for (const [k, m] of Object.entries(MONSTERS)) m.name = (en && (DATA_EN.monster[k] || m.nameEn)) || dataAsli.monster[k];
+  DUNIA.forEach((d, i) => { d.nama = en ? d.namaEn : dataAsli.dunia[i]; });
   QUESTS.forEach((q, i) => { const s = (en && DATA_EN.misi[i]) || dataAsli.misi[i]; q.title = s.title; q.offer = s.offer; });
   for (const [k, a] of Object.entries(AREAS)) {
-    const s = (en && DATA_EN.area[k]) || dataAsli.area[k];
+    const asli = dataAsli.area[k];
+    const s = (en && (DATA_EN.area[k] || (a.namaEn && { nama: a.namaEn, sub: a.subEn, gerbang: a.gerbang.map((g) => g.labelEn) }))) || asli;
     a.nama = s.nama; a.sub = s.sub;
-    a.gerbang.forEach((g, i) => { g.label = (s.gerbang && s.gerbang[i]) || dataAsli.area[k].gerbang[i]; });
+    a.gerbang.forEach((g, i) => { g.label = (s.gerbang && s.gerbang[i]) || (en && g.labelEn) || asli.gerbang[i]; });
   }
   CERITA.forEach((c, i) => {
-    const s = (en && DATA_EN.cerita[i]) || dataAsli.cerita[i];
-    c.bab = s.bab; c.tujuan = s.tujuan;
+    const s = (en && c.en) || dataAsli.cerita[i];
+    c.bab = s.bab; c.judul = s.judul; c.tujuan = s.tujuan;
     (c.teks || []).forEach((x, j) => { x[1] = (s.teks && s.teks[j]) || dataAsli.cerita[i].teks[j]; });
   });
-  for (const q of SAMPINGAN) { const s = (en && DATA_EN.sampingan[q.id]) || dataAsli.sampingan[q.id]; q.title = s.title; q.offer = s.offer; q.done = s.done; }
-  for (const n of NPC_DATA) if (n.obrolan) n.obrolan = (en && DATA_EN.obrolan[n.id]) || dataAsli.obrolan[n.id];
+  for (const q of SAMPINGAN) { const s = (en && (DATA_EN.sampingan[q.id] || q.en)) || dataAsli.sampingan[q.id]; q.title = s.title; q.offer = s.offer; q.done = s.done; }
+  for (const n of NPC_DATA) if (n.obrolan) n.obrolan = (en && (DATA_EN.obrolan[n.id] || n.obrolanEn)) || dataAsli.obrolan[n.id];
 }
 
 // Ganti bahasa & segarkan semua yang sedang tampil
@@ -504,7 +486,7 @@ function terapkanSemua() {
   refreshAudioButtons(); refreshLayar(); refreshBahasa(); refreshPanah();
   if (pauseView === "control") buildControls();
   if (S) isiStatJeda();
-  if (world) world = null;   // peta dunia dibuat ulang (nama area)
+  resetPetaDunia();   // peta dunia dibuat ulang (nama area)
 }
 // Tombol di halaman Bahasa
 function refreshBahasa() {

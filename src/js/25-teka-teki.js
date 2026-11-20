@@ -99,6 +99,8 @@ function selesaiTeka(id) {
 // Bos kalah → buka jalan berikutnya (lorong candi ke kawah)
 function setelahBosKalah(jenis) {
   if (jenis === "dwarapala" && areaId === "candi") { fillRect(14, 0, 16, 0, CAVE); buildMiniBase(); }
+  // gerbang yang terbuka karena bos ini kalah (mis. Hutan Batu → Puncak Naga)
+  if (area.gerbang.some((g) => g.kunci === "bos:" + jenis)) { bangunUlangArea(); toast(t("toast.jalanTerbuka"), false); }
 }
 
 // ---------- Gambar ----------
