@@ -86,7 +86,7 @@ function teksKotakMisi() {
 // ---------- Popup ----------
 function bukaMisi() {
   if (mode !== "play") return;
-  mode = "misi";
+  mode = "misi"; popupDibuka = performance.now();
   isiMisi();
   showUI();
 }
@@ -105,7 +105,7 @@ function isiMisi() {
 }
 $("misiList").addEventListener("click", (e) => {
   const b = e.target.closest("[data-misi]");
-  if (!b) return;
+  if (!b || popupBaruBuka()) return;
   const m = daftarMisi().find((x) => x.id === b.dataset.misi);
   if (!m) return;
   S.lacak = m.id; saveSoon(); sfx.click();

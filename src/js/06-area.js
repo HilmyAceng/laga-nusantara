@@ -4,6 +4,8 @@
 // =====================================================================
 "use strict";
 
+// Kait saat masuk area (mis. puzzle menyiapkan bendanya): fungsi(id)
+const SAAT_MASUK_AREA = [];
 // Masuk ke area: bangun petanya, isi NPC & monster, bersihkan efek lama.
 function loadArea(id) {
   buildArea(id);
@@ -17,6 +19,8 @@ function loadArea(id) {
   buildMiniBase();
   $("areaName").textContent = area.nama;
   if (S) S.dikunjungi[id] = true;
+  pasangBenderaAman();   // bendera penanda zona aman (33-zona-aman.js)
+  for (const f of SAAT_MASUK_AREA) f(id);
 }
 
 // Pindah area dengan layar gelap: fade-out → ganti peta → nama area → fade-in.

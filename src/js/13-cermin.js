@@ -7,7 +7,9 @@
 // =====================================================================
 "use strict";
 
-let cerminJeda = 0;        // detik sampai cermin bisa dipakai lagi
+// Jeda cermin disimpan sebagai jam selesai (S.cerminSampai[bos], milidetik) supaya
+// tidak ter-reset walau game ditutup lalu dibuka lagi.
+const sisaJeda = (jenis = area && area.bos ? area.bos.monster : "") => (S && S.cerminSampai ? Math.max(0, ((S.cerminSampai[jenis] || 0) - Date.now()) / 1000) : 0);
 let summon = null;         // pemanggilan yang sedang berjalan
 let kilat = 0;             // kilatan putih satu layar (0..1)
 const SUMMON_MUNCUL = 1.3; // detik dari mulai pemanggilan sampai bos muncul
@@ -27,8 +29,8 @@ const bosHidup = () => monsters.some((m) => m.d.boss && !m.dead);
 
 function talkCermin(npc) {
   const nama = MONSTERS[bosCermin()].name;
-  if (cerminJeda > 0) {
-    return openDialog(npc.name, t("cermin.redup", { detik: Math.ceil(cerminJeda) }), [{ label: t("dlg.tutup"), run: closeDialog, primary: true }]);
+  if (sisaJeda() > 0) {
+    return openDialog(npc.name, t("cermin.redup", { detik: Math.ceil(sisaJeda()) }), [{ label: t("dlg.tutup"), run: closeDialog, primary: true }]);
   }
   if (bosHidup()) return;
   bukaTantangan(npc);   // pilih tingkat kesulitan (34-tantangan-bos.js)
@@ -46,7 +48,6 @@ function startSummon(npc, tingkat = 1) {
 
 // Dipanggil tiap frame dari update()
 function updateCermin(dt) {
-  if (cerminJeda > 0) cerminJeda = Math.max(0, cerminJeda - dt);
   if (kilat > 0) kilat = Math.max(0, kilat - dt * 2.5);
   if (!summon) return;
   summon.t += dt;
@@ -94,7 +95,8 @@ function bosUlangKalah(m) {
   const n = m.tingkat || 1, h = hadiahTingkat(m.type, n), baru = n > tingkatMenang(m.type);
   S.cermin[m.type] = Math.max(tingkatMenang(m.type), n);
   S.gold += h.gold; S.potions += h.potion;
-  cerminJeda = ATURAN.cermin.jeda;
+  S.cerminSampai = S.cerminSampai || {};
+  S.cerminSampai[m.type] = Date.now() + ATURAN.cermin.jeda * 1000;
   shake = 0.6;
   toast(t("toast.bosUlang", { nama: m.d.name, hadiah: teksHadiah(h) }), true);
   if (baru && n < ATURAN.cermin.tingkat) setTimeout(() => toast(t("tantang.terbuka", { n: n + 1 }), false), 900);
@@ -104,7 +106,7 @@ function bosUlangKalah(m) {
 
 // ---------- Gambar ----------
 function drawCermin(n, time) {
-  const siap = cerminJeda <= 0 && !summon && !bosHidup();
+  const jeda = sisaJeda(), siap = jeda <= 0 && !summon && !bosHidup();
   const bob = Math.sin(time * 2) * 5, cy = n.y - 46 + bob;
   ctx.save();
   if (bosHidup()) ctx.globalAlpha = 0.3;   // saat bos sedang bertarung, cermin memudar supaya bos terlihat
@@ -135,7 +137,7 @@ function drawCermin(n, time) {
   // nama & keterangan
   ctx.font = "800 11px Nunito, sans-serif"; ctx.textAlign = "center"; ctx.fillStyle = "#c9b6ff";
   ctx.fillText(n.name, n.x, cy - 42);
-  if (cerminJeda > 0) { ctx.font = "700 16px Teko, sans-serif"; ctx.fillStyle = "#c9bfd6"; ctx.fillText(t("cermin.detik", { detik: Math.ceil(cerminJeda) }), n.x, cy - 56); }
+  if (jeda > 0) { ctx.font = "700 16px Teko, sans-serif"; ctx.fillStyle = "#c9bfd6"; ctx.fillText(t("cermin.detik", { detik: Math.ceil(jeda) }), n.x, cy - 56); }
   if (nearNpc === n && !isTouch) { ctx.font = "800 11px Nunito, sans-serif"; ctx.fillStyle = "#f7efe3"; ctx.fillText(t("cermin.sentuh"), n.x, n.y + 18); }
   ctx.restore();
 }

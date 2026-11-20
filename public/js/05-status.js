@@ -59,6 +59,31 @@ const NPC_DATA = [
   { id: "angon", name: "Ki Angon", area: "awan", x: 27.5, y: 21.4, color: "#9c8a5a", accent: "#f7efe3", hat: "#c9a26b", face: Math.PI,
     obrolan: ["Kambing awan itu lembut seperti awan, galak seperti petir.", "Mau coba keju kambing awan? Baunya... luar biasa."],
     obrolanEn: ["Cloud goats are soft as clouds and fierce as thunder.", "Want to try cloud-goat cheese? The smell is... remarkable."] },
+
+  // ---- Bab 6-10 ----
+  { id: "parmin", name: "Pak Parmin", area: "sawah", x: 14.5, y: 15.4, color: "#7a6a3a", accent: "#e9d3a9", hat: "#c9a26b", face: Math.PI / 2,
+    obrolan: ["Tikus segede kucing! Kucing segede... ah sudahlah.", "Padi tahun ini bagus, kalau tidak dimakan bayangan."],
+    obrolanEn: ["Rats as big as cats! Cats as big as... never mind.", "The rice is good this year, if the shadows don't eat it."] },
+  { id: "juru", name: "Mbah Juru", area: "sawah", x: 34.5, y: 13.4, color: "#4a4038", accent: "#c9a24a", hair: "#f2f2f2", face: Math.PI,
+    obrolan: ["Tujuh turunan keluargaku menjaga makam itu.", "Wening kecil dulu suka mencuri kemenyan. Jangan bilang-bilang."],
+    obrolanEn: ["Seven generations of my family have kept that tomb.", "Little Wening used to steal incense. Don't tell anyone."] },
+  { id: "wulan", name: "Wulan", area: "desaApung", x: 12.5, y: 14.4, color: "#2a7f9e", accent: "#f7efe3", hair: "#1f1a2a", face: 0,
+    obrolan: ["Laut itu rumahku. Aku bisa menahan napas lama sekali!", "Ibu dulu bernyanyi untuk penjaga gua."],
+    obrolanEn: ["The sea is my home. I can hold my breath for ages!", "Mother used to sing for the cave's guardian."] },
+  { id: "sanip", name: "Pak Sanip", area: "desaApung", x: 22.5, y: 14.4, color: "#8f5a2a", accent: "#f4d58a", hat: "#3a2c1a", face: Math.PI, toko: true },
+  { id: "bujang", name: "Bujang Angin", area: "lembahAngin", x: 30.5, y: 10.4, color: "#e0a03a", accent: "#2a9d8f", hair: "#2a201b", face: Math.PI / 2,
+    obrolan: ["Angin di sini bisa menerbangkan sandalmu. Pegang erat-erat!", "Layangan terbaik butuh benang terkuat."],
+    obrolanEn: ["The wind here can blow your sandals away. Hold on tight!", "The best kite needs the strongest string."] },
+  { id: "ratri", name: "Nyai Ratri", area: "lembahAngin", x: 21.5, y: 5.4, color: "#c9d6ea", accent: "#b88cff", hair: "#e8e2f0", face: Math.PI / 2,
+    obrolan: ["Istana itu dulu penuh lagu. Sekarang hanya angin yang bernyanyi.", "Aku menunggu seseorang... sudah terlalu lama."],
+    obrolanEn: ["That palace was once full of songs. Now only the wind sings.", "I've been waiting for someone... for far too long."] },
+  { id: "cahya", name: "Ki Cahya", area: "perkemahan", x: 14.5, y: 10.4, color: "#f2e6c9", accent: "#ff9f43", hair: "#ffffff", face: Math.PI / 2,
+    obrolan: ["Jaga apimu tetap menyala, Nak. Di sini, cahaya adalah nyawa.", "Bayanganmu masih utuh. Bagus."],
+    obrolanEn: ["Keep your fire burning, child. Here, light is life.", "Your shadow is still whole. Good."] },
+  { id: "lintang", name: "Lintang", area: "perkemahan", x: 21.5, y: 15.4, color: "#5a6a8f", accent: "#f4b942", hair: "#2a201b", face: Math.PI, toko: true },
+  { id: "sekar", name: "Sekar", area: "perkemahan", x: 10.5, y: 15.4, color: "#e8e2f0", accent: "#ff9fbf", hair: "#1f1a2a", face: 0,
+    obrolan: ["Aku tidak punya bayangan. Jangan takut.", "Dulu di sini ada taman melati..."],
+    obrolanEn: ["I have no shadow. Don't be afraid.", "There used to be a jasmine garden here..."] },
 ];
 for (const n of NPC_DATA) { n.x *= T; n.y *= T; }
 const npcDi = (id) => NPC_DATA.filter((n) => n.area === id);

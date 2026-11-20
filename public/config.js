@@ -207,7 +207,7 @@ const MONSTERS = {
   rajaBanaspati: { name: "Raja Banaspati", lv: 16, hp: 2400, atk: 30, speed: 85, r: 34, h: 110, exp: 800, gold: [250, 320], range: 60, wind: 0.7, cd: 1.2, aggro: 400, boss: true, ai: "rajaBanaspati", fly: true, debuff: { jenis: "terbakar", peluang: 0.45, lama: 4 } },
 
   // ---- Dunia 2 · Kepulauan Segara ----
-  ularWelang:     { name: "Ular Welang",      nameEn: "Banded Krait",      lv: 13, hp: 120, atk: 18, speed: 130, r: 13, h: 20, exp: 55,  gold: [8, 16],  range: 110, wind: 0.45, cd: 1.3, aggro: 220, charge: true, debuff: { jenis: "racun", peluang: 0.4, lama: 5 } },
+  ularWelang:     { name: "Ular Welang",      nameEn: "Welang Snake",      lv: 13, hp: 120, atk: 18, speed: 130, r: 13, h: 20, exp: 55,  gold: [8, 16],  range: 110, wind: 0.45, cd: 1.3, aggro: 220, charge: true, debuff: { jenis: "racun", peluang: 0.4, lama: 5 } },
   uburUbur:       { name: "Ubur-ubur Api",    nameEn: "Fire Jellyfish",    lv: 14, hp: 110, atk: 16, speed: 80,  r: 14, h: 46, exp: 60,  gold: [8, 15],  range: 26,  wind: 0.5,  cd: 1.4, aggro: 200, fly: true, kedip: 4.5, debuff: { jenis: "bingung", peluang: 0.35, lama: 3 } },
   harimauKumbang: { name: "Harimau Kumbang",  nameEn: "Black Panther",     lv: 15, hp: 200, atk: 24, speed: 150, r: 18, h: 34, exp: 75,  gold: [10, 20], range: 30,  wind: 0.35, cd: 1.0, aggro: 260, debuff: { jenis: "lemah", peluang: 0.3, lama: 5 } },
   hantuBajak:     { name: "Hantu Bajak Laut", nameEn: "Ghost Pirate",      lv: 16, hp: 160, atk: 20, speed: 95,  r: 15, h: 48, exp: 80,  gold: [12, 24], range: 26,  wind: 0.4,  cd: 1.2, aggro: 300, tembak: { cd: 2.4, speed: 280, jarak: 320, warna: "#c9d6e3" }, debuff: { jenis: "lambat", peluang: 0.35, lama: 3 } },
@@ -224,6 +224,25 @@ const MONSTERS = {
     pola: ["terjang", "sembur", "terjang", "hujan"], anak: "elangBatu", jenisHujan: "racun", warnaPeluru: "#7bd64a", debuff: { jenis: "racun", peluang: 0.5, lama: 6 } },
   naga:           { name: "Naga Kencana",     nameEn: "Kencana the Golden Dragon", lv: 28, hp: 10000, atk: 46, speed: 90, r: 58, h: 150, exp: 4000, gold: [700, 900], range: 80, wind: 0.8, cd: 1.1, aggro: 520, boss: true, ai: "naga", jarakPulang: 900,
     anak: "anakNaga", debuff: { jenis: "terbakar", peluang: 0.5, lama: 4 } },
+
+  // ---- Bab 6-10: bayangan Kalamurka (dunia 1-4) ----
+  tikusSawah:     { name: "Tikus Sawah Raksasa", nameEn: "Giant Paddy Rat", lv: 28, hp: 300, atk: 36, speed: 170, r: 12, h: 18, exp: 170, gold: [18, 32], range: 22, wind: 0.3, cd: 0.8, aggro: 240, debuff: { jenis: "racun", peluang: 0.25, lama: 4 } },
+  bayangan:       { name: "Bayangan",         nameEn: "Shade",             lv: 30, hp: 340, atk: 40, speed: 130, r: 14, h: 50, exp: 200, gold: [20, 36], range: 26, wind: 0.4, cd: 1.1, aggro: 280, fly: true, kedip: 3.5, debuff: { jenis: "lemah", peluang: 0.35, lama: 5 } },
+  jerangkong:     { name: "Jerangkong",       nameEn: "Skeleton",          lv: 30, hp: 420, atk: 42, speed: 100, r: 15, h: 52, exp: 210, gold: [22, 40], range: 30, wind: 0.45, cd: 1.2, aggro: 260, tembak: { cd: 2.8, speed: 300, jarak: 300, warna: "#e9e2c8" }, debuff: { jenis: "lambat", peluang: 0.3, lama: 3 } },
+  belutListrik:   { name: "Belut Listrik",    nameEn: "Electric Eel",      lv: 32, hp: 380, atk: 44, speed: 120, r: 14, h: 20, exp: 230, gold: [24, 42], range: 120, wind: 0.5, cd: 1.4, aggro: 230, charge: true, debuff: { jenis: "bingung", peluang: 0.35, lama: 3 } },
+  rohAngin:       { name: "Roh Angin",        nameEn: "Wind Spirit",       lv: 35, hp: 420, atk: 46, speed: 170, r: 15, h: 52, exp: 260, gold: [26, 46], range: 26, wind: 0.35, cd: 1.0, aggro: 300, fly: true, kedip: 4, debuff: { jenis: "bingung", peluang: 0.3, lama: 3 } },
+  prajuritBayang: { name: "Prajurit Bayang",  nameEn: "Shadow Soldier",    lv: 38, hp: 700, atk: 52, speed: 105, r: 17, h: 58, exp: 320, gold: [30, 52], range: 150, wind: 0.6, cd: 1.5, aggro: 260, charge: true, debuff: { jenis: "lemah", peluang: 0.4, lama: 5 } },
+  lelembut:       { name: "Lelembut",         nameEn: "Wraith",            lv: 39, hp: 480, atk: 50, speed: 110, r: 14, h: 52, exp: 330, gold: [30, 54], range: 26, wind: 0.4, cd: 1.2, aggro: 330, fly: true, tembak: { cd: 2, speed: 300, jarak: 340, warna: "#b88cff" }, debuff: { jenis: "racun", peluang: 0.35, lama: 5 } },
+  rajaJerangkong: { name: "Raja Jerangkong",  nameEn: "Skeleton King",     lv: 31, hp: 14000, atk: 52, speed: 90, r: 34, h: 104, exp: 4500, gold: [900, 1100], range: 62, wind: 0.8, cd: 1.2, aggro: 380, boss: true, ai: "umum",
+    pola: ["hantam", "sembur", "hujan", "terjang"], anak: "jerangkong", jenisHujan: "batu", warnaPeluru: "#e9e2c8", debuff: { jenis: "lambat", peluang: 0.45, lama: 3 } },
+  guritaRaksasa:  { name: "Gurita Raksasa",   nameEn: "Giant Octopus",     lv: 34, hp: 17000, atk: 56, speed: 70, r: 46, h: 84, exp: 5500, gold: [1000, 1300], range: 70, wind: 0.8, cd: 1.2, aggro: 380, boss: true, ai: "umum",
+    pola: ["sembur", "hujan", "hantam", "sembur"], anak: "belutListrik", jenisHujan: "air", warnaPeluru: "#3a2a55", debuff: { jenis: "bingung", peluang: 0.4, lama: 3 } },
+  rajawaliPetir:  { name: "Rajawali Petir",   nameEn: "Thunder Hawk",      lv: 37, hp: 20000, atk: 60, speed: 120, r: 36, h: 92, exp: 6500, gold: [1100, 1400], range: 60, wind: 0.7, cd: 1.1, aggro: 400, boss: true, ai: "umum", fly: true,
+    pola: ["terjang", "hujan", "sembur", "terjang"], anak: "rohAngin", jenisHujan: "petir", warnaPeluru: "#ffe066", debuff: { jenis: "bingung", peluang: 0.35, lama: 3 } },
+  penjagaMenara:  { name: "Penjaga Menara",   nameEn: "Tower Warden",      lv: 41, hp: 26000, atk: 66, speed: 85, r: 38, h: 112, exp: 8000, gold: [1300, 1600], range: 66, wind: 0.8, cd: 1.1, aggro: 400, boss: true, ai: "umum",
+    pola: ["hantam", "terjang", "sembur", "hujan"], anak: "prajuritBayang", jenisHujan: "batu", warnaPeluru: "#b88cff", debuff: { jenis: "lemah", peluang: 0.45, lama: 5 } },
+  kalamurka:      { name: "Prabu Kalamurka",  nameEn: "King Kalamurka",    lv: 45, hp: 40000, atk: 72, speed: 95, r: 36, h: 124, exp: 15000, gold: [3000, 3600], range: 70, wind: 0.8, cd: 1.0, aggro: 560, boss: true, ai: "kalamurka", jarakPulang: 900,
+    anak: "bayangan", debuff: [{ jenis: "lemah", peluang: 0.4, lama: 5 }, { jenis: "bingung", peluang: 0.2, lama: 3 }] },
 };
 
 // Berapa banyak monster di tiap zona peta.
@@ -260,6 +279,24 @@ const SPAWN = [
   { monster: "anakNaga", zona: "nagaLereng", jumlah: 7 },
   { monster: "elangBatu", zona: "nagaTebing", jumlah: 5 },
   { monster: "arcaHidup", zona: "nagaGerbang", jumlah: 4 },
+  // Bab 6-10
+  { monster: "tikusSawah", zona: "sawahUtara", jumlah: 7 },
+  { monster: "bayangan", zona: "sawahSelatan", jumlah: 5 },
+  { monster: "jerangkong", zona: "makamAula", jumlah: 5 },
+  { monster: "jerangkong", zona: "makamTengah", jumlah: 3 },
+  { monster: "belutListrik", zona: "goaLautA", jumlah: 5 },
+  { monster: "uburUbur", zona: "goaLautB", jumlah: 3 },
+  { monster: "bayangan", zona: "goaLautB", jumlah: 3 },
+  { monster: "rohAngin", zona: "anginBarat", jumlah: 7 },
+  { monster: "elangBatu", zona: "anginTimur", jumlah: 4 },
+  { monster: "rohAngin", zona: "istanaTengah", jumlah: 3 },
+  { monster: "bayangan", zona: "padangSelatan", jumlah: 7 },
+  { monster: "prajuritBayang", zona: "padangUtara", jumlah: 6 },
+  { monster: "jerangkong", zona: "kotaBarat", jumlah: 6 },
+  { monster: "lelembut", zona: "kotaTimur", jumlah: 5 },
+  { monster: "prajuritBayang", zona: "kotaTimur", jumlah: 3 },
+  { monster: "prajuritBayang", zona: "menaraBawah", jumlah: 3 },
+  { monster: "lelembut", zona: "menaraBawah", jumlah: 2 },
 ];
 
 // ---------------------------------------------------------------------
@@ -384,6 +421,35 @@ const LAGU = {
 // ---------------------------------------------------------------------
 
 // ---------------------------------------------------------------------
+// 7b. PUZZLE BARU (bab 6-10). Letak bendanya: `objek` di area (js/04c, 04d).
+//   urutan : sentuh benda sesuai urutan warna. petunjuk = kunci teks di 02-bahasa.js
+//            salah → semua padam & muncul `hukuman` (monster)
+//   dorong : dorong semua batu ke lempeng tekan (tuas = kembalikan batu ke awal)
+//   memori : perhatikan lempeng yang berkedip, lalu injak sesuai urutan.
+//            ronde dari `mulai` sampai `sampai` kedipan
+//   tebak  : jawab semua teka-teki. salah → muncul 2 `hukuman`
+// ---------------------------------------------------------------------
+const TEKA_BARU = {
+  gong:        { jenis: "urutan", gaya: "gong",    urutan: ["biru", "merah", "emas", "hijau"], petunjuk: "tk.gongPetunjuk", hukuman: "jerangkong" },
+  batuMakam:   { jenis: "dorong" },
+  pasang:      { jenis: "memori", mulai: 3, sampai: 6, hukuman: "belutListrik" },
+  tebakLaut:   { jenis: "tebak", hukuman: "belutListrik", soal: [
+    { q: "tk.l1", a: ["tk.l1a", "tk.l1b", "tk.l1c"], benar: 0 },
+    { q: "tk.l2", a: ["tk.l2a", "tk.l2b", "tk.l2c"], benar: 0 },
+    { q: "tk.l3", a: ["tk.l3a", "tk.l3b", "tk.l3c"], benar: 0 } ] },
+  lonceng:     { jenis: "urutan", gaya: "lonceng", urutan: ["ungu", "emas", "biru", "merah", "hijau"], petunjuk: "tk.loncengPetunjuk", hukuman: "rohAngin" },
+  batuAwan:    { jenis: "dorong" },
+  memoriKota:  { jenis: "memori", mulai: 3, sampai: 7, hukuman: "bayangan" },
+  tebakBayang: { jenis: "tebak", hukuman: "bayangan", soal: [
+    { q: "tk.b1", a: ["tk.b1a", "tk.b1b", "tk.b1c"], benar: 0 },
+    { q: "tk.b2", a: ["tk.b2a", "tk.b2b", "tk.b2c"], benar: 0 },
+    { q: "tk.b3", a: ["tk.b3a", "tk.b3b", "tk.b3c"], benar: 0 } ] },
+  lenteraKala: { jenis: "urutan", gaya: "lentera", urutan: ["hijau", "ungu", "merah", "biru", "emas"], petunjuk: "tk.lenteraPetunjuk", hukuman: "lelembut" },
+  batuKala:    { jenis: "dorong" },
+};
+const WARNA_SIMBOL = { merah: "#ff5a4a", biru: "#4aa8ff", hijau: "#5ad17a", emas: "#f4c542", ungu: "#b88cff" };
+
+// ---------------------------------------------------------------------
 // 8. MISI SAMPINGAN LAIN (dari NPC selain Ki Lurah)
 // npc = siapa yang memberi. type & isi sama seperti misi Ki Lurah.
 // reward.weapon = naik tingkat senjata gratis. reward.penawar = belajar resep jamu penawar.
@@ -441,4 +507,34 @@ const SAMPINGAN = [
     reward: { gold: 260, exp: 900, potion: 3 },
     en: { title: "Frightened Cloud Goats", offer: "My goats won't leave the pen, the dragon whelps keep breathing fire in the pasture! Drive off five and I'll make you cloud-goat milk. It's tasty.",
       done: "Baaah! I mean, thank you! My goats are brave enough to graze again." } },
+  { id: "tikus", npc: "parmin", title: "Perang Tikus", type: "kill", target: "tikusSawah", need: 8,
+    offer: "Tikus-tikus raksasa itu menghabiskan padiku! Aku... aku tidak berani turun dari bangku. Tolong usir delapan ekor!",
+    done: "Akhirnya aku bisa turun dari bangku! Ini, beras terbaik untukmu. Eh, maksudku koin. Beras berat dibawa.",
+    reward: { gold: 400, exp: 2500, potion: 2 },
+    en: { title: "Rat War", offer: "Those giant rats are eating all my rice! I... I don't dare get off this bench. Please drive off eight of them!",
+      done: "I can finally get off the bench! Here, my best rice for you. Er, I mean coins. Rice is heavy to carry." } },
+  { id: "mutiaraHitam", npc: "wulan", title: "Mutiara Hitam", type: "collect", item: "mutiaraHitam", need: 4, dari: "belutListrik", peluang: 0.5,
+    offer: "Belut listrik di Gua Laut menyimpan mutiara hitam di perutnya. Bawakan empat, aku mau membuat kalung untuk Ibu... untuk mengenangnya.",
+    done: "Cantik sekali. Ibu pasti tersenyum di sana. Terima kasih, sungguh.",
+    reward: { gold: 450, exp: 3000, potion: 3 },
+    en: { title: "Black Pearls", offer: "The electric eels in the Sea Cave keep black pearls in their bellies. Bring me four, I want to make a necklace for Mother... in her memory.",
+      done: "So beautiful. Mother must be smiling up there. Thank you, truly." } },
+  { id: "layangan", npc: "bujang", title: "Layang-layang Putus", type: "kill", target: "rohAngin", need: 8,
+    offer: "Roh angin terus memutus benang layang-layangku! Kalahkan delapan, nanti kubuatkan layangan paling gagah se-Negeri Awan.",
+    done: "Lihat, layanganku terbang tinggi lagi! Kau pahlawan para pembuat layangan.",
+    reward: { gold: 500, exp: 3600, potion: 2 },
+    en: { title: "Cut Kite Strings", offer: "The wind spirits keep snapping my kite strings! Defeat eight and I'll make you the finest kite in the Cloud Realm.",
+      done: "Look, my kite is flying high again! You're the hero of kite makers." } },
+  { id: "kainBayang", npc: "lintang", title: "Kain Bayang", type: "collect", item: "kainBayang", need: 5, dari: "prajuritBayang", peluang: 0.5,
+    offer: "Jubah prajurit bayang itu kainnya hangat, aneh ya? Bawakan lima potong, akan kujahit selimut untuk anak-anak di perkemahan.",
+    done: "Anak-anak bisa tidur nyenyak malam ini. Ambil ini, kau pantas mendapatkannya.",
+    reward: { gold: 600, exp: 4200, potion: 3 },
+    en: { title: "Shadow Cloth", offer: "The shadow soldiers' cloaks are oddly warm, right? Bring me five pieces and I'll sew blankets for the children in camp.",
+      done: "The children can sleep soundly tonight. Take this, you've earned it." } },
+  { id: "dayang", npc: "sekar", title: "Dayang-dayang yang Tersesat", type: "kill", target: "lelembut", need: 8,
+    offer: "Lelembut di Kota Mati dulu dayang-dayangku. Bebaskan delapan dari mereka... biar mereka tidak menangis lagi.",
+    done: "Aku mendengar mereka tertawa sebelum pergi. Terima kasih, Kisanak.",
+    reward: { gold: 700, exp: 5000, weapon: 1 },
+    en: { title: "Lost Handmaidens", offer: "The wraiths in the Dead City were once my handmaidens. Free eight of them... so they won't weep anymore.",
+      done: "I heard them laughing before they left. Thank you, traveler." } },
 ];

@@ -5,8 +5,11 @@ Bisa dimainkan di HP (joystick + tombol sentuh, mode lanskap) dan desktop (keybo
 
 ## Fitur
 
-- **Cerita utama "Kabut dari Gunung Geni"**: 5 bab × 10 episode (119 langkah) di `src/cerita/`, dengan percakapan panjang, hadiah, dan layar TAMAT. Simpanan versi lama otomatis dipindahkan ke langkah yang sama
-- **Tiga dunia**, peta dunia punya tombol pilih dunia:
+- **Cerita utama "Kabut dari Gunung Geni"**: 10 bab × 10 episode (232 langkah) di `src/cerita/`, dengan percakapan panjang, hadiah, pengumuman "Tamat Bab / Mulai Bab", dan layar TAMAT. Simpanan versi lama otomatis dipindahkan ke langkah yang sama
+- **Puzzle di cerita** (bab 6-10): urutan gong/lonceng/lentera sesuai pahatan, dorong batu ke lempeng (ada tuas reset), lempeng ingatan yang berkedip, dan batu/patung bertanya
+- **Empat dunia**, peta dunia punya dropdown pilih dunia:
+  - **Negeri Bayang** (lewat Gerbang Bayang di Makam Kuno): Perkemahan Cahaya (aman), Padang Bayang, Kota Mati, Menara Kala, Singgasana Bayang (bos terakhir **Prabu Kalamurka**)
+  - Area tambahan: Sawah Terasering & Makam Kuno (dunia 1), Desa Apung & Gua Laut (dunia 2), Lembah Angin & Istana Awan (dunia 3)
   - **Tanah Wanasari** (7 area di bawah)
   - **Kepulauan Segara** (naik perahu Pak Jala): Bandar Segara (kota aman), Hutan Bakau, Hutan Larangan (bos **Siluman Ular**), Kuil Samudra (bos **Panglima Karang**)
   - **Negeri Awan** (lewat Tangga Pelangi): Kampung Awan (aman), Hutan Batu (bos **Kelabang Raksasa**), Puncak Naga (peta 60×60, bos terakhir **Naga Kencana** yang besar: semburan api, hujan meteor, kibasan ekor, terbang lalu menukik)
@@ -67,6 +70,8 @@ Semua menu memakai tombol. `Esc` = kembali satu halaman.
 | `04-peta.js` | Jenis petak, daftar `DUNIA`, area dunia 1 (`AREAS`), gerbang berkunci |
 | `04a-dunia-segara.js` | Area dunia 2: Bandar Segara, Hutan Bakau, Hutan Larangan, Kuil Samudra |
 | `04b-dunia-awan.js` | Area dunia 3: Kampung Awan, Hutan Batu, Puncak Naga |
+| `04c-area-tambahan.js` | Area tambahan dunia 1-3: Sawah, Makam Kuno, Desa Apung, Gua Laut, Lembah Angin, Istana Awan |
+| `04d-dunia-bayang.js` | Dunia 4 Negeri Bayang: Perkemahan Cahaya, Padang Bayang, Kota Mati, Menara Kala, Singgasana |
 | `05-status.js` | Variabel utama (progres `S`, pemain `P`, monster), NPC desa, simpan |
 | `06-area.js` | Pindah area + layar gelap (fade) + gerbang |
 | `07-audio.js` | Mesin suara, volume, resep efek suara (`sfx`) |
@@ -98,7 +103,16 @@ Semua menu memakai tombol. `Esc` = kembali satu halaman.
 | `34-tantangan-bos.js` | Popup tingkat kesulitan 1-7 di Cermin Gaib |
 | `35-monster-dunia-baru.js` | Pola serangan bos "umum" & gambar monster dunia 2 dan 3 |
 | `36-naga.js` | Pola serangan & gambar Naga Kencana |
-| `37-main.js` | Loop utama (dimuat paling akhir) |
+| `38-panduan-debuff.js` | Tanya debuff ke Pak Joko & halaman Menu › Pengaturan › Gameplay › Debuff |
+| `39-notif-item.js` | Notifikasi kecil dapat barang di kiri bawah |
+| `40-ganti-bab.js` | Pengumuman "Tamat Bab ... / Mulai Bab ..." |
+| `41-teka-urutan.js` | Puzzle urutan (gong, lonceng, lentera) |
+| `42-teka-dorong.js` | Puzzle dorong batu ke lempeng |
+| `43-teka-memori.js` | Puzzle lempeng ingatan (ikuti urutan kedipan) |
+| `44-teka-tebak.js` | Puzzle tebak-tebakan (Batu Bertanya) |
+| `45-monster-bayang.js` | Gambar monster & bos bab 6-10 |
+| `46-kalamurka.js` | Pola serangan & gambar Prabu Kalamurka |
+| `47-main.js` | Loop utama (dimuat paling akhir) |
 
 Cerita utama ada di folder `src/cerita/`: `bab-1.js` ... `bab-5.js` (satu file per bab), digabung di `semua.js`.
 
@@ -129,7 +143,12 @@ Semua nama di bawah ini dibuat sementara. Ganti di tempat yang disebut, lalu jal
 |---|---|---|
 | Judul cerita | Kabut dari Gunung Geni | `game.html` (layar tamat), `CERITA[].bab` |
 | Bab | Kabut Pertama · Tiga Mustika · Layar ke Segara · Kuil Samudra · Naga Kencana | `bab` di `src/cerita/bab-N.js` |
-| Dunia | Tanah Wanasari · Kepulauan Segara · Negeri Awan | `DUNIA` di `04-peta.js` |
+| Dunia | Tanah Wanasari · Kepulauan Segara · Negeri Awan · Negeri Bayang | `DUNIA` di `04-peta.js` & `04d-dunia-bayang.js` |
+| Bab 6-10 | Bayang di Kampung Halaman · Gua Laut · Istana Angin · Negeri Bayang · Prabu Kalamurka | `bab` di `src/cerita/bab-N.js` |
+| NPC bab 6-10 | Pak Parmin, Mbah Juru, Wulan, Pak Sanip, Bujang Angin, Nyai Ratri, Ki Cahya, Lintang, Sekar | `NPC_DATA` di `05-status.js` |
+| Monster bab 6-10 | Tikus Sawah Raksasa, Bayangan, Jerangkong, Belut Listrik, Roh Angin, Prajurit Bayang, Lelembut | `MONSTERS` di `config.js` |
+| Bos bab 6-10 | Raja Jerangkong, Gurita Raksasa, Rajawali Petir, Penjaga Menara, Prabu Kalamurka | `MONSTERS` di `config.js` |
+| Puzzle | urutan warna, petunjuk pahatan, teka-teki | `TEKA_BARU` di `config.js`, teks `tk.*` di `02-bahasa.js` |
 | NPC dunia 2 & 3 | Pak Joko, Datuk Bahar, Nyi Laras, Bayu, Mbak Sari, Pak Rimba, Eyang Sukma, Kirana, Empu Gora, Ki Angon | `NPC_DATA` di `05-status.js` |
 | Area dunia 2 & 3 | Bandar Segara, Hutan Bakau, Hutan Larangan, Kuil Samudra, Kampung Awan, Hutan Batu, Puncak Naga | `04a-dunia-segara.js`, `04b-dunia-awan.js` |
 | Monster dunia 2 & 3 | Ular Welang, Ubur-ubur Api, Harimau Kumbang, Hantu Bajak Laut, Arca Hidup, Elang Batu, Anak Naga | `MONSTERS` di `config.js` |

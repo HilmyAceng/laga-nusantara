@@ -20,10 +20,16 @@ const TEKA_PITUTUR = [
 const MUSTIKA = ["mustikaBumi", "mustikaTirta", "mustikaBayu"];
 
 // Benda teka-teki untuk area `id` (ikut daftar NPCS supaya digambar & bisa diperiksa)
+// Benda yang BUKAN "NPC" (tidak diajak bicara; diurus file puzzle sendiri): batu dorong, lempeng
+const OBJEK_LANTAI = new Set(["batuDorong", "lempeng", "lempengMemori"]);
+const NAMA_OBJEK = { prasasti: "teka.nPrasasti", obor: "teka.nObor", pitutur: "teka.nPitutur", altar: "teka.nAltar",
+  saklar: "tk.nSaklar", petunjuk: "tk.nPetunjuk", tuas: "tk.nTuas", batuMemori: "tk.nMemori", batuTanya: "tk.nTanya", unggun: "tk.nUnggun" };
 function objekTeka(id) {
   oborNyala = [];
-  return (AREAS[id].objek || []).map((o, i) => ({ ...o, id: "teka-" + (o.id || o.simbol || i), tekaId: o.id, x: o.x * T, y: o.y * T, face: 0,
-    name: t({ prasasti: "teka.nPrasasti", obor: "teka.nObor", pitutur: "teka.nPitutur", altar: "teka.nAltar" }[o.kind]) }));
+  return (AREAS[id].objek || []).filter((o) => !OBJEK_LANTAI.has(o.kind)).map((o, i) => {
+    const namaKey = o.kind === "saklar" ? "tk.n_" + TEKA_BARU[o.id].gaya : NAMA_OBJEK[o.kind];
+    return { ...o, id: "teka-" + (o.id || "") + (o.simbol || i), tekaId: o.id, x: o.x * T, y: o.y * T, face: 0, namaKey, name: t(namaKey, { warna: o.simbol ? t("warna." + o.simbol) : "" }) };
+  });
 }
 const tekaSelesai = (id) => !!(S && S.teka[id]);
 
@@ -92,7 +98,8 @@ function selesaiTeka(id) {
   if (id === "obor" && areaId === "candi") fillRect(13, 9, 17, 9, CAVE);
   if (id === "pitutur" && areaId === "rawa") fillRect(21, 19, 22, 22, BRIDGE);
   if (id === "altar" && areaId === "kawah") fillRect(16, 13, 18, 15, ASH);
-  buildMiniBase(); if (typeof world !== "undefined") world = null;
+  buildMiniBase(); resetPetaDunia();
+  if ((area.objek || []).some((o) => o.id === id) && TEKA_BARU[id]) { bangunUlangArea(); toast(t("toast.jalanTerbuka"), false); }   // puzzle baru: pintu terbuka
   shake = 0.5; sfx.level(); saveSoon();
   ceritaTeka(id);
 }

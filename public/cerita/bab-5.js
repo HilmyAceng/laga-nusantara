@@ -11,7 +11,7 @@ const CERITA_BAB5 = [
       ["hero", "(Batu Pelangi di sakuku terasa hangat. Sepertinya ia senang sudah pulang.)"],
     ],
     hadiah: { exp: 400, gold: 60 },
-    en: { bab: "Chapter 5 · The Golden Dragon", judul: "Above the Clouds", tujuan: "Climb the Rainbow Stairs to Cloud Village",
+    en: { bab: "Chapter 5 · The Golden Dragon", judul: "Above the Clouds", tujuan: "Climb the Rainbow Stair to Cloud Village",
       teks: [
         "The last step of rainbow light fades beneath your feet. You stand on a stretch of cloud as soft as wet cotton.",
         "Stilted houses with palm-fiber roofs sit atop the clouds. White, fluffy goats hop from cloud to cloud.",
@@ -31,7 +31,7 @@ const CERITA_BAB5 = [
     hadiah: { exp: 400, potion: 2 },
     en: { bab: "Chapter 5 · The Golden Dragon", judul: "Above the Clouds", tujuan: "Meet Eyang Sukma, elder of Cloud Village",
       teks: [
-        "Hm? A guest from below? The Rainbow Stairs haven't opened in ages. Laras must have sent you.",
+        "Hm? A guest from below? The Rainbow Stair hasn't opened in ages. Laras must have sent you.",
         "That's right, Eyang. I'm looking for the Golden Dragon. Its red mist has reached Wanasari and the Segara Isles.",
         "Wanasari... Do you know Wening? Resi Wening, who used to steal guavas from my garden when he was young?",
         "Resi Wening... stole guavas?",
@@ -194,9 +194,9 @@ const CERITA_BAB5 = [
     en: { bab: "Chapter 5 · The Golden Dragon", judul: "The Cracked Heart", tujuan: "Ask Eyang Sukma about the Golden Dragon",
       teks: [
         "Sit, child. Long ago, the Golden Dragon was this land's guardian. Its breath warmed the clouds, its scales guided the rain below.",
-        "In its chest lay a golden jewel, the heart of all jewels. The Earth, Water, and Wind Jewels you gathered are only its sparks.",
-        "Then a king came from below. A greedy one. He wanted the jewel for himself, and stabbed the dragon's chest while it slept.",
-        "The king failed, but the jewel cracked. The dragon has slept in pain for centuries. The red mist... is its pain.",
+        "In its chest lay a golden gem, the heart of all gems. The Earth, Water, and Wind Gems you gathered are only its sparks.",
+        "Then a king came from below. A greedy one. He wanted the gem for himself, and stabbed the dragon's chest while it slept.",
+        "The king failed, but the gem cracked. The dragon has slept in pain for centuries. The red mist... is its pain.",
         "So the dragon isn't evil. It's wounded.",
         "Just so. And pain left alone turns to rage. Its young now descend to the edge of the Stone Forest. A sign it's beginning to wake.",
       ] } },
@@ -286,7 +286,7 @@ const CERITA_BAB5 = [
     hadiah: { exp: 400, potion: 3 },
     en: { bab: "Chapter 5 · The Golden Dragon", judul: "Blessing of Cloud Village", tujuan: "Say goodbye to Ki Angon",
       teks: [
-        "You're heading to the peak? My, my. Then take this: cloud-goat cheese. The most powerful provision in all the Cloud Lands.",
+        "You're heading to the peak? My, my. Then take this: cloud-goat cheese. The most powerful provision in all the Cloud Realm.",
         "Powerful how, Ki?",
         "The smell, friend. Even a dragon would back off three steps. Hahaha! No, no, these are healing draughts. Take care, alright?",
       ] } },
@@ -302,7 +302,7 @@ const CERITA_BAB5 = [
     en: { bab: "Chapter 5 · The Golden Dragon", judul: "Blessing of Cloud Village", tujuan: "Ask for Eyang Sukma's blessing before you leave",
       teks: [
         "So the time has come. Listen well, child: do not go there to kill.",
-        "Defeat its rage, but tend its wound. Your Earth, Water, and Wind Jewels are sparks of its heart. Give back its light.",
+        "Defeat its rage, but tend its wound. Your Earth, Water, and Wind Gems are sparks of its heart. Give back its light.",
         "What if it won't listen?",
         "A creature in pain rarely listens. But it will remember who came with open hands. Go now, grandchild of Wening.",
       ] } },
@@ -338,7 +338,7 @@ const CERITA_BAB5 = [
       teks: [
         "All five fire scales tremble at once in your grip, humming softly like a sorrowful song.",
         "The trembling grows stronger toward the largest crater at the heart of the peak. That is where the dragon waits.",
-        "(Earth, Water, Wind Jewels... you're trembling too. You miss home, don't you?)",
+        "(Earth, Water, Wind Gems... you're trembling too. You miss home, don't you?)",
       ] } },
 
   // ===== EP 9 =====
@@ -353,7 +353,7 @@ const CERITA_BAB5 = [
     en: { bab: "Chapter 5 · The Golden Dragon", judul: "The Golden Dragon", tujuan: "Break through 8 Dragon Whelps guarding the crater",
       teks: [
         "The last of the whelps scatter, flapping into the red sky. The way to the crater lies open.",
-        "In the crater's center, coiled over a lake of lava, lies a giant dragon with dull golden scales. A crack in its chest seeps red mist.",
+        "In the crater's center, coiled over a lake of lava, lies a giant dragon with dull golden scales. A crack in its chest leaks red mist.",
         "WHO... DARES... APPROACH? YOU... SMELL OF THE LOWLANDS. JUST LIKE HIM. BEGONE!",
       ] } },
   { bab: "Bab 5 · Naga Kencana", ep: 9, judul: "Naga Kencana", tipe: "bos", monster: "naga",
@@ -373,7 +373,7 @@ const CERITA_BAB5 = [
         "The Golden Dragon collapses at the edge of the lava lake. Its breathing is heavy. Its red eyes slowly fade to a golden yellow.",
         "You... did not stab me when I fell. Why?",
         "I didn't come to take. I came to give back.",
-        "You raise the Earth, Water, and Wind Jewels. All three float up, spin, then sink into the crack in the dragon's chest.",
+        "You raise the Earth, Water, and Wind Gems. All three float up, spin, then sink into the crack in the dragon's chest.",
         "The crack seals with a blinding golden light. The red mist is drawn back in, vanishing like dew under the morning sun.",
         "The pain... centuries of it... gone. Thank you, little human. Take this, a piece of my light. I will sleep now. A peaceful sleep.",
         "The Golden Dragon lays down its head and closes its eyes. Its young descend and curl up at its side. For the first time, the sky over the peak is blue.",
@@ -393,7 +393,7 @@ const CERITA_BAB5 = [
     en: { bab: "Chapter 5 · The Golden Dragon", judul: "The Last Mist", tujuan: "Return to Cloud Village and see Eyang Sukma",
       teks: [
         "Do you see that sky, child? Blue. Truly blue. It's been so long since I've seen it from here.",
-        "The Golden Jewel in your hand... it's warm, but it doesn't burn. That's how power should be: to warm, not to rule.",
+        "The Kencana Gem in your hand... it's warm, but it doesn't burn. That's how power should be: to warm, not to rule.",
         "Kirana has hung her father's knife on the north gate. Ki Angon counts his goats while singing. Gora? He fell asleep in front of his forge.",
         "This village owes you. But someone down below is surely waiting for news. Go home to Wanasari, see Wening.",
         "And tell him: Sukma still remembers those guavas. Hohoho!",
@@ -408,7 +408,7 @@ const CERITA_BAB5 = [
       ["resi", "...Ehem. Sukma masih hidup, ya? Perempuan itu tidak pernah lupa apa pun. Ehem. Lupakan soal jambu."],
       ["resi", "Ketika kau pertama datang, kau hanya seorang pengembara tanpa nama. Kini Wanasari, Segara, dan Negeri Awan mengenalmu sebagai penyelamat."],
       ["narasi", "Malam itu Desa Wanasari berpesta. Ki Lurah berpidato terlalu panjang, Mbok Darmi membagikan jamu gratis, dan Pak Joko akhirnya bisa tidur nyenyak."],
-      ["narasi", "Dan jauh di atas awan, Naga Kencana bermimpi indah untuk pertama kalinya dalam ratusan tahun. Kabut dari Gunung Geni... telah usai. TAMAT."],
+      ["narasi", "Naga Kencana bermimpi indah di atas awan. Tapi saat pesta usai, Resi Wening terpaku: bayangan hitam merayap pelan di tepi sawah, lalu lenyap..."],
     ],
     hadiah: { exp: 1000, gold: 500 },
     en: { bab: "Chapter 5 · The Golden Dragon", judul: "The Last Mist", tujuan: "Return to Wanasari Village and see Resi Wening",
@@ -418,8 +418,8 @@ const CERITA_BAB5 = [
         "So that's how it was. For centuries we feared that dragon, when what we should have feared was our own greed.",
         "Oh, Resi. Eyang Sukma sends her regards. She says she still remembers those guavas.",
         "...Ahem. Sukma's still alive, is she? That woman never forgets anything. Ahem. Forget about the guavas.",
-        "When you first came, you were just a nameless wanderer. Now Wanasari, Segara, and the Cloud Lands know you as their savior.",
+        "When you first came, you were just a nameless wanderer. Now Wanasari, Segara, and the Cloud Realm know you as their savior.",
         "That night, Wanasari Village held a feast. Ki Lurah gave a speech that was far too long, Mbok Darmi handed out free jamu, and Pak Joko finally slept soundly.",
-        "And far above the clouds, the Golden Dragon dreamed sweetly for the first time in centuries. The Mist from Mount Geni... is over. THE END.",
+        "Above the clouds, the Golden Dragon dreamed sweetly. But as the feast ended, Resi Wening froze: a black shadow crept along the rice fields, then vanished...",
       ] } },
 ];

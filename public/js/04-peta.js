@@ -252,13 +252,14 @@ function buildArea(id) {
   MW = area.w; MH = area.h; map = new Uint8Array(MW * MH); houses = []; ZONES = area.zona;
   area.build(seeded(ATURAN.petaSeed + id.length * 7919));
 }
-// (buildArea("desa") pertama dipanggil di 04b-dunia-awan.js, setelah semua area terdaftar)
+// (buildArea("desa") pertama dipanggil di 04d-dunia-bayang.js, setelah semua area terdaftar)
 
 // Gerbang terbuka? (lihat gerbang.kunci)
 function gerbangTerbuka(g) {
   if (!g.kunci) return true;
   if (!S) return false;
   if (g.kunci.startsWith("bos:")) return !!S.bos[g.kunci.slice(4)];
+  if (g.kunci.startsWith("teka:")) return !!S.teka[g.kunci.slice(5)];
   return !!(S.buka && S.buka[g.kunci]);
 }
 // Buka kunci (dari cerita). Kalau sedang di area yang terpengaruh, petanya dibangun ulang.
@@ -275,7 +276,9 @@ function bangunUlangArea() {
   resetPetaDunia();   // peta dunia digambar ulang (18-peta-besar.js)
 }
 
-function solidAt(px, py) { return SOLID.has(tileAt(Math.floor(px / T), Math.floor(py / T))); }
+// petak padat tambahan (mis. batu yang bisa didorong, 42-teka-dorong.js)
+let padatTambahan = () => false;
+function solidAt(px, py) { const tx = Math.floor(px / T), ty = Math.floor(py / T); return SOLID.has(tileAt(tx, ty)) || padatTambahan(tx, ty); }
 function moveEnt(e, dx, dy, fly) {
   const r = e.r * 0.8;
   if (fly) { e.x = clamp(e.x + dx, 2 * T, (MW - 2) * T); e.y = clamp(e.y + dy, 2 * T, (MH - 2) * T); return; }

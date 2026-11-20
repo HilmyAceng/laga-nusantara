@@ -45,6 +45,7 @@ function majuSampingan(q, n) {
   const st = sideState(q);
   st.prog = Math.min(q.need, n);
   if (st.prog >= q.need) { st.status = "done"; toast(t("toast.misiSelesai2", { judul: q.title, npc: npcById(q.npc).name }), false); sfx.quest(); }
+  else if (q.type === "collect") notifItem(`${t("item." + q.item)} ${st.prog} / ${q.need}`);   // barang: notif kiri bawah
   else toast(`${q.title}: ${st.prog} / ${q.need}`, false);
   refreshHud(true); saveSoon();
 }

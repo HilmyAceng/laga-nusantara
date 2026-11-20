@@ -29,7 +29,7 @@ function hadiahTingkat(jenis, n) {
 function bukaTantangan(npc) {
   if (mode !== "dialog" && mode !== "play") return;
   tantangNpc = npc;
-  mode = "tantang";
+  mode = "tantang"; popupDibuka = performance.now();
   isiTantangan();
   showUI();
 }
@@ -53,7 +53,7 @@ function isiTantangan() {
 }
 $("tantangList").addEventListener("click", (e) => {
   const b = e.target.closest("[data-tk]");
-  if (!b) return;
+  if (!b || popupBaruBuka()) return;
   const n = +b.dataset.tk, jenis = bosCermin();
   if (n > tingkatMenang(jenis) + 1) { sfx.hurt(); toast(t("tantang.kunciToast", { n: n - 1 }), false); return; }
   sfx.click();
@@ -62,4 +62,4 @@ $("tantangList").addEventListener("click", (e) => {
   startSummon(npc, n);
 });
 $("btnTantangClose").addEventListener("click", tutupTantangan);
-$("tantangBox").addEventListener("click", (e) => { if (e.target === e.currentTarget) tutupTantangan(); });
+$("tantangBox").addEventListener("click", (e) => { if (e.target === e.currentTarget && !popupBaruBuka()) tutupTantangan(); });

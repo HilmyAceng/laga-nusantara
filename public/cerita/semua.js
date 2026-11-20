@@ -1,6 +1,6 @@
 // =====================================================================
-// CERITA UTAMA: "Kabut dari Gunung Geni" — 5 bab × 10 episode
-// Tiap bab ada di file sendiri (bab-1.js ... bab-5.js). File ini menggabungkannya.
+// CERITA UTAMA: "Kabut dari Gunung Geni" — 10 bab × 10 episode
+// Tiap bab ada di file sendiri (bab-1.js ... bab-10.js). File ini menggabungkannya.
 //
 // Bentuk satu langkah:
 //   bab, ep (episode 1-10), judul (judul episode)
@@ -20,4 +20,5 @@
 // =====================================================================
 "use strict";
 
-const CERITA = [...CERITA_BAB1, ...CERITA_BAB2, ...CERITA_BAB3, ...CERITA_BAB4, ...CERITA_BAB5];
+const CERITA = [...CERITA_BAB1, ...CERITA_BAB2, ...CERITA_BAB3, ...CERITA_BAB4, ...CERITA_BAB5,
+  ...CERITA_BAB6, ...CERITA_BAB7, ...CERITA_BAB8, ...CERITA_BAB9, ...CERITA_BAB10];

@@ -230,7 +230,7 @@ const CERITA_BAB2 = [
     tujuan: "Rebut kantong curian dari Tuyul",
     teks: [
       ["narasi", "Kantong pertama berisi koin Mak Inah. Kantong kedua berisi... sandal kiri Bang Kardi."],
-      ["narasi", "Kantong ketiga berwarna biru dan terasa berat. Di dalamnya ada sesuatu yang berhembus dingin seperti angin."],
+      ["narasi", "Kantong ketiga berwarna biru dan terasa berat. Di dalamnya ada sesuatu yang berembus dingin seperti angin."],
       ["narasi", "Tuyul yang tersisa kabur sambil merengek ke arah laut. Mata mereka merah, sama seperti hantu rawa."],
     ],
     hadiah: { exp: 100 },

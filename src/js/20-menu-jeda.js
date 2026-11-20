@@ -60,7 +60,7 @@ function showCtlTab(which) {
 $("tabKey").addEventListener("click", () => showCtlTab("key"));
 
 // Pindah halaman di menu jeda: main → settings → volume / layar / control.
-const PAUSE_BACK = { main: null, settings: "main", bahasa: "settings", control: "settings", volume: "settings", layar: "settings", credit: "main", keluar: "main" };
+const PAUSE_BACK = { main: null, settings: "main", bahasa: "settings", control: "settings", volume: "settings", layar: "settings", credit: "main", keluar: "main", gameplay: "settings", debuff: "gameplay" };
 let pauseView = "main";
 function showPauseView(view, silent) {
   pauseView = view;
@@ -71,6 +71,7 @@ function showPauseView(view, silent) {
   if (view === "bahasa") refreshBahasa();
   if (view === "main" && S) isiStatJeda();
   if (view === "control") buildControls();
+  if (view === "debuff") isiPanduanDebuff();   // 38-panduan-debuff.js
   if (!silent) sfx.click();
   $("pauseBox").scrollTop = 0;
   const first = document.querySelector(`#pauseBox .pview[data-view="${view}"] button:not(:disabled)`);

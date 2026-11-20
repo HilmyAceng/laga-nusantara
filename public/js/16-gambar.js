@@ -14,6 +14,9 @@ function resize() {
 }
 const hash = (x, y) => ((x * 73856093) ^ (y * 19349663)) >>> 0;
 
+// Kait gambar untuk fitur lain: GAMBAR_TANAH = fungsi(time) digambar di atas petak;
+// BENDA_TINGGI = fungsi(time) yang mengembalikan [{ y, f }] (ikut urutan kedalaman)
+const GAMBAR_TANAH = [], BENDA_TINGGI = [];
 function drawGround(tx, ty, time) {
   const x = tx * T, y = ty * T, t = tileAt(tx, ty), h = hash(tx, ty);
   if (t === WATER || t === BRIDGE) {
@@ -80,7 +83,8 @@ function drawGround(tx, ty, time) {
     return;
   }
   // alas batu besar: rumput, atau warna lantai area (area.alasBatu) di hutan batu / puncak naga
-  ctx.fillStyle = t === ROCK && area.alasBatu ? area.alasBatu : h % 5 === 0 ? "#3d7a37" : "#428340"; ctx.fillRect(x, y, T, T);
+  // Negeri Bayang (area.bayang): rumput kelabu keunguan
+  ctx.fillStyle = t === ROCK && area.alasBatu ? area.alasBatu : area.bayang ? (h % 5 === 0 ? "#38334a" : "#3d3850") : h % 5 === 0 ? "#3d7a37" : "#428340"; ctx.fillRect(x, y, T, T);
   if (t === PATH) {
     ctx.fillStyle = "#c8a46e"; ctx.fillRect(x, y, T, T);
     ctx.fillStyle = "rgba(90,60,30,0.25)"; ctx.fillRect(x + (h % 31), y + (h % 29), 3, 3); ctx.fillRect(x + (h % 17) + 10, y + (h % 13) + 20, 2, 2);
@@ -232,8 +236,10 @@ function drawNpc(n, time) {
   const look = { color: n.color, accent: n.accent, hat: n.hat, hair: n.hair || "#3b2a22" };
   const face = Math.atan2(P.y - n.y, P.x - n.x);
   drawPerson(ctx, { x: n.x, y: n.y, face: dist(P, n) < 160 ? face : n.face, run: 0, moving: false, swing: 0, inv: 0, flash: 0 }, look, time);
-  ctx.font = "800 11px Nunito, sans-serif"; ctx.textAlign = "center"; ctx.fillStyle = "#f4b942";
-  ctx.fillText(n.name, n.x, n.y - 66);
+  // nama: putih bergaris tepi hitam supaya terbaca di latar apa pun
+  ctx.font = "800 11px Nunito, sans-serif"; ctx.textAlign = "center"; ctx.lineJoin = "round";
+  ctx.lineWidth = 3; ctx.strokeStyle = "#000"; ctx.strokeText(n.name, n.x, n.y - 66);
+  ctx.fillStyle = "#fff"; ctx.fillText(n.name, n.x, n.y - 66);
   // tanda di atas kepala: emas = cerita utama, biru = misi sampingan. "!" = ada misi, "?" = lapor
   const tanda = tandaNpc(n);
   if (tanda) {
@@ -269,7 +275,9 @@ function drawPlayerTag(px, py) {
 
 // warna barang misi yang jatuh dari monster
 const WARNA_BARANG = { kantong: "#c9a26b", sisik: "#9cc46a", daunSambiloto: "#5ad17a", kristalKabut: "#c9d6ff", taringUlar: "#e9e2c8", cakarKumbang: "#8d8894",
-  mutiara: "#ffe6f0", kerangLaut: "#7fe3ff", koinBajak: "#f4b942", intiArca: "#b88cff", pecahanArca: "#a7a2b5", buluElang: "#d9b47a", sisikApi: "#ff7b39" };
+  mutiara: "#ffe6f0", kerangLaut: "#7fe3ff", koinBajak: "#f4b942", intiArca: "#b88cff", pecahanArca: "#a7a2b5", buluElang: "#d9b47a", sisikApi: "#ff7b39",
+  ekorTikus: "#c99a8a", tulangTua: "#e9e2c8", serpihBayang: "#8a5ad0", sisikListrik: "#ffe066", intiAngin: "#9fd8ff", lencanaBayang: "#5d5070",
+  debuLelembut: "#d9c8ff", mutiaraHitam: "#3a3048", kainBayang: "#2b1a40" };
 function drawPickup(k, time) {
   const by = Math.sin(time * 5 + k.x) * 2 - 6;
   ctx.fillStyle = "rgba(0,0,0,0.25)"; ctx.beginPath(); ctx.ellipse(k.x, k.y, 6, 2.5, 0, 0, 6.28); ctx.fill();
@@ -317,6 +325,7 @@ function render(now) {
     else if (e.kind === "boom") { ctx.fillStyle = `rgba(255,150,60,${0.5 * (1 - k)})`; ctx.beginPath(); ctx.ellipse(e.x, e.y, e.r * (0.5 + k * 0.5), e.r * 0.6 * (0.5 + k * 0.5), 0, 0, 6.28); ctx.fill(); }
   }
   drawZonaAman(time);                        // lingkaran zona aman di sekitar teleport (33-zona-aman.js)
+  for (const f of GAMBAR_TANAH) f(time);
   for (const k of pickups) drawPickup(k, time);
 
   // benda tinggi & makhluk diurutkan berdasarkan y (yang di bawah digambar belakangan)
@@ -325,6 +334,8 @@ function render(now) {
   for (const hs of houses) if (hs.x + 3 >= x0 && hs.x <= x1 && hs.y + 2 >= y0 && hs.y - 1 <= y1) list.push({ y: (hs.y + 2) * T - 1, f: () => drawHouse(hs) });
   if (mode !== "select" && P) {
     for (const n of NPCS) list.push({ y: n.y, f: () => drawNpc(n, time) });
+    for (const b of benderaAman) list.push({ y: b.y, f: () => drawBenderaAman(b, time) });   // 33-zona-aman.js
+    for (const f of BENDA_TINGGI) list.push(...f(time));
     for (const m of monsters) if (!m.dead) list.push({ y: m.y, f: () => drawMonster(m, time) });
     if (!P.dead) { const C = CLASSES[S.cls]; list.push({ y: P.y, f: () => drawPerson(ctx, P, { color: C.color, accent: C.accent, weapon: C.weapon }, time) }); }
   }
@@ -399,6 +410,14 @@ function render(now) {
     }
   }
   // kawah panas: cahaya merah dari bawah
+  // Negeri Bayang: cahaya ungu redup, tepi layar gelap
+  if (area.bayang && mode !== "select") {
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    ctx.fillStyle = `rgba(40,10,70,${0.16 + 0.03 * Math.sin(time * 0.8)})`; ctx.fillRect(0, 0, W, H);
+    const g = ctx.createRadialGradient(W / 2, H / 2, Math.min(W, H) * 0.35, W / 2, H / 2, Math.max(W, H) * 0.75);
+    g.addColorStop(0, "rgba(10,4,20,0)"); g.addColorStop(1, "rgba(10,4,20,0.55)");
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  }
   if (area.panas && mode !== "select") {
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
     const g = ctx.createLinearGradient(0, 0, 0, H);

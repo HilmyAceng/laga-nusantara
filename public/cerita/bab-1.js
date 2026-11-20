@@ -53,7 +53,7 @@ const CERITA_BAB1 = [
       ["resi", "Di Candi Wingit, utara hutan, tersimpan Mustika Bumi, satu dari tiga mustika penjaga. Aku khawatir ia dalam bahaya."],
       ["hero", "Kenapa Resi memilih saya?"],
       ["resi", "Karena kau tidak lari ketika semua orang menutup pintu. Untuk sebuah awal, itu sudah cukup."],
-      ["resi", "Pergilah ke sana dan periksa. Tapi kabarkan dulu Ki Lurah, ia paham jalan hutan. Ikuti panah emas di layarmu kalau bingung arah."],
+      ["resi", "Pergilah ke sana dan periksa. Tapi kabari dulu Ki Lurah, ia paham jalan hutan. Ikuti panah emas di layarmu kalau bingung arah."],
     ],
     hadiah: { exp: 30 },
     lama: 0,

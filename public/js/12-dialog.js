@@ -26,10 +26,12 @@ function bisaBicara(n) {
   if (n.kind === "obor") return !tekaSelesai("obor") && !oborNyala.includes(n.simbol);
   return true;
 }
-function talk(npc) {
+// lewatInfo = true → langsung ke urusan misi/toko/obrolan (lewati menu tanya-jawab NPC)
+function talk(npc, lewatInfo) {
   if (npc.id === "cermin") return talkCermin(npc);
   if (npc.kind && TEKA_BICARA[npc.kind]) return TEKA_BICARA[npc.kind](npc);   // 25-teka-teki.js
   if (ceritaBicara(npc)) return;                                               // 23-cerita.js
+  if (!lewatInfo && NPC_INFO[npc.id]) return NPC_INFO[npc.id](npc);           // tanya-jawab (mis. Pak Joko: 38-panduan-debuff.js)
   if (npc.id === "lurah") {
     const q = QUESTS[S.q.idx];
     if (!q) return openDialog(npc.name, t("dlg.lurahSelesai"), [{ label: t("dlg.tutup"), run: closeDialog, primary: true }]);

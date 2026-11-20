@@ -127,7 +127,10 @@ function drawAreaMap(time) {
 // tombol dunia di atas peta. Gerbang ke dunia lain ditandai panah ungu.
 // Tambah area baru? Masukkan id-nya ke WORLD_ORDER (area pertama tiap dunia = pusat).
 // ---------------------------------------------------------------------
-const WORLD_ORDER = ["desa", "alam", "gua", "candi", "rawa", "pesisir", "kawah", "bandar", "bakau", "larangan", "kuil", "awan", "hutanBatu", "puncakNaga"];
+const WORLD_ORDER = ["desa", "alam", "gua", "candi", "rawa", "pesisir", "kawah", "sawah", "makam",
+  "bandar", "bakau", "larangan", "kuil", "desaApung", "goaLaut",
+  "awan", "hutanBatu", "puncakNaga", "lembahAngin", "istanaAwan",
+  "perkemahan", "padangBayang", "kotaMati", "menaraKala", "singgasana"];
 const WORLD_GAP = 7; // jarak antar-area (dalam petak)
 let worlds = {}, world = null, duniaPeta = 1;
 function resetPetaDunia() { worlds = {}; world = null; }
@@ -284,16 +287,17 @@ addEventListener("keydown", (e) => {
   if (mode === "map" && e.key === "Tab") { e.preventDefault(); showMapTab(mapTab === "area" ? "world" : "area"); }
 });
 $("tabWorld").addEventListener("click", () => showMapTab("world"));
-// tombol pilih dunia (hanya dunia yang pernah didatangi)
+// dropdown pilih dunia: semua dunia tercantum, yang belum pernah didatangi = "???"
 function isiTabDunia() {
-  const box = $("duniaTabs");
-  const ada = DUNIA.filter((dn) => WORLD_ORDER.some((id) => AREAS[id].dunia === dn.id && dikunjungi(id)));
-  box.hidden = mapTab !== "world" || ada.length < 2;
-  box.innerHTML = ada.map((dn) => `<button type="button" role="tab" data-dunia="${dn.id}" aria-selected="${dn.id === duniaPeta}">${dn.nama}</button>`).join("");
+  const sel = $("duniaPilih");
+  $("duniaBox").hidden = mapTab !== "world";
+  sel.innerHTML = DUNIA.map((dn) => {
+    const kenal = WORLD_ORDER.some((id) => AREAS[id].dunia === dn.id && dikunjungi(id));
+    return `<option value="${dn.id}" ${kenal ? "" : "disabled"} ${dn.id === duniaPeta ? "selected" : ""}>${t("peta.duniaKe", { n: dn.id })} · ${kenal ? dn.nama : "???"}</option>`;
+  }).join("");
 }
-$("duniaTabs").addEventListener("click", (e) => {
-  const b = e.target.closest("[data-dunia]"); if (!b) return;
-  duniaPeta = +b.dataset.dunia; sfx.click(); resetIkutPeta(); showMapTab("world");
+$("duniaPilih").addEventListener("change", (e) => {
+  duniaPeta = +e.target.value; sfx.click(); resetIkutPeta(); showMapTab("world");
 });
 $("mini").addEventListener("click", openMap);
 // klik/ketuk mesin teleport di peta → tanya "Pindah ke ...?"

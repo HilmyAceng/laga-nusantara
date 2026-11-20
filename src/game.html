@@ -80,8 +80,29 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 .zoom-btns .icon-btn:disabled { opacity: 0.35; cursor: default; }
 .zoom-btns .ring { display: inline-block; width: 12px; height: 12px; border-radius: 50%; border: 2px solid currentColor; box-shadow: inset 0 0 0 2px rgba(20, 14, 34, 0.85), inset 0 0 0 6px currentColor; vertical-align: middle; }
 .map-tabs { display: flex; flex-wrap: wrap; gap: 8px; }
-.dunia-tabs { width: auto; }
-.dunia-tabs button[aria-selected="true"] { background: #c9a6ff; }
+.dunia-box { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; font-weight: 800; color: var(--ink-dim); }
+.dunia-box select { min-width: 210px; padding: 8px 10px; border-radius: 10px; border: 1px solid #c9a6ff; background: #1d1630; color: var(--ink); font: inherit; font-weight: 800; cursor: pointer; }
+/* Notifikasi barang: kiri bawah, kecil, putih */
+.item-notifs { position: absolute; left: max(16px, env(safe-area-inset-left, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); display: grid; gap: 4px; pointer-events: none; z-index: 6; }
+.touch-on .item-notifs { bottom: calc(190px + env(safe-area-inset-bottom, 0px)); }
+.item-notif { font-size: 0.8rem; font-weight: 800; color: #fff; text-shadow: 0 1px 2px #000, 0 0 3px #000; animation: notifMasuk 0.25s ease-out; transition: opacity 0.45s, transform 0.45s; }
+.item-notif.pergi { opacity: 0; transform: translateX(-10px); }
+@keyframes notifMasuk { from { opacity: 0; transform: translateX(-12px); } }
+/* Pengumuman bab */
+.bab-banner { position: absolute; left: 0; right: 0; top: 30%; display: grid; justify-items: center; gap: 2px; padding: 18px 16px; text-align: center; pointer-events: none; z-index: 15;
+  background: linear-gradient(90deg, rgba(10,6,20,0), rgba(10,6,20,0.85) 25%, rgba(10,6,20,0.85) 75%, rgba(10,6,20,0)); opacity: 0; transform: scale(0.96); transition: opacity 0.45s, transform 0.45s; }
+.bab-banner.on { opacity: 1; transform: none; }
+.bab-banner small { font-size: 0.8rem; font-weight: 800; letter-spacing: 0.3em; text-transform: uppercase; color: var(--ink-dim); }
+.bab-banner b { font-family: var(--font-display); font-size: 3rem; line-height: 0.95; color: var(--gold); }
+.bab-banner span { font-size: 1.05rem; font-weight: 700; color: var(--ink); }
+/* Panduan debuff */
+.db-list { display: grid; gap: 8px; text-align: left; max-height: 52vh; overflow-y: auto; }
+.db-item { display: flex; gap: 10px; align-items: flex-start; padding: 8px 10px; border-radius: 10px; background: rgba(255, 255, 255, 0.05); }
+.db-ikon { flex: none; width: 16px; height: 16px; border-radius: 50%; margin-top: 3px; }
+.db-item b { font-size: 0.95rem; }
+.db-item p { margin: 2px 0; font-size: 0.82rem; line-height: 1.3; }
+.db-item small { font-size: 0.72rem; color: var(--ink-dim); }
+.db-obat { margin: 4px 0 0; font-size: 0.8rem; color: #7dffa8; }
 /* Tantangan bos */
 .tk-card { display: grid; gap: 3px; text-align: left; padding: 10px 13px; border-radius: 12px; cursor: pointer; color: inherit; font: inherit; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--line); }
 .tk-card:hover { border-color: rgba(201, 166, 255, 0.7); }
@@ -334,6 +355,10 @@ h1 span { color: var(--gold); }
   </div>
   <div class="boss" id="bossBar" hidden><b id="bossName">Genderuwo</b><div class="bar"><i id="bossFill"></i></div></div>
   <div class="toasts" id="toasts"></div>
+  <!-- notifikasi barang (js/39-notif-item.js) -->
+  <div class="item-notifs" id="itemNotif"></div>
+  <!-- pengumuman tamat/mulai bab (js/40-ganti-bab.js) -->
+  <div class="bab-banner" id="babBanner" hidden><small id="babAtas"></small><b id="babBawah"></b><span id="babKecil"></span></div>
   <div class="rotate" id="rotate" data-t="h.putar" hidden>Putar HP ke mode lanskap biar lebih leluasa</div>
 
   <div class="touch" id="touch" hidden>
@@ -413,8 +438,27 @@ h1 span { color: var(--gold); }
           <button class="go alt" type="button" data-go="control" data-t="h.kontrol">Kontrol</button>
           <button class="go alt" type="button" data-go="volume" data-t="h.volume">Volume</button>
           <button class="go alt" type="button" data-go="layar" data-t="h.layar">Layar</button>
+          <button class="go alt" type="button" data-go="gameplay" data-t="h.gameplay">Gameplay</button>
           <button class="go alt back" type="button" data-go="main" data-t="h.kembali">← Kembali</button>
         </div>
+      </div>
+
+      <!-- Halaman: gameplay (panduan) -->
+      <div class="pview" data-view="gameplay" hidden>
+        <p class="eyebrow" data-t="h.gpEyebrow">Pengaturan › Gameplay</p>
+        <h1 data-th="h.gpJudul">Game<span>play</span></h1>
+        <div class="menu">
+          <button class="go alt" type="button" data-go="debuff" data-t="h.debuff">Debuff</button>
+          <button class="go alt back" type="button" data-go="settings" data-t="h.kembali">← Kembali</button>
+        </div>
+      </div>
+
+      <!-- Halaman: daftar debuff (js/38-panduan-debuff.js) -->
+      <div class="pview" data-view="debuff" hidden>
+        <p class="eyebrow" data-t="h.dbEyebrow">Gameplay › Debuff</p>
+        <h1 data-th="h.dbJudul">De<span>buff</span></h1>
+        <div class="db-list" id="debuffList"></div>
+        <div class="menu"><button class="go alt back" type="button" data-go="gameplay" data-t="h.kembali">← Kembali</button></div>
       </div>
 
       <!-- Halaman 3: volume. Tombol − / + (naik-turun 10%), tombol Nyala/Mati -->
@@ -574,8 +618,9 @@ h1 span { color: var(--gold); }
         <button type="button" role="tab" id="tabArea" aria-selected="true" data-t="h.areaIni">Area ini</button>
         <button type="button" role="tab" id="tabWorld" aria-selected="false" data-t="h.petaDunia">Peta dunia</button>
       </div>
-      <!-- pilih dunia 1/2/3 (js/18-peta-besar.js) -->
-      <div class="tabs dunia-tabs" role="tablist" id="duniaTabs" hidden></div>
+      <!-- dropdown pilih dunia (js/18-peta-besar.js) -->
+      <label class="dunia-box" id="duniaBox" hidden><span data-t="h.pilihDunia">Dunia</span>
+        <select id="duniaPilih" data-ta="h.pilihDunia" aria-label="Dunia"></select></label>
       </div>
       <div class="map-wrap">
         <canvas id="bigMap" data-ta="h.peta" aria-label="Peta"></canvas>
@@ -622,7 +667,7 @@ h1 span { color: var(--gold); }
   <div class="overlay" id="win" hidden>
     <div class="panel small">
       <p class="eyebrow" data-t="h.winEyebrow">Tamat · Kabut dari Gunung Geni</p>
-      <h1 data-th="h.winJudul">Kabut <span>sirna</span></h1>
+      <h1 data-th="h.winJudul">Negeri <span>damai</span></h1>
       <p class="lead" id="winStats"></p>
       <div class="btns"><button class="go" id="btnWin" type="button" data-t="h.lanjutTualang">Lanjut bertualang</button></div>
     </div>
@@ -637,6 +682,11 @@ h1 span { color: var(--gold); }
 <script src="cerita/bab-3.js"></script>
 <script src="cerita/bab-4.js"></script>
 <script src="cerita/bab-5.js"></script>
+<script src="cerita/bab-6.js"></script>
+<script src="cerita/bab-7.js"></script>
+<script src="cerita/bab-8.js"></script>
+<script src="cerita/bab-9.js"></script>
+<script src="cerita/bab-10.js"></script>
 <script src="cerita/semua.js"></script>
 <!-- Kode game dipecah per fitur di folder js/. Urutan penting: file atas dimuat lebih dulu. -->
 <script src="js/01-alat.js"></script>
@@ -645,6 +695,8 @@ h1 span { color: var(--gold); }
 <script src="js/04-peta.js"></script>
 <script src="js/04a-dunia-segara.js"></script>
 <script src="js/04b-dunia-awan.js"></script>
+<script src="js/04c-area-tambahan.js"></script>
+<script src="js/04d-dunia-bayang.js"></script>
 <script src="js/05-status.js"></script>
 <script src="js/06-area.js"></script>
 <script src="js/07-audio.js"></script>
@@ -676,4 +728,13 @@ h1 span { color: var(--gold); }
 <script src="js/34-tantangan-bos.js"></script>
 <script src="js/35-monster-dunia-baru.js"></script>
 <script src="js/36-naga.js"></script>
-<script src="js/37-main.js"></script>
+<script src="js/38-panduan-debuff.js"></script>
+<script src="js/39-notif-item.js"></script>
+<script src="js/40-ganti-bab.js"></script>
+<script src="js/41-teka-urutan.js"></script>
+<script src="js/42-teka-dorong.js"></script>
+<script src="js/43-teka-memori.js"></script>
+<script src="js/44-teka-tebak.js"></script>
+<script src="js/45-monster-bayang.js"></script>
+<script src="js/46-kalamurka.js"></script>
+<script src="js/47-main.js"></script>

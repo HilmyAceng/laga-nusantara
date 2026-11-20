@@ -72,7 +72,22 @@ bindBtn("bAtk", () => (touchAttack = true), () => (touchAttack = false));
 bindBtn("bSkill", () => (press.skill = true));
 bindBtn("bRoll", () => (press.roll = true));
 bindBtn("bPot", () => (press.potion = true));
-bindBtn("bTalk", () => (press.talk = true));
+// Bicara baru jalan saat jari DIANGKAT di atas tombol (bukan saat baru menyentuh),
+// supaya sentuhan yang sama tidak "tembus" ke popup yang langsung muncul.
+(() => {
+  const el = $("bTalk");
+  el.addEventListener("pointerdown", (e) => { e.preventDefault(); el.setPointerCapture(e.pointerId); el.classList.add("pressed"); });
+  el.addEventListener("pointerup", (e) => {
+    el.classList.remove("pressed");
+    const r = el.getBoundingClientRect();
+    if (e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom) press.talk = true;
+  });
+  el.addEventListener("pointercancel", () => el.classList.remove("pressed"));
+  el.addEventListener("contextmenu", (e) => e.preventDefault());
+})();
+// Popup yang baru terbuka mengabaikan klik selama sebentar (cegah sentuhan tembus di HP)
+let popupDibuka = 0;
+const popupBaruBuka = () => performance.now() - popupDibuka < 450;
 
 const isTouch = ("ontouchstart" in window) || matchMedia("(pointer: coarse)").matches;
 if (isTouch) $("keysHint").hidden = true;

@@ -98,4 +98,3 @@ Object.assign(AREAS, {
   },
 });
 
-buildArea("desa");

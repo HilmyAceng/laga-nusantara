@@ -54,9 +54,14 @@ function selesaiLangkah(putarTeks = true) {
   sfx.quest(); saveSoon();
   const lanjut = () => {
     refreshHud(true); ensureBoss();
-    if (ceritaTamat()) { showWin(); return; }
-    toast(t("cerita.tujuanBaru", { tujuan: langkahCerita().tujuan }), true);
-    cekOtomatis();
+    const baru = langkahCerita();
+    const akhir = () => {
+      if (ceritaTamat()) { showWin(); return; }
+      toast(t("cerita.tujuanBaru", { tujuan: langkahCerita().tujuan }), true);
+      cekOtomatis();
+    };
+    // bab selesai → pengumuman "Tamat bab ... / Mulai bab ..." (40-ganti-bab.js)
+    if (!baru || baru.bab !== l.bab) umumkanBab(l.bab, baru && baru.bab, akhir); else akhir();
   };
   if (putarTeks && l.teks && l.teks.length) narasi(l.teks, lanjut); else lanjut();
 }
@@ -96,7 +101,7 @@ function ceritaItem(item) {             // saat memungut barang
   if (!l || l.tipe !== "collect" || l.item !== item) return;
   const n = S.items[item] || 0;
   if (n >= l.need) { S.items[item] -= l.need; selesaiLangkah(); }
-  else toast(`${l.tujuan}: ${n} / ${l.need}`, false);
+  else notifItem(`${t("item." + item)} ${n} / ${l.need}`);
 }
 function ceritaTeka(id) {               // 25-teka-teki.js
   const l = langkahCerita();

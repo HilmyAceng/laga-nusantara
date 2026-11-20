@@ -5,7 +5,7 @@ const CERITA_BAB3 = [
   { bab: "Bab 3 · Layar ke Segara", ep: 1, judul: "Angin Barat", tipe: "datang", area: "bandar",
     tujuan: "Berlayar ke Bandar Segara bersama Pak Jala",
     teks: [
-      ["narasi", "Dua hari dua malam perahu Pak Jala dihempas ombak. Pagi ketiga, sebuah pulau hijau muncul dari balik kabut tipis."],
+      ["narasi", "Dua hari dua malam perahu Pak Jala diempas ombak. Pagi ketiga, sebuah pulau hijau muncul dari balik kabut tipis."],
       ["narasi", "Perahu merapat di dermaga kayu yang ramai. Bau ikan asin, rempah, dan tali basah bercampur jadi satu."],
       ["jala", "Nah, ini Bandar Segara, Le. Pelabuhan paling ramai di kepulauan ini. Perutku sudah jadi ombak, tapi kita selamat."],
       ["jala", "Tapi lihat itu. Di ujung pulau, langitnya kemerahan. Kabut itu sudah sampai ke sini rupanya."],

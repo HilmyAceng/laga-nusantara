@@ -129,6 +129,8 @@ function updateMonster(m, dt) {
   }
 }
 
+// Kait update untuk fitur lain (mis. puzzle): fungsi(dt) dipanggil tiap frame saat bermain
+const UPDATE_TAMBAHAN = [];
 function update(dt) {
   if (mode !== "play") return;
   if (freeze > 0) { freeze -= dt; return; }
@@ -137,6 +139,7 @@ function update(dt) {
   musuhAktif = null;
   updateDebuff(dt);       // 32-debuff.js
   updateZonaAman(dt);     // 33-zona-aman.js
+  for (const f of UPDATE_TAMBAHAN) f(dt);
 
   for (const p of projs) {
     p.x += p.vx * dt; p.y += p.vy * dt; p.life -= dt;
@@ -174,9 +177,14 @@ function update(dt) {
     if (!P.dead && d < 22 && k.t > 0.3) {
       k.got = true;
       if (k.kind === "coin") { S.gold += k.v; sfx.coin(); }
-      else if (k.kind === "jamu") { S.potions++; toast(t("toast.dapatJamu"), false); sfx.item(); }
-      else if (k.kind === "taring") { S.items.taring = (S.items.taring || 0) + 1; sfx.item(); const q = QUESTS[S.q.idx]; if (q && q.type === "collect" && S.q.status === "active") progressQuest(1); else toast(t("toast.dapatTaring"), false); }
-      else { S.items[k.kind] = (S.items[k.kind] || 0) + 1; sfx.item(); ceritaItem(k.kind); sampinganItem(k.kind); }   // barang cerita / misi
+      else if (k.kind === "jamu") { S.potions++; notifItem(t("toast.dapatJamu")); sfx.item(); }
+      else if (k.kind === "taring") { S.items.taring = (S.items.taring || 0) + 1; sfx.item(); const q = QUESTS[S.q.idx]; if (q && q.type === "collect" && S.q.status === "active") progressQuest(1); else notifItem(t("toast.dapatTaring")); }
+      else {   // barang cerita / misi: notif kecil kiri bawah (39-notif-item.js)
+        S.items[k.kind] = (S.items[k.kind] || 0) + 1; sfx.item();
+        const l = langkahCerita();
+        if (!(l && l.tipe === "collect" && l.item === k.kind)) notifDapat(k.kind);
+        ceritaItem(k.kind); sampinganItem(k.kind);
+      }
       saveSoon();
     }
     if (k.t > 40) k.got = true;
