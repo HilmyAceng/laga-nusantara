@@ -120,7 +120,7 @@ h1 span { color: var(--gold); }
 @media (max-width: 640px) { .heroes { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .hero { display: grid; gap: 6px; padding: 10px; border-radius: 14px; cursor: pointer; text-align: left; background: rgba(255, 255, 255, 0.04); border: 2px solid rgba(255, 255, 255, 0.08); }
 .hero[aria-pressed="true"] { border-color: var(--gold); background: rgba(244, 185, 66, 0.1); }
-.hero canvas { width: 100%; height: 90px; display: block; border-radius: 10px; background: #2f5e2c; }
+.hero canvas { width: 100%; height: 120px; display: block; border-radius: 10px; background: #2f5e2c; }
 .hero b { font-family: var(--font-display); font-size: 1.5rem; font-weight: 600; line-height: 0.9; }
 .role { font-size: 0.7rem; color: var(--gold); font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
 .desc { font-size: 0.75rem; color: var(--ink-dim); line-height: 1.35; margin: 0; }
@@ -214,7 +214,7 @@ h1 span { color: var(--gold); }
   h1 { font-size: 2.3rem; }
   .lead, .desc { display: none; }
   .hero { padding: 8px; gap: 4px; }
-  .hero canvas { height: 62px; }
+  .hero canvas { height: 80px; }
   .hero b { font-size: 1.25rem; }
   .heroes { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .me { padding: 6px 8px; gap: 4px; }
@@ -1589,7 +1589,7 @@ h1 span { color: var(--gold); }
     for (const [id, c] of Object.entries(CLASSES)) {
       const b = document.createElement("button"); b.type = "button"; b.className = "hero"; b.dataset.id = id;
       b.setAttribute("aria-pressed", String(id === chosen));
-      b.innerHTML = `<canvas width="240" height="180"></canvas><b>${c.name}</b><span class="role">${c.role} · Nyawa ${c.hp}</span><p class="desc">${c.desc}</p>`;
+      b.innerHTML = `<canvas></canvas><b>${c.name}</b><span class="role">${c.role} · Nyawa ${c.hp}</span><p class="desc">${c.desc}</p>`;
       b.addEventListener("click", () => { chosen = id; wrap.querySelectorAll(".hero").forEach((x) => x.setAttribute("aria-pressed", String(x.dataset.id === id))); });
       wrap.appendChild(b);
     }
@@ -1604,9 +1604,16 @@ h1 span { color: var(--gold); }
     if (mode !== "select") return;
     document.querySelectorAll(".hero").forEach((b) => {
       const c = b.querySelector("canvas").getContext("2d"), id = b.dataset.id, C = CLASSES[id], e = previews[id];
-      c.setTransform(1, 0, 0, 1, 0, 0); c.clearRect(0, 0, 240, 180);
-      c.fillStyle = "#3d7a37"; c.fillRect(0, 0, 240, 180);
-      c.setTransform(1.75, 0, 0, 1.75, 0, 0);
+      // Ukuran gambar mengikuti ukuran kotak di layar, supaya hero tidak gepeng/melar.
+      const cv = c.canvas, dpr = Math.min(2, window.devicePixelRatio || 1);
+      const W = Math.round(cv.clientWidth * dpr), H = Math.round(cv.clientHeight * dpr);
+      if (!W || !H) return;
+      if (cv.width !== W || cv.height !== H) { cv.width = W; cv.height = H; }
+      c.setTransform(1, 0, 0, 1, 0, 0);
+      c.fillStyle = "#3d7a37"; c.fillRect(0, 0, W, H);
+      const k = H / 80;                     // tinggi kotak = 80 satuan dunia game
+      c.setTransform(k, 0, 0, k, 0, 0);
+      e.x = W / k / 2 - 6; e.y = 70;
       const sel = id === chosen;
       e.moving = sel; e.run = time * 10;
       const ph = (time * 0.8) % 1.6;
