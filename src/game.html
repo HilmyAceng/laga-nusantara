@@ -177,6 +177,9 @@ h1 span { color: var(--gold); }
 .credit { display: grid; gap: 2px; margin: 0; text-align: left; }
 .credit dt { font-size: 0.68rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); margin-top: 8px; }
 .credit dd { margin: 0; font-size: 0.9rem; line-height: 1.35; }
+.dukung-lead { margin: 6px 0 0; font-size: 0.88rem; line-height: 1.35; opacity: 0.85; }
+.go.dukung { background: var(--gold); color: #1b1208; box-shadow: 0 5px 0 #8a6414; }
+.go.dukung:active { box-shadow: 0 2px 0 #8a6414; }
 .credit-thanks { margin: 4px 0 0; font-family: var(--font-display); font-size: 1.5rem; color: var(--gold); }
 .quest small.side { display: block; margin-top: 4px; font-size: 0.78em; color: #8fd3ff; }
 .set-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
@@ -413,6 +416,8 @@ h1 span { color: var(--gold); }
           <dt data-t="h.cr6">Inspirasi</dt><dd data-t="h.cr6v">Cerita rakyat dan budaya Nusantara</dd>
         </dl>
         <p class="credit-thanks" data-t="h.crTerima">Terima kasih sudah bermain!</p>
+        <p class="dukung-lead" data-t="h.dukungLead">Suka game ini? Bantu pembuatnya terus menambah cerita, monster, dan area baru.</p>
+        <div class="menu"><button class="go dukung" id="btnDukung" type="button" data-t="h.dukung">Dukung Kami</button></div>
         <div class="menu"><button class="go alt back" type="button" data-go="main" data-t="h.kembali">← Kembali</button></div>
       </div>
 
@@ -565,4 +570,5 @@ h1 span { color: var(--gold); }
 <script src="js/25-teka-teki.js"></script>
 <script src="js/26-monster-baru.js"></script>
 <script src="js/27-navigasi.js"></script>
-<script src="js/28-main.js"></script>
+<script src="js/28-dukung.js"></script>
+<script src="js/29-main.js"></script>

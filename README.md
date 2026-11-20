@@ -81,7 +81,8 @@ Semua menu memakai tombol. `Esc` = kembali satu halaman.
 | `25-teka-teki.js` | Teka-teki: obor candi, Batu Pitutur, altar mustika |
 | `26-monster-baru.js` | Perilaku monster baru, pola serangan 3 bos baru, bola api & zona bahaya, gambar makhluk baru |
 | `27-navigasi.js` | Panah tujuan, bintang di peta, jalur antar-area |
-| `28-main.js` | Loop utama (dimuat paling akhir) |
+| `28-dukung.js` | Tombol "Dukung Kami" di halaman Credit (link di `ATURAN.dukung.tautan`) |
+| `29-main.js` | Loop utama (dimuat paling akhir) |
 
 Kalau menambah file JS baru: taruh di `src/js/` dengan nomor urut, tambahkan `<script src="js/...">` di `src/game.html`, lalu jalankan `./build.sh` (daftar file offline di `sw.js` ikut diperbarui otomatis).
 

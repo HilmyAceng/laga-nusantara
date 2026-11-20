@@ -66,6 +66,13 @@ const ATURAN = {
 
   // Mesin Teleport (tiang bendera). Berdiri di dekatnya = nyawa pulih memakai energi mesin.
   // Klik mesin di peta besar (tombol M) untuk pindah ke sana.
+  // Tombol "Dukung Kami" di halaman Credit. Isi dengan link donasi kamu,
+  // contoh "https://trakteer.id/namakamu" atau "https://saweria.co/namakamu".
+  // Selama kosong, tombol tetap tampil tapi hanya memberi tahu bahwa link belum diisi.
+  dukung: {
+    tautan: "https://saweria.co/hilmyaceng",
+  },
+
   teleport: {
     energiMaks: 1000,                     // energi maksimal tiap mesin (1 energi = 1 nyawa)
     isiUlangPoin: 1,                      // energi bertambah sebanyak ini...
