@@ -20,6 +20,7 @@
   color-scheme: dark;
 }
 html, body { height: 100%; }
+[hidden] { display: none !important; }
 body {
   margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-body);
   overflow: hidden; touch-action: none; user-select: none; -webkit-user-select: none;
@@ -123,9 +124,37 @@ h1 span { color: var(--gold); }
 .go:disabled { opacity: 0.45; cursor: default; }
 .go.sm { font-size: 1.15rem; padding: 10px 16px 7px; }
 
+/* ---------- Volume (menu jeda) ---------- */
+.vol { display: grid; gap: 10px; text-align: left; }
+.vol-row { display: grid; grid-template-columns: minmax(70px, auto) auto 1fr auto 3.2em auto; gap: 8px; align-items: center; }
+.vol-name { font-weight: 800; font-size: 0.85rem; }
+.vbtn {
+  min-width: 38px; height: 38px; padding: 0 10px; border-radius: 10px; cursor: pointer;
+  background: rgba(255, 255, 255, 0.1); border: 1px solid var(--line); font-weight: 800; font-size: 1.1rem;
+}
+.vbtn:active { transform: translateY(1px); }
+.vbtn:disabled { opacity: 0.35; cursor: default; }
+.vbtn.mute { font-size: 0.75rem; min-width: 64px; }
+.vbtn.mute[aria-pressed="false"] { background: var(--red); border-color: transparent; }
+.vol-bar { display: flex; gap: 3px; height: 16px; }
+.vol-bar i { flex: 1; border-radius: 3px; background: rgba(255, 255, 255, 0.12); }
+.vol-bar i.on { background: var(--gold); }
+.vol-bar.off i.on { background: rgba(244, 185, 66, 0.3); }
+.vol-val { font-weight: 800; font-size: 0.85rem; text-align: right; font-variant-numeric: tabular-nums; }
+.vol-bar { min-width: 0; }
+@media (max-width: 460px) {
+  .vol-row { grid-template-columns: auto 1fr auto 3.2em auto; gap: 6px 8px; }
+  .vol-name { grid-column: 1 / -1; }
+  .panel { padding: 16px; }
+}
+
 /* ---------- Panduan kontrol (menu jeda) ---------- */
-#pauseBox .panel { width: min(560px, 100%); }
-.ctl { display: grid; gap: 10px; text-align: left; padding-top: 12px; border-top: 1px solid var(--line); }
+#pausePanel.wide { width: min(560px, 100%); }
+.pview { display: grid; gap: 14px; }
+.menu { display: grid; gap: 12px; width: min(280px, 100%); margin: 4px auto 0; }
+.menu .go { width: 100%; }
+.go.back { font-size: 1.25rem; padding: 10px 18px 7px; }
+.ctl { display: grid; gap: 10px; text-align: left; }
 .tabs { display: flex; gap: 4px; padding: 4px; border-radius: 12px; background: rgba(255, 255, 255, 0.06); }
 .tabs button { flex: 1; border: 0; padding: 8px 10px; border-radius: 9px; cursor: pointer; background: transparent; color: var(--ink-dim); font-weight: 800; font-size: 0.8rem; }
 .tabs button[aria-selected="true"] { background: var(--gold); color: #1b1208; }
@@ -245,23 +274,63 @@ h1 span { color: var(--gold); }
     </div>
   </div>
 
+  <!-- Menu jeda: 4 halaman, berpindah dengan tombol (lihat showPauseView) -->
   <div class="overlay" id="pauseBox" hidden>
-    <div class="panel small">
-      <p class="eyebrow">Jeda</p>
-      <h1>Istirahat <span>sejenak</span></h1>
-      <p class="lead" id="pauseStats"></p>
-      <div class="btns">
-        <button class="go" id="btnResume" type="button">Lanjut</button>
-        <button class="go alt" id="btnMenu" type="button">Menu utama</button>
-      </div>
-      <div class="btns">
-        <button class="go alt sm" id="btnMusic" type="button">Musik: nyala</button>
-        <button class="go alt sm" id="btnSfx" type="button">Efek suara: nyala</button>
+    <div class="panel small" id="pausePanel">
+
+      <!-- Halaman 1: menu jeda -->
+      <div class="pview" data-view="main">
+        <p class="eyebrow">Jeda</p>
+        <h1>Istirahat <span>sejenak</span></h1>
+        <p class="lead" id="pauseStats"></p>
+        <div class="menu">
+          <button class="go" id="btnResume" type="button">Lanjut</button>
+          <button class="go alt" type="button" data-go="settings">Pengaturan</button>
+          <button class="go alt" id="btnMenu" type="button">Menu utama</button>
+        </div>
       </div>
 
-      <!-- Panduan kontrol: diisi otomatis dari KONTROL di config.js -->
-      <section class="ctl" aria-labelledby="ctlTitle">
-        <p class="eyebrow" id="ctlTitle">Kontrol</p>
+      <!-- Halaman 2: pengaturan -->
+      <div class="pview" data-view="settings" hidden>
+        <p class="eyebrow">Jeda › Pengaturan</p>
+        <h1>Peng<span>aturan</span></h1>
+        <div class="menu">
+          <button class="go alt" type="button" data-go="volume">Volume</button>
+          <button class="go alt" type="button" data-go="control">Kontrol</button>
+          <button class="go alt back" type="button" data-go="main">← Kembali</button>
+        </div>
+      </div>
+
+      <!-- Halaman 3: volume. Tombol − / + (naik-turun 10%), tombol Nyala/Mati -->
+      <div class="pview" data-view="volume" hidden>
+        <p class="eyebrow">Pengaturan › Volume</p>
+        <h1 id="volTitle">Vol<span>ume</span></h1>
+        <section class="vol" aria-labelledby="volTitle">
+        <div class="vol-row">
+          <span class="vol-name">Musik</span>
+          <button class="vbtn" id="musDown" type="button" aria-label="Kecilkan musik">−</button>
+          <span class="vol-bar" id="musBar" aria-hidden="true"></span>
+          <button class="vbtn" id="musUp" type="button" aria-label="Besarkan musik">+</button>
+          <span class="vol-val" id="musVal" aria-live="polite">50%</span>
+          <button class="vbtn mute" id="btnMusic" type="button">Nyala</button>
+        </div>
+        <div class="vol-row">
+          <span class="vol-name">Efek suara</span>
+          <button class="vbtn" id="sfxDown" type="button" aria-label="Kecilkan efek suara">−</button>
+          <span class="vol-bar" id="sfxBar" aria-hidden="true"></span>
+          <button class="vbtn" id="sfxUp" type="button" aria-label="Besarkan efek suara">+</button>
+          <span class="vol-val" id="sfxVal" aria-live="polite">80%</span>
+          <button class="vbtn mute" id="btnSfx" type="button">Nyala</button>
+        </div>
+        </section>
+        <div class="menu"><button class="go alt back" type="button" data-go="settings">← Kembali</button></div>
+      </div>
+
+      <!-- Halaman 4: panduan kontrol, diisi otomatis dari KONTROL di config.js -->
+      <div class="pview" data-view="control" hidden>
+        <p class="eyebrow">Pengaturan › Kontrol</p>
+        <h1 id="ctlTitle">Kon<span>trol</span></h1>
+        <section class="ctl" aria-labelledby="ctlTitle">
         <div class="tabs" role="tablist">
           <button type="button" role="tab" id="tabKey" aria-controls="ctlKey">Keyboard</button>
           <button type="button" role="tab" id="tabTouch" aria-controls="ctlTouch">HP / layar sentuh</button>
@@ -279,7 +348,9 @@ h1 span { color: var(--gold); }
           </div>
           <ul class="touchlist" id="ctlTouchList"></ul>
         </div>
-      </section>
+        </section>
+        <div class="menu"><button class="go alt back" type="button" data-go="settings">← Kembali</button></div>
+      </div>
     </div>
   </div>
 
@@ -455,7 +526,8 @@ h1 span { color: var(--gold); }
   //                 musik → musicBus ┴→ kompresor → speaker
   // =====================================================================
   const AUDIO_KEY = "laga.audio";
-  const audioOn = Object.assign({ musik: true, sfx: true }, store.get(AUDIO_KEY, {}));
+  // Pilihan pemain (tersimpan): nyala/mati + volume. Volume awal dari ATURAN.audio.
+  const audioOn = Object.assign({ musik: true, sfx: true, volMusik: ATURAN.audio.musik, volSfx: ATURAN.audio.sfx }, store.get(AUDIO_KEY, {}));
   let actx = null, sfxBus = null, musicBus = null, noiseBuf = null;
 
   // Browser baru mengizinkan suara setelah pemain menyentuh/menekan sesuatu.
@@ -463,9 +535,16 @@ h1 span { color: var(--gold); }
     if (actx) return actx;
     try {
       actx = new (window.AudioContext || window.webkitAudioContext)();
-      const comp = actx.createDynamicsCompressor(); comp.connect(actx.destination);
-      sfxBus = actx.createGain(); sfxBus.connect(comp);
-      musicBus = actx.createGain(); musicBus.connect(comp);
+      // Pembatas (limiter): hanya menahan puncak yang terlalu keras supaya tidak pecah.
+      const comp = actx.createDynamicsCompressor();
+      comp.threshold.value = -6; comp.knee.value = 4; comp.ratio.value = 8;
+      comp.attack.value = 0.003; comp.release.value = 0.15;
+      comp.connect(actx.destination);
+      // Penguat keseluruhan (ATURAN.audio.penguat), sebelum pembatas.
+      const master = actx.createGain(); master.gain.value = ATURAN.audio.penguat;
+      master.connect(comp);
+      sfxBus = actx.createGain(); sfxBus.connect(master);
+      musicBus = actx.createGain(); musicBus.connect(master);
       sfxBus.gain.value = musicBus.gain.value = 0;
       applyVolume();
       // 1 detik desis acak: bahan untuk ayunan, ledakan, gendang
@@ -478,16 +557,38 @@ h1 span { color: var(--gold); }
   function applyVolume() {
     if (!actx) return;
     const t = actx.currentTime;
-    sfxBus.gain.setTargetAtTime(audioOn.sfx ? ATURAN.audio.sfx : 0, t, 0.05);
-    musicBus.gain.setTargetAtTime(audioOn.musik ? ATURAN.audio.musik : 0, t, 0.2);
+    sfxBus.gain.setTargetAtTime(audioOn.sfx ? audioOn.volSfx : 0, t, 0.05);
+    musicBus.gain.setTargetAtTime(audioOn.musik ? audioOn.volMusik : 0, t, 0.2);
   }
   function setAudio(kind, on) {
-    audioOn[kind] = on; store.set(AUDIO_KEY, audioOn);
+    audioOn[kind] = on;
+    const key = kind === "musik" ? "volMusik" : "volSfx";
+    if (on && audioOn[key] <= 0) audioOn[key] = kind === "musik" ? ATURAN.audio.musik : ATURAN.audio.sfx;
+    store.set(AUDIO_KEY, audioOn);
     audio(); applyVolume(); refreshAudioButtons();
   }
+  // Tombol − / + mengubah volume 10% sekali tekan.
+  function changeVolume(kind, delta) {
+    const key = kind === "musik" ? "volMusik" : "volSfx";
+    audioOn[key] = clamp(Math.round((audioOn[key] + delta) * 10) / 10, 0, 1);
+    audioOn[kind] = audioOn[key] > 0;
+    store.set(AUDIO_KEY, audioOn);
+    audio(); applyVolume(); refreshAudioButtons();
+    if (kind === "sfx") sfx.coin();       // contoh bunyi supaya terdengar besar-kecilnya
+  }
   function refreshAudioButtons() {
-    $("btnMusic").textContent = `Musik: ${audioOn.musik ? "nyala" : "mati"}`;
-    $("btnSfx").textContent = `Efek suara: ${audioOn.sfx ? "nyala" : "mati"}`;
+    for (const [kind, key, p] of [["musik", "volMusik", "mus"], ["sfx", "volSfx", "sfx"]]) {
+      const v = audioOn[key], on = audioOn[kind], lvl = Math.round(v * 10);
+      $(p + "Bar").innerHTML = Array.from({ length: 10 }, (_, i) => `<i class="${i < lvl ? "on" : ""}"></i>`).join("");
+      $(p + "Bar").classList.toggle("off", !on);
+      $(p + "Val").textContent = on ? `${lvl * 10}%` : "Mati";
+      $(p + "Down").disabled = lvl <= 0;
+      $(p + "Up").disabled = lvl >= 10;
+      const btn = kind === "musik" ? $("btnMusic") : $("btnSfx");
+      btn.textContent = on ? "Nyala" : "Mati";
+      btn.setAttribute("aria-pressed", String(on));
+      btn.setAttribute("aria-label", `${kind === "musik" ? "Musik" : "Efek suara"} ${on ? "nyala, tekan untuk mematikan" : "mati, tekan untuk menyalakan"}`);
+    }
   }
 
   // Nada: osilator dengan amplop (cepat naik, pelan turun).
@@ -536,6 +637,7 @@ h1 span { color: var(--gold); }
     quest:  () => [392, 523, 659].forEach((f, i) => tone(f, 0.3, "triangle", 0.06, 1, i * 0.11)),
     drink:  () => { for (let i = 0; i < 5; i++) tone(rand(350, 600), 0.07, "sine", 0.05, 1.6, i * 0.06); tone(520, 0.3, "sine", 0.04, 1.5, 0.32); },
     talk:   () => tone(880, 0.07, "sine", 0.04, 1.2),
+    click:  () => tone(660, 0.05, "triangle", 0.035),
     start:  () => { tone(392, 0.18, "triangle", 0.06); tone(587, 0.3, "triangle", 0.06, 1, 0.11); },
     charge: () => { tone(160, 0.25, "sawtooth", 0.05, 1.4); hiss(0.3, 0.08, "lowpass", 300, 900); },
     growl:  () => { tone(70, 0.7, "sawtooth", 0.06, 0.8); hiss(0.6, 0.08, "lowpass", 400, 150); },
@@ -607,7 +709,7 @@ h1 span { color: var(--gold); }
 
   // Lagu mana yang cocok untuk tempat pemain sekarang?
   function pickMusic() {
-    if (!audioOn.musik) return null;
+    if (!audioOn.musik || audioOn.volMusik <= 0) return null;
     if (mode === "select" || !P) return "desa";
     if (monsters.some((m) => m.d.boss && !m.dead && m.aggro)) return "bos";
     const tx = P.x / T, ty = P.y / T;
@@ -639,7 +741,11 @@ h1 span { color: var(--gold); }
     if (act === "hindar") press.roll = true;
     if (act === "jamu") press.potion = true;
     if (act === "bicara") { if (mode === "dialog") closeDialog(); else press.talk = true; }
-    if (act === "jeda") { if (mode === "dialog") closeDialog(); else togglePause(); }
+    if (act === "jeda") {
+      if (mode === "dialog") closeDialog();
+      else if (mode === "pause" && PAUSE_BACK[pauseView]) showPauseView(PAUSE_BACK[pauseView]);
+      else togglePause();
+    }
     if (act === "musik") { setAudio("musik", !audioOn.musik); if (mode !== "select") toast(`Musik ${audioOn.musik ? "nyala" : "mati"}`, false); }
   });
   addEventListener("keyup", (e) => { const act = ACTION_OF[keyName(e)]; if (HOLD[act]) keys[HOLD[act]] = false; });
@@ -1400,10 +1506,11 @@ h1 span { color: var(--gold); }
     if (mode === "play") {
       mode = "pause";
       $("pauseStats").textContent = `${CLASSES[S.cls].name} Lv ${S.lv} · ${S.kills} monster dikalahkan · serangan ${atkPower()} · senjata tingkat ${S.weapon}. Progres tersimpan otomatis.`;
-      buildControls();
+      showPauseView("main", true);
     } else if (mode === "pause") mode = "play";
     else return;
     showUI();
+    if (mode === "pause") $("btnResume").focus({ preventScroll: true });
   }
 
   // Panduan kontrol di menu jeda. Tombol keyboard dibaca dari KONTROL (config.js),
@@ -1442,6 +1549,22 @@ h1 span { color: var(--gold); }
     $("ctlTouch").hidden = which !== "touch";
   }
   $("tabKey").addEventListener("click", () => showCtlTab("key"));
+
+  // Pindah halaman di menu jeda: main → settings → volume / control.
+  const PAUSE_BACK = { main: null, settings: "main", volume: "settings", control: "settings" };
+  let pauseView = "main";
+  function showPauseView(view, silent) {
+    pauseView = view;
+    document.querySelectorAll("#pauseBox .pview").forEach((el) => { el.hidden = el.dataset.view !== view; });
+    $("pausePanel").classList.toggle("wide", view === "volume" || view === "control");
+    if (view === "volume") refreshAudioButtons();
+    if (view === "control") buildControls();
+    if (!silent) sfx.click();
+    $("pauseBox").scrollTop = 0;
+    const first = document.querySelector(`#pauseBox .pview[data-view="${view}"] button:not(:disabled)`);
+    if (first) first.focus({ preventScroll: true });
+  }
+  document.querySelectorAll("#pauseBox [data-go]").forEach((b) => b.addEventListener("click", () => showPauseView(b.dataset.go)));
   $("tabTouch").addEventListener("click", () => showCtlTab("touch"));
   function showWin() {
     mode = "win";
@@ -1488,6 +1611,10 @@ h1 span { color: var(--gold); }
   $("btnMenu").addEventListener("click", toMenu);
   $("btnMusic").addEventListener("click", () => setAudio("musik", !audioOn.musik));
   $("btnSfx").addEventListener("click", () => setAudio("sfx", !audioOn.sfx));
+  $("musDown").addEventListener("click", () => changeVolume("musik", -0.1));
+  $("musUp").addEventListener("click", () => changeVolume("musik", 0.1));
+  $("sfxDown").addEventListener("click", () => changeVolume("sfx", -0.1));
+  $("sfxUp").addEventListener("click", () => changeVolume("sfx", 0.1));
   refreshAudioButtons();
   $("btnWin").addEventListener("click", () => { mode = "play"; showUI(); });
   document.addEventListener("visibilitychange", () => {

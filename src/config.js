@@ -65,8 +65,9 @@ const ATURAN = {
   petaSeed: 20251119,                     // ganti angka ini = bentuk peta berubah
 
   audio: {
-    musik: 0.5,                           // volume musik latar (0 = diam, 1 = penuh)
-    sfx: 0.8,                             // volume efek suara
+    musik: 0.6,                           // volume awal musik (0 = diam, 1 = penuh). Pemain bisa ubah di menu jeda
+    sfx: 0.9,                             // volume awal efek suara
+    penguat: 3.0,                         // pengeras keseluruhan: makin besar makin keras (1 = tanpa penguat)
   },
 };
 

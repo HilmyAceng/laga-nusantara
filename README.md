@@ -17,7 +17,16 @@ Bisa dimainkan di HP (joystick + tombol sentuh, mode lanskap) dan desktop (keybo
 
 - HP: joystick kiri untuk gerak. Tombol Serang (tahan), Jurus, Hindar, Jamu, dan Bicara (muncul di dekat NPC)
 - Keyboard: tombol panah untuk gerak, `D` serang (tahan), `S` jurus, `A` hindar, `W` jamu, `E` bicara, `Esc` jeda, `M` musik nyala/mati
-- Lupa tombolnya? Buka **menu jeda**: ada panduan kontrol untuk keyboard dan HP
+
+## Menu jeda
+
+Semua menu memakai tombol. `Esc` = kembali satu halaman.
+
+- **Lanjut**
+- **Pengaturan**
+  - **Volume**: musik dan efek suara, tombol `−` / `+` (10% per tekan) dan Nyala/Mati. Pilihan tersimpan
+  - **Kontrol**: panduan tombol keyboard dan HP (dibaca otomatis dari `KONTROL` di `config.js`)
+- **Menu utama**
 
 ## Struktur file
 
@@ -35,7 +44,7 @@ Bisa dimainkan di HP (joystick + tombol sentuh, mode lanskap) dan desktop (keybo
 | `SPAWN` | Berapa banyak monster di tiap zona |
 | `QUESTS` | Daftar misi: tipe `kill` / `collect`, jumlah, teks, hadiah |
 | `LAGU` | Musik latar tiap tempat: melodi (notasi slendro `1 2 3 5 6`), tempo, suara, pola kendang, gong |
-| `ATURAN.audio` | Volume musik dan efek suara |
+| `ATURAN.audio` | Volume awal musik dan efek suara (pemain bisa mengubahnya di Pengaturan › Volume) |
 
 Yang masih di `src/game.html`: bentuk peta (`buildMap()`), dialog NPC (`talk()`), cara kerja tiap jurus, dan resep efek suara (`sfx`).
 
@@ -46,7 +55,7 @@ Yang masih di `src/game.html`: bentuk peta (`buildMap()`), dialog NPC (`talk()`)
 python3 -m http.server 8766 --directory public
 ```
 
-Setiap kali ada update untuk pemain, naikkan versi `CACHE` di `public/sw.js` (misal `laga-v7`).
+Setiap kali ada update untuk pemain, naikkan versi `CACHE` di `public/sw.js` (misal `laga-v8`).
 
 ## Ide pengembangan berikutnya
 
