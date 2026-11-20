@@ -29,8 +29,10 @@ Semua menu memakai tombol. `Esc` = kembali satu halaman.
 - **Lanjut**
 - **Pengaturan**
   - **Volume**: musik dan efek suara, tombol `−` / `+` (10% per tekan) dan Nyala/Mati. Pilihan tersimpan
+  - **Layar**: Full Screen nyala/mati (pilihan tersimpan; setelah halaman dibuka ulang, layar penuh aktif lagi pada sentuhan pertama). Di iPhone Safari belum didukung browser: pasang lewat "Tambahkan ke Layar Utama"
   - **Kontrol**: panduan tombol keyboard dan HP (dibaca otomatis dari `KONTROL` di `config.js`)
 - **Menu utama**
+- **Keluar Permainan** (khusus HP): simpan progres lalu keluar. Kalau browser tidak mengizinkan halaman menutup sendiri, muncul layar "Progres tersimpan" dan aplikasi tinggal ditutup dari HP
 
 ## Struktur file
 
@@ -59,8 +61,9 @@ Semua menu memakai tombol. `Esc` = kembali satu halaman.
 | `17-peta-besar.js` | Peta besar (tombol `M` / klik peta mini): tab "Area ini" dan "Peta dunia" (semua area + tujuan misi), game berhenti selama dibuka |
 | `18-hud.js` | Kotak misi, koin & jamu, cooldown, toast, layar mana yang tampil |
 | `19-menu-jeda.js` | Menu jeda, volume, panduan kontrol |
-| `20-layar-judul.js` | Layar pilih hero & mulai permainan |
-| `21-main.js` | Loop utama (dimuat paling akhir) |
+| `20-layar-penuh.js` | Pengaturan › Layar: Full Screen nyala/mati (tersimpan) |
+| `21-layar-judul.js` | Layar pilih hero & mulai permainan |
+| `22-main.js` | Loop utama (dimuat paling akhir) |
 
 Kalau menambah file JS baru: taruh di `src/js/` dengan nomor urut, tambahkan `<script src="js/...">` di `src/game.html`, lalu jalankan `./build.sh` (daftar file offline di `sw.js` ikut diperbarui otomatis).
 

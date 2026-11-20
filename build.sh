@@ -13,6 +13,9 @@ cd "$(dirname "$0")"
   echo '<link rel="icon" href="icons/icon-192.png">'
   echo '<link rel="apple-touch-icon" href="icons/icon-192.png">'
   echo '<meta name="apple-mobile-web-app-capable" content="yes">'
+  echo '<meta name="mobile-web-app-capable" content="yes">'
+  echo '<meta name="apple-mobile-web-app-title" content="Laga Nusantara">'
+  echo '<meta name="application-name" content="Laga Nusantara">'
   echo '<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);box-sizing:border-box;height:100%}[hidden]{display:none!important}</style>'
   echo '</head><body>'
   cat src/game.html

@@ -7,6 +7,9 @@
 <link rel="icon" href="icons/icon-192.png">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Laga Nusantara">
+<meta name="application-name" content="Laga Nusantara">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);box-sizing:border-box;height:100%}[hidden]{display:none!important}</style>
 </head><body>
 <title>Laga Nusantara</title>
@@ -59,6 +62,7 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 .right { display: grid; justify-items: end; gap: 6px; }
 .area-name { font-family: var(--font-display); font-size: 1.1rem; line-height: 1; padding: 4px 10px 1px; border-radius: 8px; background: var(--panel); color: var(--gold); }
 /* layar transisi antar area */
+.overlay.bye { z-index: 30; background: #07050c; }
 .fade { position: absolute; inset: 0; z-index: 20; display: grid; place-items: center; background: #07050c; opacity: 0; pointer-events: none; transition: opacity 0.45s ease; }
 .fade.on { opacity: 1; pointer-events: auto; }
 .fade-card { display: grid; gap: 4px; text-align: center; transform: translateY(8px); transition: transform 0.6s ease; }
@@ -181,6 +185,8 @@ h1 span { color: var(--gold); }
 .vbtn:active { transform: translateY(1px); }
 .vbtn:disabled { opacity: 0.35; cursor: default; }
 .vbtn.mute { font-size: 0.75rem; min-width: 64px; }
+.set-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.set-note { margin: 8px 0 0; font-size: 0.78rem; line-height: 1.4; color: var(--ink-dim); text-align: left; }
 .vbtn.mute[aria-pressed="false"] { background: var(--red); border-color: transparent; }
 .vol-bar { display: flex; gap: 3px; height: 16px; }
 .vol-bar i { flex: 1; border-radius: 3px; background: rgba(255, 255, 255, 0.12); }
@@ -345,6 +351,8 @@ h1 span { color: var(--gold); }
           <button class="go" id="btnResume" type="button">Lanjut</button>
           <button class="go alt" type="button" data-go="settings">Pengaturan</button>
           <button class="go alt" id="btnMenu" type="button">Menu utama</button>
+          <!-- khusus HP (lihat js/19-menu-jeda.js) -->
+          <button class="go alt" type="button" data-go="keluar" id="btnExit" hidden>Keluar Permainan</button>
         </div>
       </div>
 
@@ -354,6 +362,7 @@ h1 span { color: var(--gold); }
         <h1>Peng<span>aturan</span></h1>
         <div class="menu">
           <button class="go alt" type="button" data-go="volume">Volume</button>
+          <button class="go alt" type="button" data-go="layar">Layar</button>
           <button class="go alt" type="button" data-go="control">Kontrol</button>
           <button class="go alt back" type="button" data-go="main">← Kembali</button>
         </div>
@@ -380,6 +389,31 @@ h1 span { color: var(--gold); }
           <span class="vol-val" id="sfxVal" aria-live="polite">80%</span>
           <button class="vbtn mute" id="btnSfx" type="button">Nyala</button>
         </div>
+        </section>
+        <div class="menu"><button class="go alt back" type="button" data-go="settings">← Kembali</button></div>
+      </div>
+
+      <!-- Halaman: konfirmasi keluar permainan (HP) -->
+      <div class="pview" data-view="keluar" hidden>
+        <p class="eyebrow">Jeda › Keluar</p>
+        <h1>Keluar <span>permainan?</span></h1>
+        <p class="lead">Progresmu tersimpan. Nanti pilih "Lanjutkan" untuk kembali ke tempat ini.</p>
+        <div class="menu">
+          <button class="go" id="btnExitYes" type="button">Ya, keluar</button>
+          <button class="go alt back" type="button" data-go="main">Batal</button>
+        </div>
+      </div>
+
+      <!-- Halaman: layar (js/20-layar-penuh.js) -->
+      <div class="pview" data-view="layar" hidden>
+        <p class="eyebrow">Pengaturan › Layar</p>
+        <h1 id="layarTitle">La<span>yar</span></h1>
+        <section class="vol" aria-labelledby="layarTitle">
+          <div class="set-row">
+            <span class="vol-name">Full Screen</span>
+            <button class="vbtn mute" id="btnFull" type="button" aria-pressed="false">Mati</button>
+          </div>
+          <p class="set-note" id="fsNote" hidden></p>
         </section>
         <div class="menu"><button class="go alt back" type="button" data-go="settings">← Kembali</button></div>
       </div>
@@ -452,6 +486,16 @@ h1 span { color: var(--gold); }
     </div>
   </div>
 
+  <!-- Layar pamit: muncul kalau browser tidak mengizinkan halaman menutup dirinya sendiri -->
+  <div class="overlay bye" id="bye" hidden>
+    <div class="panel small">
+      <p class="eyebrow">Sampai jumpa</p>
+      <h1>Progres <span>tersimpan</span></h1>
+      <p class="lead">Tutup aplikasi dari HP-mu: geser ke atas / tombol Beranda, atau tutup tab browser ini.</p>
+      <div class="btns"><button class="go" id="btnByeBack" type="button">Main lagi</button></div>
+    </div>
+  </div>
+
   <div class="overlay" id="win" hidden>
     <div class="panel small">
       <p class="eyebrow">Misi utama selesai</p>
@@ -484,7 +528,8 @@ h1 span { color: var(--gold); }
 <script src="js/17-peta-besar.js"></script>
 <script src="js/18-hud.js"></script>
 <script src="js/19-menu-jeda.js"></script>
-<script src="js/20-layar-judul.js"></script>
-<script src="js/21-main.js"></script>
+<script src="js/20-layar-penuh.js"></script>
+<script src="js/21-layar-judul.js"></script>
+<script src="js/22-main.js"></script>
 <script>if("serviceWorker" in navigator){addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}</script>
 </body></html>

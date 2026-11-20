@@ -1,6 +1,6 @@
 // =====================================================================
 // MENU JEDA
-// Menu jeda bertingkat: Lanjut / Pengaturan (Volume, Kontrol) / Menu utama.
+// Menu jeda bertingkat: Lanjut / Pengaturan (Volume, Layar, Kontrol) / Menu utama / Keluar Permainan (HP).
 // =====================================================================
 "use strict";
 
@@ -54,14 +54,15 @@ function showCtlTab(which) {
 }
 $("tabKey").addEventListener("click", () => showCtlTab("key"));
 
-// Pindah halaman di menu jeda: main → settings → volume / control.
-const PAUSE_BACK = { main: null, settings: "main", volume: "settings", control: "settings" };
+// Pindah halaman di menu jeda: main → settings → volume / layar / control.
+const PAUSE_BACK = { main: null, settings: "main", volume: "settings", layar: "settings", control: "settings", keluar: "main" };
 let pauseView = "main";
 function showPauseView(view, silent) {
   pauseView = view;
   document.querySelectorAll("#pauseBox .pview").forEach((el) => { el.hidden = el.dataset.view !== view; });
   $("pausePanel").classList.toggle("wide", view === "volume" || view === "control");
   if (view === "volume") refreshAudioButtons();
+  if (view === "layar") refreshLayar();
   if (view === "control") buildControls();
   if (!silent) sfx.click();
   $("pauseBox").scrollTop = 0;
@@ -77,6 +78,20 @@ function toMenu() { save(); mode = "select"; buildSelect(); showUI(); }
 $("btnPause").addEventListener("click", togglePause);
 $("btnResume").addEventListener("click", togglePause);
 $("btnMenu").addEventListener("click", toMenu);
+
+// Keluar Permainan (khusus HP). Halaman web tidak selalu boleh menutup dirinya sendiri,
+// jadi: simpan → keluar layar penuh → coba tutup → kalau masih terbuka, tampilkan layar pamit.
+$("btnExit").hidden = !isTouch;
+function keluarPermainan() {
+  save();
+  toMenu();
+  if (typeof keluarPenuh === "function") keluarPenuh();
+  if (actx) actx.suspend();
+  try { window.close(); } catch (e) {}
+  setTimeout(() => { $("bye").hidden = false; $("btnByeBack").focus({ preventScroll: true }); }, 300);
+}
+$("btnExitYes").addEventListener("click", keluarPermainan);
+$("btnByeBack").addEventListener("click", () => { $("bye").hidden = true; if (actx) actx.resume(); });
 
 // Tombol di halaman Volume
 $("btnMusic").addEventListener("click", () => setAudio("musik", !audioOn.musik));
