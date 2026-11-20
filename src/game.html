@@ -74,6 +74,7 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 .tele-ask .btns { display: flex; gap: 10px; justify-content: center; }
 #bigMap { display: block; width: 100%; height: min(62vh, 560px); border-radius: 12px; background: #120d18; }
 .map-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 0.8rem; font-weight: 700; color: var(--ink-dim); }
+.map-legend b { font-weight: inherit; }
 .map-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
 .map-hint { margin: 0; font-size: 0.75rem; color: var(--ink-dim); }
 .boss { position: absolute; left: 50%; top: 10px; transform: translateX(-50%); width: min(360px, 40vw); text-align: center; pointer-events: none; }
@@ -171,6 +172,13 @@ h1 span { color: var(--gold); }
 .vbtn:active { transform: translateY(1px); }
 .vbtn:disabled { opacity: 0.35; cursor: default; }
 .vbtn.mute { font-size: 0.75rem; min-width: 64px; }
+.go.pick[aria-pressed="true"] { background: var(--gold); color: #1b1208; }
+.go.pick[aria-pressed="true"]::after { content: " ✓"; }
+.credit { display: grid; gap: 2px; margin: 0; text-align: left; }
+.credit dt { font-size: 0.68rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); margin-top: 8px; }
+.credit dd { margin: 0; font-size: 0.9rem; line-height: 1.35; }
+.credit-thanks { margin: 4px 0 0; font-family: var(--font-display); font-size: 1.5rem; color: var(--gold); }
+.quest small.side { display: block; margin-top: 4px; font-size: 0.78em; color: #8fd3ff; }
 .set-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .set-note { margin: 8px 0 0; font-size: 0.78rem; line-height: 1.4; color: var(--ink-dim); text-align: left; }
 .vbtn.mute[aria-pressed="false"] { background: var(--red); border-color: transparent; }
@@ -255,7 +263,7 @@ h1 span { color: var(--gold); }
 </style>
 
 <div class="stage">
-  <canvas id="cv" aria-label="Peta petualangan Laga Nusantara"></canvas>
+  <canvas id="cv" data-ta="h.petaPetualangan" aria-label="Peta petualangan Laga Nusantara"></canvas>
 
   <div class="hud" id="hud" hidden>
     <div class="me">
@@ -263,38 +271,38 @@ h1 span { color: var(--gold); }
     </div>
     <div class="right">
       <div class="chips">
-        <span class="chip" aria-label="Koin"><i class="coin"></i><span id="gold">0</span></span>
-        <span class="chip" aria-label="Jamu"><i class="jamu"></i><span id="pots">0</span></span>
-        <button class="icon-btn" id="btnPause" type="button" aria-label="Jeda">❚❚</button>
+        <span class="chip" data-ta="h.koin" aria-label="Koin"><i class="coin"></i><span id="gold">0</span></span>
+        <span class="chip" data-ta="h.jamu" aria-label="Jamu"><i class="jamu"></i><span id="pots">0</span></span>
+        <button class="icon-btn" id="btnPause" type="button" data-ta="h.jeda" aria-label="Jeda">❚❚</button>
       </div>
-      <canvas id="mini" width="176" height="120" role="button" tabindex="-1" aria-label="Peta mini — klik untuk buka peta besar"></canvas>
+      <canvas id="mini" width="176" height="120" role="button" tabindex="-1" data-ta="h.petaMini" aria-label="Peta mini — klik untuk buka peta besar"></canvas>
       <span class="area-name" id="areaName">Desa Wanasari</span>
     </div>
   </div>
-  <div class="boss" id="bossBar" hidden><b>Genderuwo</b><div class="bar"><i id="bossFill"></i></div></div>
+  <div class="boss" id="bossBar" hidden><b id="bossName">Genderuwo</b><div class="bar"><i id="bossFill"></i></div></div>
   <div class="toasts" id="toasts"></div>
-  <div class="rotate" id="rotate" hidden>Putar HP ke mode lanskap biar lebih leluasa</div>
+  <div class="rotate" id="rotate" data-t="h.putar" hidden>Putar HP ke mode lanskap biar lebih leluasa</div>
 
   <div class="touch" id="touch" hidden>
     <div class="stick" id="stick"><div class="knob" id="knob"></div></div>
     <div class="pad">
-      <button class="tb talk" id="bTalk" type="button" hidden><span>Bicara</span></button>
-      <button class="tb roll cd" id="bRoll" type="button"><span>Hindar</span></button>
-      <button class="tb pot" id="bPot" type="button"><span>Jamu</span></button>
-      <button class="tb skill cd" id="bSkill" type="button"><span>Jurus</span></button>
-      <button class="tb atk" id="bAtk" type="button"><span>Serang</span></button>
+      <button class="tb talk" id="bTalk" type="button" hidden><span data-t="h.bicara">Bicara</span></button>
+      <button class="tb roll cd" id="bRoll" type="button"><span data-t="h.hindar">Hindar</span></button>
+      <button class="tb pot" id="bPot" type="button"><span data-t="h.jamuBtn">Jamu</span></button>
+      <button class="tb skill cd" id="bSkill" type="button"><span data-t="h.jurus">Jurus</span></button>
+      <button class="tb atk" id="bAtk" type="button"><span data-t="h.serang">Serang</span></button>
     </div>
   </div>
 
   <!-- Cooldown jurus & hindar: hanya muncul kalau main pakai keyboard (bukan HP) -->
   <div class="skills" id="skills" hidden>
     <div class="slot skill ready" id="sSkill"><kbd id="sSkillKey">S</kbd><small id="sSkillName">Jurus</small><span class="sec" id="sSkillSec"></span></div>
-    <div class="slot ready" id="sRoll"><kbd id="sRollKey">A</kbd><small>Hindar</small><span class="sec" id="sRollSec"></span></div>
+    <div class="slot ready" id="sRoll"><kbd id="sRollKey">A</kbd><small data-t="h.hindar">Hindar</small><span class="sec" id="sRollSec"></span></div>
   </div>
 
   <!-- Layar transisi saat pindah area -->
   <div class="fade" id="fade" aria-live="polite">
-    <div class="fade-card"><small>Memasuki</small><b id="fadeName"></b><span id="fadeSub"></span></div>
+    <div class="fade-card"><small data-t="h.memasuki">Memasuki</small><b id="fadeName"></b><span id="fadeSub"></span></div>
   </div>
 
   <div class="dialog" id="dialog" hidden>
@@ -310,10 +318,10 @@ h1 span { color: var(--gold); }
     <div class="panel">
       <div class="head">
         <div>
-          <p class="eyebrow">Petualangan aksi</p>
+          <p class="eyebrow" data-t="h.eyebrowJudul">Petualangan aksi</p>
           <h1>Laga <span>Nusantara</span></h1>
         </div>
-        <p class="lead">Desa Wanasari diganggu makhluk hutan. Pilih jagoanmu, bantu Ki Lurah, naikkan level, dan kalahkan penunggu gua di timur.</p>
+        <p class="lead" data-t="h.lead">Kabut merah turun dari Gunung Geni dan makhluk hutan menjadi beringas. Pilih jagoanmu, kumpulkan tiga mustika, dan hadapi Raja Banaspati.</p>
       </div>
       <div class="heroes" id="heroes"></div>
       <div class="row">
@@ -330,109 +338,143 @@ h1 span { color: var(--gold); }
 
       <!-- Halaman 1: menu jeda -->
       <div class="pview" data-view="main">
-        <p class="eyebrow">Jeda</p>
-        <h1>Istirahat <span>sejenak</span></h1>
+        <p class="eyebrow" data-t="h.jedaEyebrow">Jeda</p>
+        <h1 data-th="h.jedaJudul">Istirahat <span>sejenak</span></h1>
         <p class="lead" id="pauseStats"></p>
         <div class="menu">
-          <button class="go" id="btnResume" type="button">Lanjut</button>
-          <button class="go alt" type="button" data-go="settings">Pengaturan</button>
-          <button class="go alt" id="btnMenu" type="button">Menu utama</button>
-          <!-- khusus HP (lihat js/19-menu-jeda.js) -->
-          <button class="go alt" type="button" data-go="keluar" id="btnExit" hidden>Keluar Permainan</button>
+          <button class="go" id="btnResume" type="button" data-t="h.lanjut">Lanjut</button>
+          <button class="go alt" type="button" data-go="settings" data-t="h.pengaturan">Pengaturan</button>
+          <button class="go alt" type="button" data-go="credit" data-t="h.credit">Credit</button>
+          <button class="go alt" id="btnMenu" type="button" data-t="h.menuUtama">Menu utama</button>
+          <!-- khusus HP (lihat js/20-menu-jeda.js) -->
+          <button class="go alt" type="button" data-go="keluar" id="btnExit" data-t="h.keluar" hidden>Keluar Permainan</button>
         </div>
       </div>
 
       <!-- Halaman 2: pengaturan -->
       <div class="pview" data-view="settings" hidden>
-        <p class="eyebrow">Jeda › Pengaturan</p>
-        <h1>Peng<span>aturan</span></h1>
+        <p class="eyebrow" data-t="h.setEyebrow">Jeda › Pengaturan</p>
+        <h1 data-th="h.setJudul">Peng<span>aturan</span></h1>
         <div class="menu">
-          <button class="go alt" type="button" data-go="volume">Volume</button>
-          <button class="go alt" type="button" data-go="layar">Layar</button>
-          <button class="go alt" type="button" data-go="control">Kontrol</button>
-          <button class="go alt back" type="button" data-go="main">← Kembali</button>
+          <button class="go alt" type="button" data-go="bahasa" data-t="h.bahasa">Bahasa</button>
+          <button class="go alt" type="button" data-go="control" data-t="h.kontrol">Kontrol</button>
+          <button class="go alt" type="button" data-go="volume" data-t="h.volume">Volume</button>
+          <button class="go alt" type="button" data-go="layar" data-t="h.layar">Layar</button>
+          <button class="go alt back" type="button" data-go="main" data-t="h.kembali">← Kembali</button>
         </div>
       </div>
 
       <!-- Halaman 3: volume. Tombol − / + (naik-turun 10%), tombol Nyala/Mati -->
       <div class="pview" data-view="volume" hidden>
-        <p class="eyebrow">Pengaturan › Volume</p>
-        <h1 id="volTitle">Vol<span>ume</span></h1>
+        <p class="eyebrow" data-t="h.volEyebrow">Pengaturan › Volume</p>
+        <h1 id="volTitle" data-th="h.volJudul">Vol<span>ume</span></h1>
         <section class="vol" aria-labelledby="volTitle">
         <div class="vol-row">
-          <span class="vol-name">Musik</span>
-          <button class="vbtn" id="musDown" type="button" aria-label="Kecilkan musik">−</button>
+          <span class="vol-name" data-t="h.musik">Musik</span>
+          <button class="vbtn" id="musDown" type="button" data-ta="h.musKecil" aria-label="Kecilkan musik">−</button>
           <span class="vol-bar" id="musBar" aria-hidden="true"></span>
-          <button class="vbtn" id="musUp" type="button" aria-label="Besarkan musik">+</button>
+          <button class="vbtn" id="musUp" type="button" data-ta="h.musBesar" aria-label="Besarkan musik">+</button>
           <span class="vol-val" id="musVal" aria-live="polite">50%</span>
           <button class="vbtn mute" id="btnMusic" type="button">Nyala</button>
         </div>
         <div class="vol-row">
-          <span class="vol-name">Efek suara</span>
-          <button class="vbtn" id="sfxDown" type="button" aria-label="Kecilkan efek suara">−</button>
+          <span class="vol-name" data-t="h.sfx">Efek suara</span>
+          <button class="vbtn" id="sfxDown" type="button" data-ta="h.sfxKecil" aria-label="Kecilkan efek suara">−</button>
           <span class="vol-bar" id="sfxBar" aria-hidden="true"></span>
-          <button class="vbtn" id="sfxUp" type="button" aria-label="Besarkan efek suara">+</button>
+          <button class="vbtn" id="sfxUp" type="button" data-ta="h.sfxBesar" aria-label="Besarkan efek suara">+</button>
           <span class="vol-val" id="sfxVal" aria-live="polite">80%</span>
           <button class="vbtn mute" id="btnSfx" type="button">Nyala</button>
         </div>
         </section>
-        <div class="menu"><button class="go alt back" type="button" data-go="settings">← Kembali</button></div>
+        <div class="menu"><button class="go alt back" type="button" data-go="settings" data-t="h.kembali">← Kembali</button></div>
+      </div>
+
+      <!-- Halaman: bahasa (js/02-bahasa.js) -->
+      <div class="pview" data-view="bahasa" hidden>
+        <p class="eyebrow" data-t="h.bhsEyebrow">Pengaturan › Bahasa</p>
+        <h1 data-th="h.bhsJudul">Ba<span>hasa</span></h1>
+        <div class="menu">
+          <button class="go alt pick" type="button" data-bahasa="id" lang="id" aria-pressed="true">Indonesia</button>
+          <button class="go alt pick" type="button" data-bahasa="en" lang="en" aria-pressed="false">English</button>
+          <button class="go alt back" type="button" data-go="settings" data-t="h.kembali">← Kembali</button>
+        </div>
+      </div>
+
+      <!-- Halaman: credit -->
+      <div class="pview" data-view="credit" hidden>
+        <p class="eyebrow" data-t="h.creditEyebrow">Jeda › Credit</p>
+        <h1 data-th="h.creditJudul">Cre<span>dit</span></h1>
+        <dl class="credit">
+          <dt data-t="h.cr1">Ide, desain &amp; pengembangan</dt><dd>HilmyAceng</dd>
+          <dt data-t="h.cr2">Asisten pemrograman</dt><dd>Claude (Anthropic)</dd>
+          <dt data-t="h.cr3">Grafis</dt><dd data-t="h.cr3v">Semua digambar dengan kode (Canvas 2D), tanpa file gambar</dd>
+          <dt data-t="h.cr4">Musik &amp; suara</dt><dd data-t="h.cr4v">Lagu gamelan ciptaan sendiri dengan tangga nada slendro &amp; pelog, dimainkan lewat Web Audio</dd>
+          <dt data-t="h.cr5">Huruf</dt><dd>Teko &amp; Nunito (Google Fonts, SIL Open Font License)</dd>
+          <dt data-t="h.cr6">Inspirasi</dt><dd data-t="h.cr6v">Cerita rakyat dan budaya Nusantara</dd>
+        </dl>
+        <p class="credit-thanks" data-t="h.crTerima">Terima kasih sudah bermain!</p>
+        <div class="menu"><button class="go alt back" type="button" data-go="main" data-t="h.kembali">← Kembali</button></div>
       </div>
 
       <!-- Halaman: konfirmasi keluar permainan (HP) -->
       <div class="pview" data-view="keluar" hidden>
-        <p class="eyebrow">Jeda › Keluar</p>
-        <h1>Keluar <span>permainan?</span></h1>
-        <p class="lead">Progresmu tersimpan. Nanti pilih "Lanjutkan" untuk kembali ke tempat ini.</p>
+        <p class="eyebrow" data-t="h.keluarEyebrow">Jeda › Keluar</p>
+        <h1 data-th="h.keluarJudul">Keluar <span>permainan?</span></h1>
+        <p class="lead" data-t="h.keluarLead">Progresmu tersimpan. Nanti pilih "Lanjutkan" untuk kembali ke tempat ini.</p>
         <div class="menu">
-          <button class="go" id="btnExitYes" type="button">Ya, keluar</button>
-          <button class="go alt back" type="button" data-go="main">Batal</button>
+          <button class="go" id="btnExitYes" type="button" data-t="h.keluarYa">Ya, keluar</button>
+          <button class="go alt back" type="button" data-go="main" data-t="h.batal">Batal</button>
         </div>
       </div>
 
-      <!-- Halaman: layar (js/20-layar-penuh.js) -->
+      <!-- Halaman: layar (js/21-layar-penuh.js) -->
       <div class="pview" data-view="layar" hidden>
-        <p class="eyebrow">Pengaturan › Layar</p>
-        <h1 id="layarTitle">La<span>yar</span></h1>
+        <p class="eyebrow" data-t="h.layarEyebrow">Pengaturan › Layar</p>
+        <h1 id="layarTitle" data-th="h.layarJudul">La<span>yar</span></h1>
         <section class="vol" aria-labelledby="layarTitle">
           <div class="set-row">
             <span class="vol-name">Full Screen</span>
             <button class="vbtn mute" id="btnFull" type="button" aria-pressed="false">Mati</button>
           </div>
           <p class="set-note" id="fsNote" hidden></p>
+          <div class="set-row">
+            <span class="vol-name" data-t="h.panah">Panah tujuan</span>
+            <button class="vbtn mute" id="btnPanah" type="button" aria-pressed="true">Nyala</button>
+          </div>
+          <p class="set-note" data-t="h.panahNote">Panah emas di tepi layar yang menunjuk ke tujuan cerita.</p>
         </section>
-        <div class="menu"><button class="go alt back" type="button" data-go="settings">← Kembali</button></div>
+        <div class="menu"><button class="go alt back" type="button" data-go="settings" data-t="h.kembali">← Kembali</button></div>
       </div>
 
       <!-- Halaman 4: panduan kontrol, diisi otomatis dari KONTROL di config.js -->
       <div class="pview" data-view="control" hidden>
-        <p class="eyebrow">Pengaturan › Kontrol</p>
-        <h1 id="ctlTitle">Kon<span>trol</span></h1>
+        <p class="eyebrow" data-t="h.ctlEyebrow">Pengaturan › Kontrol</p>
+        <h1 id="ctlTitle" data-th="h.ctlJudul">Kon<span>trol</span></h1>
         <section class="ctl" aria-labelledby="ctlTitle">
         <div class="tabs" role="tablist">
           <button type="button" role="tab" id="tabKey" aria-controls="ctlKey">Keyboard</button>
-          <button type="button" role="tab" id="tabTouch" aria-controls="ctlTouch">HP / layar sentuh</button>
+          <button type="button" role="tab" id="tabTouch" aria-controls="ctlTouch" data-t="h.ctlSentuh">HP / layar sentuh</button>
         </div>
         <div class="keylist" id="ctlKey" role="tabpanel" aria-labelledby="tabKey"></div>
         <div id="ctlTouch" role="tabpanel" aria-labelledby="tabTouch" hidden>
           <div class="tm" aria-hidden="true">
             <span class="tm-pause">❚❚</span>
             <div class="tm-stick"><i></i></div>
-            <span class="tm-b talk">Bicara</span>
-            <span class="tm-b roll">Hindar</span>
-            <span class="tm-b pot">Jamu</span>
-            <span class="tm-b skill">Jurus</span>
-            <span class="tm-b atk">Serang</span>
+            <span class="tm-b talk" data-t="h.bicara">Bicara</span>
+            <span class="tm-b roll" data-t="h.hindar">Hindar</span>
+            <span class="tm-b pot" data-t="h.jamuBtn">Jamu</span>
+            <span class="tm-b skill" data-t="h.jurus">Jurus</span>
+            <span class="tm-b atk" data-t="h.serang">Serang</span>
           </div>
           <ul class="touchlist" id="ctlTouchList"></ul>
         </div>
         </section>
-        <div class="menu"><button class="go alt back" type="button" data-go="settings">← Kembali</button></div>
+        <div class="menu"><button class="go alt back" type="button" data-go="settings" data-t="h.kembali">← Kembali</button></div>
       </div>
     </div>
   </div>
 
-  <!-- Peta besar: tombol M atau klik peta mini (lihat js/17-peta-besar.js) -->
+  <!-- Peta besar: tombol M atau klik peta mini (lihat js/18-peta-besar.js) -->
   <div class="overlay" id="mapBox" hidden>
     <div class="panel map-panel">
       <div class="head">
@@ -440,33 +482,33 @@ h1 span { color: var(--gold); }
           <p class="eyebrow" id="mapSub">Peta</p>
           <h1 id="mapName">Desa <span>Wanasari</span></h1>
         </div>
-        <button class="icon-btn" id="btnMapClose" type="button" aria-label="Tutup peta">✕</button>
+        <button class="icon-btn" id="btnMapClose" type="button" data-ta="h.tutupPeta" aria-label="Tutup peta">✕</button>
       </div>
       <div class="tabs" role="tablist">
-        <button type="button" role="tab" id="tabArea" aria-selected="true">Area ini</button>
-        <button type="button" role="tab" id="tabWorld" aria-selected="false">Peta dunia</button>
+        <button type="button" role="tab" id="tabArea" aria-selected="true" data-t="h.areaIni">Area ini</button>
+        <button type="button" role="tab" id="tabWorld" aria-selected="false" data-t="h.petaDunia">Peta dunia</button>
       </div>
       <div class="map-wrap">
-        <canvas id="bigMap" aria-label="Peta"></canvas>
-        <!-- pertanyaan teleport (js/13-teleport.js) -->
+        <canvas id="bigMap" data-ta="h.peta" aria-label="Peta"></canvas>
+        <!-- pertanyaan teleport (js/14-teleport.js) -->
         <div class="tele-ask" id="teleAsk" hidden>
           <p id="teleText">Pindah ke ...?</p>
-          <div class="btns"><button class="go sm" id="btnTeleGo" type="button">Teleport</button><button class="go sm alt" id="btnTeleNo" type="button">Batal</button></div>
+          <div class="btns"><button class="go sm" id="btnTeleGo" type="button" data-t="h.teleport">Teleport</button><button class="go sm alt" id="btnTeleNo" type="button" data-t="h.batal">Batal</button></div>
         </div>
       </div>
       <div class="map-legend" id="legendArea">
-        <span><i style="background:#fff"></i>Kamu</span>
-        <span><i style="background:#f4b942"></i>Warga</span>
-        <span><i style="background:#8fd3ff"></i>Jalan keluar</span>
-        <span><i style="background:#e98a7a"></i>Monster</span>
-        <span><i style="background:#ff3b3b"></i>Bos</span>
-        <span><i style="background:#7dffa8"></i>Mesin teleport (klik)</span>
+        <span><i style="background:#fff"></i><b data-t="h.lgKamu">Kamu</b></span>
+        <span><i style="background:#f4b942"></i><b data-t="h.lgWarga">Warga</b></span>
+        <span><i style="background:#8fd3ff"></i><b data-t="h.lgKeluar">Jalan keluar</b></span>
+        <span><i style="background:#e98a7a"></i><b data-t="h.lgMonster">Monster</b></span>
+        <span><i style="background:#ff3b3b"></i><b data-t="h.lgBos">Bos</b></span>
+        <span><i style="background:#7dffa8"></i><b data-t="h.lgTele">Mesin teleport (klik)</b></span>
       </div>
       <div class="map-legend" id="legendWorld" hidden>
-        <span><i style="background:#fff"></i>Kamu</span>
-        <span><i style="background:#8fd3ff"></i>Jalan antar-area</span>
-        <span><i style="background:#f4b942"></i>Tujuan misi</span>
-        <span><i style="background:#7dffa8"></i>Mesin teleport (klik)</span>
+        <span><i style="background:#fff"></i><b data-t="h.lgKamu">Kamu</b></span>
+        <span><i style="background:#8fd3ff"></i><b data-t="h.lgJalan">Jalan antar-area</b></span>
+        <span><i style="background:#f4b942"></i><b data-t="h.lgMisi">Tujuan misi</b></span>
+        <span><i style="background:#7dffa8"></i><b data-t="h.lgTele">Mesin teleport (klik)</b></span>
       </div>
       <p class="map-hint" id="mapHint"></p>
     </div>
@@ -475,19 +517,19 @@ h1 span { color: var(--gold); }
   <!-- Layar pamit: muncul kalau browser tidak mengizinkan halaman menutup dirinya sendiri -->
   <div class="overlay bye" id="bye" hidden>
     <div class="panel small">
-      <p class="eyebrow">Sampai jumpa</p>
-      <h1>Progres <span>tersimpan</span></h1>
-      <p class="lead">Tutup aplikasi dari HP-mu: geser ke atas / tombol Beranda, atau tutup tab browser ini.</p>
-      <div class="btns"><button class="go" id="btnByeBack" type="button">Main lagi</button></div>
+      <p class="eyebrow" data-t="h.byeEyebrow">Sampai jumpa</p>
+      <h1 data-th="h.byeJudul">Progres <span>tersimpan</span></h1>
+      <p class="lead" data-t="h.byeLead">Tutup aplikasi dari HP-mu: geser ke atas / tombol Beranda, atau tutup tab browser ini.</p>
+      <div class="btns"><button class="go" id="btnByeBack" type="button" data-t="h.mainLagi">Main lagi</button></div>
     </div>
   </div>
 
   <div class="overlay" id="win" hidden>
     <div class="panel small">
-      <p class="eyebrow">Misi utama selesai</p>
-      <h1>Desa <span>selamat</span></h1>
+      <p class="eyebrow" data-t="h.winEyebrow">Tamat · Kabut dari Gunung Geni</p>
+      <h1 data-th="h.winJudul">Kabut <span>sirna</span></h1>
       <p class="lead" id="winStats"></p>
-      <div class="btns"><button class="go" id="btnWin" type="button">Lanjut bertualang</button></div>
+      <div class="btns"><button class="go" id="btnWin" type="button" data-t="h.lanjutTualang">Lanjut bertualang</button></div>
     </div>
   </div>
 </div>
@@ -497,24 +539,30 @@ h1 span { color: var(--gold); }
 <script src="config.js"></script>
 <!-- Kode game dipecah per fitur di folder js/. Urutan penting: file atas dimuat lebih dulu. -->
 <script src="js/01-alat.js"></script>
-<script src="js/02-rumus.js"></script>
-<script src="js/03-peta.js"></script>
-<script src="js/04-status.js"></script>
-<script src="js/05-area.js"></script>
-<script src="js/06-audio.js"></script>
-<script src="js/07-musik.js"></script>
-<script src="js/08-input.js"></script>
-<script src="js/09-tarung.js"></script>
-<script src="js/10-progres.js"></script>
-<script src="js/11-dialog.js"></script>
-<script src="js/12-cermin.js"></script>
-<script src="js/13-teleport.js"></script>
-<script src="js/14-update.js"></script>
-<script src="js/15-gambar.js"></script>
-<script src="js/16-peta-mini.js"></script>
-<script src="js/17-peta-besar.js"></script>
-<script src="js/18-hud.js"></script>
-<script src="js/19-menu-jeda.js"></script>
-<script src="js/20-layar-penuh.js"></script>
-<script src="js/21-layar-judul.js"></script>
-<script src="js/22-main.js"></script>
+<script src="js/02-bahasa.js"></script>
+<script src="js/03-rumus.js"></script>
+<script src="js/04-peta.js"></script>
+<script src="js/05-status.js"></script>
+<script src="js/06-area.js"></script>
+<script src="js/07-audio.js"></script>
+<script src="js/08-musik.js"></script>
+<script src="js/09-input.js"></script>
+<script src="js/10-tarung.js"></script>
+<script src="js/11-progres.js"></script>
+<script src="js/12-dialog.js"></script>
+<script src="js/13-cermin.js"></script>
+<script src="js/14-teleport.js"></script>
+<script src="js/15-update.js"></script>
+<script src="js/16-gambar.js"></script>
+<script src="js/17-peta-mini.js"></script>
+<script src="js/18-peta-besar.js"></script>
+<script src="js/19-hud.js"></script>
+<script src="js/20-menu-jeda.js"></script>
+<script src="js/21-layar-penuh.js"></script>
+<script src="js/22-layar-judul.js"></script>
+<script src="js/23-cerita.js"></script>
+<script src="js/24-sampingan.js"></script>
+<script src="js/25-teka-teki.js"></script>
+<script src="js/26-monster-baru.js"></script>
+<script src="js/27-navigasi.js"></script>
+<script src="js/28-main.js"></script>
