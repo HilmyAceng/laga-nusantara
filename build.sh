@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Gabungkan src/game.html menjadi public/index.html (PWA) dan salin src/config.js ke public/.
+# Gabungkan src/game.html menjadi public/index.html (PWA), salin src/config.js dan folder src/js/
+# ke public/, lalu perbarui daftar file offline di public/sw.js.
 set -euo pipefail
 cd "$(dirname "$0")"
 {
@@ -19,4 +20,11 @@ cd "$(dirname "$0")"
   echo '</body></html>'
 } > public/index.html
 cp src/config.js public/config.js
-echo "OK -> public/index.html + public/config.js"
+rm -rf public/js && cp -r src/js public/js
+
+# Daftar file yang disimpan untuk main offline (baris FILES di sw.js dibuat ulang otomatis)
+files='"./", "./index.html", "./config.js", "./manifest.webmanifest", "./icons/icon-192.png", "./icons/icon-512.png"'
+for f in src/js/*.js; do files="$files, \"./js/$(basename "$f")\""; done
+sed -i "s|^const FILES = .*|const FILES = [$files];|" public/sw.js
+
+echo "OK -> public/index.html, public/config.js, public/js/ ($(ls src/js | wc -l) file), sw.js"

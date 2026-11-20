@@ -125,8 +125,9 @@ const MONSTERS = {
 };
 
 // Berapa banyak monster di tiap zona peta.
-// Zona: "forest" (hutan timur), "north" (padang utara), "south" (padang selatan).
-// Bos Genderuwo tidak ditulis di sini: dia muncul sendiri saat misi ke-3 aktif.
+// Zona (semuanya di peta "Hutan & Padang"): "forest" (hutan), "north" (padang utara),
+// "south" (padang selatan).
+// Bos Genderuwo tidak ditulis di sini: dia muncul di peta Gua saat misi ke-3 aktif.
 const SPAWN = [
   { monster: "kera", zona: "forest", jumlah: 9 },
   { monster: "kelelawar", zona: "north", jumlah: 6 },
