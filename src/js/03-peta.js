@@ -1,6 +1,6 @@
 // =====================================================================
 // PETA
-// Jenis petak, dan bentuk ketiga area (Desa, Hutan & Padang, Gua).
+// Jenis petak, dan bentuk semua area (Desa, Hutan & Padang, Gua, Candi Wingit).
 // Tiap area punya build() untuk menyusun petak dan gerbang[] untuk pindah area.
 // =====================================================================
 "use strict";
@@ -18,7 +18,7 @@ const inZone = (z, tx, ty) => tx >= z.x0 && tx <= z.x1 && ty >= z.y0 && ty <= z.
 const fillRect = (x0, y0, x1, y1, v) => { for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) setT(x, y, v); };
 
 // ---------------------------------------------------------------------
-// TIGA AREA. Masing-masing peta sendiri; pindah lewat "gerbang"
+// AREA. Masing-masing peta sendiri; pindah lewat "gerbang"
 // (kotak petak). Saat pemain menginjak gerbang: layar gelap → area baru.
 //   gerbang.masuk = titik muncul (dalam petak) di area tujuan
 // ---------------------------------------------------------------------
@@ -42,7 +42,7 @@ const AREAS = {
       // rumah-rumah desa (3x2 petak)
       for (const [hx, hy] of [[5, 5], [15, 5], [5, 16], [15, 16]]) { houses.push({ x: hx, y: hy }); fillRect(hx, hy, hx + 2, hy + 1, HOUSE); }
       // bersihkan area di sekitar NPC & titik mulai
-      for (const [x, y] of [[12, 8], [9, 14], [12, 12]]) for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) if (SOLID.has(tileAt(x + dx, y + dy)) && tileAt(x + dx, y + dy) !== HOUSE) setT(x + dx, y + dy, G);
+      for (const [x, y] of [[12, 8], [9, 14], [16, 14], [12, 12]]) for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) if (SOLID.has(tileAt(x + dx, y + dy)) && tileAt(x + dx, y + dy) !== HOUSE) setT(x + dx, y + dy, G);
     },
   },
   alam: {
@@ -56,6 +56,7 @@ const AREAS = {
     gerbang: [
       { x0: 0, y0: 21, x1: 0, y1: 23, ke: "desa", masuk: { x: 19.5, y: 11.5 }, label: "← Desa" },
       { x0: 25, y0: 21, x1: 26, y1: 23, ke: "gua", masuk: { x: 2.5, y: 8.5 }, label: "Gua →" },
+      { x0: 15, y0: 0, x1: 17, y1: 0, ke: "candi", masuk: { x: 15.5, y: 23.5 }, label: "↑ Candi" },
     ],
     build(r) {
       for (let y = 0; y < MH; y++) for (let x = 0; x < MW; x++) {
@@ -78,6 +79,25 @@ const AREAS = {
       // jalan
       for (let x = 2; x < g.x0; x++) for (let y = 21; y <= 23; y++) setT(x, y, y === 22 || x < 4 ? PATH : (r() < 0.75 ? PATH : G));
       for (let y = 4; y <= 38; y++) setT(16, y, PATH);
+      // jalan ke utara menuju Candi Wingit
+      fillRect(15, 0, 17, 3, PATH);
+    },
+  },
+  candi: {
+    nama: "Candi Wingit", sub: "Reruntuhan angker di utara hutan", lagu: "gua", tepi: WALL, w: 30, h: 26, gelap: true,
+    // monster hanya di aula tengah & bilik utara; aula masuk (selatan) aman
+    zona: { candi: { x0: 2, y0: 1, x1: 27, y1: 15 } },
+    gerbang: [{ x0: 14, y0: 25, x1: 16, y1: 25, ke: "alam", masuk: { x: 16.5, y: 2.5 }, label: "↓ Hutan" }],
+    build() {
+      fillRect(0, 0, MW - 1, MH - 1, WALL);
+      fillRect(1, 1, MW - 2, MH - 2, CAVE);
+      fillRect(14, 25, 16, 25, CAVE);              // pintu masuk dari hutan
+      // tembok pemisah: aula masuk | aula tengah | dua bilik utara
+      fillRect(1, 17, 28, 17, WALL); fillRect(13, 17, 17, 17, CAVE);
+      fillRect(1, 9, 28, 9, WALL); fillRect(4, 9, 6, 9, CAVE); fillRect(23, 9, 25, 9, CAVE);
+      fillRect(15, 1, 15, 8, WALL); fillRect(15, 4, 15, 5, CAVE);
+      // tiang-tiang batu
+      for (const [x, y] of [[6, 12], [6, 14], [11, 12], [11, 14], [19, 12], [19, 14], [24, 12], [24, 14], [8, 21], [22, 21], [5, 3], [10, 6], [20, 3], [25, 6]]) setT(x, y, WALL);
     },
   },
   gua: {

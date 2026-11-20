@@ -50,7 +50,7 @@ function updatePlayer(dt) {
     else if (S.potions <= 0) toast("Jamu habis. Beli di Mbok Darmi", false);
   }
   nearNpc = null;
-  for (const n of NPCS) if (dist(P, n) < ATURAN.jarakBicara) nearNpc = n;
+  for (const n of NPCS) if (!n.diam && dist(P, n) < ATURAN.jarakBicara) nearNpc = n;
   if (!P.dead) checkGates();
   if (inp.talk && nearNpc) talk(nearNpc);
 }

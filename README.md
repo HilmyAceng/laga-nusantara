@@ -5,10 +5,11 @@ Bisa dimainkan di HP (joystick + tombol sentuh, mode lanskap) dan desktop (keybo
 
 ## Fitur
 
-- **Tiga peta terpisah** dengan layar transisi (gelap + nama area) saat pindah:
-  - **Desa Wanasari**: aman, ada Ki Lurah & Mbok Darmi. Keluar lewat jembatan di timur
-  - **Hutan & Padang**: hutan, padang utara & selatan, semua monster biasa. Mulut gua di timur
+- **Empat peta terpisah** dengan layar transisi (gelap + nama area) saat pindah:
+  - **Desa Wanasari**: aman, ada Ki Lurah, Mbok Darmi & Pak Wowo (belum bisa diajak bicara). Keluar lewat jembatan di timur
+  - **Hutan & Padang**: hutan, padang utara & selatan, semua monster biasa. Mulut gua di timur, jalan ke candi di utara
   - **Gua Genderuwo**: dungeon gelap tempat bos. Pingsan di luar desa = pulang ke desa
+  - **Candi Wingit**: dungeon reruntuhan di utara hutan, berisi kelelawar & babi hutan
 - **4 kelas hero**: Pendekar, Pemanah, Pendobrak, Penyihir. Masing-masing punya serangan dan jurus sendiri
 - **Monster**: Kera Liar (Lv1), Kelelawar (Lv3, terbang), Babi Hutan (Lv4, menyeruduk), Genderuwo (bos Lv8)
 - **Progres**: EXP & naik level (nyawa dan serangan bertambah), koin, jamu, tingkat senjata
@@ -41,7 +42,7 @@ Semua menu memakai tombol. `Esc` = kembali satu halaman.
 |---|---|
 | `01-alat.js` | Fungsi bantu kecil (`$`, `clamp`, `rand`, `store` untuk simpanan) |
 | `02-rumus.js` | Rumus EXP, nyawa, serangan |
-| `03-peta.js` | Jenis petak dan bentuk 3 area (`AREAS`: Desa, Hutan & Padang, Gua) |
+| `03-peta.js` | Jenis petak dan bentuk 4 area (`AREAS`: Desa, Hutan & Padang, Gua, Candi) |
 | `04-status.js` | Variabel utama (progres `S`, pemain `P`, monster), NPC desa, simpan |
 | `05-area.js` | Pindah area + layar gelap (fade) + gerbang |
 | `06-audio.js` | Mesin suara, volume, resep efek suara (`sfx`) |
@@ -53,7 +54,7 @@ Semua menu memakai tombol. `Esc` = kembali satu halaman.
 | `12-update.js` | Logika tiap frame: gerak pemain, AI monster, peluru |
 | `13-gambar.js` | Menggambar dunia, karakter, monster, efek |
 | `14-peta-mini.js` | Peta mini |
-| `15-peta-besar.js` | Peta besar (tombol `M` / klik peta mini): tab "Area ini" dan "Peta dunia" (ketiga area + tujuan misi), game berhenti selama dibuka |
+| `15-peta-besar.js` | Peta besar (tombol `M` / klik peta mini): tab "Area ini" dan "Peta dunia" (semua area + tujuan misi), game berhenti selama dibuka |
 | `16-hud.js` | Kotak misi, koin & jamu, cooldown, toast, layar mana yang tampil |
 | `17-menu-jeda.js` | Menu jeda, volume, panduan kontrol |
 | `18-layar-judul.js` | Layar pilih hero & mulai permainan |
@@ -74,7 +75,7 @@ Kalau menambah file JS baru: taruh di `src/js/` dengan nomor urut, tambahkan `<s
 | `LAGU` | Musik latar tiap tempat: melodi (notasi slendro `1 2 3 5 6`), tempo, suara, pola kendang, gong |
 | `ATURAN.audio` | Volume awal musik dan efek suara (pemain bisa mengubahnya di Pengaturan › Volume) |
 
-Yang ada di `src/js/` (bukan config): bentuk ketiga peta (`AREAS` di `03-peta.js`), dialog NPC (`talk()` di `11-dialog.js`), cara kerja tiap jurus (`09-tarung.js`), dan resep efek suara (`sfx` di `06-audio.js`).
+Yang ada di `src/js/` (bukan config): bentuk semua peta (`AREAS` di `03-peta.js`), dialog NPC (`talk()` di `11-dialog.js`), cara kerja tiap jurus (`09-tarung.js`), dan resep efek suara (`sfx` di `06-audio.js`).
 
 ## Build & jalankan
 

@@ -126,13 +126,16 @@ const MONSTERS = {
 };
 
 // Berapa banyak monster di tiap zona peta.
-// Zona (semuanya di peta "Hutan & Padang"): "forest" (hutan), "north" (padang utara),
-// "south" (padang selatan).
+// Zona di peta "Hutan & Padang": "forest" (hutan), "north" (padang utara),
+// "south" (padang selatan). Zona di peta "Candi Wingit": "candi".
 // Bos Genderuwo tidak ditulis di sini: dia muncul di peta Gua saat misi ke-3 aktif.
 const SPAWN = [
   { monster: "kera", zona: "forest", jumlah: 9 },
   { monster: "kelelawar", zona: "north", jumlah: 6 },
   { monster: "babi", zona: "south", jumlah: 7 },
+  // Candi Wingit (dungeon di utara hutan)
+  { monster: "kelelawar", zona: "candi", jumlah: 7 },
+  { monster: "babi", zona: "candi", jumlah: 4 },
 ];
 
 // ---------------------------------------------------------------------

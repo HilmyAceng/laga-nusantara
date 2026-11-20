@@ -15,6 +15,8 @@ const START = { x: 12 * T + T / 2, y: 12 * T + T / 2 };   // titik muncul di des
 const NPC_DESA = [
   { id: "lurah", name: "Ki Lurah", x: 12 * T + T / 2, y: 8 * T + T / 2, color: "#6d597a", accent: "#f4b942", face: Math.PI / 2 },
   { id: "dagang", name: "Mbok Darmi", x: 9 * T + T / 2, y: 14 * T + T / 2, color: "#c0563a", accent: "#e9d3a9", face: 0 },
+  // diam: true = belum bisa diajak bicara (tidak ada tombol Bicara)
+  { id: "wowo", name: "Pak Wowo", x: 16 * T + T / 2, y: 14 * T + T / 2, color: "#3d6b8f", accent: "#d9c38a", hat: "#1f1a24", hair: "#2a201b", face: Math.PI, diam: true },
 ];
 let NPCS = NPC_DESA;       // NPC di area sekarang (hanya desa yang punya NPC)
 const cam = { x: START.x, y: START.y };

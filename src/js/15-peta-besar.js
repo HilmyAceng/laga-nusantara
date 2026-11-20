@@ -4,7 +4,7 @@
 // peta mini. Permainan berhenti sementara selama peta dibuka.
 // Dua tab:
 //   Area ini   = area tempatmu berada: posisi kamu, warga, monster, bos, jalan keluar.
-//   Peta dunia = ketiga area berjajar, disambung lewat gerbangnya, plus tujuan misi.
+//   Peta dunia = semua area berdampingan, disambung lewat gerbangnya, plus tujuan misi.
 // =====================================================================
 "use strict";
 
@@ -69,7 +69,7 @@ function drawAreaMap(time) {
     const gx = (g.x0 + g.x1 + 1) / 2 * T, gy = (g.y0 + g.y1 + 1) / 2 * T;
     dot(X(gx), Y(gy), "#8fd3ff", 6);
     const lx = clamp(X(gx), ox + 40 * DPR, ox + MW * k - 40 * DPR);
-    label(g.label, lx, Y(gy) - 10 * DPR, "#8fd3ff");
+    label(g.label, lx, g.y0 === 0 ? Y(gy) + 20 * DPR : Y(gy) - 10 * DPR, "#8fd3ff");
   }
   // monster & bos
   for (const m of monsters) {
@@ -92,43 +92,50 @@ function drawAreaMap(time) {
 
 // ---------------------------------------------------------------------
 // PETA DUNIA
-// Urutan area dari kiri ke kanan. Tinggi tiap area diatur supaya gerbang
-// yang tersambung sejajar. Tambah area baru? Masukkan id-nya ke sini.
+// Semua area digambar berdampingan. Letaknya dihitung otomatis dari gerbang:
+// kalau gerbang balik di area B ada di tepi kiri, B ditaruh di kanan A;
+// tepi bawah → B di atas A; dst. Gerbang yang tersambung dibuat sejajar.
+// Tambah area baru? Masukkan id-nya ke WORLD_ORDER (area pertama = pusat).
 // ---------------------------------------------------------------------
-const WORLD_ORDER = ["desa", "alam", "gua"];
+const WORLD_ORDER = ["desa", "alam", "gua", "candi"];
 const WORLD_GAP = 7; // jarak antar-area (dalam petak)
 let world = null;
+const gateMid = (g) => ({ x: (g.x0 + g.x1 + 1) / 2, y: (g.y0 + g.y1 + 1) / 2 });
 // Bangun petak semua area sekali saja (petanya selalu sama karena pakai seed).
 function buildWorld() {
   const keep = { MW, MH, map, houses, ZONES, area, areaId };
   const parts = {};
-  let x = 0;
   for (const id of WORLD_ORDER) {
     buildArea(id);
     const cv = document.createElement("canvas");
     paintTiles(cv, MW, MH, map);
-    parts[id] = { id, a: AREAS[id], cv, w: MW, h: MH, x, y: 0 };
-    x += MW + WORLD_GAP;
+    parts[id] = { id, a: AREAS[id], cv, w: MW, h: MH, x: 0, y: 0 };
   }
   ({ MW, MH, map, houses, ZONES, area, areaId } = keep); // kembalikan area yang aktif
-  const gateMid = (g) => ({ x: (g.x0 + g.x1 + 1) / 2, y: (g.y0 + g.y1 + 1) / 2 });
-  // sejajarkan: area ke-i digeser naik/turun mengikuti gerbang dari area sebelumnya
-  for (let i = 1; i < WORLD_ORDER.length; i++) {
-    const prev = parts[WORLD_ORDER[i - 1]], cur = parts[WORLD_ORDER[i]];
-    const out = prev.a.gerbang.find((g) => g.ke === cur.id), back = cur.a.gerbang.find((g) => g.ke === prev.id);
-    if (out && back) cur.y = prev.y + gateMid(out).y - gateMid(back).y;
+  // susun mulai dari area pertama, menyebar lewat gerbang
+  const placed = new Set([WORLD_ORDER[0]]), queue = [WORLD_ORDER[0]], links = [];
+  while (queue.length) {
+    const A = parts[queue.shift()];
+    for (const g of A.a.gerbang) {
+      const B = parts[g.ke]; if (!B) continue;
+      const back = B.a.gerbang.find((b) => b.ke === A.id); if (!back) continue;
+      const p = gateMid(g), q = gateMid(back);
+      if (!placed.has(B.id)) {
+        if (back.x0 === 0) { B.x = A.x + A.w + WORLD_GAP; B.y = A.y + p.y - q.y; }            // B di kanan
+        else if (back.x1 === B.w - 1) { B.x = A.x - B.w - WORLD_GAP; B.y = A.y + p.y - q.y; } // B di kiri
+        else if (back.y1 === B.h - 1) { B.y = A.y - B.h - WORLD_GAP; B.x = A.x + p.x - q.x; } // B di atas
+        else { B.y = A.y + A.h + WORLD_GAP; B.x = A.x + p.x - q.x; }                          // B di bawah
+        placed.add(B.id); queue.push(B.id);
+        links.push({ x1: A.x + p.x, y1: A.y + p.y, x2: B.x + q.x, y2: B.y + q.y });
+      }
+    }
   }
-  // garis jalan antar-area (sekali per pasangan)
-  const links = [];
-  for (const id of WORLD_ORDER) for (const g of parts[id].a.gerbang) {
-    const to = parts[g.ke]; if (!to || WORLD_ORDER.indexOf(g.ke) < WORLD_ORDER.indexOf(id)) continue;
-    const back = to.a.gerbang.find((b) => b.ke === id); if (!back) continue;
-    const p = gateMid(g), q = gateMid(back);
-    links.push({ x1: parts[id].x + p.x, y1: parts[id].y + p.y, x2: to.x + q.x, y2: to.y + q.y });
-  }
-  const top = Math.min(...Object.values(parts).map((p) => p.y));
-  const bottom = Math.max(...Object.values(parts).map((p) => p.y + p.h));
-  world = { parts, links, top, bottom, width: x - WORLD_GAP };
+  const all = Object.values(parts).filter((p) => placed.has(p.id));
+  world = {
+    parts, links, list: all.map((p) => p.id),
+    left: Math.min(...all.map((p) => p.x)), right: Math.max(...all.map((p) => p.x + p.w)),
+    top: Math.min(...all.map((p) => p.y)), bottom: Math.max(...all.map((p) => p.y + p.h)),
+  };
 }
 
 // Area tujuan misi yang sedang berjalan (null = tidak ada misi).
@@ -139,8 +146,8 @@ function questArea() {
   const mon = q.type === "kill" ? q.target : q.item === "taring" ? "babi" : null;
   if (!mon) return null;
   if (MONSTERS[mon].boss) return WORLD_ORDER.find((id) => AREAS[id].bos) || null;
-  const sp = SPAWN.find((s) => s.monster === mon);
-  return sp ? WORLD_ORDER.find((id) => AREAS[id].zona && AREAS[id].zona[sp.zona]) || null : null;
+  // area pertama (urut WORLD_ORDER) yang punya zona tempat monster itu muncul
+  return WORLD_ORDER.find((id) => SPAWN.some((s) => s.monster === mon && AREAS[id].zona[s.zona])) || null;
 }
 
 function drawWorldMap(time) {
@@ -153,9 +160,9 @@ function drawWorldMap(time) {
   c.fillStyle = "#15111f"; c.fillRect(0, 0, cw, ch);
   // ruang untuk nama area di atas & bawah
   const padX = 16 * DPR, padTop = 40 * DPR, padBot = 30 * DPR;
-  const ww = world.width, wh = world.bottom - world.top;
+  const ww = world.right - world.left, wh = world.bottom - world.top;
   const k = Math.min((cw - padX * 2) / ww, (ch - padTop - padBot) / wh);
-  const ox = (cw - ww * k) / 2, oy = padTop + (ch - padTop - padBot - wh * k) / 2 - world.top * k;
+  const ox = (cw - ww * k) / 2 - world.left * k, oy = padTop + (ch - padTop - padBot - wh * k) / 2 - world.top * k;
   const X = (tx) => ox + tx * k, Y = (ty) => oy + ty * k;
   // layar sempit (HP tegak) → tulisan lebih kecil; tulisan tidak boleh keluar kotak
   const fs = clamp(cw / DPR / 600, 0.62, 1);
@@ -169,8 +176,8 @@ function drawWorldMap(time) {
   c.setLineDash([6 * DPR, 5 * DPR]); c.lineWidth = 3 * DPR; c.strokeStyle = "#8fd3ff";
   for (const l of world.links) { c.beginPath(); c.moveTo(X(l.x1), Y(l.y1)); c.lineTo(X(l.x2), Y(l.y2)); c.stroke(); }
   c.setLineDash([]);
-  const goal = questArea();
-  for (const id of WORLD_ORDER) {
+  const goal = questArea(), names = [];
+  for (const id of world.list) {
     const p = world.parts[id], here = id === areaId;
     const x = X(p.x), y = Y(p.y), w = p.w * k, h = p.h * k;
     c.imageSmoothingEnabled = false;
@@ -179,7 +186,9 @@ function drawWorldMap(time) {
     c.globalAlpha = 1;
     c.lineWidth = (here ? 3 : 1.5) * DPR; c.strokeStyle = here ? "#f4b942" : "rgba(255,255,255,0.25)";
     c.strokeRect(x, y, w, h);
-    text(p.a.nama, x + w / 2, y - 10 * DPR, here ? "#f4b942" : "#f7efe3", 15, 900);
+    // nama area rata kiri di atas kotaknya; digambar paling akhir supaya di atas garis jalan
+    c.font = `900 ${15 * fs * DPR}px Nunito, sans-serif`;
+    names.push([p.a.nama, x + c.measureText(p.a.nama).width / 2, y - 10 * DPR, here ? "#f4b942" : "#f7efe3"]);
     if (here) text("Kamu di sini", x + w / 2, y + h + 18 * DPR, "#f4b942", 11);
     // tujuan misi: tanda ! emas memantul di pojok kanan atas area
     if (id === goal) {
@@ -192,6 +201,7 @@ function drawWorldMap(time) {
   for (const l of world.links) for (const [gx, gy] of [[l.x1, l.y1], [l.x2, l.y2]]) {
     c.fillStyle = "#8fd3ff"; c.beginPath(); c.arc(X(gx), Y(gy), 4 * DPR, 0, 6.28); c.fill();
   }
+  for (const [t, x, y, col] of names) text(t, x, y, col, 15, 900);
   // posisi kamu di area sekarang
   const p = world.parts[areaId];
   if (p) {

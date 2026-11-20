@@ -176,7 +176,7 @@ function drawMonster(m, time) {
 }
 
 function drawNpc(n, time) {
-  const look = n.id === "lurah" ? { color: n.color, accent: n.accent, hat: "#2b2238", hair: "#d9d4cc" } : { color: n.color, accent: n.accent, hair: "#3b2a22" };
+  const look = n.id === "lurah" ? { color: n.color, accent: n.accent, hat: "#2b2238", hair: "#d9d4cc" } : { color: n.color, accent: n.accent, hat: n.hat, hair: n.hair || "#3b2a22" };
   const face = Math.atan2(P.y - n.y, P.x - n.x);
   drawPerson(ctx, { x: n.x, y: n.y, face: dist(P, n) < 160 ? face : n.face, run: 0, moving: false, swing: 0, inv: 0, flash: 0 }, look, time);
   ctx.font = "800 11px Nunito, sans-serif"; ctx.textAlign = "center"; ctx.fillStyle = "#f4b942";
@@ -302,7 +302,7 @@ function render(now) {
   if (mode !== "select") {
     ctx.font = "700 15px Teko, sans-serif"; ctx.textAlign = "center";
     for (const g of area.gerbang) {
-      const gx = Math.min(Math.max((g.x0 + g.x1 + 1) / 2, 1.6), MW - 1.6) * T, gy = g.y0 * T - 10;
+      const gx = Math.min(Math.max((g.x0 + g.x1 + 1) / 2, 1.6), MW - 1.6) * T, gy = g.y0 === 0 ? (g.y1 + 1) * T + 22 : g.y0 * T - 10;
       const w = ctx.measureText(g.label).width + 16;
       ctx.fillStyle = "rgba(20,14,34,0.75)"; ctx.fillRect(gx - w / 2, gy - 15, w, 20);
       ctx.fillStyle = "#f4b942"; ctx.fillText(g.label, gx, gy);
