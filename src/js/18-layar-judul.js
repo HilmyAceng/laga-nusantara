@@ -15,7 +15,7 @@ function buildSelect() {
   }
   const saved = store.get(SAVE_KEY, null);
   const cont = $("btnCont");
-  if (saved && CLASSES[saved.cls]) { cont.hidden = false; cont.textContent = `Lanjutkan (${CLASSES[saved.cls].name} Lv ${saved.lv})`; $("btnNew").textContent = "Mulai baru (progres lama terhapus)"; }
+  if (saved && CLASSES[saved.cls]) { cont.hidden = false; cont.textContent = `Lanjutkan (${CLASSES[saved.cls].name} Lv ${saved.lv}${saved.pos && AREAS[saved.pos.area] ? " · " + AREAS[saved.pos.area].nama : ""})`; $("btnNew").textContent = "Mulai baru (progres lama terhapus)"; }
   else { cont.hidden = true; $("btnNew").textContent = "Mulai petualangan"; $("btnNew").className = "go"; }
 }
 const previews = {};
@@ -45,11 +45,21 @@ function drawPreviews(time) {
 function startGame(fresh) {
   if (fresh) { S = newSave(chosen); save(); }
   P = makePlayer();
-  loadArea("desa");
-  cam.x = P.x; cam.y = P.y;
+  // Lanjutkan: kembali ke area & titik terakhir (kalau datanya masih cocok dengan peta)
+  const pos = !fresh && S.pos;
+  if (pos && AREAS[pos.area]) {
+    loadArea(pos.area);
+    if (pos.x > 0 && pos.y > 0 && pos.x < MW && pos.y < MH && !solidAt(pos.x * T, pos.y * T)) {
+      P.x = pos.x * T; P.y = pos.y * T;
+      if (pos.hp > 0) P.hp = Math.min(maxHp(), pos.hp);
+    } else loadArea("desa");
+  } else loadArea("desa");
+  P.inv = 1.5; // kebal sebentar saat baru muncul
+  cam.x = P.x; cam.y = P.y - 20;
   mode = "play"; showUI(); refreshHud(true);
   sfx.start();
   if (fresh) toast("Temui Ki Lurah di utara desa", false);
+  else toast(`Melanjutkan di ${area.nama}`, false);
 }
 
 // Tombol di layar judul

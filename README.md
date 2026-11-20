@@ -1,7 +1,7 @@
 # Laga Nusantara
 
 Action RPG top-down. Desa Wanasari diganggu makhluk hutan. Pilih jagoan, jelajahi peta, naikkan level, selesaikan misi dari Ki Lurah, lalu kalahkan Genderuwo di gua timur.
-Bisa dimainkan di HP (joystick + tombol sentuh, mode lanskap) dan desktop (keyboard), serta bisa diinstal sebagai aplikasi (PWA). Progres tersimpan otomatis di perangkat.
+Bisa dimainkan di HP (joystick + tombol sentuh, mode lanskap) dan desktop (keyboard), serta bisa diinstal sebagai aplikasi (PWA). Progres tersimpan otomatis di perangkat, termasuk area & posisi terakhir: keluar aplikasi atau refresh, lalu "Lanjutkan" membawamu kembali ke tempat tadi.
 
 ## Fitur
 

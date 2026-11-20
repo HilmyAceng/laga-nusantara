@@ -22,9 +22,17 @@ let NPCS = NPC_DESA;       // NPC di area sekarang (hanya desa yang punya NPC)
 const cam = { x: START.x, y: START.y };
 
 function newSave(cls) {
-  return { cls, lv: 1, exp: 0, gold: ATURAN.awal.koin, potions: ATURAN.awal.jamu, weapon: 0, q: { idx: 0, prog: 0, status: "none" }, items: { taring: 0 }, kills: 0, bossDown: false };
+  return { cls, lv: 1, exp: 0, gold: ATURAN.awal.koin, potions: ATURAN.awal.jamu, weapon: 0, q: { idx: 0, prog: 0, status: "none" }, items: { taring: 0 }, kills: 0, bossDown: false, pos: null };
 }
-function save() { if (S) store.set(SAVE_KEY, S); }
+// Simpan progres + posisi terakhir (area, titik, nyawa) supaya "Lanjutkan" mulai di tempat tadi.
+// Saat pindah area (transit) posisi lama dipertahankan; saat pingsan → nanti mulai di desa.
+function save() {
+  if (!S) return;
+  if (P && mode !== "select" && mode !== "transit") {
+    S.pos = P.dead ? null : { area: areaId, x: +(P.x / T).toFixed(2), y: +(P.y / T).toFixed(2), hp: Math.ceil(P.hp) };
+  }
+  store.set(SAVE_KEY, S);
+}
 
 function makePlayer() {
   return { x: START.x, y: START.y, r: 12, face: 0, run: 0, moving: false, hp: maxHp(), inv: 1, flash: 0,
