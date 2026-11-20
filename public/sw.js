@@ -1,5 +1,5 @@
 // Service worker: simpan file game agar bisa dimainkan offline.
-const CACHE = "laga-v4";
+const CACHE = "laga-v6";
 const FILES = ["./", "./index.html", "./config.js", "./manifest.webmanifest", "./icons/icon-192.png", "./icons/icon-512.png"];
 self.addEventListener("install", (e) => { e.waitUntil(caches.open(CACHE).then((c) => c.addAll(FILES))); self.skipWaiting(); });
 self.addEventListener("activate", (e) => {

@@ -23,6 +23,7 @@ const KONTROL = {
   jamu: ["w"],
   bicara: ["e", "Enter"],
   jeda: ["Escape", "p"],
+  musik: ["m"],           // nyalakan / matikan musik
 };
 
 // ---------------------------------------------------------------------
@@ -62,6 +63,11 @@ const ATURAN = {
   },
 
   petaSeed: 20251119,                     // ganti angka ini = bentuk peta berubah
+
+  audio: {
+    musik: 0.5,                           // volume musik latar (0 = diam, 1 = penuh)
+    sfx: 0.8,                             // volume efek suara
+  },
 };
 
 // ---------------------------------------------------------------------
@@ -143,3 +149,42 @@ const QUESTS = [
     offer: "Sudah waktunya. Genderuwo di gua ujung timur yang membuat semua makhluk hutan gelisah. Kalahkan dia, Nak.",
     reward: { gold: 200, exp: 250, potion: 3 } },
 ];
+
+// ---------------------------------------------------------------------
+// 6. MUSIK LATAR (gaya gamelan, dibuat oleh kode, tanpa file audio)
+// Musik berganti otomatis sesuai tempat: desa, luar (hutan & padang),
+// gua, dan bos (saat Genderuwo mengejar).
+//
+// Cara menulis nada (notasi kepatihan, tangga nada slendro):
+//   1 2 3 5 6   = nada (slendro tidak punya 4 dan 7)
+//   .           = diam satu ketukan
+//   6,  atau 1, = satu oktaf lebih rendah (tambah koma lagi: makin rendah)
+//   1'          = satu oktaf lebih tinggi
+// tempo   = kecepatan: berapa nada (termasuk ".") dimainkan per menit
+// suara   = "saron" (logam nyaring), "bonang" (gong kecil lembut), "gelap" (dengung rendah)
+// kendang = pola gendang: D = dhung (rendah), t = tak (tinggi), . = diam
+// gong    = gong berbunyi setiap berapa ketukan (0 = tanpa gong)
+// Semua lagu di bawah ini ciptaan sendiri untuk game ini.
+// ---------------------------------------------------------------------
+const LAGU = {
+  desa: {
+    tempo: 144, suara: "bonang", gong: 32,
+    melodi: "3 . 5 6 5 . 3 2 . 1 2 3 . 2 1 . 6, . 1 2 3 5 3 . 2 . 1 . 6, . 1 .",
+    kendang: "D . . . t . . . D . t . . . t .",
+  },
+  luar: {
+    tempo: 192, suara: "saron", gong: 16,
+    melodi: "1 2 3 5 6 5 3 2 1 . 6, 1 2 3 2 . 3 5 6 1' 6 5 3 5 6 . 5 3 2 3 1 .",
+    kendang: "D . t D . t D t D . t D . t t t",
+  },
+  gua: {
+    tempo: 112, suara: "gelap", gong: 16,
+    melodi: "1, . . . 2, . 1, . . . 6,, . . . . . 3, . . . 2, . 1, . . . 6,, . . .",
+    kendang: "D . . . . . . . . . . . D . . .",
+  },
+  bos: {
+    tempo: 280, suara: "saron", gong: 8,
+    melodi: "6, 1 6, 1 2 1 6, . 6, 1 2 3 2 1 6, . 3 2 3 5 3 2 1 2 6, 1 2 1 6, . 6, .",
+    kendang: "D t t D t D t t D t t D t D D t",
+  },
+};
