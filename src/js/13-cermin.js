@@ -101,6 +101,7 @@ function bosUlangKalah(m) {
   toast(t("toast.bosUlang", { nama: m.d.name, hadiah: teksHadiah(h) }), true);
   if (baru && n < ATURAN.cermin.tingkat) setTimeout(() => toast(t("tantang.terbuka", { n: n + 1 }), false), 900);
   gainExp(h.exp);
+  dropCermin(m, n);                       // jimat legenda & langka (53-drop-langka.js)
   victory(); saveSoon();
 }
 

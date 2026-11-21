@@ -19,6 +19,7 @@ function teksHadiah(h) {
     h.weapon && t("side.hSenjata"),
     h.penawar && t("side.hPenawar"),
     h.item && t("item." + h.item),
+    h.jimat && namaJimat(h.jimat),
   ].filter(Boolean).join(" · ");
 }
 // Tempat monster jenis ini: bos → tempat bosnya; monster biasa → zonanya
@@ -31,6 +32,7 @@ const tempatNpc = (id) => { const n = npcById(id); return n && { area: n.area, x
 // Perintah & tujuan untuk misi Ki Lurah / sampingan (bentuknya sama: kill / collect)
 function perintahMisi(q, prog, selesai, npcId) {
   const nama = npcById(npcId).name;
+  if (q.type === "latihan") return perintahLatihan(q, prog, selesai);   // 56-cara-bermain.js
   if (selesai) return { perintah: t("misi.lapor", { npc: nama }), target: () => tempatNpc(npcId) };
   if (q.type === "kill") return {
     perintah: t("misi.kalahkan", { n: q.need, nama: MONSTERS[q.target].name }) + ` (${prog}/${q.need})`,

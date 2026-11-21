@@ -15,12 +15,12 @@ function sampinganBicara(npc) {
   if (!q) return false;
   const st = sideState(q), r = q.reward;
   if (st.status === "none") {
-    const hadiah = [r.gold && t("cerita.hKoin", { n: r.gold }), r.exp && r.exp + " EXP", r.potion && t("cerita.hJamu", { n: r.potion }), r.weapon && t("side.hSenjata"), r.penawar && t("side.hPenawar")].filter(Boolean).join(", ");
+    const hadiah = [r.gold && t("cerita.hKoin", { n: r.gold }), r.exp && r.exp + " EXP", r.potion && t("cerita.hJamu", { n: r.potion }), r.weapon && t("side.hSenjata"), r.penawar && t("side.hPenawar"), r.jimat && namaJimat(r.jimat)].filter(Boolean).join(", ");
     openDialog(npc.name, `${q.offer} (${t("side.hadiah")}: ${hadiah})`, [
       { label: t("dlg.nanti"), run: closeDialog },
       { label: t("dlg.terima"), primary: true, run: () => {
         st.status = "active";
-        st.prog = q.type === "collect" ? Math.min(q.need, S.items[q.item] || 0) : 0;
+        st.prog = q.type === "collect" ? Math.min(q.need, S.items[q.item] || 0) : 0; st.sub = 0;
         if (st.prog >= q.need) st.status = "done";
         sfx.quest(); saveSoon(); refreshHud(true); closeDialog();
       } },
@@ -33,6 +33,7 @@ function sampinganBicara(npc) {
       st.status = "selesai";
       S.gold += r.gold || 0; S.potions += r.potion || 0; S.weapon += r.weapon || 0;
       if (r.penawar) { S.penawar = true; setTimeout(() => toast(t("toast.penawar"), true), 600); }
+      if (r.jimat) setTimeout(() => beriJimat(r.jimat), 900);      // 52-jimat.js
       closeDialog(); if (r.exp) gainExp(r.exp); sfx.quest();
       toast(t("toast.hadiah", { koin: r.gold || 0, exp: r.exp || 0 }) + (r.weapon ? " · " + t("toast.senjata", { lv: S.weapon }) : ""), false);
       refreshHud(true); saveSoon();

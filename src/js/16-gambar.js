@@ -16,7 +16,8 @@ const hash = (x, y) => ((x * 73856093) ^ (y * 19349663)) >>> 0;
 
 // Kait gambar untuk fitur lain: GAMBAR_TANAH = fungsi(time) digambar di atas petak;
 // BENDA_TINGGI = fungsi(time) yang mengembalikan [{ y, f }] (ikut urutan kedalaman)
-const GAMBAR_TANAH = [], BENDA_TINGGI = [];
+// GAMBAR_ATAS = fungsi(time) digambar di atas semua makhluk (efek jurus, bintang lumpuh, ...)
+const GAMBAR_TANAH = [], BENDA_TINGGI = [], GAMBAR_ATAS = [];
 function drawGround(tx, ty, time) {
   const x = tx * T, y = ty * T, t = tileAt(tx, ty), h = hash(tx, ty);
   if (t === WATER || t === BRIDGE) {
@@ -140,7 +141,7 @@ function drawWeapon(c, weapon, pull) {
 
 // Karakter manusia (pemain, NPC, pratinjau). e: {x,y,face,run,moving,swing,swingDur,inv,flash}
 function drawPerson(c, e, look, time, opts = {}) {
-  c.save(); c.translate(e.x, e.y);
+  c.save(); c.translate(e.x, e.y - (e.lompat || 0));
   c.fillStyle = "rgba(0,0,0,0.3)"; c.beginPath(); c.ellipse(0, 0, 12, 4.5, 0, 0, 6.28); c.fill();
   if (e.inv > 0 && !opts.preview && Math.floor(time * 18) % 2 === 0) c.globalAlpha = 0.45;
   const flip = Math.cos(e.face) < -0.05 ? -1 : 1;
@@ -279,6 +280,7 @@ const WARNA_BARANG = { kantong: "#c9a26b", sisik: "#9cc46a", daunSambiloto: "#5a
   ekorTikus: "#c99a8a", tulangTua: "#e9e2c8", serpihBayang: "#8a5ad0", sisikListrik: "#ffe066", intiAngin: "#9fd8ff", lencanaBayang: "#5d5070",
   debuLelembut: "#d9c8ff", mutiaraHitam: "#3a3048", kainBayang: "#2b1a40" };
 function drawPickup(k, time) {
+  if (GAMBAR_PICKUP[k.kind]) return GAMBAR_PICKUP[k.kind](k, time);   // jimat & serpih (53-drop-langka.js)
   const by = Math.sin(time * 5 + k.x) * 2 - 6;
   ctx.fillStyle = "rgba(0,0,0,0.25)"; ctx.beginPath(); ctx.ellipse(k.x, k.y, 6, 2.5, 0, 0, 6.28); ctx.fill();
   if (k.kind === "coin") { ctx.fillStyle = "#f4b942"; ctx.beginPath(); ctx.arc(k.x, k.y + by, 5, 0, 6.28); ctx.fill(); ctx.fillStyle = "#ffe08a"; ctx.fillRect(k.x - 1, k.y + by - 3, 2, 4); }
@@ -342,6 +344,7 @@ function render(now) {
   list.sort((a, b) => a.y - b.y);
   for (const o of list) o.f();
   drawMusuhKhusus(time);                     // lingkaran bahaya & bola api musuh (26-monster-baru.js)
+  if (mode !== "select") for (const f of GAMBAR_ATAS) f(time);
 
   // efek di udara
   for (const e of effects) {
@@ -428,6 +431,10 @@ function render(now) {
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
     drawPlayerTag(W / 2 + (P.x - cx + sx) * scale, H / 2 + (P.y - 64 - cy + sy) * scale);
     drawIkonDebuff(W / 2 + (P.x - cx + sx) * scale, H / 2 + (P.y - 64 - cy + sy) * scale);   // 32-debuff.js
+    drawIkonRamuan(W / 2 + (P.x - cx + sx) * scale, H / 2 + (P.y - 64 - cy + sy) * scale);   // 52-jimat.js
+    drawTenaga(W / 2 + (P.x - cx + sx) * scale, H / 2 + (P.y - 64 - cy + sy) * scale);       // 49-pamungkas.js
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    drawLayarLambat();                                                                      // 50-hindar-tangkis.js
     // panah penunjuk tujuan (27-navigasi.js)
     if (mode === "play") drawPanahTujuan((x, y) => [W / 2 + (x - cx + sx) * scale, H / 2 + (y - cy + sy) * scale], time);
   }

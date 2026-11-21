@@ -16,9 +16,9 @@ let bahaya = [];     // lingkaran merah: meledak setelah `dur` detik { x, y, r, 
 // peluru & bahaya membawa debuff monster penembaknya (32-debuff.js)
 function tembak(m, ang, speed, dmg, r = 9) {
   const warna = m.d.warnaPeluru || (m.d.tembak && m.d.tembak.warna) || null;
-  tembakan.push({ x: m.x, y: m.y - 30, vx: Math.cos(ang) * speed, vy: Math.sin(ang) * speed, life: 2.4, dmg, r, deb: m.d.debuff || null, warna });
+  tembakan.push({ x: m.x, y: m.y - 30, vx: Math.cos(ang) * speed, vy: Math.sin(ang) * speed, life: 2.4, dmg, r, deb: m.d.debuff || null, warna, dari: m });
 }
-function tandaBahaya(x, y, r, dur, dmg, jenis) { bahaya.push({ x, y, r, t: 0, dur, dmg, jenis, deb: musuhAktif ? musuhAktif.d.debuff || null : null }); }
+function tandaBahaya(x, y, r, dur, dmg, jenis) { bahaya.push({ x, y, r, t: 0, dur, dmg, jenis, deb: musuhAktif ? musuhAktif.d.debuff || null : null, dari: musuhAktif }); }
 
 function updateMusuhKhusus(dt) {
   for (const s of tembakan) {
@@ -26,7 +26,7 @@ function updateMusuhKhusus(dt) {
     const tl = tileAt(Math.floor(s.x / T), Math.floor((s.y + 30) / T));
     if (tl === TREE || tl === ROCK || tl === HOUSE || tl === WALL) s.life = 0;
     if (diZonaAman(s.x, s.y + 30)) { s.life = 0; spark(s.x, s.y, "#7dffa8", 6); continue; }   // lenyap di zona aman
-    if (!P.dead && Math.hypot(P.x - s.x, P.y - 30 - s.y) < s.r + 12) { hurtPlayer(s.dmg, Math.atan2(s.vy, s.vx), s.deb); s.life = 0; spark(s.x, s.y, s.warna || "#ff9f43", 8); }
+    if (!P.dead && Math.hypot(P.x - s.x, P.y - 30 - s.y) < s.r + 12) { hurtPlayer(s.dmg, Math.atan2(s.vy, s.vx), s.deb, { dari: s.dari }); s.life = 0; spark(s.x, s.y, s.warna || "#ff9f43", 8); }
     if (Math.random() < 0.6) parts.push({ x: s.x, y: s.y + 30, z: 30, vz: 20, vx: rand(-15, 15), vy: rand(-15, 15), life: 0.3, max: 0.3, color: s.warna || "#ffb347" });
   }
   tembakan = tembakan.filter((s) => s.life > 0);
@@ -34,7 +34,7 @@ function updateMusuhKhusus(dt) {
     b.t += dt;
     if (b.t >= b.dur && !b.done) {
       b.done = true; shake = Math.max(shake, 0.3);
-      if (!P.dead && Math.hypot(P.x - b.x, P.y - b.y) < b.r + P.r) hurtPlayer(b.dmg, Math.atan2(P.y - b.y, P.x - b.x), b.deb);
+      if (!P.dead && Math.hypot(P.x - b.x, P.y - b.y) < b.r + P.r) hurtPlayer(b.dmg, Math.atan2(P.y - b.y, P.x - b.x), b.deb, { dari: b.dari });
       const warna = WARNA_BAHAYA[b.jenis] || "#8d8894";
       for (let i = 0; i < 14; i++) { const a = rand(0, 6.28), rr = rand(0, b.r); parts.push({ x: b.x + Math.cos(a) * rr, y: b.y + Math.sin(a) * rr, z: 0, vz: rand(150, 330), vx: 0, vy: 0, life: 0.5, max: 0.5, color: warna }); }
       b.jenis === "api" ? sfx.boom() : b.jenis === "air" ? sfx.roll() : sfx.slam();
@@ -93,7 +93,7 @@ function bosUmum(m, dt, dp, toP) {
     const a = Math.atan2(m.home.y - m.y, m.home.x - m.x);
     moveEnt(m, Math.cos(a) * d.speed * 1.5 * dt, Math.sin(a) * d.speed * 1.5 * dt, d.fly);
     m.hp = Math.min(d.hp, m.hp + d.hp * 0.5 * dt);
-    if (dist(m, m.home) < 20) { m.state = "idle"; m.aggro = false; m.hp = d.hp; m.fase2 = false; }
+    if (dist(m, m.home) < 20) { m.state = "idle"; m.aggro = false; m.hp = d.hp; m.fase2 = m.f2 = m.fase3 = false; m.urut = -1; }
     return true;
   }
   if (P.dead || pAman || dist(m, m.home) > (d.jarakPulang || 520)) { m.state = "pulang"; return true; }
@@ -104,7 +104,8 @@ function bosUmum(m, dt, dp, toP) {
 function fase2(m) {
   shake = 0.6; sfx.growl(); toast(t("toast.bosMarah", { nama: m.d.name }), true);
   const anak = m.d.anak || { buayaPutih: "buaya", rajaBanaspati: "banaspati" }[m.type];
-  if (anak) for (let i = 0; i < 2; i++) {
+  const hidup = monsters.filter((x) => !x.dead && x.type === anak).length;   // jangan menumpuk anak buah
+  if (anak && hidup < 4) for (let i = 0; i < 2; i++) {
     const a = rand(0, 6.28), spot = { x: m.x + Math.cos(a) * 90, y: m.y + Math.sin(a) * 90 };
     if (!solidAt(spot.x, spot.y)) { const c = makeMonster(anak, spot); c.aggro = true; c.state = "chase"; monsters.push(c); spark(spot.x, spot.y - 20, "#c9bfd6", 12); }
   }
@@ -241,6 +242,7 @@ function tandaBos(m) {
   const k = 1 - m.st / (m.serang === "hantam" ? 1 : 0.9);
   ctx.fillStyle = `rgba(229,72,77,${0.15 + 0.35 * clamp(k, 0, 1)})`;
   if (m.serang === "hantam") { ctx.beginPath(); ctx.ellipse(0, 0, m.type === "rajaBanaspati" ? 140 : 150, 90, 0, 0, 6.28); ctx.fill(); }
+  else if (m.serang === "cakar") { ctx.beginPath(); ctx.moveTo(0, 0); ctx.arc(0, 0, 150, m.ang - 1, m.ang + 1); ctx.closePath(); ctx.fill(); }
   else if (m.serang === "ekor") { ctx.beginPath(); ctx.ellipse(0, 0, 125, 75, 0, 0, 6.28); ctx.fill(); }
   else if (m.serang === "terjang") { ctx.save(); ctx.rotate(m.ang); ctx.fillRect(0, -m.d.r * 0.8, 420, m.d.r * 1.6); ctx.restore(); }
   else if (m.serang === "sapu") { ctx.beginPath(); ctx.moveTo(0, 0); ctx.arc(0, 0, m.d.range + m.d.r + 20, m.ang - 1.2, m.ang + 1.2); ctx.closePath(); ctx.fill(); }

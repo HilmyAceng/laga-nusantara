@@ -5,6 +5,19 @@ Bisa dimainkan di HP (joystick + tombol sentuh, mode lanskap) dan desktop (keybo
 
 ## Fitur
 
+- **Sistem tarung lanjutan**:
+  - **4 jurus per kelas** (terbuka di Lv 1, 8, 18, 30), dua dipasang sekaligus (`S` & `F`). Contoh: Badai Golok, Gelombang Angin, Langkah Bayang, Panah Jerat, Hujan Panah, Panah Tembus, Benteng, Lompatan Palu, Raungan, Perisai Api, Tapak Es, Meteor
+  - **Jurus pamungkas** (`R`, mulai Lv 5) saat bar **Tenaga Dalam** (garis emas di bawah nyawa) penuh: Seribu Tebasan, Panah Garuda, Palu Bumi, Hujan Meteor
+  - **Hindar sempurna**: berguling tepat sebelum kena → waktu melambat, pukulan berikutnya pasti kritis
+  - **Tangkis**: Hindar tanpa arah → serangan ditahan, penyerang lumpuh, kamu membalas
+  - **Poin jurus**: 1 poin tiap naik level untuk rank jurus (kemampuan baru di rank 3 & 5) dan 5 pasif. Bisa diatur ulang dengan koin
+- **Jimat** (Biasa / Langka / Legenda) di 2-3 slot. Biasa dijual di toko, Langka dari bos, Legenda khas tiap bos dari Cermin Gaib (peluang naik tiap tingkat, dijamin keluar setelah 10 kali gagal). Jimat bisa ditempa sampai ★5 dengan koin + Serpih Pusaka
+- **Kegunaan koin**: jamu, asah senjata, jimat, tempa jimat, ramuan 2 menit (Kuat, Baja, Penangkal, Gesit), atur ulang poin jurus
+- **Monster menguat sesuai level pemain** (sampai 8 level di atas aslinya). Selisih level berpengaruh, dan monster dunia 2+ belajar trik (lebih cepat, kadang memukul dua kali)
+- **Bos tangguh** bertingkat dari mudah ke sulit: tipuan, amukan (lari ke lingkaran hijau, lalu bos kelelahan), kuda-kuda (pecahkan dengan tangkisan), kombo. **Naga Kencana dirombak** jadi 3 fase: kombo cakar, terbang & lajur api & cincin api, lalu amukan Nafas Matahari
+- **Jurus khas tiap bos**: Genderuwo (Lempar Batu), Dwarapala (Gada Berputar), Buaya Putih (Gulungan Maut — menyelam lalu menyembul), Raja Banaspati (Pusaran Api), Siluman Ular (Kolam Racun, Tatapan Batu — balikkan badan!), Panglima Karang (Ombak Pasang), Kelabang (Terowongan), Raja Jerangkong (Tombak Tulang), Gurita Raksasa (Tinta Pekat, Sabetan Tentakel), Rajawali Petir (Badai Petir, Sambaran Kilat), Penjaga Menara (Lonceng Kala — cari penjuru hijau), Prabu Kalamurka (Cermin Bayang)
+- **Debuff baru**: lumpuh (stun) dan berdarah (damage over time yang bertumpuk). Monster juga bisa lumpuh, beku, terjerat, melemah, dan terkena racun/terbakar/berdarah dari jurus & jimatmu
+- **Latihan Dasar** bersama **Ki Sabda** di desa (misi sampingan cara bermain, 10 langkah) dan **Boneka Latihan** untuk berlatih hindar sempurna & tangkis kapan saja
 - **Cerita utama "Kabut dari Gunung Geni"**: 10 bab × 10 episode (232 langkah) di `src/cerita/`, dengan percakapan panjang, hadiah, pengumuman "Tamat Bab / Mulai Bab", dan layar TAMAT. Simpanan versi lama otomatis dipindahkan ke langkah yang sama
 - **Puzzle di cerita** (bab 6-10): urutan gong/lonceng/lentera sesuai pahatan, dorong batu ke lempeng (ada tuas reset), lempeng ingatan yang berkedip, dan batu/patung bertanya
 - **Empat dunia**, peta dunia punya dropdown pilih dunia:
@@ -39,7 +52,8 @@ Bisa dimainkan di HP (joystick + tombol sentuh, mode lanskap) dan desktop (keybo
 ## Kontrol
 
 - HP: joystick kiri untuk gerak. Tombol Serang (tahan), Jurus, Hindar, Jamu, dan Bicara (muncul di dekat NPC)
-- Keyboard: tombol panah untuk gerak, `D` serang (tahan), `S` jurus, `A` hindar, `W` jamu, `E` bicara, `M` buka peta besar (atau klik peta mini), `Esc` jeda, `N` musik nyala/mati
+- Keyboard: tombol panah untuk gerak, `D` serang (tahan), `S` jurus 1, `F` jurus 2, `R` pamungkas, `A` hindar (+ arah = berguling, tanpa arah = tangkis), `W` jamu, `E` bicara, `M` buka peta besar (atau klik peta mini), `J` daftar misi, `K` halaman jurus, `I` halaman jimat, `Esc` jeda, `N` musik nyala/mati
+- HP: tombol tambahan Jurus 2 dan Pamungkas (muncul mulai Lv 5)
 
 ## Menu jeda
 
@@ -50,6 +64,7 @@ Semua menu memakai tombol. `Esc` = kembali satu halaman.
   - **Bahasa**: Indonesia (bawaan) atau English. Semua teks ikut berganti: menu, dialog, misi, nama area, monster & kelas hero. Pilihan tersimpan
   - **Kontrol**: panduan tombol keyboard dan HP (dibaca otomatis dari `KONTROL` di `config.js`)
   - **Volume**: musik dan efek suara, tombol `−` / `+` (10% per tekan) dan Nyala/Mati. Pilihan tersimpan
+  - **Gameplay**: Cara Bermain (panduan lengkap), Jurus & Poin Jurus, Jimat, Debuff
   - **Layar**: Full Screen nyala/mati (pilihan tersimpan; setelah halaman dibuka ulang, layar penuh aktif lagi pada sentuhan pertama). Di iPhone Safari belum didukung browser: pasang lewat "Tambahkan ke Layar Utama"
 - **Credit**: siapa yang membuat game ini, dan dari mana grafis, musik & huruf berasal
 - **Menu utama**
@@ -66,6 +81,7 @@ Semua menu memakai tombol. `Esc` = kembali satu halaman.
 | `00-galat.js` | Layar galat: kalau game gagal dimuat/error, tampilkan pesan + tombol "Perbaiki & muat ulang" (dimuat paling awal) |
 | `01-alat.js` | Fungsi bantu kecil (`$`, `clamp`, `rand`, `store` untuk simpanan) |
 | `02-bahasa.js` | Bahasa Indonesia / English: kamus teks (`TEKS`), terjemahan data game (`DATA_EN`), fungsi `t()` |
+| `02a-teks-tempur.js` | Teks ID/EN untuk jurus, jimat, bos tangguh, debuff baru, cara bermain |
 | `03-rumus.js` | Rumus EXP, nyawa, serangan |
 | `04-peta.js` | Jenis petak, daftar `DUNIA`, area dunia 1 (`AREAS`), gerbang berkunci |
 | `04a-dunia-segara.js` | Area dunia 2: Bandar Segara, Hutan Bakau, Hutan Larangan, Kuil Samudra |
@@ -112,7 +128,18 @@ Semua menu memakai tombol. `Esc` = kembali satu halaman.
 | `44-teka-tebak.js` | Puzzle tebak-tebakan (Batu Bertanya) |
 | `45-monster-bayang.js` | Gambar monster & bos bab 6-10 |
 | `46-kalamurka.js` | Pola serangan & gambar Prabu Kalamurka |
-| `47-main.js` | Loop utama (dimuat paling akhir) |
+| `48-jurus.js` | 4 jurus tiap kelas, slot jurus 1 & 2, efek & peluru jurus |
+| `49-pamungkas.js` | Bar Tenaga Dalam & jurus pamungkas |
+| `50-hindar-tangkis.js` | Hindar sempurna (waktu melambat) & tangkis |
+| `51-poin-jurus.js` | Poin jurus, pasif, halaman Jurus (tombol K) |
+| `52-jimat.js` | Jimat, tempa, ramuan, bonus stat, halaman Jimat (tombol I) |
+| `53-drop-langka.js` | Drop jimat & serpih dari bos, cermin, monster (dengan pity) |
+| `54-skala-monster.js` | Monster menguat sesuai level, selisih level, trik serang ganda |
+| `55-debuff-baru.js` | Debuff lumpuh & berdarah, status monster (lumpuh/beku/lambat/lemah/DoT) |
+| `56-cara-bermain.js` | Ki Sabda, Boneka Latihan, misi Latihan Dasar, halaman Cara Bermain |
+| `57-bos-tangguh.js` | Trik semua bos: tipuan, amukan, kuda-kuda, kombo |
+| `59-jurus-khas-bos.js` | Jurus khas 12 bos (selain naga), kolam racun, ombak, tinta, penjuru kala |
+| `60-main.js` | Loop utama (dimuat paling akhir) |
 
 Cerita utama ada di folder `src/cerita/`: `bab-1.js` ... `bab-5.js` (satu file per bab), digabung di `semua.js`.
 
@@ -130,10 +157,15 @@ Kalau menambah file JS baru: taruh di `src/js/` dengan nomor urut, tambahkan `<s
 | `QUESTS` | Misi sampingan Ki Lurah: tipe `kill` / `collect`, jumlah, teks, hadiah |
 | (`src/cerita/`) | Cerita utama per bab: tipe `bicara` / `datang` / `kill` / `collect` / `teka` / `bos`, episode, tujuan, percakapan, hadiah, terjemahan `en` |
 | `SAMPINGAN` | Misi sampingan dari NPC lain |
+| `ATURAN.tenaga` / `hindarSempurna` / `tangkis` / `poinJurus` / `jimat` / `skalaMonster` | Angka-angka sistem tarung baru |
+| `JURUS` / `PAMUNGKAS` / `PASIF` | Jurus tiap kelas (level buka, jeda, damage, kemampuan rank 3 & 5), pamungkas, pasif |
+| `JIMAT` / `RAMUAN` | Semua jimat (rarity, efek, harga) dan ramuan toko |
+| `BOS_TANGGUH` / `DEBUFF_TAMBAHAN` | Tier & trik tiap bos; monster pemberi lumpuh/berdarah |
+| `LATIHAN` | Langkah misi Latihan Dasar (Ki Sabda) |
 | `LAGU` | Musik latar tiap tempat: melodi (notasi slendro `1 2 3 5 6`), tempo, suara, pola kendang, gong |
 | `ATURAN.audio` | Volume awal musik dan efek suara (pemain bisa mengubahnya di Pengaturan › Volume) |
 
-Yang ada di `src/js/` (bukan config): bentuk semua peta, letak bos/teleport/teka-teki (`AREAS` di `04-peta.js`), daftar NPC & obrolannya (`NPC_DATA` di `05-status.js`), terjemahan Inggris (`02-bahasa.js`), dialog NPC (`talk()` di `12-dialog.js`), cara kerja tiap jurus (`10-tarung.js`), dan resep efek suara (`sfx` di `07-audio.js`).
+Yang ada di `src/js/` (bukan config): bentuk semua peta, letak bos/teleport/teka-teki (`AREAS` di `04-peta.js`), daftar NPC & obrolannya (`NPC_DATA` di `05-status.js`), terjemahan Inggris (`02-bahasa.js`), dialog NPC (`talk()` di `12-dialog.js`), cara kerja tiap jurus (`48-jurus.js`), dan resep efek suara (`sfx` di `07-audio.js`).
 
 ## Nama sementara (silakan diganti)
 
@@ -172,6 +204,7 @@ Setiap kali ada update untuk pemain, naikkan versi `CACHE` di `public/sw.js` (mi
 
 ## Ide pengembangan berikutnya
 
-- Inventaris dan perlengkapan (armor, aksesoris)
+- Fase khusus (seperti Naga) untuk bos lain
+- Armor & kosmetik (warna baju, aura)
 - Sprite gambar sendiri atau aset dari Kenney.nl
 - Multiplayer co-op online (butuh server WebSocket)

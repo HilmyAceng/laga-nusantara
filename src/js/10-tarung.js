@@ -1,6 +1,6 @@
 // =====================================================================
 // PERTARUNGAN
-// Serangan, jurus tiap kelas, peluru, damage ke monster & pemain.
+// Serangan biasa, peluru, damage ke monster & pemain. (Jurus: 48-jurus.js)
 // =====================================================================
 "use strict";
 
@@ -41,46 +41,46 @@ function fire(kind, ang, speed, range, dmg, splash, quiet) {
   if (!quiet) kind === "fire" ? sfx.fire() : sfx.arrow();
   projs.push({ kind, x: P.x + Math.cos(ang) * 14, y: P.y + Math.sin(ang) * 14, vx: Math.cos(ang) * speed, vy: Math.sin(ang) * speed, life: range / speed, dmg, splash });
 }
-function playerSkill() {
-  const C = CLASSES[S.cls], K = C.skill;
-  P.skillCd = K.cd; sfx[K.type]();
-  if (K.type === "dash") {
-    const ang = aimAngle(K.dist); P.face = ang;
-    P.dash = 0.2; P.rdx = Math.cos(ang); P.rdy = Math.sin(ang); P.dashHit = new Set(); P.inv = Math.max(P.inv, 0.3);
-  } else if (K.type === "volley") {
-    const ang = aimAngle(C.attack.range); P.face = ang; P.swing = P.swingDur = 0.15;
-    for (const a of [-0.28, -0.14, 0, 0.14, 0.28]) fire("arrow", ang + a, C.attack.speed, C.attack.range, atkPower() * K.mult, 0, true);
-  } else if (K.type === "quake") {
-    P.swing = P.swingDur = 0.3; shake = Math.max(shake, 0.45);
-    effects.push({ kind: "ring", x: P.x, y: P.y, r: K.r, t: 0, dur: 0.5 });
-    for (let i = 0; i < 24; i++) { const a = rand(0, 6.28), rr = rand(0, K.r); parts.push({ x: P.x + Math.cos(a) * rr, y: P.y + Math.sin(a) * rr, z: 0, vz: rand(150, 380), vx: 0, vy: 0, life: 0.6, max: 0.6, color: "#c9a26b" }); }
-    for (const m of monsters) if (!m.dead && dist(P, m) <= K.r + m.r) damageMonster(m, atkPower() * K.mult, Math.atan2(m.y - P.y, m.x - P.x), 360);
-  } else if (K.type === "pillar") {
-    const tgt = nearestMonster(K.dist + 120);
-    const ang = tgt ? Math.atan2(tgt.y - P.y, tgt.x - P.x) : P.face; P.face = ang; P.swing = P.swingDur = 0.2;
-    const x = tgt ? tgt.x : P.x + Math.cos(ang) * K.dist, y = tgt ? tgt.y : P.y + Math.sin(ang) * K.dist;
-    effects.push({ kind: "pillar", x, y, r: K.r, t: 0, delay: 0.3, dur: 0.45, done: false, dmg: atkPower() * K.mult });
-  }
-}
-
-function damageMonster(m, amount, ang, kb) {
+// opts: { kritis: pasti kritis, dot: jenis (damage berkala: tanpa kritis/terpental/efek), tanpaTenaga }
+function damageMonster(m, amount, ang, kb, opts = {}) {
   if (m.dead || m.kebal) return;   // kebal: misalnya naga yang sedang terbang
-  const crit = Math.random() < ATURAN.kritis.peluang;
-  const dmg = Math.max(1, Math.round(amount * rand(0.9, 1.1) * (crit ? ATURAN.kritis.kali : 1)));
+  if (m.d.latihan) latihanAksi("serang");   // latihan dasar (56-cara-bermain.js)
+  // pengali: selisih level (54), keadaan bos (57), jimat bos & beku rentan
+  amount *= kaliKeMusuh(m) * (m.d.boss ? kaliKeadaanBos(m) * (1 + bonusStat("bos")) : 1) * (!m.d.boss && m.rentan > 0 ? 1.3 : 1);
+  if (opts.dot) {
+    const dmg = Math.max(1, Math.round(amount));
+    m.hp -= dmg; m.aggro = true; m.seen = 4;
+    numbers.push({ x: m.x + rand(-10, 10), y: m.y - m.d.h - 6, v: dmg, life: 0.6, color: (ATURAN.debuff[opts.dot] || {}).warna || "#ff9f43", size: 16 });
+    if (m.hp <= 0) killMonster(m);
+    return;
+  }
+  const kritisSiap = P && P.kritisSiap;   // setelah hindar sempurna (50-hindar-tangkis.js)
+  const crit = opts.kritis || kritisSiap || Math.random() < ATURAN.kritis.peluang + bonusStat("kritis");
+  if (kritisSiap) P.kritisSiap = false;
+  const dmg = Math.max(1, Math.round(amount * rand(0.9, 1.1) * (crit ? ATURAN.kritis.kali + bonusStat("kritisKali") : 1)));
   m.hp -= dmg; m.flash = 0.12; m.aggro = true; m.seen = 4;
-  if (!m.d.boss) { m.kbx = Math.cos(ang) * kb; m.kby = Math.sin(ang) * kb; if (kb > 250 && m.state === "windup") { m.state = "recover"; m.st = 0.5; } }
+  if (!m.d.boss && kb) { m.kbx = Math.cos(ang) * kb; m.kby = Math.sin(ang) * kb; if (kb > 250 && m.state === "windup") { m.state = "recover"; m.st = 0.5; } }
   numbers.push({ x: m.x + rand(-8, 8), y: m.y - m.d.h - 10, v: dmg, life: 0.8, color: crit ? "#ffd166" : "#fff6e8", size: crit ? 30 : 22 });
   spark(m.x, m.y - m.d.h * 0.5, crit ? "#ffd166" : "#fff2c4", crit ? 14 : 8);
   freeze = Math.max(freeze, crit ? 0.06 : 0.035);
   (crit ? sfx.crit : sfx.hit)();
+  // jimat: hisap nyawa, debuff ke musuh, lumpuh
+  const hisap = bonusStat("hisap");
+  if (hisap && P && !P.dead) P.hp = Math.min(maxHp(), P.hp + dmg * hisap);
+  for (const e of dotSerangan()) if (Math.random() < e.peluang) beriDotMonster(m, e.jenis);
+  if (bonusStat("lumpuh") && Math.random() < bonusStat("lumpuh")) lumpuhkanMonster(m, m.d.boss ? 0.4 : 1);
+  if (!opts.tanpaTenaga) tambahTenaga(ATURAN.tenaga.pukul);
   if (m.hp <= 0) killMonster(m);
 }
 
 function killMonster(m) {
   if (m.ulang) return bosUlangKalah(m);   // bos dari cermin gaib: hadiahnya lain (13-cermin.js)
+  if (m.d.latihan) { m.hp = m.d.hp; return; }
   m.dead = true; m.respawn = ATURAN.monster.munculLagi; S.kills++; sfx.die();
   spark(m.x, m.y - m.d.h * 0.5, "#c9bfd6", 18);
-  const coins = Math.round(rand(m.d.gold[0], m.d.gold[1]));
+  tambahTenaga(ATURAN.tenaga.bunuh, true);
+  dropMonster(m);                         // jimat & serpih (53-drop-langka.js)
+  const coins = Math.round(rand(m.d.gold[0], m.d.gold[1]) * (1 + bonusStat("koin")));
   for (let i = 0; i < Math.min(6, coins); i++) pickups.push({ kind: "coin", v: Math.ceil(coins / Math.min(6, coins)), x: m.x + rand(-16, 16), y: m.y + rand(-12, 12), t: 0 });
   if (Math.random() < ATURAN.monster.dropJamu) pickups.push({ kind: "jamu", x: m.x, y: m.y + 6, t: 0 });
   const q = QUESTS[S.q.idx];
@@ -101,14 +101,33 @@ function killMonster(m) {
 }
 
 // deb = debuff dari serangan ini; kosong = debuff milik monster yang sedang menyerang
-function hurtPlayer(amount, ang, deb) {
-  if (P.inv > 0 || P.dead || pAman) return;
-  const sumber = deb !== undefined ? deb : musuhAktif ? musuhAktif.d.debuff : null;
-  const dmg = Math.max(1, Math.round(amount * rand(0.9, 1.1)));
-  P.hp -= dmg; P.inv = 0.6; P.flash = 0.15; P.kbx = Math.cos(ang) * 280; P.kby = Math.sin(ang) * 280;
+// opts: { dari: monster penyerang, mutlak: amukan bos (tak bisa ditangkis/dihindari), latihan: pukulan boneka }
+function hurtPlayer(amount, ang, deb, opts = {}) {
+  if (P.dead) return;
+  if (cekHindarTangkis(amount, ang, opts)) return;          // hindar sempurna & tangkis (50-hindar-tangkis.js)
+  if (opts.latihan) { numbers.push({ x: P.x, y: P.y - 60, v: t("latihan.kena"), life: 0.8, color: "#ff8b8e", size: 20 }); sfx.hurt(); return; }
+  if ((P.inv > 0 && !opts.mutlak) || pAman) return;
+  const dari = opts.dari || musuhAktif;
+  const sumber = deb !== undefined ? deb : dari ? dari.d.debuff : null;
+  // pengali: selisih level, monster melemah, jimat/ramuan tahan, jurus benteng
+  let kali = (opts.mutlak ? 1 : kaliDariMusuh(dari) * kaliLemahMonster(dari)) * (1 - bonusStat("tahan"));
+  if (P.benteng > 0) kali *= 0.3;
+  const dmg = Math.max(1, Math.round(amount * rand(0.9, 1.1) * kali));
+  P.hp -= dmg; P.inv = 0.6; P.flash = 0.15;
+  if (!(P.benteng > 0)) { P.kbx = Math.cos(ang) * 280; P.kby = Math.sin(ang) * 280; }
   shake = Math.max(shake, 0.25); sfx.hurt();
   numbers.push({ x: P.x, y: P.y - 56, v: dmg, life: 0.8, color: "#ff8b8e", size: 22 });
   if (navigator.vibrate) { try { navigator.vibrate(40); } catch (e) {} }
+  tambahTenaga(ATURAN.tenaga.dipukul, true);
+  // pantulan damage (jimat duri / jurus benteng) ke penyerang jarak dekat
+  const duri = bonusStat("duri") + (P.benteng > 0 ? 0.5 : 0);
+  if (duri && dari && !dari.dead && dist(dari, P) < 200) damageMonster(dari, dmg * duri, Math.atan2(dari.y - P.y, dari.x - P.x), 0, { tanpaTenaga: true });
+  // jimat bangkit (Sisik Naga): sekali tiap 5 menit
+  if (P.hp <= 0 && bonusStat("bangkit") && !(S.bangkitSampai > Date.now())) {
+    S.bangkitSampai = Date.now() + 300000; P.hp = Math.round(maxHp() * 0.3); P.inv = 2;
+    toast(t("jimat.bangkit"), true); spark(P.x, P.y - 30, "#f4b942", 30); sfx.level();
+    return;
+  }
   if (P.hp <= 0) {
     P.hp = 0; P.dead = true; P.deadT = ATURAN.pingsan.lama; sfx.faint();
     const lost = Math.floor(S.gold * ATURAN.pingsan.koinHilang); S.gold -= lost;

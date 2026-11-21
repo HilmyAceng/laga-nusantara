@@ -280,6 +280,7 @@ function bangunUlangArea() {
 let padatTambahan = () => false;
 function solidAt(px, py) { const tx = Math.floor(px / T), ty = Math.floor(py / T); return SOLID.has(tileAt(tx, ty)) || padatTambahan(tx, ty); }
 function moveEnt(e, dx, dy, fly) {
+  if (e.lambat > 0) { dx *= 0.5; dy *= 0.5; }   // monster terjerat/lambat (55-debuff-baru.js)
   const r = e.r * 0.8;
   if (fly) { e.x = clamp(e.x + dx, 2 * T, (MW - 2) * T); e.y = clamp(e.y + dy, 2 * T, (MH - 2) * T); return; }
   if (dx) { const nx = e.x + dx, sx = nx + Math.sign(dx) * r; if (!solidAt(sx, e.y - r * 0.6) && !solidAt(sx, e.y + r * 0.4)) e.x = nx; }

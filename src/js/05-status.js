@@ -115,7 +115,7 @@ function save() {
 
 function makePlayer() {
   return { x: START.x, y: START.y, r: 12, face: 0, run: 0, moving: false, hp: maxHp(), inv: 1, flash: 0,
-    atkCd: 0, skillCd: 0, rollCd: 0, roll: 0, rdx: 0, rdy: 0, dash: 0, dashHit: null, combo: 0, comboT: 0,
+    atkCd: 0, cd: [0, 0], cdMaks: [1, 1], tenaga: 0, rollCd: 0, roll: 0, rdx: 0, rdy: 0, dash: 0, dashHit: null, combo: 0, comboT: 0,
     swing: 0, swingDur: 0.18, kbx: 0, kby: 0, dead: false, deadT: 0, debuff: {} };
 }
 

@@ -37,18 +37,15 @@ function refreshHud(force) {
   const boss = monsters.find((m) => m.d.boss && !m.dead && m.aggro);
   ui.boss.hidden = !boss || mode === "select";
   if (boss) { ui.bossFill.style.width = (100 * boss.hp / boss.d.hp) + "%"; setText(ui.bossName, "bossName", boss.d.name); }
-  const sc = Math.round(P.skillCd / CLASSES[S.cls].skill.cd * 40) / 40;
-  if (last.sc !== sc) { last.sc = sc; ui.bSkill.style.setProperty("--cd", sc); }
+  hudJurus();                       // jurus slot 1 & 2, pamungkas (48-jurus.js, 49-pamungkas.js)
   const rc = Math.round(P.rollCd / ATURAN.hindar.jeda * 20) / 20;
   if (last.rc !== rc) { last.rc = rc; ui.bRoll.style.setProperty("--cd", rc); }
   if (!isTouch) {
-    setSlot(ui.sSkill, ui.sSkillSec, "ss", P.skillCd, CLASSES[S.cls].skill.cd);
     setSlot(ui.sRoll, ui.sRollSec, "sr", P.rollCd, ATURAN.hindar.jeda);
     if (last.sn !== S.cls) {
       last.sn = S.cls;
       const lbl = (act) => { const k = KONTROL[act][0]; return KEY_LABEL[k] || (k.length === 1 ? k.toUpperCase() : k); };
-      $("sSkillName").textContent = CLASSES[S.cls].skill.name;
-      $("sSkillKey").textContent = lbl("jurus"); $("sRollKey").textContent = lbl("hindar");
+      $("sRollKey").textContent = lbl("hindar");
     }
   }
   const talkable = !!nearNpc && mode === "play";

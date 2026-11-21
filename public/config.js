@@ -25,6 +25,10 @@ const KONTROL = {
   jeda: ["Escape", "p"],
   peta: ["m"],            // buka / tutup peta besar
   misi: ["j"],            // buka / tutup daftar misi (pilih misi yang dilacak)
+  jurus2: ["f"],          // jurus di slot ke-2 (pilih di Menu › Gameplay › Jurus)
+  pamungkas: ["r"],       // jurus pamungkas (saat bar Tenaga Dalam penuh)
+  menuJurus: ["k"],       // buka halaman Jurus & Poin Jurus
+  menuJimat: ["i"],       // buka halaman Jimat
   musik: ["n"],           // nyalakan / matikan musik
 };
 
@@ -87,6 +91,8 @@ const ATURAN = {
     lambat:   { warna: "#7fb2ff", kali: 0.55 },
     lemah:    { warna: "#b88cff", kali: 0.6 },
     bingung:  { warna: "#ff8fd8" },
+    lumpuh:   { warna: "#ffe066", kebalSetelah: 2.5 },   // stun: tidak bisa bergerak & menyerang; setelahnya kebal lumpuh sebentar
+    berdarah: { warna: "#e5484d", perDetik: 0.018, tumpukMaks: 3 },   // damage over time, bisa bertumpuk sampai 3 (tiap tumpukan menambah sakit)
   },
 
   // Zona aman: monster tidak bisa masuk, peluru musuh lenyap, debuff hilang, nyawa pulih pelan.
@@ -138,6 +144,46 @@ const ATURAN = {
     sfx: 0.9,                             // volume awal efek suara
     penguat: 3.0,                         // pengeras keseluruhan: makin besar makin keras (1 = tanpa penguat)
   },
+};
+
+// Pertarungan lanjutan (48-56 di js/)
+ATURAN.tenaga = {                         // bar Tenaga Dalam untuk jurus pamungkas
+  maks: 100, bukaLevel: 5,                // pamungkas terbuka mulai level 5
+  pukul: 1.6, dipukul: 4, bunuh: 3,       // tambahan tenaga tiap memukul / dipukul / mengalahkan musuh
+  sempurna: 15, tangkis: 20,              // tambahan tenaga dari hindar sempurna & tangkis
+};
+ATURAN.hindarSempurna = {                 // berguling TEPAT saat serangan datang
+  jendela: 0.2,                           // detik pertama gulingan yang dihitung "tepat"
+  lambat: 0.3, lamaLambat: 0.6,           // waktu melambat jadi 30% selama 0.6 detik
+};
+ATURAN.tangkis = {                        // Hindar TANPA arah = kuda-kuda tangkis
+  jendela: 0.32, jeda: 0.75,              // lama kuda-kuda & jeda sebelum bisa menangkis/berguling lagi
+  lumpuhMusuh: 1.6, lumpuhBos: 0.5,       // musuh yang ditangkis jadi lumpuh
+  balas: 1.5,                             // serangan balik = serangan × 1.5
+};
+ATURAN.poinJurus = {
+  rankMaks: 5,                            // tiap jurus/pasif bisa dinaikkan sampai 5
+  damagePerRank: 0.12, cdPerRank: 0.04,   // tiap rank: damage +12%, jeda -4%
+  resetHarga: 60,                         // atur ulang poin = 60 koin × level
+};
+ATURAN.jimat = {
+  slot: 2, slotTambah: 25,                // 2 slot jimat; slot ke-3 terbuka di level 25
+  bintangMaks: 5, perBintang: 0.25,       // tiap bintang: efek +25%
+  tempaKoin: [60, 180, 500],              // biaya tempa (× bintang sekarang): biasa, langka, legenda
+  tempaSerpih: [3, 6, 12],
+  serpihGanda: [2, 5, 15],                // jimat kembar dilebur jadi serpih pusaka
+  dropMonster: { serpih: 0.03, biasa: 0.004, langka: 0.0012 },   // peluang drop dari monster biasa
+  dropCermin: { legendaDasar: 0.03, legendaPerTingkat: 0.035, langkaDasar: 0.15, langkaPerTingkat: 0.05, pity: 10 },
+};
+ATURAN.skalaMonster = {
+  // Monster ikut menguat sesuai level pemain, tapi tidak lebih dari `batasAtas` level di atas level aslinya.
+  batasAtas: 8,
+  nyawaPerLv: 0.11, seranganPerLv: 0.075, hadiahPerLv: 0.07,
+  kaliSerang: 1.15, kaliNyawa: 1.1,       // semua monster sedikit lebih galak dari dulu
+  // selisih level: musuh yang levelnya di atasmu lebih sulit dilukai & lebih sakit pukulannya
+  kurangiPerLv: 0.05, tambahPerLv: 0.06, selisihMaks: 10,
+  // monster dunia 2+ atau yang sudah menguat 4 level: lebih cepat & kadang memukul dua kali
+  trikLevel: 13, trikSelisih: 4, serangGanda: 0.3,
 };
 
 // ---------------------------------------------------------------------
@@ -540,3 +586,201 @@ const SAMPINGAN = [
     en: { title: "Lost Handmaidens", offer: "The wraiths in the Dead City were once my handmaidens. Free eight of them... so they won't weep anymore.",
       done: "I heard them laughing before they left. Thank you, traveler." } },
 ];
+
+// ---------------------------------------------------------------------
+// 9. JURUS (48-jurus.js), PAMUNGKAS (49), POIN JURUS (51)
+// Tiap kelas punya 4 jurus. `buka` = level saat jurus terbuka.
+// Pasang 2 jurus sekaligus (slot 1 = tombol S, slot 2 = tombol F).
+// cd = jeda (detik), mult = pengali serangan.
+// naik3 / naik5 = kemampuan tambahan saat jurus mencapai rank 3 / rank 5 (poin jurus).
+// ---------------------------------------------------------------------
+const JURUS = {
+  pendekar: [
+    { id: "tebasanKilat", name: "Tebasan Kilat", type: "dash", buka: 1, cd: 5, mult: 2.4, dist: 230,
+      desc: "Menerjang lurus menembus musuh.", naik3: "Langsung menerjang sekali lagi ke musuh terdekat.", naik5: "Musuh yang ditembus jadi berdarah.",
+      en: { name: "Lightning Slash", desc: "Dash straight through enemies.", naik3: "Instantly dash again at the nearest enemy.", naik5: "Enemies you pass through start bleeding." } },
+    { id: "badaiGolok", name: "Badai Golok", type: "spin", buka: 8, cd: 7, mult: 0.9, r: 95, hits: 5,
+      desc: "Berputar sambil menebas semua musuh di sekeliling (5 kali).", naik3: "Jangkauan putaran +30%.", naik5: "Menarik musuh mendekat & membuat berdarah.",
+      en: { name: "Blade Storm", desc: "Spin and slash every enemy around you (5 hits).", naik3: "Spin range +30%.", naik5: "Pulls enemies in and makes them bleed." } },
+    { id: "gelombangAngin", name: "Gelombang Angin", type: "wave", buka: 18, cd: 6, mult: 2.2, speed: 700, range: 440,
+      desc: "Melempar gelombang tebasan yang menembus barisan musuh.", naik3: "Tiga gelombang sekaligus, menyebar.", naik5: "Musuh yang kena jadi lumpuh sebentar.",
+      en: { name: "Wind Wave", desc: "Hurl a slashing wave that pierces enemy lines.", naik3: "Three waves at once, fanned out.", naik5: "Enemies hit are briefly stunned." } },
+    { id: "langkahBayang", name: "Langkah Bayang", type: "blink", buka: 30, cd: 10, mult: 2.8, jarak: 320, target: 3,
+      desc: "Berpindah kilat menebas 3 musuh terdekat satu per satu. Kebal selama jurus.", naik3: "Menebas sampai 5 musuh.", naik5: "Setiap tebasan pasti kritis.",
+      en: { name: "Shadow Step", desc: "Flash between and slash the 3 nearest enemies. Invulnerable while active.", naik3: "Slashes up to 5 enemies.", naik5: "Every slash is a critical hit." } },
+  ],
+  pemanah: [
+    { id: "panahTiga", name: "Panah Tiga", type: "volley", buka: 1, cd: 4.5, mult: 1.4,
+      desc: "Lima anak panah menyebar sekaligus.", naik3: "Tujuh anak panah.", naik5: "Anak panah menembus musuh.",
+      en: { name: "Triple Shot", desc: "Five arrows fanned out at once.", naik3: "Seven arrows.", naik5: "Arrows pierce enemies." } },
+    { id: "panahJerat", name: "Panah Jerat", type: "snare", buka: 8, cd: 6, mult: 1.6,
+      desc: "Panah berjaring: musuh melambat 3 detik & lumpuh sebentar.", naik3: "Jaring meledak, menjerat musuh di sekitarnya.", naik5: "Lumpuh lebih lama, bos pun ikut terjerat.",
+      en: { name: "Snare Arrow", desc: "A net arrow: enemy slowed for 3s and briefly stunned.", naik3: "The net bursts, snaring nearby enemies.", naik5: "Longer stun, even bosses get snared." } },
+    { id: "hujanPanah", name: "Hujan Panah", type: "rain", buka: 18, cd: 8, mult: 0.6, r: 110, ticks: 8,
+      desc: "Panah berjatuhan di area musuh terdekat selama 1,6 detik.", naik3: "Area hujan lebih luas.", naik5: "Panah beracun (racun).",
+      en: { name: "Arrow Rain", desc: "Arrows rain on the nearest enemy's area for 1.6s.", naik3: "Wider rain area.", naik5: "Poisoned arrows." } },
+    { id: "panahTembus", name: "Panah Tembus", type: "pierce", buka: 30, cd: 9, mult: 4, speed: 950, range: 620,
+      desc: "Panah raksasa menembus semua musuh. Damage ×1,5 ke bos.", naik3: "Dua panah raksasa.", naik5: "Musuh yang kena berdarah.",
+      en: { name: "Piercing Shot", desc: "A giant arrow pierces every enemy. ×1.5 damage to bosses.", naik3: "Two giant arrows.", naik5: "Enemies hit start bleeding." } },
+  ],
+  pendobrak: [
+    { id: "gempa", name: "Gempa", type: "quake", buka: 1, cd: 7, mult: 2.6, r: 140,
+      desc: "Menghantam tanah, semua musuh di sekitar terkena.", naik3: "Area +30% & musuh biasa lumpuh.", naik5: "Gempa susulan setengah detik kemudian.",
+      en: { name: "Earthquake", desc: "Slam the ground, hitting every enemy around.", naik3: "Area +30% and normal enemies are stunned.", naik5: "An aftershock half a second later." } },
+    { id: "benteng", name: "Benteng", type: "guard", buka: 8, cd: 12, lama: 3,
+      desc: "Selama 3 detik damage yang diterima -70%, tak terpental, & memantulkan pukulan.", naik3: "Bertahan 4,5 detik.", naik5: "Saat selesai: pulih 15% nyawa & semua debuff hilang.",
+      en: { name: "Bulwark", desc: "For 3s take 70% less damage, no knockback, and reflect hits.", naik3: "Lasts 4.5s.", naik5: "When it ends: heal 15% HP and clear all debuffs." } },
+    { id: "lompatanPalu", name: "Lompatan Palu", type: "leap", buka: 18, cd: 8, mult: 3, r: 110, jarak: 300,
+      desc: "Melompat ke musuh terdekat lalu menghantam: musuh di sekitar lumpuh.", naik3: "Area hantaman lebih luas.", naik5: "Lumpuh lebih lama, bos ikut goyah.",
+      en: { name: "Hammer Leap", desc: "Leap to the nearest enemy and slam: nearby enemies are stunned.", naik3: "Wider slam area.", naik5: "Longer stun, bosses stagger too." } },
+    { id: "raungan", name: "Raungan", type: "roar", buka: 30, cd: 14, r: 220, lama: 6,
+      desc: "Musuh di sekitar lumpuh & melemah 6 detik, seranganmu +30%.", naik3: "Efek bertahan 9 detik.", naik5: "Langsung mengisi Tenaga Dalam +30.",
+      en: { name: "War Cry", desc: "Nearby enemies are stunned and weakened for 6s, your attack +30%.", naik3: "Effects last 9s.", naik5: "Instantly fills Inner Power +30." } },
+  ],
+  penyihir: [
+    { id: "pilarApi", name: "Pilar Api", type: "pillar", buka: 1, cd: 6, mult: 3, dist: 150, r: 70,
+      desc: "Pilar api menyembur dari tanah di bawah musuh.", naik3: "Dua pilar tambahan di sekitarnya.", naik5: "Musuh yang kena terbakar.",
+      en: { name: "Fire Pillar", desc: "A pillar of fire erupts under an enemy.", naik3: "Two extra pillars around it.", naik5: "Enemies hit start burning." } },
+    { id: "perisaiApi", name: "Perisai Api", type: "orbit", buka: 8, cd: 10, mult: 0.8, lama: 6, bola: 3,
+      desc: "3 bola api mengitarimu 6 detik, membakar musuh yang tersentuh.", naik3: "5 bola api.", naik5: "Bola api juga menghancurkan peluru musuh.",
+      en: { name: "Flame Shield", desc: "3 fireballs orbit you for 6s, burning enemies they touch.", naik3: "5 fireballs.", naik5: "Fireballs also destroy enemy projectiles." } },
+    { id: "tapakEs", name: "Tapak Es", type: "freeze", buka: 18, cd: 9, mult: 1.2, r: 150,
+      desc: "Gelombang es: musuh di sekitar membeku (lumpuh) 2 detik.", naik3: "Jangkauan lebih luas.", naik5: "Beku 3 detik & musuh beku menerima damage +30%.",
+      en: { name: "Frost Step", desc: "A frost wave: nearby enemies freeze (stun) for 2s.", naik3: "Wider reach.", naik5: "Freeze lasts 3s and frozen enemies take +30% damage." } },
+    { id: "meteor", name: "Meteor", type: "meteor", buka: 30, cd: 12, mult: 6, r: 120,
+      desc: "Meteor jatuh setelah 1,2 detik: damage sangat besar & membakar.", naik3: "Dua meteor.", naik5: "Kawah api tertinggal 3 detik.",
+      en: { name: "Meteor", desc: "A meteor lands after 1.2s: huge damage and burning.", naik3: "Two meteors.", naik5: "Leaves a fire crater for 3s." } },
+  ],
+};
+// Jurus pamungkas tiap kelas: dipakai saat bar Tenaga Dalam penuh (tombol R)
+const PAMUNGKAS = {
+  pendekar: { name: "Seribu Tebasan", type: "seribu", mult: 0.75, r: 300, desc: "Waktu seolah berhenti: semua musuh dekat ditebas 10 kali.",
+    en: { name: "Thousand Cuts", desc: "Time seems to stop: every nearby enemy is slashed 10 times." } },
+  pemanah: { name: "Panah Garuda", type: "garuda", mult: 9, desc: "Seberkas panah cahaya raksasa menembus semua musuh di depan.",
+    en: { name: "Garuda Arrow", desc: "A giant beam of light pierces every enemy ahead." } },
+  pendobrak: { name: "Palu Bumi", type: "palu", mult: 2.6, desc: "Tiga gempa beruntun makin luas, musuh lumpuh.",
+    en: { name: "Earth Hammer", desc: "Three widening quakes in a row, stunning enemies." } },
+  penyihir: { name: "Hujan Meteor", type: "hujanMeteor", mult: 2.6, desc: "Sepuluh meteor menghujani area di sekitarmu.",
+    en: { name: "Meteor Shower", desc: "Ten meteors rain down around you." } },
+};
+// Pasif (poin jurus): tiap rank menambah sedikit
+const PASIF = [
+  { id: "nyawa", name: "Tubuh Baja", per: 0.04, desc: "Nyawa maksimal +4% per rank.", en: { name: "Steel Body", desc: "Max HP +4% per rank." } },
+  { id: "kuat", name: "Tenaga Otot", per: 0.03, desc: "Serangan +3% per rank.", en: { name: "Muscle Power", desc: "Attack +3% per rank." } },
+  { id: "tangkas", name: "Tangkas", per: 0.06, desc: "Jeda hindar -6% & kuda-kuda tangkis lebih lama per rank.", en: { name: "Agility", desc: "Dodge cooldown -6% and longer parry stance per rank." } },
+  { id: "batin", name: "Olah Batin", per: 0.1, desc: "Tenaga Dalam terisi +10% lebih cepat per rank.", en: { name: "Inner Training", desc: "Inner Power fills 10% faster per rank." } },
+  { id: "pamungkas", name: "Puncak Ilmu", per: 0.15, desc: "Damage jurus pamungkas +15% per rank.", en: { name: "Peak Mastery", desc: "Ultimate damage +15% per rank." } },
+];
+
+// ---------------------------------------------------------------------
+// 10. JIMAT (52-jimat.js) & DROP LANGKA (53-drop-langka.js)
+// rarity: "biasa" (dijual di toko), "langka" (drop bos & cermin), "legenda" (khas tiap bos, dari Cermin Gaib).
+// efek (angka = nilai di bintang 1; tiap bintang +25%):
+//   atk / hp / tahan / bos / cd / koin / exp / gerak / jamu / tenaga / pamungkas / hindarCd = persen (0.1 = 10%)
+//   kritis = tambahan peluang kritis, kritisKali = tambahan pengali kritis, hisap = nyawa dari damage,
+//   duri = pantulan damage ke penyerang, tangkis = tambahan detik kuda-kuda
+//   dot = { jenis, peluang } (seranganmu memberi racun/berdarah/terbakar ke musuh), lumpuh = peluang musuh lumpuh
+//   kebal = [debuff] (tidak bisa terkena), jejakApi = berguling meninggalkan api, bangkit = bangkit sekali saat pingsan
+// harga = harga di toko (khusus biasa).
+// ---------------------------------------------------------------------
+const JIMAT = {
+  gelangBesi:   { name: "Gelang Besi", rarity: "biasa", harga: 120, efek: { atk: 0.06 }, en: { name: "Iron Bangle" } },
+  kalungAkar:   { name: "Kalung Akar Bahar", rarity: "biasa", harga: 120, efek: { hp: 0.08 }, en: { name: "Sea-Root Necklace" } },
+  cincinTembaga:{ name: "Cincin Tembaga", rarity: "biasa", harga: 150, efek: { kritis: 0.04 }, en: { name: "Copper Ring" } },
+  sabukKulit:   { name: "Sabuk Kulit Kerbau", rarity: "biasa", harga: 150, efek: { tahan: 0.05 }, en: { name: "Buffalo-Hide Belt" } },
+  buluPerkutut: { name: "Bulu Perkutut", rarity: "biasa", harga: 130, efek: { gerak: 0.06 }, en: { name: "Dove Feather" } },
+  kantongKepeng:{ name: "Kantong Kepeng", rarity: "biasa", harga: 100, efek: { koin: 0.12 }, en: { name: "Coin Pouch" } },
+  daunSirih:    { name: "Daun Sirih Kering", rarity: "biasa", harga: 110, efek: { jamu: 0.15 }, en: { name: "Dried Betel Leaf" } },
+  batuAsah:     { name: "Batu Asah Saku", rarity: "biasa", harga: 180, efek: { cd: 0.05 }, en: { name: "Pocket Whetstone" } },
+
+  tasbihCendana:{ name: "Tasbih Cendana", rarity: "langka", efek: { tenaga: 0.2, hp: 0.05 }, en: { name: "Sandalwood Beads" } },
+  taringMacan:  { name: "Taring Macan", rarity: "langka", efek: { atk: 0.1, dot: { jenis: "berdarah", peluang: 0.12 } }, en: { name: "Tiger Fang" } },
+  mataKucing:   { name: "Batu Mata Kucing", rarity: "langka", efek: { kritis: 0.07, kritisKali: 0.2 }, en: { name: "Cat's-Eye Stone" } },
+  rajahPenangkal:{ name: "Rajah Penangkal", rarity: "langka", efek: { tahan: 0.04, kebal: ["racun", "terbakar"] }, en: { name: "Warding Talisman" } },
+  gelangLeluhur:{ name: "Gelang Perak Leluhur", rarity: "langka", efek: { bos: 0.12 }, en: { name: "Ancestral Silver Bangle" } },
+  selendangAngin:{ name: "Selendang Angin", rarity: "langka", efek: { hindarCd: 0.2, gerak: 0.06 }, en: { name: "Wind Shawl" } },
+  cincinDarah:  { name: "Cincin Darah", rarity: "langka", efek: { hisap: 0.04 }, en: { name: "Blood Ring" } },
+  wesiKuning:   { name: "Wesi Kuning", rarity: "langka", efek: { tangkis: 0.08, duri: 0.3 }, en: { name: "Yellow Iron" } },
+
+  // legenda: khas tiap bos (bos = jenis bos yang menjatuhkannya)
+  buluGenderuwo:  { name: "Bulu Genderuwo", rarity: "legenda", bos: "genderuwo", efek: { tahan: 0.1, duri: 0.5 }, en: { name: "Genderuwo Fur" } },
+  gadaDwarapala:  { name: "Gada Dwarapala Mini", rarity: "legenda", bos: "dwarapala", efek: { atk: 0.08, lumpuh: 0.08 }, en: { name: "Miniature Dwarapala Club" } },
+  sisikBuayaPutih:{ name: "Sisik Buaya Putih", rarity: "legenda", bos: "buayaPutih", efek: { hp: 0.15, kebal: ["lambat"] }, en: { name: "White Crocodile Scale" } },
+  mahkotaBanaspati:{ name: "Mahkota Banaspati", rarity: "legenda", bos: "rajaBanaspati", efek: { jejakApi: 1, atk: 0.06, kebal: ["terbakar"] }, en: { name: "Banaspati Crown" } },
+  mustikaUlar:    { name: "Mustika Ular", rarity: "legenda", bos: "silumanUlar", efek: { dot: { jenis: "racun", peluang: 0.2 }, kebal: ["racun"] }, en: { name: "Serpent Gem" } },
+  perisaiKarang:  { name: "Perisai Karang", rarity: "legenda", bos: "panglimaKarang", efek: { tahan: 0.15, tangkis: 0.06 }, en: { name: "Coral Shield" } },
+  taringKelabang: { name: "Taring Kelabang", rarity: "legenda", bos: "kelabang", efek: { hisap: 0.06, dot: { jenis: "berdarah", peluang: 0.15 } }, en: { name: "Centipede Fang" } },
+  sisikNaga:      { name: "Sisik Naga Kencana", rarity: "legenda", bos: "naga", efek: { atk: 0.15, kebal: ["terbakar"], bangkit: 1 }, en: { name: "Golden Dragon Scale" } },
+  tulangRaja:     { name: "Tulang Raja Jerangkong", rarity: "legenda", bos: "rajaJerangkong", efek: { exp: 0.2, kritisKali: 0.3 }, en: { name: "Skeleton King's Bone" } },
+  tintaGurita:    { name: "Tinta Gurita", rarity: "legenda", bos: "guritaRaksasa", efek: { cd: 0.12, kebal: ["bingung"] }, en: { name: "Octopus Ink" } },
+  buluRajawali:   { name: "Bulu Rajawali Petir", rarity: "legenda", bos: "rajawaliPetir", efek: { gerak: 0.12, hindarCd: 0.25, kebal: ["lumpuh"] }, en: { name: "Thunder Eagle Feather" } },
+  kunciMenara:    { name: "Kunci Menara Kala", rarity: "legenda", bos: "penjagaMenara", efek: { tenaga: 0.35, pamungkas: 0.2 }, en: { name: "Kala Tower Key" } },
+  mahkotaKalamurka:{ name: "Mahkota Kalamurka", rarity: "legenda", bos: "kalamurka", efek: { bos: 0.2, atk: 0.1, kritis: 0.06 }, en: { name: "Kalamurka's Crown" } },
+};
+const WARNA_RARITY = { biasa: "#e8e2d0", langka: "#6fb7ff", legenda: "#f4b942" };
+
+// Ramuan sementara (dibeli di toko, langsung diminum). harga = dasar + perLevel × level pemain.
+const RAMUAN = {
+  kuat:      { name: "Ramuan Kuat", lama: 120, dasar: 50, perLevel: 6, efek: { atk: 0.25 }, warna: "#ff7b39", desc: "Serangan +25% selama 2 menit.", en: { name: "Strength Brew", desc: "Attack +25% for 2 minutes." } },
+  baja:      { name: "Ramuan Baja", lama: 120, dasar: 50, perLevel: 6, efek: { tahan: 0.25 }, warna: "#8fd3ff", desc: "Damage yang diterima -25% selama 2 menit.", en: { name: "Iron Brew", desc: "Damage taken -25% for 2 minutes." } },
+  penangkal: { name: "Ramuan Penangkal", lama: 120, dasar: 40, perLevel: 4, efek: { kebalSemua: 1 }, warna: "#7dffa8", desc: "Kebal semua debuff selama 2 menit.", en: { name: "Warding Brew", desc: "Immune to all debuffs for 2 minutes." } },
+  gesit:     { name: "Ramuan Gesit", lama: 120, dasar: 40, perLevel: 4, efek: { gerak: 0.2, hindarCd: 0.3 }, warna: "#f4b942", desc: "Gerak +20% & jeda hindar -30% selama 2 menit.", en: { name: "Swift Brew", desc: "Move +20% and dodge cooldown -30% for 2 minutes." } },
+};
+
+// ---------------------------------------------------------------------
+// 11. BOS TANGGUH (57-bos-tangguh.js) & DEBUFF TAMBAHAN (55-debuff-baru.js)
+// tier 1 (mudah) → 13 (paling sulit). Semakin tinggi tier, semakin banyak trik:
+//   tipuan    : peluang bos pura-pura menyerang (tahan sebentar, lalu baru memukul)
+//   amukan    : serangan pamungkas bos tiap `jeda` detik — layar memerah, lari ke lingkaran hijau!
+//   kudaKuda  : bos sesekali bertahan (perisai biru, damage -75%). Tangkis serangannya untuk memecahkan
+//   kombo     : peluang bos langsung menyerang lagi tanpa jeda
+// Di Cermin Gaib tingkat 5+ semua trik ini makin sering.
+// ---------------------------------------------------------------------
+const BOS_TANGGUH = {
+  genderuwo:      { tier: 1,  tipuan: 0.15 },
+  dwarapala:      { tier: 2,  tipuan: 0.18, amukan: 26 },
+  buayaPutih:     { tier: 3,  tipuan: 0.2,  amukan: 24 },
+  rajaBanaspati:  { tier: 4,  tipuan: 0.22, amukan: 22, kombo: 0.15 },
+  silumanUlar:    { tier: 5,  tipuan: 0.24, amukan: 22, kombo: 0.15, kudaKuda: 18 },
+  panglimaKarang: { tier: 6,  tipuan: 0.25, amukan: 21, kombo: 0.2,  kudaKuda: 16 },
+  kelabang:       { tier: 7,  tipuan: 0.26, amukan: 20, kombo: 0.25, kudaKuda: 16 },
+  naga:           { tier: 8,  tipuan: 0.25, kombo: 0.2 },   // naga punya amukan sendiri (36-naga.js)
+  rajaJerangkong: { tier: 9,  tipuan: 0.28, amukan: 19, kombo: 0.25, kudaKuda: 15 },
+  guritaRaksasa:  { tier: 10, tipuan: 0.3,  amukan: 18, kombo: 0.3,  kudaKuda: 14 },
+  rajawaliPetir:  { tier: 11, tipuan: 0.32, amukan: 17, kombo: 0.3,  kudaKuda: 14 },
+  penjagaMenara:  { tier: 12, tipuan: 0.34, amukan: 16, kombo: 0.35, kudaKuda: 13 },
+  kalamurka:      { tier: 13, tipuan: 0.36, amukan: 15, kombo: 0.35, kudaKuda: 12 },
+};
+// Debuff lumpuh (stun) & berdarah (damage over time) yang ditambahkan ke monster tertentu
+const DEBUFF_TAMBAHAN = {
+  babi:           { jenis: "lumpuh",   peluang: 0.2,  lama: 0.8 },
+  genderuwo:      { jenis: "lumpuh",   peluang: 0.25, lama: 1 },
+  dwarapala:      { jenis: "lumpuh",   peluang: 0.3,  lama: 1.1 },
+  harimauKumbang: { jenis: "berdarah", peluang: 0.4,  lama: 6 },
+  kelabang:       { jenis: "berdarah", peluang: 0.4,  lama: 6 },
+  arcaHidup:      { jenis: "lumpuh",   peluang: 0.25, lama: 1 },
+  jerangkong:     { jenis: "berdarah", peluang: 0.35, lama: 6 },
+  belutListrik:   { jenis: "lumpuh",   peluang: 0.3,  lama: 0.9 },
+  prajuritBayang: { jenis: "berdarah", peluang: 0.35, lama: 6 },
+  rajaJerangkong: { jenis: "berdarah", peluang: 0.4,  lama: 7 },
+  rajawaliPetir:  { jenis: "lumpuh",   peluang: 0.3,  lama: 1 },
+  penjagaMenara:  { jenis: "lumpuh",   peluang: 0.3,  lama: 1.1 },
+  kalamurka:      { jenis: "berdarah", peluang: 0.3,  lama: 7 },
+};
+
+// ---------------------------------------------------------------------
+// 12. CARA BERMAIN (56-cara-bermain.js): latihan dasar bersama Ki Sabda di desa.
+// Langkah dikerjakan berurutan. jumlah = berapa kali harus dilakukan.
+// ---------------------------------------------------------------------
+const LATIHAN = [
+  { id: "gerak", jumlah: 1 }, { id: "serang", jumlah: 5 }, { id: "jurus", jumlah: 1 }, { id: "hindar", jumlah: 2 },
+  { id: "sempurna", jumlah: 1 }, { id: "tangkis", jumlah: 1 }, { id: "jamu", jumlah: 1 }, { id: "peta", jumlah: 1 },
+  { id: "misi", jumlah: 1 }, { id: "menu", jumlah: 1 },
+];
+MONSTERS.boneka = { name: "Boneka Latihan", nameEn: "Training Dummy", lv: 1, hp: 99999, atk: 0, speed: 0, r: 14, h: 50, exp: 0, gold: [0, 0], range: 46, wind: 1, cd: 3, aggro: 170, ai: "boneka", latihan: true };
+SAMPINGAN.unshift({ id: "latihan", npc: "sabda", title: "Latihan Dasar", type: "latihan", need: LATIHAN.length,
+  offer: "Kisanak baru di sini? Sebelum keluar desa, berlatihlah dulu dengan bonekaku. Akan kuajari cara bergerak, menyerang, berguling, menangkis, dan banyak lagi.",
+  done: "Bagus sekali! Kau sudah siap menghadapi dunia luar. Ingat: musuh yang kuat bisa dikalahkan dengan sabar membaca gerakannya.",
+  reward: { gold: 60, exp: 30, potion: 3, jimat: "gelangBesi" },
+  en: { title: "Basic Training", offer: "New around here? Before leaving the village, train with my dummy first. I'll teach you to move, attack, roll, parry, and more.",
+    done: "Excellent! You're ready for the outside world. Remember: strong foes can be beaten by patiently reading their moves." } });

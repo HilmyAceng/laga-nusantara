@@ -8,7 +8,7 @@
 let prev = performance.now(), miniT = 0, autoSaveT = 3;
 function frame(now) {
   const dt = Math.min(0.033, (now - prev) / 1000); prev = now;
-  update(dt);
+  update(dt * skalaWaktu(dt));   // hindar sempurna: waktu melambat (50-hindar-tangkis.js)
   render(now);
   drawPreviews(now / 1000);
   if (mode === "map") drawBigMap(now / 1000);

@@ -5,7 +5,7 @@
 "use strict";
 
 function isiStatJeda() {
-  $("pauseStats").textContent = t("jeda.stats", { kelas: CLASSES[S.cls].name, lv: S.lv, kills: S.kills, atk: atkPower(), senjata: S.weapon });
+  $("pauseStats").textContent = t("jeda.stats", { kelas: CLASSES[S.cls].name, lv: S.lv, kills: S.kills, atk: atkPower(), senjata: S.weapon }) + (poinSisa() ? " · " + t("jeda.poin", { n: poinSisa() }) : "");
 }
 function togglePause() {
   if (mode === "play") {
@@ -27,8 +27,12 @@ function buildControls() {
   const rows = [
     [keys("kiri", "atas", "kanan", "bawah"), t("ctl.gerak")],
     [keys("serang"), t("ctl.serang")],
-    [keys("jurus"), t("ctl.jurus", { nama: C.skill.name, cd: C.skill.cd })],
-    [keys("hindar"), t("ctl.hindar")],
+    [keys("jurus"), t("ctl.jurusSlot", { n: 1, nama: jurusSlot(0) ? namaJurus(jurusSlot(0)) : t("jurus.kosong") })],
+    [keys("jurus2"), t("ctl.jurusSlot", { n: 2, nama: jurusSlot(1) ? namaJurus(jurusSlot(1)) : t("jurus.kosong") })],
+    [keys("pamungkas"), t("ctl.pamungkas", { nama: teksPam("name"), lv: ATURAN.tenaga.bukaLevel })],
+    [keys("hindar"), t("ctl.hindar2")],
+    [keys("menuJurus"), t("ctl.menuJurus")],
+    [keys("menuJimat"), t("ctl.menuJimat")],
     [keys("jamu"), t("ctl.jamu", { pulih })],
     [keys("bicara"), t("ctl.bicara")],
     [keys("peta"), t("ctl.peta")],
@@ -40,8 +44,9 @@ function buildControls() {
   $("ctlTouchList").innerHTML = [
     t("ctlT.stick"),
     t("ctlT.serang"),
-    t("ctlT.jurus", { nama: C.skill.name }),
-    t("ctlT.hindar"),
+    t("ctlT.jurus2"),
+    t("ctlT.pamungkas", { nama: teksPam("name"), lv: ATURAN.tenaga.bukaLevel }),
+    t("ctlT.hindar2"),
     t("ctlT.jamu", { pulih }),
     t("ctlT.bicara"),
     t("ctlT.peta"),
@@ -60,18 +65,22 @@ function showCtlTab(which) {
 $("tabKey").addEventListener("click", () => showCtlTab("key"));
 
 // Pindah halaman di menu jeda: main → settings → volume / layar / control.
-const PAUSE_BACK = { main: null, settings: "main", bahasa: "settings", control: "settings", volume: "settings", layar: "settings", credit: "main", keluar: "main", gameplay: "settings", debuff: "gameplay" };
+const PAUSE_BACK = { main: null, settings: "main", bahasa: "settings", control: "settings", volume: "settings", layar: "settings", credit: "main", keluar: "main", gameplay: "settings", debuff: "gameplay", jurus: "gameplay", jimat: "gameplay", cara: "gameplay" };
 let pauseView = "main";
 function showPauseView(view, silent) {
   pauseView = view;
   document.querySelectorAll("#pauseBox .pview").forEach((el) => { el.hidden = el.dataset.view !== view; });
-  $("pausePanel").classList.toggle("wide", view === "volume" || view === "control");
+  $("pausePanel").classList.toggle("wide", ["volume", "control", "jurus", "jimat", "cara"].includes(view));
+  if (view !== "jimat") jimatDariToko = false;
   if (view === "volume") refreshAudioButtons();
   if (view === "layar") { refreshLayar(); refreshPanah(); }
   if (view === "bahasa") refreshBahasa();
   if (view === "main" && S) isiStatJeda();
   if (view === "control") buildControls();
   if (view === "debuff") isiPanduanDebuff();   // 38-panduan-debuff.js
+  if (view === "jurus") isiHalamanJurus();     // 51-poin-jurus.js
+  if (view === "jimat") isiHalamanJimat();     // 52-jimat.js
+  if (view === "cara") isiCaraBermain();       // 56-cara-bermain.js
   if (!silent) sfx.click();
   $("pauseBox").scrollTop = 0;
   const first = document.querySelector(`#pauseBox .pview[data-view="${view}"] button:not(:disabled)`);

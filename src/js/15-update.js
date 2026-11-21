@@ -17,20 +17,25 @@ function updatePlayer(dt) {
   const inp = readInput();
   if (punyaDebuff("bingung")) { inp.mx = -inp.mx; inp.my = -inp.my; }   // debuff bingung: arah terbalik
   P.inv = Math.max(0, P.inv - dt); P.flash = Math.max(0, P.flash - dt);
-  P.atkCd = Math.max(0, P.atkCd - dt); P.skillCd = Math.max(0, P.skillCd - dt); P.rollCd = Math.max(0, P.rollCd - dt);
+  P.atkCd = Math.max(0, P.atkCd - dt); P.rollCd = Math.max(0, P.rollCd - dt);
   P.comboT = Math.max(0, P.comboT - dt); P.swing = Math.max(0, P.swing - dt);
   P.moving = false;
 
   if (P.dash > 0) {
     P.dash -= dt;
     moveEnt(P, P.rdx * 1150 * dt, P.rdy * 1150 * dt);
-    for (const m of monsters) if (!m.dead && !P.dashHit.has(m) && dist(P, m) < m.r + 26) { P.dashHit.add(m); damageMonster(m, atkPower() * C.skill.mult, Math.atan2(P.rdy, P.rdx), 300); }
+    for (const m of monsters) if (!m.dead && !P.dashHit.has(m) && dist(P, m) < m.r + 26) { P.dashHit.add(m); damageMonster(m, P.dashDmg, Math.atan2(P.rdy, P.rdx), 300); if (P.dashDot) beriDotMonster(m, P.dashDot); }
     if (Math.random() < 0.8) parts.push({ x: P.x, y: P.y - rand(5, 35), z: 0, vz: 0, vx: -P.rdx * 60, vy: -P.rdy * 60, life: 0.25, max: 0.25, color: C.color });
     return;
   }
+  if (jurusMengunci(dt)) return;          // lompatan palu / langkah bayang (48-jurus.js)
+  if (punyaDebuff("lumpuh")) {            // lumpuh: diam di tempat (55-debuff-baru.js)
+    if (P.kbx || P.kby) { moveEnt(P, P.kbx * dt, P.kby * dt); const k = Math.exp(-12 * dt); P.kbx *= k; P.kby *= k; }
+    nearNpc = null; return;
+  }
   if (P.roll > 0) { P.roll -= dt; moveEnt(P, P.rdx * ATURAN.hindar.kecepatan * dt, P.rdy * ATURAN.hindar.kecepatan * dt); P.run += dt * 30; return; }
 
-  const slow = (P.swing > 0 ? 0.35 : 1) * kaliGerak();   // debuff lambat (32-debuff.js)
+  const slow = (P.swing > 0 ? 0.35 : 1) * kaliGerak() * (1 + bonusStat("gerak"));   // debuff lambat (32-debuff.js), jimat/ramuan gerak
   if (inp.mx || inp.my) {
     moveEnt(P, inp.mx * C.speed * slow * dt, inp.my * C.speed * slow * dt);
     P.moving = true; P.run += dt * 11;
@@ -38,18 +43,17 @@ function updatePlayer(dt) {
   }
   if (P.kbx || P.kby) { moveEnt(P, P.kbx * dt, P.kby * dt); const k = Math.exp(-12 * dt); P.kbx *= k; P.kby *= k; if (Math.abs(P.kbx) + Math.abs(P.kby) < 5) P.kbx = P.kby = 0; }
 
-  if (inp.roll && P.rollCd <= 0) {
-    const l = Math.hypot(inp.mx, inp.my);
-    P.rdx = l ? inp.mx / l : Math.cos(P.face); P.rdy = l ? inp.my / l : Math.sin(P.face);
-    P.roll = ATURAN.hindar.lama; P.rollCd = ATURAN.hindar.jeda; P.inv = Math.max(P.inv, ATURAN.hindar.kebal); sfx.roll();
-    return;
-  }
-  if (inp.skill && P.skillCd <= 0) playerSkill();
-  else if (inp.attack && P.atkCd <= 0) playerAttack();
+  // hindar: dengan arah = berguling, tanpa arah = tangkis (50-hindar-tangkis.js)
+  if (inp.roll && P.rollCd <= 0 && hindarAtauTangkis(inp)) return;
+  if (inp.ult) pakaiPamungkas();                 // 49-pamungkas.js
+  else if (inp.skill) pakaiJurus(0);             // 48-jurus.js
+  else if (inp.skill2) pakaiJurus(1);
+  else if (inp.attack && P.atkCd <= 0 && !P.spin) playerAttack();
   if (inp.potion) {
+    latihanAksi("jamu");
     // jamu: pulihkan nyawa; setelah belajar resep penawar (Pak Joko) juga menyembuhkan semua debuff
     const obati = S.penawar && adaDebuff();
-    if (S.potions > 0 && (P.hp < maxHp() || obati)) { S.potions--; const h = Math.round(maxHp() * ATURAN.jamuPulih); P.hp = Math.min(maxHp(), P.hp + h); numbers.push({ x: P.x, y: P.y - 56, v: "+" + h, life: 0.9, color: "#5ad17a", size: 22 }); sfx.drink(); if (obati) sembuhkanDebuff("jamu"); saveSoon(); }
+    if (S.potions > 0 && (P.hp < maxHp() || obati)) { S.potions--; const h = Math.round(maxHp() * ATURAN.jamuPulih * (1 + bonusStat("jamu"))); P.hp = Math.min(maxHp(), P.hp + h); numbers.push({ x: P.x, y: P.y - 56, v: "+" + h, life: 0.9, color: "#5ad17a", size: 22 }); sfx.drink(); if (obati) sembuhkanDebuff("jamu"); saveSoon(); }
     else if (S.potions <= 0) toast(t("toast.jamuHabis"), false);
   }
   nearNpc = null;
@@ -66,8 +70,10 @@ function updateMonster(m, dt) {
   }
   m.flash = Math.max(0, m.flash - dt); m.cd = Math.max(0, m.cd - dt); m.seen = Math.max(0, m.seen - dt); m.run += dt * 8;
   if (m.kbx || m.kby) { moveEnt(m, m.kbx * dt, m.kby * dt, d.fly); const k = Math.exp(-10 * dt); m.kbx *= k; m.kby *= k; if (Math.abs(m.kbx) + Math.abs(m.kby) < 5) m.kbx = m.kby = 0; }
+  if (monsterLumpuh(m, dt)) return;                    // lumpuh / beku / terjerat (55-debuff-baru.js)
   const alive = !P.dead && !pAman, dp = dist(m, P), toP = Math.atan2(P.y - m.y, P.x - m.x);   // pemain di zona aman = tidak dikejar
   const reach = d.range + d.r + P.r;
+  if (d.boss && bosTangguh(m, dt, dp, toP)) return;   // tipuan, amukan, kuda-kuda, kombo (57-bos-tangguh.js)
   if (d.ai) { AI_BOS[d.ai](m, dt, dp, toP); return; }   // bos baru punya pola sendiri (26-monster-baru.js)
   perilakuMonster(m, dt, dp, toP);                       // kedip / tembak
   switch (m.state) {
@@ -105,7 +111,7 @@ function updateMonster(m, dt) {
           if (kena && d.copet) { copet(m); break; }    // tuyul mencopet lalu kabur
         }
         effects.push({ kind: "claw", x: m.x, y: m.y - d.h * 0.4, ang: m.ang, r: d.range + d.r, t: 0, dur: 0.15 }); sfx.claw();
-        m.state = "recover"; m.st = 0.35; m.cd = d.cd;
+        selesaiSerang(m, toP);                         // kadang memukul dua kali (54-skala-monster.js)
       }
       break;
     }
@@ -161,7 +167,7 @@ function update(dt) {
     e.t += dt;
     if (e.kind === "pillar" && !e.done && e.t >= e.delay) {
       e.done = true; shake = Math.max(shake, 0.25);
-      for (const m of monsters) if (!m.dead && Math.hypot(m.x - e.x, m.y - e.y) < e.r + m.r) damageMonster(m, e.dmg, Math.atan2(m.y - e.y, m.x - e.x), 200);
+      for (const m of monsters) if (!m.dead && Math.hypot(m.x - e.x, m.y - e.y) < e.r + m.r) { damageMonster(m, e.dmg, Math.atan2(m.y - e.y, m.x - e.x), 200); if (e.dot) beriDotMonster(m, e.dot); }
     }
     if (e.kind === "pillar" && e.t >= e.delay && e.t <= e.delay + e.dur) for (let i = 0; i < 3; i++) parts.push({ x: e.x + rand(-e.r * 0.6, e.r * 0.6), y: e.y + rand(-10, 10), z: rand(0, 40), vz: rand(180, 380), vx: 0, vy: 0, life: 0.4, max: 0.4, color: Math.random() < 0.5 ? "#ff7b39" : "#ffd166" });
   }
@@ -176,7 +182,8 @@ function update(dt) {
     if (!P.dead && d < 90 && k.t > 0.3) { const a = Math.atan2(P.y - k.y, P.x - k.x); k.x += Math.cos(a) * 320 * dt; k.y += Math.sin(a) * 320 * dt; }
     if (!P.dead && d < 22 && k.t > 0.3) {
       k.got = true;
-      if (k.kind === "coin") { S.gold += k.v; sfx.coin(); }
+      if (ambilKhusus(k)) {}                         // jimat & serpih pusaka (53-drop-langka.js)
+      else if (k.kind === "coin") { S.gold += k.v; sfx.coin(); }
       else if (k.kind === "jamu") { S.potions++; notifItem(t("toast.dapatJamu")); sfx.item(); }
       else if (k.kind === "taring") { S.items.taring = (S.items.taring || 0) + 1; sfx.item(); const q = QUESTS[S.q.idx]; if (q && q.type === "collect" && S.q.status === "active") progressQuest(1); else notifItem(t("toast.dapatTaring")); }
       else {   // barang cerita / misi: notif kecil kiri bawah (39-notif-item.js)
@@ -187,7 +194,7 @@ function update(dt) {
       }
       saveSoon();
     }
-    if (k.t > 40) k.got = true;
+    if (k.t > 40 && k.kind !== "jimat") k.got = true;
   }
   pickups = pickups.filter((k) => !k.got);
 

@@ -110,6 +110,45 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 .bab-banner b { font-family: var(--font-display); font-size: 3rem; line-height: 0.95; color: var(--gold); }
 .bab-banner span { font-size: 1.05rem; font-weight: 700; color: var(--ink); }
 /* Panduan debuff */
+/* ---------- Jurus, jimat, cara bermain (js/51, 52, 56) ---------- */
+.gp-list { display: grid; gap: 10px; text-align: left; max-height: 58vh; overflow-y: auto; padding-right: 4px; }
+.gp-list h3 { margin: 6px 0 0; font-family: var(--font-display); font-size: 1.35rem; font-weight: 600; color: var(--gold); }
+.jr-top { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; font-weight: 800; font-size: 0.9rem; }
+.jr-top b { color: var(--gold); font-size: 1.1rem; }
+.jr-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; }
+.jr-card, .jm-card { display: grid; gap: 4px; align-content: start; padding: 10px 12px; border-radius: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--line); }
+.jr-card.kunci { opacity: 0.55; }
+.jr-card.pam { border-color: rgba(244, 185, 66, 0.5); }
+.jr-head, .jm-head { display: flex; gap: 8px; align-items: center; justify-content: space-between; }
+.jr-head b, .jm-head b { font-size: 0.98rem; }
+.jr-card p, .jm-card p { margin: 0; font-size: 0.8rem; line-height: 1.35; }
+.jr-card small, .jm-card small { color: var(--ink-dim); font-size: 0.72rem; }
+.jr-lv { font-size: 0.72rem; font-weight: 800; color: var(--ink-dim); }
+.jr-naik { color: var(--ink-dim); opacity: 0.7; }
+.jr-naik.on { color: #7dffa8; opacity: 1; }
+.jr-aksi { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.gp-list button { padding: 6px 10px; border-radius: 9px; border: 1px solid var(--line); background: rgba(255, 255, 255, 0.08); color: var(--ink); font: inherit; font-size: 0.78rem; font-weight: 800; cursor: pointer; }
+.gp-list button:disabled { opacity: 0.4; cursor: default; }
+.gp-list button[aria-pressed="true"], .gp-list button[aria-selected="true"] { background: var(--gold); color: #1b1208; border-color: var(--gold); }
+.pips { display: inline-flex; gap: 3px; }
+.pips i { width: 9px; height: 9px; border-radius: 50%; background: rgba(255, 255, 255, 0.15); }
+.pips i.on { background: var(--gold); }
+.jr-pasifs { display: grid; gap: 6px; }
+.jr-pasif { display: grid; grid-template-columns: 1fr auto auto; gap: 10px; align-items: center; padding: 8px 10px; border-radius: 10px; background: rgba(255, 255, 255, 0.05); }
+.jr-pasif b { display: block; font-size: 0.9rem; }
+.jr-pasif small { font-size: 0.72rem; color: var(--ink-dim); }
+.jm-card { border-color: var(--rc); box-shadow: inset 3px 0 0 var(--rc); }
+.jm-rar { font-size: 0.68rem; font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase; color: var(--rc); }
+.bintang { color: var(--gold); letter-spacing: 2px; font-size: 0.85rem; }
+.jm-slots { display: flex; flex-wrap: wrap; gap: 6px; }
+.jm-slot { padding: 5px 10px; border-radius: 999px; font-size: 0.78rem; font-weight: 800; border: 1px solid var(--rc, var(--line)); color: var(--rc, var(--ink)); }
+.jm-slot.kosong { color: var(--ink-dim); border-style: dashed; }
+.jm-info { margin: 0; font-size: 0.78rem; color: var(--ink-dim); }
+.gp-list .tabs { justify-self: start; }
+.cara { padding: 8px 12px; border-radius: 10px; background: rgba(255, 255, 255, 0.05); }
+.cara h3 { margin: 0 0 4px; font-size: 1.2rem; }
+.cara p { margin: 0; font-size: 0.84rem; line-height: 1.45; }
+.cara kbd { font: 800 0.72rem/1 inherit; padding: 2px 5px; border-radius: 5px; background: rgba(255, 255, 255, 0.16); border: 1px solid var(--line); }
 .db-list { display: grid; gap: 8px; text-align: left; max-height: 52vh; overflow-y: auto; }
 .db-item { display: flex; gap: 10px; align-items: flex-start; padding: 8px 10px; border-radius: 10px; background: rgba(255, 255, 255, 0.05); }
 .db-ikon { flex: none; width: 16px; height: 16px; border-radius: 50%; margin-top: 3px; }
@@ -172,7 +211,7 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
   pointer-events: auto; touch-action: none;
 }
 .knob { position: absolute; left: 50%; top: 50%; width: 54px; height: 54px; margin: -27px 0 0 -27px; border-radius: 50%; background: rgba(247, 239, 227, 0.35); border: 2px solid rgba(247, 239, 227, 0.6); }
-.pad { position: absolute; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); right: max(14px, env(safe-area-inset-right, 0px)); width: 220px; height: 180px; }
+.pad { position: absolute; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); right: max(14px, env(safe-area-inset-right, 0px)); width: 290px; height: 180px; }
 .tb {
   position: absolute; width: 60px; height: 60px; border-radius: 50%; pointer-events: auto; touch-action: none;
   border: 2px solid rgba(255, 255, 255, 0.25); background: rgba(20, 14, 34, 0.62);
@@ -185,6 +224,10 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 .tb.roll { right: 6px; bottom: 94px; }
 .tb.pot { right: 84px; bottom: 76px; }
 .tb.talk { right: 150px; bottom: 112px; background: rgba(244, 185, 66, 0.7); color: #1b1208; }
+.tb.skill2 { right: 160px; bottom: 30px; background: rgba(61, 139, 253, 0.55); }
+.tb.ult { right: 224px; bottom: 100px; width: 58px; height: 58px; background: rgba(244, 185, 66, 0.35); font-size: 0.55rem; letter-spacing: -0.02em; }
+.tb.ult.penuh { background: rgba(244, 185, 66, 0.85); color: #1b1208; box-shadow: 0 0 16px rgba(244, 185, 66, 0.8); animation: pop 0.6s ease-in-out infinite alternate; }
+.tb.kosong { opacity: 0.35; }
 .tb.cd::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: conic-gradient(rgba(5, 3, 12, 0.72) calc(var(--cd, 0) * 360deg), transparent 0); }
 
 /* ---------- Cooldown jurus & hindar (keyboard/PC) ---------- */
@@ -196,6 +239,10 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
   transition: border-color 0.15s;
 }
 .slot.skill { background: rgba(61, 139, 253, 0.45); }
+.slot.kosong { opacity: 0.4; }
+.slot.ult { background: rgba(244, 185, 66, 0.25); }
+.slot.ult.ready { background: rgba(244, 185, 66, 0.7); color: #1b1208; box-shadow: 0 0 14px rgba(244, 185, 66, 0.7); }
+.slot.ult .sec { font-size: 1.1rem; }
 .slot.ready { border-color: var(--gold); }
 .slot::after { content: ""; position: absolute; inset: 0; background: conic-gradient(rgba(5, 3, 12, 0.72) calc(var(--cd, 0) * 360deg), transparent 0); }
 .slot > * { position: relative; z-index: 1; }
@@ -276,7 +323,7 @@ h1 span { color: var(--gold); }
 }
 
 /* ---------- Panduan kontrol (menu jeda) ---------- */
-#pausePanel.wide { width: min(560px, 100%); }
+#pausePanel.wide { width: min(640px, 100%); }
 .pview { display: grid; gap: 14px; }
 .menu { display: grid; gap: 12px; width: min(280px, 100%); margin: 4px auto 0; }
 .menu .go { width: 100%; }
@@ -381,7 +428,9 @@ h1 span { color: var(--gold); }
       <button class="tb talk" id="bTalk" type="button" hidden><span data-t="h.bicara">Bicara</span></button>
       <button class="tb roll cd" id="bRoll" type="button"><span data-t="h.hindar">Hindar</span></button>
       <button class="tb pot" id="bPot" type="button"><span data-t="h.jamuBtn">Jamu</span></button>
-      <button class="tb skill cd" id="bSkill" type="button"><span data-t="h.jurus">Jurus</span></button>
+      <button class="tb skill cd" id="bSkill" type="button"><span>Jurus</span></button>
+      <button class="tb skill2 cd" id="bSkill2" type="button"><span>Jurus 2</span></button>
+      <button class="tb ult cd" id="bUlt" type="button" hidden><span data-t="h.pamungkas">Pamungkas</span></button>
       <button class="tb atk" id="bAtk" type="button"><span data-t="h.serang">Serang</span></button>
     </div>
   </div>
@@ -389,6 +438,8 @@ h1 span { color: var(--gold); }
   <!-- Cooldown jurus & hindar: hanya muncul kalau main pakai keyboard (bukan HP) -->
   <div class="skills" id="skills" hidden>
     <div class="slot skill ready" id="sSkill"><kbd id="sSkillKey">S</kbd><small id="sSkillName">Jurus</small><span class="sec" id="sSkillSec"></span></div>
+    <div class="slot skill ready" id="sSkill2"><kbd id="sSkill2Key">F</kbd><small id="sSkill2Name">Jurus</small><span class="sec" id="sSkill2Sec"></span></div>
+    <div class="slot ult" id="sUlt" hidden><kbd id="sUltKey">R</kbd><small id="sUltName">Pamungkas</small><span class="sec" id="sUltSec"></span></div>
     <div class="slot ready" id="sRoll"><kbd id="sRollKey">A</kbd><small data-t="h.hindar">Hindar</small><span class="sec" id="sRollSec"></span></div>
   </div>
 
@@ -462,9 +513,36 @@ h1 span { color: var(--gold); }
         <p class="eyebrow" data-t="h.gpEyebrow">Pengaturan › Gameplay</p>
         <h1 data-th="h.gpJudul">Game<span>play</span></h1>
         <div class="menu">
+          <button class="go alt" type="button" data-go="cara" data-t="h.cara">Cara Bermain</button>
+          <button class="go alt" type="button" data-go="jurus" data-t="h.jurusMenu">Jurus &amp; Poin Jurus</button>
+          <button class="go alt" type="button" data-go="jimat" data-t="h.jimatMenu">Jimat</button>
           <button class="go alt" type="button" data-go="debuff" data-t="h.debuff">Debuff</button>
           <button class="go alt back" type="button" data-go="settings" data-t="h.kembali">← Kembali</button>
         </div>
+      </div>
+
+      <!-- Halaman: cara bermain (js/56-cara-bermain.js) -->
+      <div class="pview" data-view="cara" hidden>
+        <p class="eyebrow" data-t="h.caraEyebrow">Gameplay › Cara Bermain</p>
+        <h1 data-th="h.caraJudul">Cara <span>Bermain</span></h1>
+        <div class="gp-list" id="caraIsi"></div>
+        <div class="menu"><button class="go alt back" type="button" data-go="gameplay" data-t="h.kembali">← Kembali</button></div>
+      </div>
+
+      <!-- Halaman: jurus & poin jurus (js/51-poin-jurus.js) -->
+      <div class="pview" data-view="jurus" hidden>
+        <p class="eyebrow" data-t="h.jurusEyebrow">Gameplay › Jurus</p>
+        <h1 data-th="h.jurusJudul">Ju<span>rus</span></h1>
+        <div class="gp-list" id="jurusIsi"></div>
+        <div class="menu"><button class="go alt back" type="button" data-go="gameplay" data-t="h.kembali">← Kembali</button></div>
+      </div>
+
+      <!-- Halaman: jimat (js/52-jimat.js) -->
+      <div class="pview" data-view="jimat" hidden>
+        <p class="eyebrow" data-t="h.jimatEyebrow">Gameplay › Jimat</p>
+        <h1 data-th="h.jimatJudul">Ji<span>mat</span></h1>
+        <div class="gp-list" id="jimatIsi"></div>
+        <div class="menu"><button class="go alt back" type="button" id="btnJimatBack" data-t="h.kembali">← Kembali</button></div>
       </div>
 
       <!-- Halaman: daftar debuff (js/38-panduan-debuff.js) -->
@@ -705,6 +783,7 @@ h1 span { color: var(--gold); }
 <!-- Kode game dipecah per fitur di folder js/. Urutan penting: file atas dimuat lebih dulu. -->
 <script src="js/01-alat.js"></script>
 <script src="js/02-bahasa.js"></script>
+<script src="js/02a-teks-tempur.js"></script>
 <script src="js/03-rumus.js"></script>
 <script src="js/04-peta.js"></script>
 <script src="js/04a-dunia-segara.js"></script>
@@ -751,6 +830,17 @@ h1 span { color: var(--gold); }
 <script src="js/44-teka-tebak.js"></script>
 <script src="js/45-monster-bayang.js"></script>
 <script src="js/46-kalamurka.js"></script>
-<script src="js/47-main.js"></script>
+<script src="js/48-jurus.js"></script>
+<script src="js/49-pamungkas.js"></script>
+<script src="js/50-hindar-tangkis.js"></script>
+<script src="js/51-poin-jurus.js"></script>
+<script src="js/52-jimat.js"></script>
+<script src="js/53-drop-langka.js"></script>
+<script src="js/54-skala-monster.js"></script>
+<script src="js/55-debuff-baru.js"></script>
+<script src="js/56-cara-bermain.js"></script>
+<script src="js/57-bos-tangguh.js"></script>
+<script src="js/59-jurus-khas-bos.js"></script>
+<script src="js/60-main.js"></script>
 <script>if("serviceWorker" in navigator){addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}</script>
 </body></html>

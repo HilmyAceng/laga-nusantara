@@ -5,7 +5,7 @@
 "use strict";
 
 const keys = { up: false, down: false, left: false, right: false, attack: false };
-const press = { skill: false, roll: false, potion: false, talk: false };
+const press = { skill: false, skill2: false, ult: false, roll: false, potion: false, talk: false };
 const stick = { x: 0, y: 0 };
 let touchAttack = false;
 // Tombol dibaca dari KONTROL di config.js → peta "tombol → aksi".
@@ -98,6 +98,6 @@ function readInput() {
   const l = Math.hypot(mx, my);
   if (l > 1) { mx /= l; my /= l; }
   const inp = { mx, my, attack: keys.attack || touchAttack, ...press };
-  press.skill = press.roll = press.potion = press.talk = false;
+  for (const k in press) press[k] = false;
   return inp;
 }

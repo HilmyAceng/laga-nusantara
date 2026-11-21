@@ -5,11 +5,12 @@
 "use strict";
 
 function gainExp(v) {
-  S.exp += v;
+  S.exp += Math.round(v * (1 + bonusStat("exp")));
   while (S.exp >= expNeed(S.lv)) {
     S.exp -= expNeed(S.lv); S.lv++;
     P.hp = maxHp();
     toast(t("toast.naikLevel", { lv: S.lv }), true); sfx.level();
+    setelahNaikLevel(S.lv);              // jurus baru & poin jurus (51-poin-jurus.js)
     for (let i = 0; i < 26; i++) { const a = rand(0, 6.28); parts.push({ x: P.x + Math.cos(a) * 20, y: P.y + Math.sin(a) * 10, z: 0, vz: rand(120, 300), vx: 0, vy: 0, life: 0.8, max: 0.8, color: "#ffd166" }); }
   }
   saveSoon();

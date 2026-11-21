@@ -47,6 +47,7 @@ function startGame(fresh) {
   // simpanan lama: catat Genderuwo yang sudah kalah & area tempat terakhir sebagai sudah dikunjungi
   if (S.bossDown) S.bos.genderuwo = true;
   migrasiCerita();                    // simpanan cerita versi lama (23-cerita.js)
+  lengkapiSave();                     // data jurus, jimat, ramuan (48-jurus.js)
   if (S.pos && AREAS[S.pos.area]) S.dikunjungi[S.pos.area] = true;
   P = makePlayer();
   // Lanjutkan: kembali ke area & titik terakhir (kalau datanya masih cocok dengan peta)
