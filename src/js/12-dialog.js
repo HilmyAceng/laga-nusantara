@@ -61,7 +61,6 @@ function talk(npc, lewatInfo) {
     const T0 = ATURAN.toko, wCost = T0.hargaAsah * (S.weapon + 1);
     openDialog(npc.name, t("dlg.toko", { koin: S.gold, pulih: Math.round(ATURAN.jamuPulih * 100), lv: S.weapon }), [
       { label: t("dlg.beliJamu", { harga: T0.hargaJamu }), disabled: S.gold < T0.hargaJamu, run: () => { S.gold -= T0.hargaJamu; S.potions++; sfx.coin(); saveSoon(); talk(npc); } },
-      { label: t("dlg.asah", { atk: L.seranganPerSenjata, harga: wCost }), disabled: S.gold < wCost, run: () => { S.gold -= wCost; S.weapon++; sfx.level(); toast(t("toast.senjata", { lv: S.weapon }), false); saveSoon(); talk(npc); } },
       { label: t("dlg.ramuan"), run: () => tokoRamuan(npc) },          // 52-jimat.js
       { label: t("dlg.jimat"), run: () => bukaJimatToko() },
       { label: t("dlg.tutup"), primary: true, run: closeDialog },

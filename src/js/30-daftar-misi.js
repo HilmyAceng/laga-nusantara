@@ -34,6 +34,7 @@ function perintahMisi(q, prog, selesai, npcId) {
   const nama = npcById(npcId).name;
   if (q.type === "latihan") return perintahLatihan(q, prog, selesai);   // 56-cara-bermain.js
   if (selesai) return { perintah: t("misi.lapor", { npc: nama }), target: () => tempatNpc(npcId) };
+  if (q.type === "aksi") return { perintah: t("misi.aksi." + q.aksi) + ` (${prog}/${q.need})`, target: () => tempatNpc(npcId) };   // 70-warung-pahat.js
   if (q.type === "kill") return {
     perintah: t("misi.kalahkan", { n: q.need, nama: MONSTERS[q.target].name }) + ` (${prog}/${q.need})`,
     target: () => tempatMonster(q.target),
@@ -66,7 +67,7 @@ function daftarMisi() {
     const p = perintahMisi(x, st.prog, st.status === "done", x.npc);
     out.push({ id: "side:" + x.id, jenis: t("misi.jDari", { npc: npcById(x.npc).name }), judul: x.title, hadiah: teksHadiah(x.reward), selesai: st.status === "done", ...p });
   }
-  return out;
+  return urutkanPanduan(out);   // misi panduan pemain lebih dulu (70-warung-pahat.js)
 }
 // Misi yang dilacak. Kalau misi pilihan sudah selesai, kembali ke misi pertama.
 function misiLacak() {

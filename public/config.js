@@ -538,7 +538,7 @@ const SAMPINGAN = [
     offer: "Mbah butuh tiga sisik buaya rawa untuk menempa ulang senjatamu. Buaya-buaya itu ada di rawa selatan.",
     done: "Sisik yang bagus. Sini, Mbah tempa senjatamu sebentar... nah, lebih tajam!",
     reward: { gold: 40, exp: 150, weapon: 1 } },
-  { id: "penawar", npc: "joko", title: "Ramuan Penawar", type: "collect", item: "daunSambiloto", need: 5, dari: ["kera", "babi", "kelelawar"], peluang: 0.5,
+  { id: "penawar", npc: "joko", panduan: true, title: "Ramuan Penawar", type: "collect", item: "daunSambiloto", need: 5, dari: ["kera", "babi", "kelelawar"], peluang: 0.5,
     offer: "Racun, luka bakar, rasa lemas, kepala pening... itu ulah makhluk berkabut, Nak. Cara menyembuhkannya ada dua: beristirahat di zona aman dekat mesin teleport, atau minum jamu yang diracik dengan sambiloto. Bawakan lima daun sambiloto dari monster di Hutan & Padang, nanti kuajari resepnya.",
     done: "Daun yang segar! Perhatikan: tumbuk, seduh, campur ke jamu. Mulai sekarang setiap jamu yang kau minum juga menyembuhkan SEMUA debuff.",
     reward: { gold: 30, exp: 80, potion: 3, penawar: true },
@@ -817,9 +817,29 @@ const LATIHAN = [
   { id: "misi", jumlah: 1 }, { id: "menu", jumlah: 1 },
 ];
 MONSTERS.boneka = { name: "Boneka Latihan", nameEn: "Training Dummy", lv: 1, hp: 99999, atk: 0, speed: 0, r: 14, h: 50, exp: 0, gold: [0, 0], range: 46, wind: 1, cd: 3, aggro: 170, ai: "boneka", latihan: true };
-SAMPINGAN.unshift({ id: "latihan", npc: "sabda", title: "Latihan Dasar", type: "latihan", need: LATIHAN.length,
+SAMPINGAN.unshift({ id: "latihan", npc: "sabda", panduan: true, title: "Latihan Dasar", type: "latihan", need: LATIHAN.length,
   offer: "Kisanak baru di sini? Sebelum keluar desa, berlatihlah dulu dengan bonekaku. Akan kuajari cara bergerak, menyerang, berguling, menangkis, dan banyak lagi.",
   done: "Bagus sekali! Kau sudah siap menghadapi dunia luar. Ingat: musuh yang kuat bisa dikalahkan dengan sabar membaca gerakannya.",
   reward: { gold: 60, exp: 30, potion: 3, jimat: "gelangBesi" },
   en: { title: "Basic Training", offer: "New around here? Before leaving the village, train with my dummy first. I'll teach you to move, attack, roll, parry, and more.",
     done: "Excellent! You're ready for the outside world. Remember: strong foes can be beaten by patiently reading their moves." } });
+
+// ---------------------------------------------------------------------
+// 13. WARUNG & TUKANG PAHAT (70-warung-pahat.js): misi panduan di Desa Wanasari.
+// type "aksi" = lakukan sesuatu `need` kali (aksi: "belanja" = beli jamu di warung,
+// "pahat" = tingkatkan senjata di Tukang Pahat). panduan: true = misi yang mengajari
+// cara bermain; diutamakan di daftar misi (lebih dulu dari cerita utama).
+// ---------------------------------------------------------------------
+SAMPINGAN.splice(1, 0,
+  { id: "belanja", npc: "warung-desa", panduan: true, title: "Belanja di Warung", type: "aksi", aksi: "belanja", need: 1,
+    offer: "Selamat datang di warungku, Nak! Di sini ada jamu, ramuan, dan jimat. Coba beli satu jamu dulu, biar kau tahu caranya. Warung seperti ini ada di setiap desa.",
+    done: "Nah, gampang kan? Kalau jamumu habis, mampir saja ke warung desa mana pun.",
+    reward: { gold: 30, exp: 40, potion: 1 },
+    en: { title: "Shopping at the Stall", offer: "Welcome to my stall, dear! I sell jamu, tonics, and charms. Try buying one jamu first so you know how. There's a stall like this in every village.",
+      done: "See, easy! When you run out of jamu, just stop by any village stall." } },
+  { id: "pahatSenjata", npc: "pahat-desa", panduan: true, title: "Senjata Lebih Tajam", type: "aksi", aksi: "pahat", need: 1,
+    offer: "Aku tukang pahat desa ini. Kayu, batu, besi, semua bisa kupahat dan kuasah. Bawa senjatamu ke sini, sekali tingkatkan saja, nanti ongkosnya kuganti sebagian. Bengkel pahat ada di setiap desa.",
+    done: "Lihat kilaunya! Makin tinggi tingkat senjatamu, makin keras pukulanmu. Ini, kukembalikan sebagian ongkosnya.",
+    reward: { gold: 40, exp: 60 },
+    en: { title: "A Sharper Weapon", offer: "I'm this village's carver. Wood, stone, iron, I can carve and hone them all. Bring your weapon here and upgrade it once; I'll refund part of the cost. There's a carver's workshop in every village.",
+      done: "Look at that shine! The higher your weapon's tier, the harder you hit. Here, part of the cost back." } });

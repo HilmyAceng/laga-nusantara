@@ -47,7 +47,7 @@ const JENIS_WARGA = {
       ["Kata ibu, jangan main ke hutan sendirian.", "Mom says not to go into the forest alone."], ["Kucingnya lucu, ya? Dia suka dielus.", "Isn't the cat cute? It likes being petted."]] },
   ibu: { color: "#a0436b", accent: "#f4d58a", hair: "#1f1a24", cepat: 38, nama: ["Ibu Warga", "Villager"],
     kata: [["Hari ini panas sekali, ya.", "It's so hot today."], ["Mau ke pasar, persediaan beras menipis.", "Off to the market, we're running low on rice."],
-      ["Hati-hati di jalan, Nak.", "Take care out there, dear."], ["Jamu Mbok Darmi itu manjur, lho.", "Mbok Darmi's jamu really works, you know."]] },
+      ["Hati-hati di jalan, Nak.", "Take care out there, dear."], ["Jamu di warung Mbok Sum itu manjur, lho.", "The jamu at Mbok Sum's stall really works, you know."]] },
   tani: { color: "#6b8f3d", accent: "#e9d3a9", hat: "#c9a26b", cepat: 34, nama: ["Pak Tani", "Farmer"],
     kata: [["Padi tahun ini semoga melimpah.", "Hope the rice harvest is plentiful this year."], ["Babi hutan sering merusak ladang.", "Wild boars keep wrecking the fields."],
       ["Istirahat dulu, pegal juga mencangkul.", "Taking a break, hoeing is tiring."]] },
