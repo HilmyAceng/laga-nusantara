@@ -8,6 +8,10 @@ Bisa dimainkan di HP (joystick + tombol sentuh, mode lanskap) dan desktop (keybo
 - **Sistem tarung lanjutan**:
   - **4 jurus per kelas** (terbuka di Lv 1, 8, 18, 30), dua dipasang sekaligus (`S` & `F`). Contoh: Badai Golok, Gelombang Angin, Langkah Bayang, Panah Jerat, Hujan Panah, Panah Tembus, Benteng, Lompatan Palu, Raungan, Perisai Api, Tapak Es, Meteor
   - **Jurus pamungkas** (`R`, mulai Lv 5) saat bar **Tenaga Dalam** (garis emas di bawah nyawa) penuh: Seribu Tebasan, Panah Garuda, Palu Bumi, Hujan Meteor
+  - **Warga keliling**: 15 warga (bocah, ibu, petani, nelayan, pedagang, pelaut, dll.) berjalan-jalan di 6 desa, bergumam, dan bisa diajak ngobrol; NPC cerita tetap diam
+  - **Hiasan desa**: warung, gerobak, perahu, jemuran, lampion, pot bunga, dll. di 6 desa; kucing berkeliaran & mengeong saat didekati, ayam mematuk & kabur
+  - **Level maksimal 80** dan EXP naik level ±1,5–2× lebih lambat (`ATURAN.level`)
+  - **Koleksi Jimat**: daftar semua jimat (terkumpul x / 29) di Menu › Gameplay, jimat yang belum didapat tampil redup dengan petunjuk cara mendapatkannya
   - **Status Karakter**: halaman kekuatan, bonus jimat/pasif & catatan petualangan; tombol pintas Status, Jurus (lencana poin sisa) & Jimat di kiri koin; menu Gameplay kini langsung di menu jeda (di atas Pengaturan)
   - **Jeda jamu**: setelah minum jamu harus menunggu 10 detik; desktop punya kotak Jamu (tombol `W` atau klik)
   - **Teleport ke Cermin Gaib**: setiap cermin yang sudah muncul tampil (ikon ungu) di peta; ketuk untuk pindah ke depan cermin itu
@@ -157,7 +161,10 @@ Semua menu memakai tombol. `Esc` = kembali satu halaman.
 | `64-cermin-peta.js` | Cermin Gaib yang sudah muncul tampil di peta mini, peta area & peta dunia; ketuk ikonnya untuk teleport ke depan cermin |
 | `65-jamu-jeda.js` | Jeda jamu 10 detik (`ATURAN.jamuJeda`), kotak Jamu di desktop (W / klik) & lencana jumlah di tombol HP |
 | `66-status-karakter.js` | Halaman Status Karakter (tombol 👤 / `Tab` / `C`, tidak lagi di menu) & tombol pintas ⚔ 💎 👤 di kiri koin (halaman Jurus & Jimat tidak lagi di menu Gameplay) |
-| `67-main.js` | Loop utama (dimuat paling akhir) |
+| `67-koleksi-jimat.js` | Menu › Gameplay › Koleksi Jimat: semua jimat per rarity, yang sudah & belum didapat beserta cara mendapatkannya |
+| `68-hiasan.js` | Hiasan desa: warung, gerobak, perahu, jemuran, lampion, dll. + kucing & ayam yang bergerak sendiri (`HIASAN`) |
+| `69-warga-keliling.js` | Warga keliling di desa: berjalan sendiri, bergumam, bisa diajak ngobrol (`WARGA`, `JENIS_WARGA`) |
+| `70-main.js` | Loop utama (dimuat paling akhir) |
 
 Cerita utama ada di folder `src/cerita/`: `bab-1.js` ... `bab-5.js` (satu file per bab), digabung di `semua.js`.
 

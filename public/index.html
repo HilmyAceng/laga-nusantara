@@ -192,6 +192,8 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 .misi-lacak { justify-self: end; margin-top: 2px; font-size: 0.72rem; font-weight: 800; color: var(--ink-dim); }
 .misi-card[aria-pressed="true"] .misi-lacak { color: var(--gold); }
 .misi-kosong { margin: 0; padding: 16px; text-align: center; color: var(--ink-dim); }
+/* pesan kosong di dalam grid kartu (mis. halaman Jimat) memakai lebar penuh supaya di tengah */
+.jr-grid .misi-kosong { grid-column: 1 / -1; }
 .map-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 0.8rem; font-weight: 700; color: var(--ink-dim); }
 .map-legend b { font-weight: inherit; }
 .map-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
@@ -297,6 +299,9 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 .st-bar { height: 6px; border-radius: 3px; background: rgba(255, 255, 255, 0.1); overflow: hidden; }
 .st-bar i { display: block; height: 100%; background: var(--gold); }
 .st-list { margin: 0; padding-left: 18px; font-size: 0.82rem; line-height: 1.5; }
+
+/* koleksi jimat (js/67-koleksi-jimat.js): jimat yang belum didapat tampil redup */
+.jm-card.kk-belum { opacity: 0.55; filter: grayscale(0.6); border-style: dashed; }
 
 /* ---------- Overlay & dialog ---------- */
 .overlay {
@@ -571,6 +576,7 @@ h1 span { color: var(--gold); }
         <h1 data-th="h.gpJudul">Game<span>play</span></h1>
         <div class="menu">
           <button class="go alt" type="button" data-go="cara" data-t="h.cara">Cara Bermain</button>
+          <button class="go alt" type="button" data-go="koleksi" data-t="h.koleksi">Koleksi Jimat</button>
           <button class="go alt" type="button" data-go="debuff" data-t="h.debuff">Debuff</button>
           <button class="go alt back" type="button" data-go="main" data-t="h.kembali">← Kembali</button>
         </div>
@@ -590,6 +596,14 @@ h1 span { color: var(--gold); }
         <h1 data-th="h.jurusJudul">Ju<span>rus</span></h1>
         <div class="gp-list" id="jurusIsi"></div>
         <div class="menu"><button class="go alt back" type="button" id="btnJurusBack" data-t="h.kembali">← Kembali</button></div>
+      </div>
+
+      <!-- Halaman: koleksi jimat (js/67-koleksi-jimat.js) -->
+      <div class="pview" data-view="koleksi" hidden>
+        <p class="eyebrow" data-t="h.koleksiEyebrow">Gameplay › Koleksi</p>
+        <h1 data-th="h.koleksiJudul">Koleksi <span>Jimat</span></h1>
+        <div class="gp-list" id="koleksiIsi"></div>
+        <div class="menu"><button class="go alt back" type="button" data-go="gameplay" data-t="h.kembali">← Kembali</button></div>
       </div>
 
       <!-- Halaman: status karakter (js/66-status-karakter.js) -->
@@ -921,6 +935,9 @@ h1 span { color: var(--gold); }
 <script src="js/64-cermin-peta.js"></script>
 <script src="js/65-jamu-jeda.js"></script>
 <script src="js/66-status-karakter.js"></script>
-<script src="js/67-main.js"></script>
+<script src="js/67-koleksi-jimat.js"></script>
+<script src="js/68-hiasan.js"></script>
+<script src="js/69-warga-keliling.js"></script>
+<script src="js/70-main.js"></script>
 <script>if("serviceWorker" in navigator){addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}</script>
 </body></html>

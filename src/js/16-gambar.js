@@ -271,7 +271,7 @@ function drawPlayerTag(px, py) {
   ctx.font = "800 10px Nunito, sans-serif"; ctx.textAlign = "center"; ctx.fillStyle = "#fff";
   ctx.fillText(`${hp} / ${mh}`, px, y - 7);
   // bar EXP
-  ctx.fillStyle = "#7fb2ff"; ctx.fillRect(x, y - 4, w * clamp(S.exp / expNeed(S.lv), 0, 1), 3);
+  ctx.fillStyle = "#7fb2ff"; ctx.fillRect(x, y - 4, w * (levelMaks() ? 1 : clamp(S.exp / expNeed(S.lv), 0, 1)), 3);
 }
 
 // warna barang misi yang jatuh dari monster

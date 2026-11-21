@@ -29,8 +29,8 @@ function isiHalamanStatus() {
 
   $("statusIsi").innerHTML = `
     <div class="st-box"><b>${t("st.kelas", { kelas: C.name, lv: S.lv })}</b>
-      <div class="st-bar"><i style="width:${Math.min(100, (100 * S.exp) / need)}%"></i></div>
-      <small>${t("st.exp", { a: S.exp, b: need })}</small></div>
+      <div class="st-bar"><i style="width:${levelMaks() ? 100 : Math.min(100, (100 * S.exp) / need)}%"></i></div>
+      <small>${levelMaks() ? t("st.expMaks") : t("st.exp", { a: S.exp, b: need })}</small></div>
     <h3>${t("st.utama")}</h3>
     <div class="st-grid">
       ${kotakStat(t("st.nyawa"), `${Math.ceil(P.hp)} / ${maxHp()}`)}

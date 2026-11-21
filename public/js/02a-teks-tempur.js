@@ -6,6 +6,13 @@
 "use strict";
 
 Object.assign(TEKS.id, {
+  // koleksi jimat (67-koleksi-jimat.js)
+  "h.koleksi": "Koleksi Jimat", "h.koleksiEyebrow": "Gameplay › Koleksi", "h.koleksiJudul": "Koleksi <span>Jimat</span>",
+  "koleksi.total": "Terkumpul {n} dari {total} jimat", "koleksi.belum": "Belum didapat",
+  "koleksi.info": "Jimat yang redup belum kamu miliki. Pasang jimat lewat tombol 💎 di kanan atas.",
+  "koleksi.sumber.biasa": "Dijual di toko desa · kadang dijatuhkan monster",
+  "koleksi.sumber.langka": "Bos cerita (pertama kali kalah), Cermin Gaib tingkat 3+, atau monster Lv 13+",
+  "koleksi.dariBos": "Jimat khas {bos} · Cermin Gaib tingkat {tingkat}+",
   // status karakter & pintasan HUD (66-status-karakter.js)
   "h.statusMenu": "Status Karakter", "h.statusEyebrow": "Karakter", "h.statusJudul": "Sta<span>tus</span>",
   "ctl.menuStatus": "Halaman Status Karakter",
@@ -15,6 +22,9 @@ Object.assign(TEKS.id, {
   "st.tidakAda": "Belum ada bonus. Pasang jimat (tombol 💎) atau naikkan pasif di halaman Jurus.",
   "st.kills": "Monster dikalahkan", "st.koin": "Koin", "st.jamu": "Jamu", "st.poin": "Poin jurus sisa", "st.jimat": "Jimat dipakai", "st.bos": "Bos dikalahkan",
   "st.dasar": "dasar {n}",
+  "st.expMaks": "Level tertinggi — EXP sudah penuh",
+  "hias.warung": "WARUNG", "hias.warungIkan": "IKAN SEGAR",
+  "toast.levelMaks": "Lv {lv} — level tertinggi tercapai!",
   // cermin di peta & teleport ke cermin (64-cermin-peta.js)
   "cermin.tanya": "Pindah ke Cermin Gaib di {area}?",
   "cermin.peta": "Cermin · {bos}",
@@ -187,6 +197,12 @@ Object.assign(TEKS.id, {
 });
 
 Object.assign(TEKS.en, {
+  "h.koleksi": "Charm Collection", "h.koleksiEyebrow": "Gameplay › Collection", "h.koleksiJudul": "Charm <span>Collection</span>",
+  "koleksi.total": "Collected {n} of {total} charms", "koleksi.belum": "Not found yet",
+  "koleksi.info": "Dimmed charms are ones you don't own yet. Equip charms with the 💎 button at the top right.",
+  "koleksi.sumber.biasa": "Sold in village shops · sometimes dropped by monsters",
+  "koleksi.sumber.langka": "Story bosses (first defeat), Magic Mirror tier 3+, or Lv 13+ monsters",
+  "koleksi.dariBos": "{bos}'s signature charm · Magic Mirror tier {tingkat}+",
   "h.statusMenu": "Character Status", "h.statusEyebrow": "Character", "h.statusJudul": "Sta<span>tus</span>",
   "ctl.menuStatus": "Character Status page",
   "st.kelas": "{kelas} · Lv {lv}", "st.exp": "EXP {a} / {b}", "st.utama": "Strength", "st.bonus": "Bonuses from charms, tonics & passives", "st.lain": "Adventure log",
@@ -195,6 +211,9 @@ Object.assign(TEKS.en, {
   "st.tidakAda": "No bonuses yet. Equip charms (💎 button) or raise passives on the Skills page.",
   "st.kills": "Monsters defeated", "st.koin": "Coins", "st.jamu": "Jamu", "st.poin": "Unspent skill points", "st.jimat": "Charms equipped", "st.bos": "Bosses defeated",
   "st.dasar": "base {n}",
+  "st.expMaks": "Max level — EXP is full",
+  "hias.warung": "WARUNG", "hias.warungIkan": "FRESH FISH",
+  "toast.levelMaks": "Lv {lv} — max level reached!",
   "cermin.tanya": "Travel to the Magic Mirror in {area}?",
   "cermin.peta": "Mirror · {bos}",
   "h.lgCermin": "Magic Mirror (click)",

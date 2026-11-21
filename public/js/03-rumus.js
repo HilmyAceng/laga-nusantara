@@ -6,6 +6,7 @@
 
 const L = ATURAN.level;
 const expNeed = (lv) => Math.round(L.expDasar * Math.pow(lv, L.expPangkat));
+const levelMaks = () => S && S.lv >= L.maks;   // sudah level tertinggi (ATURAN.level.maks)?
 // jimat/ramuan (52-jimat.js) & pasif poin jurus (51-poin-jurus.js) ikut dihitung
 const maxHp = () => Math.round((CLASSES[S.cls].hp + (S.lv - 1) * L.nyawaPerLevel) * (1 + bonusStat("hp") + pasifNilai("nyawa")));
 // serangan dasar; dikali debuff "lemah" (32-debuff.js) saat bertarung

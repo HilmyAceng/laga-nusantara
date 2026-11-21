@@ -99,6 +99,7 @@ function drawAreaMap(time) {
       continue;
     }
     if (n.kind === "cermin") { cerminDiPetaArea(c, X(n.x), Y(n.y), time, label); continue; }   // 64-cermin-peta.js
+    if (n.kind === "warga") { dot(X(n.x), Y(n.y), "#b9b2c6", 3); continue; }                  // warga keliling: titik kecil tanpa nama (69-warga-keliling.js)
     dot(X(n.x), Y(n.y), "#f4b942", 5); label(n.name, X(n.x), Y(n.y) - 9 * DPR, "#f4b942");
   }
   // tujuan cerita di area ini (atau gerbang menuju tujuan)

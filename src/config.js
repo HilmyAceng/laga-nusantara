@@ -42,7 +42,8 @@ const ATURAN = {
   awal: { koin: 10, jamu: 3 },            // modal saat mulai baru
 
   level: {
-    expDasar: 25, expPangkat: 1.45,       // EXP untuk naik level = expDasar × level^expPangkat
+    expDasar: 32, expPangkat: 1.55,       // EXP untuk naik level = expDasar × level^expPangkat (dulu 25 & 1.45: ±1,5-2× lebih lambat)
+    maks: 80,                             // level tertinggi karakter; setelah itu EXP tidak bertambah lagi
     nyawaPerLevel: 14,                    // tambahan nyawa tiap naik level
     seranganPerLevel: 2,                  // tambahan serangan tiap naik level
     seranganPerSenjata: 3,                // tambahan serangan tiap asah senjata
