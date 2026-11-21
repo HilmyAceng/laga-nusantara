@@ -147,7 +147,9 @@ function hudHindar() {
   // putaran gelap selalu penuh 360° → 0° selama satu lapis terisi; kalau masih ada lapis, gelapnya tipis (kelas "masih")
   const c = Math.round(isi * 60) / 60;
   if (last.rc !== c) { last.rc = c; ui.bRoll.style.setProperty("--cd", c); }
-  ui.bRoll.dataset.lapis = P.lapis;
+  // HP: "×2" = sisa lapis; kalau habis tampilkan hitung mundur detik
+  const lbl = P.lapis > 0 ? "×" + P.lapis : Math.ceil(P.lapisT) + "s";
+  if (ui.bRoll.dataset.lapis !== lbl) ui.bRoll.dataset.lapis = lbl;
   ui.bRoll.classList.toggle("habis", P.lapis <= 0);
   ui.bRoll.classList.toggle("masih", P.lapis > 0 && !penuh);
   if (!isTouch) {

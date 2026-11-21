@@ -46,11 +46,12 @@ Object.assign(AREAS, {
     teleport: { id: "makam", x: 4.5, y: 24.5 },
     bos: { x: 30, y: 15.5, monster: "rajaJerangkong" },
     objek: [
-      { kind: "petunjuk", id: "gong", x: 6.5, y: 9.5 },
-      { kind: "saklar", id: "gong", simbol: "merah", x: 3.5, y: 5.5 },
-      { kind: "saklar", id: "gong", simbol: "hijau", x: 5.5, y: 5.5 },
-      { kind: "saklar", id: "gong", simbol: "biru", x: 7.5, y: 5.5 },
-      { kind: "saklar", id: "gong", simbol: "emas", x: 9.5, y: 5.5 },
+      // gong berselang-seling (zig-zag) supaya jaraknya ±4 petak dan mudah dipilih satu per satu
+      { kind: "petunjuk", id: "gong", x: 6.5, y: 11 },
+      { kind: "saklar", id: "gong", simbol: "merah", x: 2.5, y: 3.5 },
+      { kind: "saklar", id: "gong", simbol: "hijau", x: 5, y: 7.5 },
+      { kind: "saklar", id: "gong", simbol: "biru", x: 8, y: 3.5 },
+      { kind: "saklar", id: "gong", simbol: "emas", x: 10.5, y: 7.5 },
       { kind: "batuDorong", id: "batuMakam", x: 16, y: 17 }, { kind: "batuDorong", id: "batuMakam", x: 19, y: 19 }, { kind: "batuDorong", id: "batuMakam", x: 22, y: 17 },
       { kind: "lempeng", id: "batuMakam", x: 14, y: 23 }, { kind: "lempeng", id: "batuMakam", x: 19, y: 25 }, { kind: "lempeng", id: "batuMakam", x: 23, y: 22 },
       { kind: "tuas", id: "batuMakam", x: 14.5, y: 27.5 },

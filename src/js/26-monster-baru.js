@@ -96,7 +96,7 @@ function bosUmum(m, dt, dp, toP) {
     if (dist(m, m.home) < 20) { m.state = "idle"; m.aggro = false; m.hp = d.hp; m.fase2 = m.f2 = m.fase3 = false; m.urut = -1; }
     return true;
   }
-  if (P.dead || pAman || dist(m, m.home) > (d.jarakPulang || 520)) { m.state = "pulang"; return true; }
+  if (P.dead || pAman || dist(m, m.home) > jarakAreaBos(d, d.jarakPulang || 520)) { m.state = "pulang"; return true; }
   m.seen = 4;
   if (!m.fase2 && m.hp < d.hp * 0.5) { m.fase2 = true; fase2(m); }
   return false;

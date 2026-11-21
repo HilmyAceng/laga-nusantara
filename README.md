@@ -8,7 +8,7 @@ Bisa dimainkan di HP (joystick + tombol sentuh, mode lanskap) dan desktop (keybo
 - **Sistem tarung lanjutan**:
   - **4 jurus per kelas** (terbuka di Lv 1, 8, 18, 30), dua dipasang sekaligus (`S` & `F`). Contoh: Badai Golok, Gelombang Angin, Langkah Bayang, Panah Jerat, Hujan Panah, Panah Tembus, Benteng, Lompatan Palu, Raungan, Perisai Api, Tapak Es, Meteor
   - **Jurus pamungkas** (`R`, mulai Lv 5) saat bar **Tenaga Dalam** (garis emas di bawah nyawa) penuh: Seribu Tebasan, Panah Garuda, Palu Bumi, Hujan Meteor
-  - **Hindar 2 lapis**: berguling atau tangkis bisa 2 kali beruntun (keduanya memakai lapis yang sama), tiap lapis terisi lagi 5 detik (angka di pojok tombol Hindar; `ATURAN.hindar.lapis` & `isiUlang`)
+  - **Hindar 2 lapis**: berguling atau tangkis bisa 2 kali beruntun (keduanya memakai lapis yang sama), tiap lapis terisi lagi 5 detik (di HP angka ×2 di bawah tulisan Hindar, berubah jadi hitung mundur detik saat habis; `ATURAN.hindar.lapis` & `isiUlang`)
   - **Hindar sempurna**: berguling tepat sebelum kena → waktu melambat, pukulan berikutnya pasti kritis
   - **Tangkis**: Hindar tanpa arah → serangan ditahan, penyerang lumpuh, kamu membalas
   - **Poin jurus**: 1 poin tiap naik level untuk rank jurus (kemampuan baru di rank 3 & 5) dan 5 pasif. Bisa diatur ulang dengan koin
@@ -58,7 +58,7 @@ Bisa dimainkan di HP (joystick + tombol sentuh, mode lanskap) dan desktop (keybo
 
 ## Kontrol
 
-- HP: joystick kiri untuk gerak. Tombol Serang (tahan), Jurus, Hindar, Jamu, dan Bicara (muncul di dekat NPC)
+- HP: joystick kiri untuk gerak. Di kanan: Serang (tahan), Jurus 1 & Jurus 2 di samping Serang, Pamungkas di atas Serang, Jamu di atas Pamungkas, Hindar di kiri bawah, dan Bicara (muncul di dekat NPC)
 - Keyboard: tombol panah untuk gerak, `D` serang (tahan), `S` jurus 1, `F` jurus 2, `R` pamungkas, `A` hindar (+ arah = berguling, tanpa arah = tangkis), `W` jamu, `E` bicara, `M` buka peta besar (atau klik peta mini), `J` daftar misi, `K` halaman jurus, `I` halaman jimat, `Esc` jeda, `N` musik nyala/mati
 - HP: tombol tambahan Jurus 2 dan Pamungkas (muncul mulai Lv 5)
 
@@ -149,7 +149,8 @@ Semua menu memakai tombol. `Esc` = kembali satu halaman.
 | `60-belum-saatnya.js` | Notif "belum saatnya" untuk benda teka-teki, batu dorong, gerbang tertutup, sarang bos sepi |
 | `61-suara-makhluk.js` | Suara sintetis monster, bos, hero & ocehan NPC; batas suara bersamaan & jarak |
 | `62-fase-bos.js` | Fase bos 2-3: bangkit dengan nyawa penuh, kekuatan tambahan tiap fase |
-| `63-main.js` | Loop utama (dimuat paling akhir) |
+| `63-area-bos.js` | Area bos: jarak bos mengejar sebelum menyerah & pulang (`ATURAN.areaBos`) |
+| `64-main.js` | Loop utama (dimuat paling akhir) |
 
 Cerita utama ada di folder `src/cerita/`: `bab-1.js` ... `bab-5.js` (satu file per bab), digabung di `semua.js`.
 
@@ -167,6 +168,7 @@ Kalau menambah file JS baru: taruh di `src/js/` dengan nomor urut, tambahkan `<s
 | `QUESTS` | Misi sampingan Ki Lurah: tipe `kill` / `collect`, jumlah, teks, hadiah |
 | (`src/cerita/`) | Cerita utama per bab: tipe `bicara` / `datang` / `kill` / `collect` / `teka` / `bos`, episode, tujuan, percakapan, hadiah, terjemahan `en` |
 | `SAMPINGAN` | Misi sampingan dari NPC lain |
+| `ATURAN.areaBos` | Jarak kejar bos dari sarang: `max(dasar × kali, minimal)` piksel |
 | `ATURAN.tenaga` / `hindarSempurna` / `tangkis` / `poinJurus` / `jimat` / `skalaMonster` | Angka-angka sistem tarung baru |
 | `JURUS` / `PAMUNGKAS` / `PASIF` | Jurus tiap kelas (level buka, jeda, damage, kemampuan rank 3 & 5), pamungkas, pasif |
 | `JIMAT` / `RAMUAN` | Semua jimat (rarity, efek, harga) dan ramuan toko |

@@ -87,7 +87,7 @@ function updateMonster(m, dt) {
       break;
     }
     case "chase": {
-      if (!alive || dist(m, m.home) > (d.boss ? 380 : 560)) { m.state = "return"; break; }
+      if (!alive || dist(m, m.home) > (d.boss ? jarakAreaBos(d, 380) : 560)) { m.state = "return"; break; }
       m.seen = 4;
       const wob = d.fly ? Math.sin(m.run * 0.6) * 0.8 : 0;
       if (dp > reach - 6) moveEnt(m, Math.cos(toP + wob) * d.speed * dt, Math.sin(toP + wob) * d.speed * dt, d.fly);

@@ -56,6 +56,9 @@ const ATURAN = {
 
   // hindar (berguling) punya `lapis` muatan. Tiap lapis terisi lagi setelah `isiUlang` detik (satu per satu).
   // jeda = jarak minimal antar-gulingan supaya 2 lapis bisa dipakai beruntun.
+  // area bos: seberapa jauh bos (cerita & Cermin Gaib) mengejar dari sarangnya sebelum menyerah & pulang.
+  // jarak = max(jarak dasar bos × kali, minimal) piksel (1 petak = 40 px)
+  areaBos: { kali: 1.8, minimal: 820 },
   hindar: { lama: 0.22, jeda: 0.3, kecepatan: 470, kebal: 0.28, lapis: 2, isiUlang: 5 },
 
   kritis: { peluang: 0.12, kali: 1.6 },   // pukulan kritis: peluang & pengali damage
