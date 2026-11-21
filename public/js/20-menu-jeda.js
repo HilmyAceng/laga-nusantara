@@ -66,7 +66,7 @@ function showCtlTab(which) {
 $("tabKey").addEventListener("click", () => showCtlTab("key"));
 
 // Pindah halaman di menu jeda: main → settings → volume / layar / control.
-const PAUSE_BACK = { main: null, settings: "main", bahasa: "settings", control: "settings", volume: "settings", layar: "settings", credit: "main", keluar: "main", gameplay: "main", debuff: "gameplay", jurus: null, jimat: null, cara: "gameplay", status: "gameplay" };
+const PAUSE_BACK = { main: null, settings: "main", bahasa: "settings", control: "settings", volume: "settings", layar: "settings", credit: "main", keluar: "main", gameplay: "main", debuff: "gameplay", jurus: null, jimat: null, cara: "gameplay", status: null };
 let pauseView = "main";
 function showPauseView(view, silent) {
   pauseView = view;

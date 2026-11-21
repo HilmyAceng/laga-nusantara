@@ -1,6 +1,6 @@
 // =====================================================================
 // STATUS KARAKTER & PINTASAN HUD
-//  - Halaman Menu › Gameplay › Status Karakter (atau tombol 👤 di HUD / tombol C):
+//  - Halaman Status Karakter: tombol 👤 di HUD, atau tombol Tab / C (buka & tutup):
 //    kelas, level, EXP, kekuatan (nyawa, serangan, kritis, gerak, pertahanan, hindar, jamu),
 //    total bonus dari jimat + ramuan + pasif, dan catatan petualangan.
 //  - Tombol pintasan di kiri koin: ⚔ Jurus (lencana = poin jurus sisa) · 💎 Jimat · 👤 Status.
@@ -61,9 +61,12 @@ $("btnStatus").addEventListener("click", () => bukaHalamanMenu("status"));
 $("btnJurusHud").addEventListener("click", () => bukaHalamanMenu("jurus"));
 $("btnJimatHud").addEventListener("click", () => bukaHalamanMenu("jimat"));
 $("btnJurusBack").addEventListener("click", () => { togglePause(); showUI(); });
+$("btnStatusBack").addEventListener("click", () => { togglePause(); showUI(); });
 addEventListener("keydown", (e) => {
   if (e.repeat) return;
-  if (ACTION_OF[keyName(e)] === "menuStatus") bukaHalamanMenu("status");
+  if (ACTION_OF[keyName(e)] !== "menuStatus") return;
+  if (e.key === "Tab" && (mode === "play" || mode === "pause")) e.preventDefault();   // jangan pindah fokus tombol
+  bukaHalamanMenu("status");
 });
 // lencana poin jurus sisa di tombol ⚔ (dipanggil dari refreshHud)
 function hudPintasan() {

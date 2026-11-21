@@ -556,7 +556,6 @@ h1 span { color: var(--gold); }
         <p class="eyebrow" data-t="h.gpEyebrow">Jeda › Gameplay</p>
         <h1 data-th="h.gpJudul">Game<span>play</span></h1>
         <div class="menu">
-          <button class="go alt" type="button" data-go="status" data-t="h.statusMenu">Status Karakter</button>
           <button class="go alt" type="button" data-go="cara" data-t="h.cara">Cara Bermain</button>
           <button class="go alt" type="button" data-go="debuff" data-t="h.debuff">Debuff</button>
           <button class="go alt back" type="button" data-go="main" data-t="h.kembali">← Kembali</button>
@@ -581,10 +580,10 @@ h1 span { color: var(--gold); }
 
       <!-- Halaman: status karakter (js/66-status-karakter.js) -->
       <div class="pview" data-view="status" hidden>
-        <p class="eyebrow" data-t="h.statusEyebrow">Gameplay › Status</p>
+        <p class="eyebrow" data-t="h.statusEyebrow">Karakter</p>
         <h1 data-th="h.statusJudul">Sta<span>tus</span></h1>
         <div class="gp-list" id="statusIsi"></div>
-        <div class="menu"><button class="go alt back" type="button" data-go="gameplay" data-t="h.kembali">← Kembali</button></div>
+        <div class="menu"><button class="go alt back" type="button" id="btnStatusBack" data-t="h.kembali">← Kembali</button></div>
       </div>
 
       <!-- Halaman: jimat (js/52-jimat.js) -->

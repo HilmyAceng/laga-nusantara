@@ -7,7 +7,7 @@
 
 Object.assign(TEKS.id, {
   // status karakter & pintasan HUD (66-status-karakter.js)
-  "h.statusMenu": "Status Karakter", "h.statusEyebrow": "Gameplay › Status", "h.statusJudul": "Sta<span>tus</span>",
+  "h.statusMenu": "Status Karakter", "h.statusEyebrow": "Karakter", "h.statusJudul": "Sta<span>tus</span>",
   "ctl.menuStatus": "Halaman Status Karakter",
   "st.kelas": "{kelas} · Lv {lv}", "st.exp": "EXP {a} / {b}", "st.utama": "Kekuatan", "st.bonus": "Bonus dari jimat, ramuan & pasif", "st.lain": "Catatan petualangan",
   "st.nyawa": "Nyawa", "st.serang": "Serangan", "st.senjata": "Tingkat senjata", "st.kritis": "Peluang kritis", "st.kritisKali": "Damage kritis",
@@ -187,7 +187,7 @@ Object.assign(TEKS.id, {
 });
 
 Object.assign(TEKS.en, {
-  "h.statusMenu": "Character Status", "h.statusEyebrow": "Gameplay › Status", "h.statusJudul": "Sta<span>tus</span>",
+  "h.statusMenu": "Character Status", "h.statusEyebrow": "Character", "h.statusJudul": "Sta<span>tus</span>",
   "ctl.menuStatus": "Character Status page",
   "st.kelas": "{kelas} · Lv {lv}", "st.exp": "EXP {a} / {b}", "st.utama": "Strength", "st.bonus": "Bonuses from charms, tonics & passives", "st.lain": "Adventure log",
   "st.nyawa": "Health", "st.serang": "Attack", "st.senjata": "Weapon tier", "st.kritis": "Crit chance", "st.kritisKali": "Crit damage",

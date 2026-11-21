@@ -63,7 +63,7 @@ Bisa dimainkan di HP (joystick + tombol sentuh, mode lanskap) dan desktop (keybo
 ## Kontrol
 
 - HP: joystick kiri untuk gerak. Di kanan: Serang (tahan), Jurus 1 & Jurus 2 di samping Serang, Pamungkas di atas Serang, Jamu di atas Pamungkas, Hindar di kiri bawah, dan Bicara (muncul di dekat NPC)
-- Keyboard: tombol panah untuk gerak, `D` serang (tahan), `S` jurus 1, `F` jurus 2, `R` pamungkas, `A` hindar (+ arah = berguling, tanpa arah = tangkis), `W` jamu, `E` bicara, `M` buka peta besar (atau klik peta mini), `J` daftar misi, `K` halaman jurus, `I` halaman jimat, `C` status karakter, `Esc` jeda, `N` musik nyala/mati
+- Keyboard: tombol panah untuk gerak, `D` serang (tahan), `S` jurus 1, `F` jurus 2, `R` pamungkas, `A` hindar (+ arah = berguling, tanpa arah = tangkis), `W` jamu, `E` bicara, `M` buka peta besar (atau klik peta mini), `J` daftar misi, `K` halaman jurus, `I` halaman jimat, `Tab` / `C` status karakter, `Esc` jeda, `N` musik nyala/mati
 - HP: tombol tambahan Jurus 2 dan Pamungkas (muncul mulai Lv 5)
 
 ## Menu jeda
@@ -156,7 +156,7 @@ Semua menu memakai tombol. `Esc` = kembali satu halaman.
 | `63-area-bos.js` | Area bos: jarak bos mengejar sebelum menyerah & pulang (`ATURAN.areaBos`) |
 | `64-cermin-peta.js` | Cermin Gaib yang sudah muncul tampil di peta mini, peta area & peta dunia; ketuk ikonnya untuk teleport ke depan cermin |
 | `65-jamu-jeda.js` | Jeda jamu 10 detik (`ATURAN.jamuJeda`), kotak Jamu di desktop (W / klik) & lencana jumlah di tombol HP |
-| `66-status-karakter.js` | Halaman Status Karakter (tombol 👤 / `C`) & tombol pintas ⚔ 💎 👤 di kiri koin (halaman Jurus & Jimat tidak lagi di menu Gameplay) |
+| `66-status-karakter.js` | Halaman Status Karakter (tombol 👤 / `Tab` / `C`, tidak lagi di menu) & tombol pintas ⚔ 💎 👤 di kiri koin (halaman Jurus & Jimat tidak lagi di menu Gameplay) |
 | `67-main.js` | Loop utama (dimuat paling akhir) |
 
 Cerita utama ada di folder `src/cerita/`: `bab-1.js` ... `bab-5.js` (satu file per bab), digabung di `semua.js`.

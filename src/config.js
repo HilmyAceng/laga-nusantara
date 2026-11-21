@@ -29,7 +29,7 @@ const KONTROL = {
   pamungkas: ["r"],       // jurus pamungkas (saat bar Tenaga Dalam penuh)
   menuJurus: ["k"],       // buka halaman Jurus & Poin Jurus
   menuJimat: ["i"],       // buka halaman Jimat
-  menuStatus: ["c"],      // buka halaman Status Karakter
+  menuStatus: ["Tab", "c"], // buka / tutup halaman Status Karakter
   musik: ["n"],           // nyalakan / matikan musik
 };
 
