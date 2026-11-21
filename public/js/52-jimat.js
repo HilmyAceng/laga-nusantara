@@ -5,7 +5,7 @@
 //  - Tempa jimat di toko: koin + Serpih Pusaka → bintang naik, efek +25% per bintang.
 //    Jimat kembar otomatis dilebur jadi Serpih Pusaka.
 //  - Ramuan sementara (RAMUAN): dibeli di toko & langsung diminum, efek 2 menit.
-// Halaman: Menu › Pengaturan › Gameplay › Jimat, tombol I, atau "Jimat" di toko.
+// Halaman: tombol 💎 di HUD (66-status-karakter.js), tombol I, atau "Jimat" di toko.
 // Simpanan: S.jimat = { punya: { id: bintang }, pakai: [id], serpih, pity }, S.ramuan = { id: jam selesai }
 // =====================================================================
 "use strict";
@@ -161,6 +161,6 @@ $("jimatIsi").addEventListener("click", (e) => {
 });
 // tombol kembali di halaman jimat: dari toko → langsung main lagi
 $("btnJimatBack").addEventListener("click", () => {
-  if (jimatDariToko) { jimatDariToko = false; togglePause(); showUI(); }
-  else showPauseView("gameplay");
+  // halaman jimat dibuka dari toko atau tombol 💎 di HUD → kembali langsung ke permainan
+  jimatDariToko = false; togglePause(); showUI();
 });

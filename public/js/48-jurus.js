@@ -3,7 +3,7 @@
 // Tiap kelas punya 4 jurus (JURUS di config.js) yang terbuka bertahap sesuai
 // level. Dua jurus bisa dipasang sekaligus:
 //   slot 1 = tombol S (KONTROL.jurus)   slot 2 = tombol F (KONTROL.jurus2)
-// Pilih jurus untuk slot di Menu › Pengaturan › Gameplay › Jurus (51-poin-jurus.js).
+// Pilih jurus untuk slot di halaman Jurus: tombol ⚔ di HUD / tombol K (51-poin-jurus.js).
 // Rank jurus (poin jurus) menambah damage, memperpendek jeda, dan di rank 3 / 5
 // membuka kemampuan tambahan (naik3 / naik5).
 // Simpanan: S.jurus = { slot: [id, id], rank: { id: n }, pasif: { id: n } }

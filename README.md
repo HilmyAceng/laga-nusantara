@@ -8,6 +8,7 @@ Bisa dimainkan di HP (joystick + tombol sentuh, mode lanskap) dan desktop (keybo
 - **Sistem tarung lanjutan**:
   - **4 jurus per kelas** (terbuka di Lv 1, 8, 18, 30), dua dipasang sekaligus (`S` & `F`). Contoh: Badai Golok, Gelombang Angin, Langkah Bayang, Panah Jerat, Hujan Panah, Panah Tembus, Benteng, Lompatan Palu, Raungan, Perisai Api, Tapak Es, Meteor
   - **Jurus pamungkas** (`R`, mulai Lv 5) saat bar **Tenaga Dalam** (garis emas di bawah nyawa) penuh: Seribu Tebasan, Panah Garuda, Palu Bumi, Hujan Meteor
+  - **Status Karakter**: halaman kekuatan, bonus jimat/pasif & catatan petualangan; tombol pintas Status, Jurus (lencana poin sisa) & Jimat di kiri koin; menu Gameplay kini langsung di menu jeda (di atas Pengaturan)
   - **Jeda jamu**: setelah minum jamu harus menunggu 10 detik; desktop punya kotak Jamu (tombol `W` atau klik)
   - **Teleport ke Cermin Gaib**: setiap cermin yang sudah muncul tampil (ikon ungu) di peta; ketuk untuk pindah ke depan cermin itu
   - **Arena bos lapang**: ruang bos di Candi, Rawa (pulau), Kawah, Gua Genderuwo, Hutan Larangan, Kuil, Hutan Batu, Makam, Gua Laut, Istana Awan & Menara Kala diperluas (mis. Kuil 16×8 → 36×9 petak, Rawa 9×7 → 18×10), dan bos mengejar lebih jauh sebelum pulang
@@ -62,7 +63,7 @@ Bisa dimainkan di HP (joystick + tombol sentuh, mode lanskap) dan desktop (keybo
 ## Kontrol
 
 - HP: joystick kiri untuk gerak. Di kanan: Serang (tahan), Jurus 1 & Jurus 2 di samping Serang, Pamungkas di atas Serang, Jamu di atas Pamungkas, Hindar di kiri bawah, dan Bicara (muncul di dekat NPC)
-- Keyboard: tombol panah untuk gerak, `D` serang (tahan), `S` jurus 1, `F` jurus 2, `R` pamungkas, `A` hindar (+ arah = berguling, tanpa arah = tangkis), `W` jamu, `E` bicara, `M` buka peta besar (atau klik peta mini), `J` daftar misi, `K` halaman jurus, `I` halaman jimat, `Esc` jeda, `N` musik nyala/mati
+- Keyboard: tombol panah untuk gerak, `D` serang (tahan), `S` jurus 1, `F` jurus 2, `R` pamungkas, `A` hindar (+ arah = berguling, tanpa arah = tangkis), `W` jamu, `E` bicara, `M` buka peta besar (atau klik peta mini), `J` daftar misi, `K` halaman jurus, `I` halaman jimat, `C` status karakter, `Esc` jeda, `N` musik nyala/mati
 - HP: tombol tambahan Jurus 2 dan Pamungkas (muncul mulai Lv 5)
 
 ## Menu jeda
@@ -155,7 +156,8 @@ Semua menu memakai tombol. `Esc` = kembali satu halaman.
 | `63-area-bos.js` | Area bos: jarak bos mengejar sebelum menyerah & pulang (`ATURAN.areaBos`) |
 | `64-cermin-peta.js` | Cermin Gaib yang sudah muncul tampil di peta mini, peta area & peta dunia; ketuk ikonnya untuk teleport ke depan cermin |
 | `65-jamu-jeda.js` | Jeda jamu 10 detik (`ATURAN.jamuJeda`), kotak Jamu di desktop (W / klik) & lencana jumlah di tombol HP |
-| `66-main.js` | Loop utama (dimuat paling akhir) |
+| `66-status-karakter.js` | Halaman Status Karakter (tombol 👤 / `C`) & tombol pintas ⚔ 💎 👤 di kiri koin (halaman Jurus & Jimat tidak lagi di menu Gameplay) |
+| `67-main.js` | Loop utama (dimuat paling akhir) |
 
 Cerita utama ada di folder `src/cerita/`: `bab-1.js` ... `bab-5.js` (satu file per bab), digabung di `semua.js`.
 

@@ -332,7 +332,7 @@ const TEKS = {
     "item.ekorTikus": "Rat tail", "item.tulangTua": "Old bone", "item.serpihBayang": "Shadow shard", "item.sisikListrik": "Electric scale",
     "item.intiAngin": "Wind core", "item.lencanaBayang": "Shadow badge", "item.debuLelembut": "Wraith dust", "item.mutiaraHitam": "Black pearl", "item.kainBayang": "Shadow cloth",
     "item.segelBumi": "Earth Seal", "item.segelSegara": "Sea Seal", "item.segelAwan": "Cloud Seal", "item.tombakCahaya": "Spear of Light", "item.mahkotaKala": "Kala Crown",
-    "h.gameplay": "Gameplay", "h.gpEyebrow": "Settings › Gameplay", "h.gpJudul": "Game<span>play</span>", "h.debuff": "Debuffs",
+    "h.gameplay": "Gameplay", "h.gpEyebrow": "Pause › Gameplay", "h.gpJudul": "Game<span>play</span>", "h.debuff": "Debuffs",
     "h.dbEyebrow": "Gameplay › Debuffs", "h.dbJudul": "De<span>buffs</span>", "h.pilihDunia": "World",
     "cerita.ep": "Ep {n}",
     "item.daunSambiloto": "Sambiloto leaf", "item.kristalKabut": "Mist crystal", "item.taringUlar": "Snake fang", "item.cakarKumbang": "Panther claw",

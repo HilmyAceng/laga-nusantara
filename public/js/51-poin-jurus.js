@@ -2,7 +2,7 @@
 // POIN JURUS
 // Tiap naik level dapat 1 poin jurus. Poin dipakai untuk menaikkan rank jurus
 // (damage +, jeda -, kemampuan baru di rank 3 & 5) atau pasif (PASIF di config.js).
-// Halaman: Menu › Pengaturan › Gameplay › Jurus, atau tombol K (KONTROL.menuJurus).
+// Halaman: tombol ⚔ di HUD (66-status-karakter.js) atau tombol K (KONTROL.menuJurus).
 // Di halaman yang sama kamu memilih jurus untuk slot 1 & slot 2.
 // Poin bisa diatur ulang dengan koin (ATURAN.poinJurus.resetHarga × level).
 // =====================================================================

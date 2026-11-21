@@ -40,6 +40,7 @@ function refreshHud(force) {
   hudJurus();                       // jurus slot 1 & 2, pamungkas (48-jurus.js, 49-pamungkas.js)
   hudHindar();                      // lapis hindar (50-hindar-tangkis.js)
   hudJamu();                        // jumlah & jeda jamu (65-jamu-jeda.js)
+  hudPintasan();                    // lencana poin jurus di tombol ⚔ (66-status-karakter.js)
   if (!isTouch) {
     if (last.sn !== S.cls) {
       last.sn = S.cls;

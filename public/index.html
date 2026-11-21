@@ -286,6 +286,18 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 #bPot span { transform: translateY(-6px); }
 #bPot::before { content: attr(data-jamu); position: absolute; z-index: 3; left: 50%; bottom: 5px; transform: translateX(-50%); min-width: 22px; padding: 1px 4px; border-radius: 8px; background: rgba(5, 3, 12, 0.75); border: 1px solid #5ad17a; font: 900 0.68rem/1 var(--font-display, sans-serif); color: #8ff0a8; text-align: center; }
 
+/* pintasan Status / Jurus / Jimat di HUD + halaman status (js/66-status-karakter.js) */
+.hud .icon-btn.pintas { position: relative; font-size: 0.95rem; line-height: 1; }
+.pintas-poin { position: absolute; top: -6px; right: -6px; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 8px; background: var(--gold); color: #1b1208; font: 900 0.62rem/16px var(--font-display, sans-serif); text-align: center; }
+.st-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+.st-box { padding: 8px 10px; border-radius: 10px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--line); display: grid; gap: 2px; }
+.st-box small { color: var(--ink-dim); font-size: 0.7rem; font-weight: 700; }
+.st-box b { font-size: 1.05rem; font-variant-numeric: tabular-nums; }
+.st-box em { font-style: normal; font-size: 0.68rem; color: #8ff0a8; }
+.st-bar { height: 6px; border-radius: 3px; background: rgba(255, 255, 255, 0.1); overflow: hidden; }
+.st-bar i { display: block; height: 100%; background: var(--gold); }
+.st-list { margin: 0; padding-left: 18px; font-size: 0.82rem; line-height: 1.5; }
+
 /* ---------- Overlay & dialog ---------- */
 .overlay {
   position: absolute; inset: 0; display: grid; place-items: safe center; overflow-y: auto; touch-action: pan-y;
@@ -440,6 +452,10 @@ h1 span { color: var(--gold); }
     </div>
     <div class="right">
       <div class="chips">
+        <!-- pintasan halaman (js/66-status-karakter.js): Jurus (+ poin sisa), Jimat, Status -->
+        <button class="icon-btn pintas" id="btnJurusHud" type="button" data-ta="h.jurusMenu" aria-label="Jurus">⚔<b class="pintas-poin" id="poinHud" hidden>0</b></button>
+        <button class="icon-btn pintas" id="btnJimatHud" type="button" data-ta="h.jimatMenu" aria-label="Jimat">💎</button>
+        <button class="icon-btn pintas" id="btnStatus" type="button" data-ta="h.statusMenu" aria-label="Status">👤</button>
         <span class="chip" data-ta="h.koin" aria-label="Koin"><i class="coin"></i><span id="gold">0</span></span>
         <span class="chip" data-ta="h.jamu" aria-label="Jamu"><i class="jamu"></i><span id="pots">0</span></span>
         <button class="icon-btn" id="btnPause" type="button" data-ta="h.jeda" aria-label="Jeda">❚❚</button>
@@ -527,6 +543,7 @@ h1 span { color: var(--gold); }
         <p class="lead" id="pauseStats"></p>
         <div class="menu">
           <button class="go" id="btnResume" type="button" data-t="h.lanjut">Lanjut</button>
+          <button class="go alt" type="button" data-go="gameplay" data-t="h.gameplay">Gameplay</button>
           <button class="go alt" type="button" data-go="settings" data-t="h.pengaturan">Pengaturan</button>
           <button class="go alt" type="button" data-go="credit" data-t="h.credit">Credit</button>
           <button class="go alt" id="btnMenu" type="button" data-t="h.menuUtama">Menu utama</button>
@@ -544,21 +561,19 @@ h1 span { color: var(--gold); }
           <button class="go alt" type="button" data-go="control" data-t="h.kontrol">Kontrol</button>
           <button class="go alt" type="button" data-go="volume" data-t="h.volume">Volume</button>
           <button class="go alt" type="button" data-go="layar" data-t="h.layar">Layar</button>
-          <button class="go alt" type="button" data-go="gameplay" data-t="h.gameplay">Gameplay</button>
           <button class="go alt back" type="button" data-go="main" data-t="h.kembali">← Kembali</button>
         </div>
       </div>
 
       <!-- Halaman: gameplay (panduan) -->
       <div class="pview" data-view="gameplay" hidden>
-        <p class="eyebrow" data-t="h.gpEyebrow">Pengaturan › Gameplay</p>
+        <p class="eyebrow" data-t="h.gpEyebrow">Jeda › Gameplay</p>
         <h1 data-th="h.gpJudul">Game<span>play</span></h1>
         <div class="menu">
+          <button class="go alt" type="button" data-go="status" data-t="h.statusMenu">Status Karakter</button>
           <button class="go alt" type="button" data-go="cara" data-t="h.cara">Cara Bermain</button>
-          <button class="go alt" type="button" data-go="jurus" data-t="h.jurusMenu">Jurus &amp; Poin Jurus</button>
-          <button class="go alt" type="button" data-go="jimat" data-t="h.jimatMenu">Jimat</button>
           <button class="go alt" type="button" data-go="debuff" data-t="h.debuff">Debuff</button>
-          <button class="go alt back" type="button" data-go="settings" data-t="h.kembali">← Kembali</button>
+          <button class="go alt back" type="button" data-go="main" data-t="h.kembali">← Kembali</button>
         </div>
       </div>
 
@@ -572,15 +587,23 @@ h1 span { color: var(--gold); }
 
       <!-- Halaman: jurus & poin jurus (js/51-poin-jurus.js) -->
       <div class="pview" data-view="jurus" hidden>
-        <p class="eyebrow" data-t="h.jurusEyebrow">Gameplay › Jurus</p>
+        <p class="eyebrow" data-t="h.jurusEyebrow">Jurus &amp; Poin Jurus</p>
         <h1 data-th="h.jurusJudul">Ju<span>rus</span></h1>
         <div class="gp-list" id="jurusIsi"></div>
+        <div class="menu"><button class="go alt back" type="button" id="btnJurusBack" data-t="h.kembali">← Kembali</button></div>
+      </div>
+
+      <!-- Halaman: status karakter (js/66-status-karakter.js) -->
+      <div class="pview" data-view="status" hidden>
+        <p class="eyebrow" data-t="h.statusEyebrow">Gameplay › Status</p>
+        <h1 data-th="h.statusJudul">Sta<span>tus</span></h1>
+        <div class="gp-list" id="statusIsi"></div>
         <div class="menu"><button class="go alt back" type="button" data-go="gameplay" data-t="h.kembali">← Kembali</button></div>
       </div>
 
       <!-- Halaman: jimat (js/52-jimat.js) -->
       <div class="pview" data-view="jimat" hidden>
-        <p class="eyebrow" data-t="h.jimatEyebrow">Gameplay › Jimat</p>
+        <p class="eyebrow" data-t="h.jimatEyebrow">Jimat &amp; Tempa</p>
         <h1 data-th="h.jimatJudul">Ji<span>mat</span></h1>
         <div class="gp-list" id="jimatIsi"></div>
         <div class="menu"><button class="go alt back" type="button" id="btnJimatBack" data-t="h.kembali">← Kembali</button></div>
@@ -898,6 +921,7 @@ h1 span { color: var(--gold); }
 <script src="js/63-area-bos.js"></script>
 <script src="js/64-cermin-peta.js"></script>
 <script src="js/65-jamu-jeda.js"></script>
-<script src="js/66-main.js"></script>
+<script src="js/66-status-karakter.js"></script>
+<script src="js/67-main.js"></script>
 <script>if("serviceWorker" in navigator){addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}</script>
 </body></html>

@@ -25,10 +25,11 @@ const KONTROL = {
   jeda: ["Escape", "p"],
   peta: ["m"],            // buka / tutup peta besar
   misi: ["j"],            // buka / tutup daftar misi (pilih misi yang dilacak)
-  jurus2: ["f"],          // jurus di slot ke-2 (pilih di Menu › Gameplay › Jurus)
+  jurus2: ["f"],          // jurus di slot ke-2 (pilih di halaman Jurus: tombol ⚔ / K)
   pamungkas: ["r"],       // jurus pamungkas (saat bar Tenaga Dalam penuh)
   menuJurus: ["k"],       // buka halaman Jurus & Poin Jurus
   menuJimat: ["i"],       // buka halaman Jimat
+  menuStatus: ["c"],      // buka halaman Status Karakter
   musik: ["n"],           // nyalakan / matikan musik
 };
 
