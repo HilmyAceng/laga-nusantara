@@ -36,12 +36,10 @@ function refreshHud(force) {
   if (last.q !== qh) { last.q = qh; ui.quest.innerHTML = qh; }
   const boss = monsters.find((m) => m.d.boss && !m.dead && m.aggro);
   ui.boss.hidden = !boss || mode === "select";
-  if (boss) { ui.bossFill.style.width = (100 * boss.hp / boss.d.hp) + "%"; setText(ui.bossName, "bossName", boss.d.name); }
+  if (boss) { ui.bossFill.style.width = (100 * boss.hp / boss.d.hp) + "%"; setText(ui.bossName, "bossName", hudFaseBos(boss)); }   // "Fase n/m" (62-fase-bos.js)
   hudJurus();                       // jurus slot 1 & 2, pamungkas (48-jurus.js, 49-pamungkas.js)
-  const rc = Math.round(P.rollCd / ATURAN.hindar.jeda * 20) / 20;
-  if (last.rc !== rc) { last.rc = rc; ui.bRoll.style.setProperty("--cd", rc); }
+  hudHindar();                      // lapis hindar (50-hindar-tangkis.js)
   if (!isTouch) {
-    setSlot(ui.sRoll, ui.sRollSec, "sr", P.rollCd, ATURAN.hindar.jeda);
     if (last.sn !== S.cls) {
       last.sn = S.cls;
       const lbl = (act) => { const k = KONTROL[act][0]; return KEY_LABEL[k] || (k.length === 1 ? k.toUpperCase() : k); };

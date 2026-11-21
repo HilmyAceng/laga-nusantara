@@ -5,6 +5,17 @@
 //   melodi (+ suara), isian (+ suaraIsian), bas (+ suaraBas),
 //   kendang & perkusi (pola gendang), gong.
 // Lagu dengan ulang: false dimainkan sekali (musik kemenangan), lihat playJingle().
+//
+// Supaya tidak kaku:
+//   - tiap nada punya kekuatan berbeda (ketukan kuat/lemah) & sedikit meleset seperti dimainkan manusia
+//   - ayun (swing): ketukan ganjil sedikit terlambat
+//   - struktur gamelan: kenong & kempul menandai frasa, gong di awal frasa
+//   - frasa A / B bergantian: di frasa B muncul imbal (peking memecah melodi 2× lebih rapat),
+//     kendang lebih rapat, dan ada isian kendang (rol) di akhir tiap frasa
+//   - musik bereaksi: ada monster mengejar → lapisan tarung (bas berdenyut, kecrek);
+//     nyawa bos makin sedikit → tempo makin cepat & semua lapisan menyala
+//   - gema ruang (echo) supaya terdengar lebih luas
+// `semangat` (0-1), `ayun`, `frasa` di LAGU (config.js) mengatur seberapa ramai lagu itu.
 // =====================================================================
 "use strict";
 
@@ -44,11 +55,11 @@ function playMusic(id) {
   if (music.gain) { const old = music.gain; old.gain.setTargetAtTime(0.0001, t, s && s.once ? 0.12 : 0.4); setTimeout(() => old.disconnect(), 3000); }
   music.cur = id; music.gain = null;
   if (!id || !s) return;
-  const g = actx.createGain(); g.connect(musicBus);
+  const g = actx.createGain(); g.connect(musicBus); g.connect(ruangMusik());
   const vol = s.keras || 1;    // pengali volume per lagu (config.js)
   if (s.once) { g.gain.setValueAtTime(vol, t); music.next = t + 0.08; }
   else { g.gain.setValueAtTime(0.0001, t); g.gain.setTargetAtTime(vol, t + 0.3, 0.5); music.next = t + 0.3; }
-  music.gain = g; music.step = 0;
+  music.gain = g; music.step = 0; music.basTerakhir = null;
 }
 function note(type, f, t, vol, attack, decay, out, lowpass) {
   const o = actx.createOscillator(), g = actx.createGain();
@@ -104,22 +115,80 @@ function gong(t, out) {
   note("sine", NADA_DASAR / 4 * 1.006, t, 0.1, 0.02, 3.5, out);
 }
 const at = (arr, i) => (arr.length ? arr[i % arr.length] : null);
+
+// gema ruang: tunda + umpan balik, disaring supaya lembut (dibuat sekali)
+let gema = null;
+function ruangMusik() {
+  if (gema) return gema;
+  const inp = actx.createGain(), d = actx.createDelay(1), fb = actx.createGain(), lp = actx.createBiquadFilter(), wet = actx.createGain();
+  d.delayTime.value = 0.27; fb.gain.value = 0.32; lp.type = "lowpass"; lp.frequency.value = 2400; wet.gain.value = 0.22;
+  inp.connect(d); d.connect(lp); lp.connect(fb); fb.connect(d); lp.connect(wet); wet.connect(musicBus);
+  return (gema = inp);
+}
+// kenong (gong sedang, nada tengah) & kempul (gong gantung kecil)
+function kenong(f, t, out, v) { note("sine", f, t, 0.07 * v, 0.01, 1.4, out); note("triangle", f * 2, t, 0.012 * v, 0.005, 0.5, out); }
+function kempul(f, t, out, v) { note("sine", f, t, 0.09 * v, 0.015, 1.8, out); note("sine", f * 1.01, t, 0.05 * v, 0.015, 1.8, out); }
+// tiap nada lewat pengatur kekuatan sendiri
+function keras(out, v) { const g = actx.createGain(); g.gain.value = v; g.connect(out); setTimeout(() => g.disconnect(), 6000); return g; }
+
+// Seberapa tegang suasana sekarang (0 = santai, 1 = bertarung, 2 = bos hampir kalah)
+let tegang = 0;
+function hitungTegang() {
+  if (!P || mode === "select") return 0;
+  const bos = monsters.find((m) => m.d.boss && !m.dead && m.aggro);
+  if (bos) return 1 + (1 - bos.hp / bos.d.hp);
+  return monsters.some((m) => !m.dead && m.aggro && !m.d.latihan && dist(m, P) < 420) ? 1 : 0;
+}
+
 function playStep(s, i, t, len) {
-  const out = music.gain;
+  const out = music.gain, sem = s.semangat ?? 0.5, F = s.frasa || 32, pos = i % F, frasaB = Math.floor(i / F) % 2 === 1 && sem >= 0.3;
+  const kuat = pos % 8 === 0 ? 1.2 : pos % 4 === 0 ? 1.08 : pos % 2 === 0 ? 0.95 : 0.8;
+  const v = () => kuat * rand(0.86, 1.06);
+  const jt = () => t + rand(-0.006, 0.006) + (i % 2 ? (s.ayun || 0) * len : 0);   // meleset sedikit + ayun
   const f = at(s.notes, i), fi = at(s.fill, i), fb = at(s.bass, i);
-  if (f) (SUARA[s.suara] || SUARA.saron)(f, t, len, out);
-  if (fi) (SUARA[s.suaraIsian] || SUARA.peking)(fi, t, len, out);
-  if (fb) (SUARA[s.suaraBas] || SUARA.bas)(fb, t, len, out);
-  const d = at(s.drums, i), p = at(s.perc, i);
-  if (d) hit(d, t, out);
-  if (p) hit(p, t, out);
+  if (f) (SUARA[s.suara] || SUARA.saron)(f, jt(), len, keras(out, v()));
+  if (fi) (SUARA[s.suaraIsian] || SUARA.peking)(fi, jt(), len, keras(out, v() * (frasaB ? 1.15 : 1)));
+  if (fb) (SUARA[s.suaraBas] || SUARA.bas)(fb, jt(), len, keras(out, v()));
+  // saron rangkap: melodi digandakan satu oktaf di ketukan kuat (lagu bersemangat)
+  if (sem >= 0.8 && f && pos % 2 === 0) SUARA.peking(f, jt(), len, keras(out, 0.35 * v()));
+  // bas berdenyut: nada bas terakhir diulang cepat di sela ketukan, mendorong lagu terus maju
+  if (fb) music.basTerakhir = fb;
+  if (sem >= 0.7 && !fb && music.basTerakhir && !s.once) SUARA.bas(music.basTerakhir, jt(), len * 0.5, keras(out, 0.3 + 0.15 * (sem - 0.7)));
+  // imbal: peking memecah melodi (nada ini & nada berikutnya, satu oktaf lebih tinggi)
+  if ((frasaB || sem >= 0.85 || tegang >= 1.4) && sem >= 0.4 && f) {
+    const nx = at(s.notes, i + 1) || f;
+    SUARA.peking(f * 2, jt(), len * 0.5, keras(out, 0.55 * v()));
+    SUARA.peking(nx * 2, t + len * 0.5 + rand(-0.004, 0.004), len * 0.5, keras(out, 0.4 * v()));
+  }
+  // kendang: frasa B lebih rapat; 4 ketukan terakhir frasa = isian (rol)
+  let d = at(s.drums, i);
+  if (sem >= 0.3 && pos >= F - 4) d = ["t", "D", "t", "D"][pos - (F - 4)];
+  else if (frasaB && !d && i % 2 === 1) d = "t";
+  const p = at(s.perc, i);
+  if (d) hit(d, jt(), keras(out, v()));
+  // kendang ciblon: frasa B lagu bersemangat dimainkan dua kali lebih rapat
+  if (frasaB && sem >= 0.8 && pos % 2 === 0) hit("t", t + len * 0.5 + rand(-0.004, 0.004), keras(out, 0.45 * v()));
+  // naik menjelang akhir frasa: rol kendang makin keras di 8 ketukan terakhir
+  if (sem >= 0.6 && pos >= F - 8) { const naik = (pos - (F - 8)) / 8; hit("t", t + len * 0.5, keras(out, 0.3 + 0.6 * naik)); if (pos >= F - 2) hit("x", jt(), keras(out, 0.8)); }
+  if (p) hit(p, jt(), keras(out, 0.9 * v()));
+  // struktur gamelan
   if (s.gong && i % s.gong === 0) gong(t, out);
+  if (sem >= 0.3 && pos % 8 === 4) kempul(NADA_DASAR / 2 * (s.tangga === "pelog" ? 1.06 : 1.12), t, out, kuat);
+  if (sem >= 0.3 && pos % 8 === 0 && pos) kenong(NADA_DASAR * (s.tangga === "pelog" ? 0.94 : 1), t, out, kuat);
+  if (pos === 0 && i && sem >= 0.6) hit("B", t, out);
+  // lapisan tarung: bas berdenyut & kecrek saat dikejar monster / melawan bos
+  if (tegang >= 1 && !s.once) {
+    if (i % 2 === 0 && fb !== undefined) SUARA.bas((fb || NADA_DASAR / 4), jt(), len * 0.6, keras(out, 0.45 + 0.25 * (tegang - 1)));
+    if (i % 2 === 1) hit("x", jt(), keras(out, 0.6));
+    if (tegang >= 1.5 && i % 4 === 2) hit("D", jt(), keras(out, 0.8));
+  }
 }
 // Penjadwal: setiap 50 ms, siapkan nada untuk 0.2 detik ke depan agar ritme stabil.
 function musicTick() {
   const s = SONGS[music.cur];
   if (!actx || !music.gain || !s || actx.state !== "running") return;
-  const len = 60 / s.tempo;
+  tegang = s.once ? 0 : hitungTegang();
+  const len = 60 / (s.tempo * (tegang > 1 ? 1 + 0.15 * (tegang - 1) : 1));   // bos makin lemah = makin cepat
   if (music.next < actx.currentTime - 0.5) music.next = actx.currentTime + 0.05;
   while (music.next < actx.currentTime + 0.2) {
     if (s.once && music.step >= s.notes.length) return;   // lagu sekali-main sudah habis

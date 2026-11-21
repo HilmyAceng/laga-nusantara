@@ -8,13 +8,15 @@ Bisa dimainkan di HP (joystick + tombol sentuh, mode lanskap) dan desktop (keybo
 - **Sistem tarung lanjutan**:
   - **4 jurus per kelas** (terbuka di Lv 1, 8, 18, 30), dua dipasang sekaligus (`S` & `F`). Contoh: Badai Golok, Gelombang Angin, Langkah Bayang, Panah Jerat, Hujan Panah, Panah Tembus, Benteng, Lompatan Palu, Raungan, Perisai Api, Tapak Es, Meteor
   - **Jurus pamungkas** (`R`, mulai Lv 5) saat bar **Tenaga Dalam** (garis emas di bawah nyawa) penuh: Seribu Tebasan, Panah Garuda, Palu Bumi, Hujan Meteor
+  - **Hindar 2 lapis**: berguling atau tangkis bisa 2 kali beruntun (keduanya memakai lapis yang sama), tiap lapis terisi lagi 5 detik (angka di pojok tombol Hindar; `ATURAN.hindar.lapis` & `isiUlang`)
   - **Hindar sempurna**: berguling tepat sebelum kena → waktu melambat, pukulan berikutnya pasti kritis
   - **Tangkis**: Hindar tanpa arah → serangan ditahan, penyerang lumpuh, kamu membalas
   - **Poin jurus**: 1 poin tiap naik level untuk rank jurus (kemampuan baru di rank 3 & 5) dan 5 pasif. Bisa diatur ulang dengan koin
 - **Jimat** (Biasa / Langka / Legenda) di 2-3 slot. Biasa dijual di toko, Langka dari bos, Legenda khas tiap bos dari Cermin Gaib (peluang naik tiap tingkat, dijamin keluar setelah 10 kali gagal). Jimat bisa ditempa sampai ★5 dengan koin + Serpih Pusaka
 - **Kegunaan koin**: jamu, asah senjata, jimat, tempa jimat, ramuan 2 menit (Kuat, Baja, Penangkal, Gesit), atur ulang poin jurus
-- **Monster menguat sesuai level pemain** (sampai 8 level di atas aslinya). Selisih level berpengaruh, dan monster dunia 2+ belajar trik (lebih cepat, kadang memukul dua kali)
+- **Monster menguat sesuai level pemain** (sampai 12 level di atas aslinya; nyawa +16% & serangan +10% per level). Bos menguat lebih cepat (nyawa +15%, serangan +10%, gerak dasar ×1,4 lalu +3,5% per level, kecepatan serang +2,5% per level — paling cepat ×1,5 — ditambah pengali level asli), termasuk bos Cermin Gaib (kecepatan serang +4% tiap tingkat). Monster dunia berikutnya otomatis lebih tebal & lebih sakit. Selisih level berpengaruh, dan monster dunia 2+ belajar trik (lebih cepat, kadang memukul dua kali)
 - **Bos tangguh** bertingkat dari mudah ke sulit: tipuan, amukan (lari ke lingkaran hijau, lalu bos kelelahan), kuda-kuda (pecahkan dengan tangkisan), kombo. **Naga Kencana dirombak** jadi 3 fase: kombo cakar, terbang & lajur api & cincin api, lalu amukan Nafas Matahari
+- **Fase bos**: semua bos (cerita & Cermin Gaib) punya 2-3 fase. Nyawa habis → bangkit lagi dengan nyawa penuh: Fase 2 · Murka (lebih kuat & cepat, memanggil anak buah), Fase 3 · Amarah Terakhir (lebih kuat lagi, kebal sebagian damage, jurus khas lebih sering). Bar nyawa menulis "Fase n/m" (`FASE_BOS` di config)
 - **Jurus khas tiap bos**: Genderuwo (Lempar Batu), Dwarapala (Gada Berputar), Buaya Putih (Gulungan Maut — menyelam lalu menyembul), Raja Banaspati (Pusaran Api), Siluman Ular (Kolam Racun, Tatapan Batu — balikkan badan!), Panglima Karang (Ombak Pasang), Kelabang (Terowongan), Raja Jerangkong (Tombak Tulang), Gurita Raksasa (Tinta Pekat, Sabetan Tentakel), Rajawali Petir (Badai Petir, Sambaran Kilat), Penjaga Menara (Lonceng Kala — cari penjuru hijau), Prabu Kalamurka (Cermin Bayang)
 - **Debuff baru**: lumpuh (stun) dan berdarah (damage over time yang bertumpuk). Monster juga bisa lumpuh, beku, terjerat, melemah, dan terkena racun/terbakar/berdarah dari jurus & jimatmu
 - **Latihan Dasar** bersama **Ki Sabda** di desa (misi sampingan cara bermain, 10 langkah) dan **Boneka Latihan** untuk berlatih hindar sempurna & tangkis kapan saja
@@ -28,7 +30,7 @@ Bisa dimainkan di HP (joystick + tombol sentuh, mode lanskap) dan desktop (keybo
   - **Negeri Awan** (lewat Tangga Pelangi): Kampung Awan (aman), Hutan Batu (bos **Kelabang Raksasa**), Puncak Naga (peta 60×60, bos terakhir **Naga Kencana** yang besar: semburan api, hujan meteor, kibasan ekor, terbang lalu menukik)
 - **Debuff** dari monster tertentu & bos: racun, terbakar, lambat, lemah, bingung (ikon di atas kepala). Sembuh sendiri, di zona aman, atau dengan jamu setelah misi **Pak Joko** (Ramuan Penawar)
 - **Zona aman**: kota/desa dan lingkaran di sekitar tiap mesin teleport. Monster tak bisa masuk, debuff hilang, nyawa pulih pelan
-- **Tantangan bos** di Cermin Gaib: tingkat kesulitan 1-7, level karakter yang disarankan, hadiah per tingkat; tingkat berikutnya terbuka setelah tingkat sebelumnya dimenangkan
+- **Tantangan bos** di Cermin Gaib: tingkat kesulitan 1-7 (tiap tingkat: nyawa +85%, serangan +32%, gerak +8%, kecepatan serang +6%, level saran +4), level karakter yang disarankan, hadiah per tingkat; tingkat berikutnya terbuka setelah tingkat sebelumnya dimenangkan
 - **Peta Tanah Wanasari** dengan layar transisi (gelap + nama area) saat pindah:
   - **Desa Wanasari**: aman. Ki Lurah (misi sampingan), Mbok Darmi (toko), Resi Wening (cerita), Pak Wowo (belum bisa diajak bicara), Mesin Teleport
   - **Hutan & Padang**: monster biasa. Jalan ke Gua (timur), Candi (utara), Rawa (selatan)
@@ -37,8 +39,10 @@ Bisa dimainkan di HP (joystick + tombol sentuh, mode lanskap) dan desktop (keybo
   - **Rawa Kabut** (baru): berkabut, Hantu Kabut & Buaya Rawa, Mbah Tirto, teka-teki Batu Pitutur, bos **Buaya Putih**
   - **Kampung Nelayan** (baru): kampung tepi laut, Pak Jala, Mak Inah (toko), Bang Kardi, Tuyul & Kepiting Karang
   - **Kawah Geni** (baru): lava & Banaspati, altar tiga mustika, bos terakhir **Raja Banaspati**
+- **Notif "Dukung Kami"** kecil di atas tengah setiap bab cerita selesai, hilang sendiri setelah 10 detik (`ATURAN.dukung.lamaNotif`). Notif tengah lain sekarang di bagian atas layar supaya tidak menutupi karakter
+- **Notif "belum saatnya"**: benda teka-teki & batu dorong yang disentuh sebelum waktunya memberi tahu di bab/episode mana ia dipakai; gerbang tertutup menyebut alasannya; sarang bos yang masih sepi memberi tanda
 - **Teka-teki**: nyalakan obor sesuai petunjuk prasasti, jawab 3 teka-teki Batu Pitutur (salah = hantu muncul), letakkan 3 mustika di altar
-- **Mesin Teleport** di Desa, Candi, Rawa, Kampung & Kawah: pulihkan nyawa (energi 1000, terisi 1 tiap 5 menit), dan pindah cepat lewat peta besar (aktif setelah areanya didatangi)
+- **Mesin Teleport** hanya di desa & kota (Desa Wanasari, Kampung Nelayan, Bandar Segara, Desa Apung, Kampung Awan, Perkemahan Cahaya; atur di `ATURAN.teleport.area`): pulihkan nyawa (energi 1000, terisi 1 tiap 5 menit), dan pindah cepat lewat peta besar (aktif setelah areanya didatangi)
 - **Cermin Gaib** di sarang tiap bos (Genderuwo: setelah misi Ki Lurah selesai; bos lain: setelah bos itu dikalahkan): tantang lagi dengan tingkat 1-7, jeda 30 detik
 - **Navigasi nyaman**: panah emas di tepi layar menuju tujuan cerita (lengkap dengan jarak & nama area berikutnya), bintang tujuan di peta mini & peta besar, jalur emas di peta dunia, area yang belum didatangi tertutup kabut "???", tanda **!** / **?** di atas NPC (emas = cerita, biru = misi sampingan)
 - **4 kelas hero**: Pendekar, Pemanah, Pendobrak, Penyihir. Masing-masing punya serangan dan jurus sendiri
@@ -46,6 +50,8 @@ Bisa dimainkan di HP (joystick + tombol sentuh, mode lanskap) dan desktop (keybo
 - **Bos**: Genderuwo, Dwarapala (hujan batu), Buaya Putih (terjangan & memanggil anak buaya), Raja Banaspati (semburan api, hujan api). Bos marah di bawah 50% nyawa
 - **Progres**: EXP & naik level (nyawa dan serangan bertambah), koin, jamu, tingkat senjata
 - **Misi sampingan**: rantai misi Ki Lurah, Bang Kardi, Mbah Tirto, Pak Joko (resep penawar debuff), Bayu, Pak Rimba, Nyi Laras, Kirana, Empu Gora (naik tingkat senjata), Ki Angon. **Toko** Mbok Darmi, Mak Inah, Mbak Sari, Empu Gora
+- **Suara makhluk** (sintetis, tanpa file): tiap monster punya suara khas saat melihatmu, saat ancang-ancang (tanda serangan), dan saat mati; bos meraung saat mengejar, ganti fase, jurus khas & amukan; hero bersuara saat menyerang, berjurus, berguling, menangkis, terluka, dan pamungkas (nada beda tiap kelas); NPC "mengoceh" saat bicara dengan nada khas. Volume sendiri di Pengaturan › Volume › Suara makhluk
+- **Musik gamelan yang hidup**: nada berkekuatan beda & sedikit meleset seperti dimainkan manusia, ayunan, kenong & kempul penanda frasa, frasa A/B bergantian dengan imbal peking dan isian kendang, saron rangkap oktaf, bas berdenyut, kendang ciblon (2× rapat), rol kendang yang naik menjelang akhir frasa, gema ruang, lapisan tarung saat dikejar monster, dan tempo bos makin cepat saat nyawanya menipis (`semangat`, `ayun`, `frasa` di `LAGU`)
 - **Musik gamelan & efek suara** yang dibuat oleh kode (tanpa file audio). Lima lagu dengan suasana berbeda: riang (desa), tegang (hutan), seram (gua & candi), paling tegang (bos), dan musik kemenangan. Lagu punya lapisan melodi, isian, bas, kendang & kecrek, dengan tangga nada slendro atau pelog
 - **Peta mini**, serangan auto-bidik, guling menghindar (kebal sesaat), tanda merah sebelum musuh menyerang
 
@@ -63,7 +69,7 @@ Semua menu memakai tombol. `Esc` = kembali satu halaman.
 - **Pengaturan**
   - **Bahasa**: Indonesia (bawaan) atau English. Semua teks ikut berganti: menu, dialog, misi, nama area, monster & kelas hero. Pilihan tersimpan
   - **Kontrol**: panduan tombol keyboard dan HP (dibaca otomatis dari `KONTROL` di `config.js`)
-  - **Volume**: musik dan efek suara, tombol `−` / `+` (10% per tekan) dan Nyala/Mati. Pilihan tersimpan
+  - **Volume**: musik, efek suara, dan suara makhluk, tombol `−` / `+` (10% per tekan) dan Nyala/Mati. Pilihan tersimpan
   - **Gameplay**: Cara Bermain (panduan lengkap), Jurus & Poin Jurus, Jimat, Debuff
   - **Layar**: Full Screen nyala/mati (pilihan tersimpan; setelah halaman dibuka ulang, layar penuh aktif lagi pada sentuhan pertama). Di iPhone Safari belum didukung browser: pasang lewat "Tambahkan ke Layar Utama"
 - **Credit**: siapa yang membuat game ini, dan dari mana grafis, musik & huruf berasal
@@ -139,7 +145,10 @@ Semua menu memakai tombol. `Esc` = kembali satu halaman.
 | `56-cara-bermain.js` | Ki Sabda, Boneka Latihan, misi Latihan Dasar, halaman Cara Bermain |
 | `57-bos-tangguh.js` | Trik semua bos: tipuan, amukan, kuda-kuda, kombo |
 | `59-jurus-khas-bos.js` | Jurus khas 12 bos (selain naga), kolam racun, ombak, tinta, penjuru kala |
-| `60-main.js` | Loop utama (dimuat paling akhir) |
+| `60-belum-saatnya.js` | Notif "belum saatnya" untuk benda teka-teki, batu dorong, gerbang tertutup, sarang bos sepi |
+| `61-suara-makhluk.js` | Suara sintetis monster, bos, hero & ocehan NPC; batas suara bersamaan & jarak |
+| `62-fase-bos.js` | Fase bos 2-3: bangkit dengan nyawa penuh, kekuatan tambahan tiap fase |
+| `63-main.js` | Loop utama (dimuat paling akhir) |
 
 Cerita utama ada di folder `src/cerita/`: `bab-1.js` ... `bab-5.js` (satu file per bab), digabung di `semua.js`.
 

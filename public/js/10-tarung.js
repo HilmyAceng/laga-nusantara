@@ -74,6 +74,7 @@ function damageMonster(m, amount, ang, kb, opts = {}) {
 }
 
 function killMonster(m) {
+  if (m.d.boss && naikFaseBos(m)) return;  // bos bangkit ke fase berikutnya (62-fase-bos.js)
   if (m.ulang) return bosUlangKalah(m);   // bos dari cermin gaib: hadiahnya lain (13-cermin.js)
   if (m.d.latihan) { m.hp = m.d.hp; return; }
   m.dead = true; m.respawn = ATURAN.monster.munculLagi; S.kills++; sfx.die();

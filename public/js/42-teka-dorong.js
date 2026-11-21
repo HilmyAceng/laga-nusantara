@@ -35,6 +35,7 @@ UPDATE_TAMBAHAN.push((dt) => {
   const tx = Math.floor((P.x + dx * (P.r + 6)) / T), ty = Math.floor((P.y + dy * (P.r + 6)) / T);
   const b = batuDi(tx, ty);
   if (!b || tekaSelesai(b.teka)) { dorongT = 0; return; }
+  if (tekaBelumSaatnya(b.teka)) { dorongT = 0; notifBelum("batu:" + b.teka, t("belum.batu") + " " + teksNanti(langkahTeka(b.teka).l)); return; }   // 60-belum-saatnya.js
   dorongT += dt;
   if (dorongT < 0.22) return;
   dorongT = 0;

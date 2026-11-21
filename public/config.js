@@ -54,7 +54,9 @@ const ATURAN = {
 
   jamuPulih: 0.4,                         // jamu memulihkan 40% nyawa maksimal
 
-  hindar: { lama: 0.22, jeda: 0.9, kecepatan: 470, kebal: 0.28 },
+  // hindar (berguling) punya `lapis` muatan. Tiap lapis terisi lagi setelah `isiUlang` detik (satu per satu).
+  // jeda = jarak minimal antar-gulingan supaya 2 lapis bisa dipakai beruntun.
+  hindar: { lama: 0.22, jeda: 0.3, kecepatan: 470, kebal: 0.28, lapis: 2, isiUlang: 5 },
 
   kritis: { peluang: 0.12, kali: 1.6 },   // pukulan kritis: peluang & pengali damage
 
@@ -68,10 +70,11 @@ const ATURAN = {
   cermin: {
     jeda: 30,                             // detik sampai cermin bisa dipakai lagi
     tingkat: 7,                           // jumlah tingkat kesulitan
-    nyawaTambah: 0.45,                    // tiap tingkat: nyawa bos +45%
-    seranganTambah: 0.18,                 // tiap tingkat: serangan bos +18%
-    cepatTambah: 0.04,                    // tiap tingkat: gerak bos +4%
-    levelTambah: 2,                       // level karakter yang disarankan naik 2 tiap tingkat
+    nyawaTambah: 0.85,                    // tiap tingkat: nyawa bos +85%
+    seranganTambah: 0.32,                 // tiap tingkat: serangan bos +32%
+    cepatTambah: 0.08,                    // tiap tingkat: gerak bos +8%
+    seranganCepatTambah: 0.06,            // tiap tingkat: kecepatan serang bos +6%
+    levelTambah: 4,                       // level karakter yang disarankan naik 4 tiap tingkat
     koin: 0.2,                            // hadiah koin = koin bos × 0.2 × tingkat
     exp: 0.3,                             // hadiah EXP  = EXP bos × 0.3 × tingkat
     jamuMulai: 4,                         // tingkat 4 ke atas: bonus jamu (tingkat - 3)
@@ -101,7 +104,7 @@ const ATURAN = {
     radius: 3.2,                          // jari-jari di sekitar mesin teleport (petak)
     pulihPerDetik: 0.03,                  // nyawa pulih 3% per detik
     // bendera di sekeliling mesin teleport hanya dipasang di area-area ini
-    benderaTeleport: ["candi", "kawah", "bakau", "goaLaut", "hutanBatu", "padangBayang"],
+    benderaTeleport: ["pesisir"],
   },
 
   // Peta besar: zoom paling dekat (1 = seluruh peta terlihat, 4 = 4 kali lebih dekat)
@@ -118,9 +121,12 @@ const ATURAN = {
   // Selama kosong, tombol tetap tampil tapi hanya memberi tahu bahwa link belum diisi.
   dukung: {
     tautan: "https://saweria.co/hilmyaceng",
+    lamaNotif: 10,                        // notif "Dukung Kami" tiap bab selesai hilang sendiri setelah 10 detik
   },
 
   teleport: {
+    // mesin teleport hanya dipasang di desa/kota (bukan di hutan, gua, atau sarang bos)
+    area: ["desa", "pesisir", "bandar", "desaApung", "awan", "perkemahan"],
     energiMaks: 1000,                     // energi maksimal tiap mesin (1 energi = 1 nyawa)
     isiUlangPoin: 1,                      // energi bertambah sebanyak ini...
     isiUlangDetik: 300,                   // ...setiap sekian detik (300 = 5 menit), walau game ditutup
@@ -142,6 +148,7 @@ const ATURAN = {
   audio: {
     musik: 0.6,                           // volume awal musik (0 = diam, 1 = penuh). Pemain bisa ubah di menu jeda
     sfx: 0.9,                             // volume awal efek suara
+    suara: 0.8,                           // volume awal suara makhluk (monster, bos, hero, ocehan NPC)
     penguat: 3.0,                         // pengeras keseluruhan: makin besar makin keras (1 = tanpa penguat)
   },
 };
@@ -177,9 +184,18 @@ ATURAN.jimat = {
 };
 ATURAN.skalaMonster = {
   // Monster ikut menguat sesuai level pemain, tapi tidak lebih dari `batasAtas` level di atas level aslinya.
-  batasAtas: 8,
-  nyawaPerLv: 0.11, seranganPerLv: 0.075, hadiahPerLv: 0.07,
+  batasAtas: 12,
+  nyawaPerLv: 0.16, seranganPerLv: 0.1, hadiahPerLv: 0.08,
   kaliSerang: 1.15, kaliNyawa: 1.1,       // semua monster sedikit lebih galak dari dulu
+  // makin tinggi level asli monster (dunia berikutnya), makin tebal nyawa & makin sakit pukulannya:
+  // nyawa × (1 + nyawaPerLvAsli × level asli), serangan × (1 + seranganPerLvAsli × level asli)
+  nyawaPerLvAsli: 0.012, seranganPerLvAsli: 0.007,
+  // bos menguat lebih cepat dari monster biasa (berlaku juga untuk bos Cermin Gaib)
+  bosNyawaPerLv: 0.15, bosSeranganPerLv: 0.1, bosNyawaPerLvAsli: 0.02, bosSeranganPerLvAsli: 0.01,
+  // bos juga makin cepat tiap level menguat: gerak +2% & kecepatan serang +2.5% per level (paling cepat ×1.4)
+  // kecepatan serang = semua ancang-ancang, jeda antar-serangan & pola bos berjalan lebih cepat
+  bosGerakPerLv: 0.035, bosSeranganCepatPerLv: 0.025, bosCepatMaks: 1.5,
+  bosGerakDasar: 1.4,                     // semua bos 40% lebih cepat bergerak dari angka di MONSTERS (supaya tidak gampang dikabur)
   // selisih level: musuh yang levelnya di atasmu lebih sulit dilukai & lebih sakit pukulannya
   kurangiPerLv: 0.05, tambahPerLv: 0.06, selisihMaks: 10,
   // monster dunia 2+ atau yang sudah menguat 4 level: lebih cepat & kadang memukul dua kali
@@ -372,6 +388,8 @@ const QUESTS = [
 //   desa  = riang (juga di layar judul)     luar = tegang (hutan & padang)
 //   gua   = seram (gua & candi)             bos  = paling tegang (saat Genderuwo mengejar)
 //   menang = musik kemenangan, diputar sekali (bos tumbang & layar "Desa selamat")
+// semangat = 0..1 seberapa ramai (imbal, kendang rapat, kenong/kempul, isian kendang)
+// ayun = ketukan ganjil sedikit terlambat (0 = kaku, 0.15 = berayun), frasa = panjang satu frasa (ketukan)
 // Lagu mana dipakai di area mana: lihat `lagu` tiap area di js/03-peta.js.
 //
 // Cara menulis nada:
@@ -399,7 +417,7 @@ const QUESTS = [
 const LAGU = {
   // RIANG: cepat, melodi naik-turun, bas melompat oktaf, ketuk kayu di sela ketukan
   desa: {
-    tempo: 300, suara: "saron", gong: 32, keras: 0.85,
+    semangat: 0.85, ayun: 0.08, tempo: 330, suara: "saron", gong: 32, keras: 0.85,
     melodi: "3 5 6 1' 6 5 3 5 6 . 5 3 2 3 5 . 2 3 5 6 5 3 2 1 2 . 3 2 1 6, 1 .",
     isian: ". . 5' . . . 6' . . . 5' . 3' . . . . . 2' . . . 3' . 5' . . . 6' . 5' .", suaraIsian: "suling",
     bas: "1,, . 1, . 5,, . 5, . 6,, . 6, . 2,, . 2, .", suaraBas: "bas",
@@ -408,7 +426,7 @@ const LAGU = {
   },
   // TEGANG: sangat cepat, bas menderu terus, kecrek tanpa henti
   luar: {
-    tempo: 380, suara: "saron", gong: 16, keras: 0.75,
+    semangat: 1, ayun: 0.05, tempo: 410, suara: "saron", gong: 16, keras: 0.75,
     melodi: "6, 1 2 1 6, 1 2 3 5 3 2 1 2 3 5 6 5 6 1' 6 5 3 5 6 5 3 2 3 2 1 6, 1",
     isian: "6 . 5 . 3 . 5 . 6 . 1' . 6 . 5 .", suaraIsian: "peking",
     bas: "6,, 6,, 6, 6,, 1, 6,, 3,, 5,,", suaraBas: "bas",
@@ -418,7 +436,7 @@ const LAGU = {
   // SERAM: pelog, pelan & jarang, dengung panjang, bisikan sumbang,
   // detak jantung (D D), dan tetesan air (k) yang tidak beraturan
   gua: {
-    tempo: 200, tangga: "pelog", suara: "gelap", gong: 0, keras: 1.6,
+    semangat: 0.7, ayun: 0, frasa: 48, tempo: 225, tangga: "pelog", suara: "gelap", gong: 0, keras: 1.6,
     melodi: "1, . . . . . 2, . . . . . 1, . . . 7,, . . . . . 4, . . . . . 5, . . . . . 4, . . . 2, . . . . . . . . .",
     isian: ". . . . . . . . 2'' . . . . . . . . . . . 1'' . . . . . . 7' . . . . . . . . . . . . 4' . .", suaraIsian: "bisik",
     bas: "1,, . . . . . . . . . . . . . . . 2,, . . . . . . . . . . . . . . .", suaraBas: "dengung",
@@ -427,7 +445,7 @@ const LAGU = {
   },
   // PALING TEGANG (bos): pelog, sangat cepat, gendang & kecrek rapat, gong tiap 8 ketukan
   bos: {
-    tempo: 420, tangga: "pelog", suara: "saron", gong: 8, keras: 0.85,
+    semangat: 1, ayun: 0.04, tempo: 450, tangga: "pelog", suara: "saron", gong: 8, keras: 0.85,
     melodi: "1 2 1 7, 1 2 4 2 1 2 4 5 4 2 1 7, 5 4 2 4 5 6 5 4 2 1 2 4 2 1 7, 1",
     isian: "1' . 7 . 5 . 4 . 5 . 7 . 1' . 2' .", suaraIsian: "peking",
     bas: "1,, 1,, 1, 1,, 2,, 1,, 7,,, 7,,,", suaraBas: "bas",
@@ -436,7 +454,7 @@ const LAGU = {
   },
   // PESISIR (Kampung Nelayan): riang, berayun seperti ombak, suling di atas bas yang santai
   pesisir: {
-    tempo: 260, suara: "bonang", gong: 32, keras: 0.9,
+    semangat: 0.8, ayun: 0.12, tempo: 290, suara: "bonang", gong: 32, keras: 0.9,
     melodi: "5 . 6 1' . 6 5 3 5 . 3 2 . 3 5 . 6 . 5 6 1' 2' 1' 6 5 . 3 5 6 . 5 .",
     isian: ". . . . 3' . . . . . 2' . . . . . 5' . . . 6' . . . . . 1'' . . . . .", suaraIsian: "suling",
     bas: "5,, . . 5, 1,, . . 1, 6,, . . 6, 2,, . 3,, .", suaraBas: "bas",
@@ -445,7 +463,7 @@ const LAGU = {
   },
   // KAWAH (Kawah Geni): pelog, menghentak berat, dentum besar & kecrek panas
   kawah: {
-    tempo: 330, tangga: "pelog", suara: "saron", gong: 16, keras: 0.8,
+    semangat: 1, ayun: 0.03, tempo: 360, tangga: "pelog", suara: "saron", gong: 16, keras: 0.8,
     melodi: "1 . 2 1 7, . 1 2 4 . 2 1 2 . 4 5 6 . 5 4 2 . 1 2 4 5 4 2 1 . 7, .",
     isian: "5 . . 4 . . 5 . 6 . . 5 . . 4 .", suaraIsian: "peking",
     bas: "1,, . 1,, 1, 7,,, . 7,,, 1,,", suaraBas: "bas",
@@ -454,7 +472,7 @@ const LAGU = {
   },
   // KEMENANGAN: naik bertahap ke nada tinggi, gendang makin rapat, ditutup gong
   menang: {
-    tempo: 300, suara: "saron", ulang: false,
+    semangat: 0.2, tempo: 330, suara: "saron", ulang: false,
     melodi: "5, 6, 1 2 3 . 2 3 5 . 3 5 6 . 1' 6 1' 2' 3' . . 2' 1' . 6 . 1' . . . . . . . . .",
     isian: ". . . . 3' . . . 5' . . . 6' . . . 1'' . . . . . . . . . . . 1'' . . . . . . . .", suaraIsian: "peking",
     bas: "1,, . . . 1, . . . 5,, . . . 6,, . . . 1, . . . 5,, . . . 1,, . . . . . . . . .", suaraBas: "bas",
@@ -751,6 +769,20 @@ const BOS_TANGGUH = {
   penjagaMenara:  { tier: 12, tipuan: 0.34, amukan: 16, kombo: 0.35, kudaKuda: 13 },
   kalamurka:      { tier: 13, tipuan: 0.36, amukan: 15, kombo: 0.35, kudaKuda: 12 },
 };
+// FASE BOS (62-fase-bos.js): nyawa bos habis → bangkit dengan nyawa PENUH di fase berikutnya.
+// Bos tier ≤ duaFaseSampaiTier punya 2 fase, sisanya 3 fase. Di Cermin Gaib tingkat ≥ cerminTigaFase semua bos 3 fase.
+// Tiap fase punya kekuatan tambahan berbeda (dikalikan dari fase 1):
+//   atk = serangan, cepat = kecepatan serang, gerak = kecepatan gerak, tahan = damage diterima berkurang,
+//   anak = memanggil anak buah, khas = jurus khas lebih sering (pengali jeda)
+const FASE_BOS = {
+  duaFaseSampaiTier: 3, cerminTigaFase: 4, transisi: 2.2,
+  fase: [
+    null,
+    { atk: 1.2, cepat: 1.15, gerak: 1.12, anak: true, warna: "#ff5a3a" },                       // Fase 2 · Murka
+    { atk: 1.4, cepat: 1.3, gerak: 1.25, tahan: 0.2, khas: 0.65, anak: true, warna: "#b84aff" }, // Fase 3 · Amarah Terakhir
+  ],
+};
+
 // Debuff lumpuh (stun) & berdarah (damage over time) yang ditambahkan ke monster tertentu
 const DEBUFF_TAMBAHAN = {
   babi:           { jenis: "lumpuh",   peluang: 0.2,  lama: 0.8 },

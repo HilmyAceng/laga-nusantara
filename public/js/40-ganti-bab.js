@@ -1,7 +1,7 @@
 // =====================================================================
 // GANTI BAB
 // Saat bab cerita selesai: pengumuman besar "Tamat · Bab 1 ..." lalu
-// "Mulai · Bab 2 ...". Dipanggil dari selesaiLangkah() (23-cerita.js).
+// "Mulai · Bab 2 ...", lalu notif kecil "Dukung Kami". Dipanggil dari selesaiLangkah() (23-cerita.js).
 // =====================================================================
 "use strict";
 
@@ -15,9 +15,9 @@ function umumkanBab(lama, baru, after) {
   sfx.level();
   const [bl, jl] = lama.split(" · ");
   tampil(t("bab.tamat"), bl, jl || "", 2400, () => {
-    if (!baru) { el.hidden = true; after && after(); return; }
+    if (!baru) { el.hidden = true; tampilNotifDukung(); after && after(); return; }
     const [bb, jb] = baru.split(" · ");
     sfx.quest();
-    tampil(t("bab.mulai"), bb, jb || "", 2400, () => { el.hidden = true; after && after(); });
+    tampil(t("bab.mulai"), bb, jb || "", 2400, () => { el.hidden = true; tampilNotifDukung(); after && after(); });   // ajakan dukung (28-dukung.js)
   });
 }

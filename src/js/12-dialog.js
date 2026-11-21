@@ -30,6 +30,7 @@ function bisaBicara(n) {
 // lewatInfo = true → langsung ke urusan misi/toko/obrolan (lewati menu tanya-jawab NPC)
 function talk(npc, lewatInfo) {
   if (npc.id === "cermin") return talkCermin(npc);
+  if (npc.kind && cekBelumSaatnya(npc)) return;                                // belum waktunya (60-belum-saatnya.js)
   if (npc.kind && TEKA_BICARA[npc.kind]) return TEKA_BICARA[npc.kind](npc);   // 25-teka-teki.js
   if (ceritaBicara(npc)) return;                                               // 23-cerita.js
   if (!lewatInfo && NPC_INFO[npc.id]) return NPC_INFO[npc.id](npc);           // tanya-jawab (mis. Pak Joko: 38-panduan-debuff.js)

@@ -254,7 +254,7 @@ function jurusKhasBos(m, dt, siap) {
     return true;
   }
   if (!siap) return false;
-  const jeda = KHAS_JEDA[m.type] * ((m.tingkat || 0) >= 5 ? 0.75 : 1);
+  const jeda = KHAS_JEDA[m.type] * ((m.tingkat || 0) >= 5 ? 0.75 : 1) * (m.khasKali || 1);   // fase 3: lebih sering (62-fase-bos.js)
   m.khasT = (m.khasT ?? jeda * 0.5) - dt;
   if (m.khasT > 0) return false;
   m.khasT = jeda;

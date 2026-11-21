@@ -31,6 +31,7 @@ const sedangBertarung = (m) => m.aggro && !["idle", "pulang", "return"].includes
 // Dipanggil dari updateMonster sebelum AI bos. true = frame ini sudah ditangani (AI dilewati).
 function bosTangguh(m, dt, dp, toP) {
   if (m.d.latihan) return false;
+  if (transisiFaseBos(m, dt)) return true;   // sedang bangkit ke fase berikutnya (62-fase-bos.js)
   const c = m.cfg || (m.cfg = cfgBos(m));
   if (m.amuk) return updateAmukan(m, dt, dp, toP);
   if (m.capek > 0) { m.capek -= dt; if (Math.random() < 0.3) parts.push({ x: m.x + rand(-20, 20), y: m.y, z: m.d.h, vz: 20, vx: 0, vy: 0, life: 0.6, max: 0.6, color: "#c9bfd6", s: 6, float: true }); return true; }
@@ -117,6 +118,7 @@ function kaliKeadaanBos(m) {
   if (m.capek > 0) k *= 1.5;
   if (m.rentan > 0) k *= 1.3;
   if (m.amuk) k *= 0.5;
+  if (m.tahanFase) k *= 1 - m.tahanFase;   // fase 3: kebal sebagian damage (62-fase-bos.js)
   return k;
 }
 

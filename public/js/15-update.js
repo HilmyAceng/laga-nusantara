@@ -64,6 +64,7 @@ function updatePlayer(dt) {
 
 function updateMonster(m, dt) {
   const d = m.d;
+  if (d.kaliSerangCepat) dt *= d.kaliSerangCepat;   // bos yang menguat: semua gerakan & serangannya lebih cepat (54-skala-monster.js)
   if (m.dead) {
     if (!d.boss) { m.respawn -= dt; if (m.respawn <= 0 && dist(P, m.home) > 420) Object.assign(m, makeMonster(m.type, m.home)); }
     return;

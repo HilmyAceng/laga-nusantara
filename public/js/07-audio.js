@@ -2,14 +2,16 @@
 // AUDIO & EFEK SUARA
 // Semua suara dibuat dengan WebAudio, tanpa file audio.
 // Jalur suara: efek → sfxBus ┐
-//              musik → musicBus ┴→ penguat → pembatas → speaker
+//              musik → musicBus ┼→ penguat → pembatas → speaker
+//   suara makhluk → suaraBus ┘   (61-suara-makhluk.js)
 // =====================================================================
 "use strict";
 
 const AUDIO_KEY = "laga.audio";
 // Pilihan pemain (tersimpan): nyala/mati + volume. Volume awal dari ATURAN.audio.
-const audioOn = Object.assign({ musik: true, sfx: true, volMusik: ATURAN.audio.musik, volSfx: ATURAN.audio.sfx }, store.get(AUDIO_KEY, {}));
-let actx = null, sfxBus = null, musicBus = null, noiseBuf = null;
+const audioOn = Object.assign({ musik: true, sfx: true, suara: true, volMusik: ATURAN.audio.musik, volSfx: ATURAN.audio.sfx, volSuara: ATURAN.audio.suara }, store.get(AUDIO_KEY, {}));
+let actx = null, sfxBus = null, musicBus = null, suaraBus = null, noiseBuf = null;
+const KUNCI_VOL = { musik: "volMusik", sfx: "volSfx", suara: "volSuara" };
 
 // Browser baru mengizinkan suara setelah pemain menyentuh/menekan sesuatu.
 function audio() {
@@ -26,7 +28,8 @@ function audio() {
     master.connect(comp);
     sfxBus = actx.createGain(); sfxBus.connect(master);
     musicBus = actx.createGain(); musicBus.connect(master);
-    sfxBus.gain.value = musicBus.gain.value = 0;
+    suaraBus = actx.createGain(); suaraBus.connect(master);
+    sfxBus.gain.value = musicBus.gain.value = suaraBus.gain.value = 0;
     applyVolume();
     // 1 detik desis acak: bahan untuk ayunan, ledakan, gendang
     noiseBuf = actx.createBuffer(1, actx.sampleRate, actx.sampleRate);
@@ -40,35 +43,37 @@ function applyVolume() {
   const t = actx.currentTime;
   sfxBus.gain.setTargetAtTime(audioOn.sfx ? audioOn.volSfx : 0, t, 0.05);
   musicBus.gain.setTargetAtTime(audioOn.musik ? audioOn.volMusik : 0, t, 0.2);
+  suaraBus.gain.setTargetAtTime(audioOn.suara ? audioOn.volSuara : 0, t, 0.05);
 }
 function setAudio(kind, on) {
   audioOn[kind] = on;
-  const key = kind === "musik" ? "volMusik" : "volSfx";
-  if (on && audioOn[key] <= 0) audioOn[key] = kind === "musik" ? ATURAN.audio.musik : ATURAN.audio.sfx;
+  const key = KUNCI_VOL[kind];
+  if (on && audioOn[key] <= 0) audioOn[key] = ATURAN.audio[kind];
   store.set(AUDIO_KEY, audioOn);
   audio(); applyVolume(); refreshAudioButtons();
 }
 // Tombol − / + mengubah volume 10% sekali tekan.
 function changeVolume(kind, delta) {
-  const key = kind === "musik" ? "volMusik" : "volSfx";
+  const key = KUNCI_VOL[kind];
   audioOn[key] = clamp(Math.round((audioOn[key] + delta) * 10) / 10, 0, 1);
   audioOn[kind] = audioOn[key] > 0;
   store.set(AUDIO_KEY, audioOn);
   audio(); applyVolume(); refreshAudioButtons();
   if (kind === "sfx") sfx.coin();       // contoh bunyi supaya terdengar besar-kecilnya
+  if (kind === "suara" && typeof contohSuara === "function") contohSuara();
 }
 function refreshAudioButtons() {
-  for (const [kind, key, p] of [["musik", "volMusik", "mus"], ["sfx", "volSfx", "sfx"]]) {
+  for (const [kind, key, p] of [["musik", "volMusik", "mus"], ["sfx", "volSfx", "sfx"], ["suara", "volSuara", "sua"]]) {
     const v = audioOn[key], on = audioOn[kind], lvl = Math.round(v * 10);
     $(p + "Bar").innerHTML = Array.from({ length: 10 }, (_, i) => `<i class="${i < lvl ? "on" : ""}"></i>`).join("");
     $(p + "Bar").classList.toggle("off", !on);
     $(p + "Val").textContent = on ? `${lvl * 10}%` : t("set.mati");
     $(p + "Down").disabled = lvl <= 0;
     $(p + "Up").disabled = lvl >= 10;
-    const btn = kind === "musik" ? $("btnMusic") : $("btnSfx");
+    const btn = { musik: $("btnMusic"), sfx: $("btnSfx"), suara: $("btnSuara") }[kind];
     btn.textContent = t(on ? "set.nyala" : "set.mati");
     btn.setAttribute("aria-pressed", String(on));
-    btn.setAttribute("aria-label", t("vol.aria", { jenis: t(kind === "musik" ? "vol.musik" : "vol.sfx"), status: t(on ? "vol.ariaNyala" : "vol.ariaMati") }));
+    btn.setAttribute("aria-label", t("vol.aria", { jenis: t("vol." + kind), status: t(on ? "vol.ariaNyala" : "vol.ariaMati") }));
   }
 }
 

@@ -10,7 +10,8 @@
 "use strict";
 
 // Semua mesin di dunia: [{ id, areaId, x, y }] (x, y dalam petak)
-const TELEPORTS = Object.entries(AREAS).filter(([, a]) => a.teleport).map(([id, a]) => ({ ...a.teleport, areaId: id }));
+// hanya area yang tercantum di ATURAN.teleport.area (desa & kota) yang punya mesin
+const TELEPORTS = Object.entries(AREAS).filter(([id, a]) => a.teleport && ATURAN.teleport.area.includes(id)).map(([id, a]) => ({ ...a.teleport, areaId: id }));
 
 // ---------- Energi ----------
 // Disimpan di S.tele[id] = { poin, t } (t = jam terakhir dihitung, milidetik).

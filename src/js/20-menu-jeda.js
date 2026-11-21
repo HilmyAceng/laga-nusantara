@@ -117,4 +117,7 @@ $("musDown").addEventListener("click", () => changeVolume("musik", -0.1));
 $("musUp").addEventListener("click", () => changeVolume("musik", 0.1));
 $("sfxDown").addEventListener("click", () => changeVolume("sfx", -0.1));
 $("sfxUp").addEventListener("click", () => changeVolume("sfx", 0.1));
+$("btnSuara").addEventListener("click", () => setAudio("suara", !audioOn.suara));
+$("suaDown").addEventListener("click", () => changeVolume("suara", -0.1));
+$("suaUp").addEventListener("click", () => changeVolume("suara", 0.1));
 refreshAudioButtons();
