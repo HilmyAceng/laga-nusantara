@@ -77,7 +77,9 @@ const ATURAN = {
     levelTambah: 4,                       // level karakter yang disarankan naik 4 tiap tingkat
     koin: 0.2,                            // hadiah koin = koin bos × 0.2 × tingkat
     exp: 0.3,                             // hadiah EXP  = EXP bos × 0.3 × tingkat
-    jamuMulai: 4,                         // tingkat 4 ke atas: bonus jamu (tingkat - 3)
+    // hadiah equipment (jimat) tiap tingkat — pasti didapat setiap menang. "legenda" = jimat khas bos itu.
+    // Jimat yang sudah dimiliki otomatis dilebur jadi Serpih Pusaka (untuk menempa).
+    jimat: { 1: ["biasa"], 2: ["biasa"], 3: ["biasa", "langka"], 4: ["biasa", "langka"], 5: ["biasa", "langka"], 6: ["langka", "legenda"], 7: ["langka", "legenda"] },
   },
 
   // Debuff = efek buruk dari serangan monster tertentu (lihat `debuff` di MONSTERS).
@@ -180,7 +182,6 @@ ATURAN.jimat = {
   tempaSerpih: [3, 6, 12],
   serpihGanda: [2, 5, 15],                // jimat kembar dilebur jadi serpih pusaka
   dropMonster: { serpih: 0.03, biasa: 0.004, langka: 0.0012 },   // peluang drop dari monster biasa
-  dropCermin: { legendaDasar: 0.03, legendaPerTingkat: 0.035, langkaDasar: 0.15, langkaPerTingkat: 0.05, pity: 10 },
 };
 ATURAN.skalaMonster = {
   // Monster ikut menguat sesuai level pemain, tapi tidak lebih dari `batasAtas` level di atas level aslinya.

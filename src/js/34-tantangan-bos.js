@@ -2,7 +2,7 @@
 // TANTANGAN BOS (CERMIN GAIB)
 // Sentuh cermin di sarang bos → popup daftar tingkat kesulitan 1-7:
 //   - level karakter yang disarankan
-//   - hadiah (koin, EXP, jamu)
+//   - hadiah (koin, EXP) & equipment (jimat Biasa / Langka / Legenda sesuai tingkat)
 //   - tingkat N terkunci sampai tingkat N-1 dimenangkan
 // Semakin tinggi tingkat: nyawa, serangan, dan kecepatan bos naik.
 // Angka-angkanya di ATURAN.cermin (config.js).
@@ -22,9 +22,15 @@ function statTingkat(jenis, n) {
 }
 function hadiahTingkat(jenis, n) {
   const d = MONSTERS[jenis], A = ATURAN.cermin;
-  return { gold: Math.round(d.gold[0] * A.koin * n), exp: Math.round(d.exp * A.exp * n), potion: n >= A.jamuMulai ? n - A.jamuMulai + 1 : 0 };
+  return { gold: Math.round(d.gold[0] * A.koin * n), exp: Math.round(d.exp * A.exp * n), equip: A.jimat[n] || [] };   // equip = daftar rarity jimat (lihat 53-drop-langka.js)
 }
 
+// label hadiah equipment: rarity berwarna; legenda = nama jimat khas bos (✓ kalau sudah punya)
+function chipJimat(r, jenis) {
+  const leg = r === "legenda" && legendaBos(jenis);
+  const nama = leg ? namaJimat(leg) + (bintangJimat(leg) ? " ✓" : "") : t("tantang.jimatAcak", { rarity: t("rarity." + r) });
+  return `<i class="jm-chip" style="--rc:${WARNA_RARITY[r]}">${nama}</i>`;
+}
 // ---------- Popup ----------
 function bukaTantangan(npc) {
   if (mode !== "dialog" && mode !== "play") return;
@@ -46,6 +52,7 @@ function isiTantangan() {
         <span class="tk-head"><b>${t("tantang.tk", { n })}</b><span class="tk-titik">${titik}</span></span>
         <span class="tk-saran${S.lv < saran ? " kurang" : ""}">${t("tantang.saran", { lv: saran })}</span>
         <span class="tk-hadiah"><i class="coin"></i>${t("misi.hadiah")}: ${teksHadiah(h)}</span>
+        <span class="tk-jimat">${t("tantang.equip")}: ${h.equip.map((r) => chipJimat(r, jenis)).join("")}</span>
         <span class="tk-status">${t(kunci ? "tantang.terkunci" : sudah ? "tantang.menang" : "tantang.mulai", { n: n - 1 })}</span>
       </button>`);
   }

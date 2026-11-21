@@ -12,7 +12,7 @@ Bisa dimainkan di HP (joystick + tombol sentuh, mode lanskap) dan desktop (keybo
   - **Hindar sempurna**: berguling tepat sebelum kena → waktu melambat, pukulan berikutnya pasti kritis
   - **Tangkis**: Hindar tanpa arah → serangan ditahan, penyerang lumpuh, kamu membalas
   - **Poin jurus**: 1 poin tiap naik level untuk rank jurus (kemampuan baru di rank 3 & 5) dan 5 pasif. Bisa diatur ulang dengan koin
-- **Jimat** (Biasa / Langka / Legenda) di 2-3 slot. Biasa dijual di toko, Langka dari bos, Legenda khas tiap bos dari Cermin Gaib (peluang naik tiap tingkat, dijamin keluar setelah 10 kali gagal). Jimat bisa ditempa sampai ★5 dengan koin + Serpih Pusaka
+- **Jimat** (Biasa / Langka / Legenda) di 2-3 slot. Biasa dijual di toko, Langka dari bos, Legenda khas tiap bos dari Cermin Gaib. Jimat bisa ditempa sampai ★5 dengan koin + Serpih Pusaka
 - **Kegunaan koin**: jamu, asah senjata, jimat, tempa jimat, ramuan 2 menit (Kuat, Baja, Penangkal, Gesit), atur ulang poin jurus
 - **Monster menguat sesuai level pemain** (sampai 12 level di atas aslinya; nyawa +16% & serangan +10% per level). Bos menguat lebih cepat (nyawa +15%, serangan +10%, gerak dasar ×1,4 lalu +3,5% per level, kecepatan serang +2,5% per level — paling cepat ×1,5 — ditambah pengali level asli), termasuk bos Cermin Gaib (kecepatan serang +4% tiap tingkat). Monster dunia berikutnya otomatis lebih tebal & lebih sakit. Selisih level berpengaruh, dan monster dunia 2+ belajar trik (lebih cepat, kadang memukul dua kali)
 - **Bos tangguh** bertingkat dari mudah ke sulit: tipuan, amukan (lari ke lingkaran hijau, lalu bos kelelahan), kuda-kuda (pecahkan dengan tangkisan), kombo. **Naga Kencana dirombak** jadi 3 fase: kombo cakar, terbang & lajur api & cincin api, lalu amukan Nafas Matahari
@@ -30,6 +30,7 @@ Bisa dimainkan di HP (joystick + tombol sentuh, mode lanskap) dan desktop (keybo
   - **Negeri Awan** (lewat Tangga Pelangi): Kampung Awan (aman), Hutan Batu (bos **Kelabang Raksasa**), Puncak Naga (peta 60×60, bos terakhir **Naga Kencana** yang besar: semburan api, hujan meteor, kibasan ekor, terbang lalu menukik)
 - **Debuff** dari monster tertentu & bos: racun, terbakar, lambat, lemah, bingung (ikon di atas kepala). Sembuh sendiri, di zona aman, atau dengan jamu setelah misi **Pak Joko** (Ramuan Penawar)
 - **Zona aman**: kota/desa dan lingkaran di sekitar tiap mesin teleport. Monster tak bisa masuk, debuff hilang, nyawa pulih pelan
+- **Hadiah equipment Cermin Gaib** (pasti tiap menang, tampil di popup tingkat): tingkat 1-2 jimat Biasa, 3-5 Biasa + Langka, 6-7 Langka + Legenda khas bos itu (`ATURAN.cermin.jimat`). Hadiah jamu dihapus
 - **Tantangan bos** di Cermin Gaib: tingkat kesulitan 1-7 (tiap tingkat: nyawa +85%, serangan +32%, gerak +8%, kecepatan serang +6%, level saran +4), level karakter yang disarankan, hadiah per tingkat; tingkat berikutnya terbuka setelah tingkat sebelumnya dimenangkan
 - **Peta Tanah Wanasari** dengan layar transisi (gelap + nama area) saat pindah:
   - **Desa Wanasari**: aman. Ki Lurah (misi sampingan), Mbok Darmi (toko), Resi Wening (cerita), Pak Wowo (belum bisa diajak bicara), Mesin Teleport
@@ -139,7 +140,7 @@ Semua menu memakai tombol. `Esc` = kembali satu halaman.
 | `50-hindar-tangkis.js` | Hindar sempurna (waktu melambat) & tangkis |
 | `51-poin-jurus.js` | Poin jurus, pasif, halaman Jurus (tombol K) |
 | `52-jimat.js` | Jimat, tempa, ramuan, bonus stat, halaman Jimat (tombol I) |
-| `53-drop-langka.js` | Drop jimat & serpih dari bos, cermin, monster (dengan pity) |
+| `53-drop-langka.js` | Drop jimat & serpih dari bos, hadiah equipment Cermin Gaib per tingkat, monster |
 | `54-skala-monster.js` | Monster menguat sesuai level, selisih level, trik serang ganda |
 | `55-debuff-baru.js` | Debuff lumpuh & berdarah, status monster (lumpuh/beku/lambat/lemah/DoT) |
 | `56-cara-bermain.js` | Ki Sabda, Boneka Latihan, misi Latihan Dasar, halaman Cara Bermain |

@@ -94,7 +94,7 @@ function bosUlangKalah(m) {
   spark(m.x, m.y - m.d.h * 0.5, "#d9c8ff", 24);
   const n = m.tingkat || 1, h = hadiahTingkat(m.type, n), baru = n > tingkatMenang(m.type);
   S.cermin[m.type] = Math.max(tingkatMenang(m.type), n);
-  S.gold += h.gold; S.potions += h.potion;
+  S.gold += h.gold;
   S.cerminSampai = S.cerminSampai || {};
   S.cerminSampai[m.type] = Date.now() + ATURAN.cermin.jeda * 1000;
   shake = 0.6;

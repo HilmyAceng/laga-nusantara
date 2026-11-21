@@ -1,9 +1,8 @@
 // =====================================================================
 // DROP LANGKA
 //  - Bos cerita (pertama kali kalah): pasti menjatuhkan 1 jimat Langka + Serpih Pusaka.
-//  - Bos Cermin Gaib tingkat N: peluang jimat Legenda khas bos itu naik tiap tingkat,
-//    plus peluang jimat Langka. Pengaman nasib sial (pity): setelah sekian kali gagal,
-//    Legenda berikutnya dijamin keluar (ATURAN.jimat.dropCermin).
+//  - Bos Cermin Gaib tingkat N: hadiah jimat pasti sesuai tingkat (ATURAN.cermin.jimat):
+//    tingkat 1-2 Biasa, 3-5 Biasa + Langka, 6-7 Langka + Legenda khas bos itu.
 //  - Monster biasa: peluang kecil Serpih Pusaka / jimat Biasa / Langka.
 // Barang jatuh di tanah dengan cahaya sesuai rarity, dipungut seperti koin.
 // =====================================================================
@@ -34,18 +33,13 @@ function dropMonster(m) {
   if (m.d.lv >= 13 && Math.random() < D.langka) jatuhkanJimat(acakJimat("langka"), m.x, m.y);
 }
 // bos Cermin Gaib tingkat n (dipanggil dari bosUlangKalah)
+// hadiah equipment pasti sesuai tingkat (ATURAN.cermin.jimat): biasa / langka acak, legenda = jimat khas bos
 function dropCermin(m, n) {
-  const D = ATURAN.jimat.dropCermin, leg = legendaBos(m.type);
-  S.jimat.pity[m.type] = (S.jimat.pity[m.type] || 0) + 1;
-  const peluang = D.legendaDasar + D.legendaPerTingkat * (n - 1);
-  if (leg && (Math.random() < peluang || S.jimat.pity[m.type] >= D.pity)) {
-    S.jimat.pity[m.type] = 0;
-    jatuhkanJimat(leg, m.x, m.y);
-    setTimeout(() => toast(t("drop.legenda"), true), 400);
-  } else if (leg && S.jimat.pity[m.type] >= D.pity - 3) {
-    setTimeout(() => toast(t("drop.hampir", { n: D.pity - S.jimat.pity[m.type] }), false), 1200);
+  for (const r of hadiahTingkat(m.type, n).equip) {
+    const leg = r === "legenda" && legendaBos(m.type);
+    jatuhkanJimat(leg || acakJimat(r === "legenda" ? "langka" : r), m.x, m.y);
+    if (leg) setTimeout(() => toast(t("drop.legenda"), true), 400);
   }
-  if (Math.random() < D.langkaDasar + D.langkaPerTingkat * n) jatuhkanJimat(acakJimat("langka"), m.x, m.y);
   jatuhkanSerpih(n * 2, m.x, m.y);
 }
 
