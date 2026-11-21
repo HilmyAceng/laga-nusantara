@@ -131,10 +131,25 @@ const WORLD_ORDER = ["desa", "alam", "gua", "candi", "rawa", "pesisir", "kawah",
   "bandar", "bakau", "larangan", "kuil", "desaApung", "goaLaut",
   "awan", "hutanBatu", "puncakNaga", "lembahAngin", "istanaAwan",
   "perkemahan", "padangBayang", "kotaMati", "menaraKala", "singgasana"];
-const WORLD_GAP = 7; // jarak antar-area (dalam petak)
+const WORLD_GAP = 10; // jarak antar-area (dalam petak)
 let worlds = {}, world = null, duniaPeta = 1;
 function resetPetaDunia() { worlds = {}; world = null; }
 const gateMid = (g) => ({ x: (g.x0 + g.x1 + 1) / 2, y: (g.y0 + g.y1 + 1) / 2 });
+// Area di peta dunia tidak boleh saling timpa. Kalau tempat B bertabrakan
+// dengan area yang sudah dipasang, B digeser sedikit demi sedikit: menjauh
+// searah gerbangnya, atau menyamping. Yang pergeserannya paling kecil dipakai.
+// Jarak antar-kotak minimal WORLD_GAP (cukup untuk nama area di atas kotak).
+function tabrakArea(B, x, y, lain) {
+  return lain.some((o) => x < o.x + o.w + WORLD_GAP && x + B.w + WORLD_GAP > o.x && y < o.y + o.h + WORLD_GAP && y + B.h + WORLD_GAP > o.y);
+}
+function cariTempatKosong(B, dx, dy, lain) {
+  const x0 = B.x, y0 = B.y, sx = dy, sy = dx;   // (sx, sy) = arah menyamping
+  for (let d = 0; d < 400; d++) {
+    for (const [mx, my] of [[dx * d, dy * d], [sx * d, sy * d], [-sx * d, -sy * d]]) {
+      if (!tabrakArea(B, x0 + mx, y0 + my, lain)) { B.x = x0 + mx; B.y = y0 + my; return; }
+    }
+  }
+}
 // Bangun petak semua area satu dunia (petanya selalu sama karena pakai seed; dibangun ulang kalau ada gerbang terbuka).
 function buildWorld(dunia) {
   const keep = { MW, MH, map, houses, ZONES, area, areaId };
@@ -157,10 +172,12 @@ function buildWorld(dunia) {
       const back = B.a.gerbang.find((b) => b.ke === A.id); if (!back) continue;
       const p = gateMid(g), q = gateMid(back);
       if (!placed.has(B.id)) {
-        if (back.x0 === 0) { B.x = A.x + A.w + WORLD_GAP; B.y = A.y + p.y - q.y; }            // B di kanan
-        else if (back.x1 === B.w - 1) { B.x = A.x - B.w - WORLD_GAP; B.y = A.y + p.y - q.y; } // B di kiri
-        else if (back.y1 === B.h - 1) { B.y = A.y - B.h - WORLD_GAP; B.x = A.x + p.x - q.x; } // B di atas
-        else { B.y = A.y + A.h + WORLD_GAP; B.x = A.x + p.x - q.x; }                          // B di bawah
+        let dx = 0, dy = 0;
+        if (back.x0 === 0) { B.x = A.x + A.w + WORLD_GAP; B.y = A.y + p.y - q.y; dx = 1; }             // B di kanan
+        else if (back.x1 === B.w - 1) { B.x = A.x - B.w - WORLD_GAP; B.y = A.y + p.y - q.y; dx = -1; } // B di kiri
+        else if (back.y1 === B.h - 1) { B.y = A.y - B.h - WORLD_GAP; B.x = A.x + p.x - q.x; dy = -1; } // B di atas
+        else { B.y = A.y + A.h + WORLD_GAP; B.x = A.x + p.x - q.x; dy = 1; }                           // B di bawah
+        cariTempatKosong(B, dx, dy, [...placed].map((id) => parts[id]));
         placed.add(B.id); queue.push(B.id);
         links.push({ a: A.id, b: B.id, x1: A.x + p.x, y1: A.y + p.y, x2: B.x + q.x, y2: B.y + q.y });
       }
@@ -188,7 +205,8 @@ function drawWorldMap(time) {
   c.setTransform(1, 0, 0, 1, 0, 0);
   c.fillStyle = "#15111f"; c.fillRect(0, 0, cw, ch);
   // ruang untuk nama area di atas & bawah
-  const padX = 16 * DPR, padTop = 40 * DPR, padBot = 30 * DPR;
+  const goalLain = questArea() && AREAS[questArea()].dunia !== duniaPeta;   // ada tulisan "tujuan di dunia lain" di bawah
+  const padX = 16 * DPR, padTop = 40 * DPR, padBot = (goalLain ? 56 : 30) * DPR;
   const ww = world.right - world.left, wh = world.bottom - world.top;
   const k0 = Math.min((cw - padX * 2) / ww, (ch - padTop - padBot) / wh);
   const ox0 = (cw - ww * k0) / 2 - world.left * k0, oy0 = padTop + (ch - padTop - padBot - wh * k0) / 2 - world.top * k0;
@@ -236,9 +254,14 @@ function drawWorldMap(time) {
     c.strokeStyle = here ? "#f4b942" : jalur.includes(id) ? "rgba(244,185,66,0.7)" : "rgba(255,255,255,0.25)";
     c.strokeRect(x, y, w, h);
     // nama area rata kiri di atas kotaknya; digambar paling akhir supaya di atas garis jalan
+    // ukuran huruf dikecilkan kalau nama lebih lebar dari kotak + celah, supaya tidak menimpa nama area sebelah
     const nama = kenal ? p.a.nama : "???";
-    c.font = `900 ${15 * fs * DPR}px Nunito, sans-serif`;
-    names.push([nama, x + c.measureText(nama).width / 2, y - 10 * DPR, here ? "#f4b942" : kenal ? "#f7efe3" : "#8d8894"]);
+    let uk = 15;
+    c.font = `900 ${uk * fs * DPR}px Nunito, sans-serif`;
+    const muat = w + WORLD_GAP * k * 0.8, lebar = c.measureText(nama).width;
+    if (lebar > muat) uk = Math.max(9, uk * muat / lebar);
+    c.font = `900 ${uk * fs * DPR}px Nunito, sans-serif`;
+    names.push([nama, x + c.measureText(nama).width / 2, y - 6 * DPR, here ? "#f4b942" : kenal ? "#f7efe3" : "#8d8894", uk]);
     // tujuan misi: tanda ! emas memantul di pojok kanan atas area
     if (id === goal) {
       const bx = x + w - 12 * DPR, by = y + 14 * DPR + Math.sin(time * 4) * 3 * DPR;
@@ -268,7 +291,7 @@ function drawWorldMap(time) {
     drawTeleportIcon(c, tx, ty, DPR * fs, time);
     mapHits.push({ x: tx, y: ty, r: 20 * DPR, tele: tp });
   }
-  for (const [t, x, y, col] of names) text(t, x, y, col, 15, 900);
+  for (const [t, x, y, col, uk] of names) text(t, x, y, col, uk, 900);
   // tujuan cerita ada di dunia lain
   if (goal0 && !goal) text(t("peta.tujuanDunia", { dunia: DUNIA.find((x) => x.id === AREAS[goal0].dunia).nama }), cw / 2, ch - 10 * DPR, "#f4b942", 13);
   // posisi kamu di area sekarang

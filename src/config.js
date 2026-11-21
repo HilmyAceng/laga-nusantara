@@ -94,6 +94,8 @@ const ATURAN = {
   zonaAman: {
     radius: 3.2,                          // jari-jari di sekitar mesin teleport (petak)
     pulihPerDetik: 0.03,                  // nyawa pulih 3% per detik
+    // bendera di sekeliling mesin teleport hanya dipasang di area-area ini
+    benderaTeleport: ["candi", "kawah", "bakau", "goaLaut", "hutanBatu", "padangBayang"],
   },
 
   // Peta besar: zoom paling dekat (1 = seluruh peta terlihat, 4 = 4 kali lebih dekat)

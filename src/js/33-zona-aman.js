@@ -59,7 +59,8 @@ function drawZonaAman(time) {
 }
 
 // ---------- Bendera penanda zona aman ----------
-// Hanya dipasang di zona aman: melingkari mesin teleport, dan di kiri-kanan
+// Hanya dipasang di zona aman: melingkari mesin teleport (hanya di area yang
+// tercantum di ATURAN.zonaAman.benderaTeleport), dan di kiri-kanan
 // setiap pintu masuk area aman (desa, kota). Dihitung ulang saat pindah area.
 let benderaAman = [];
 function pasangBenderaAman() {
@@ -74,6 +75,7 @@ function pasangBenderaAman() {
     }
     return;
   }
+  if (!ATURAN.zonaAman.benderaTeleport.includes(areaId)) return;   // bendera teleport hanya di beberapa area
   for (const n of NPCS) if (n.kind === "teleport")
     for (let i = 0; i < 6; i++) { const a = (i / 6) * 6.28 + 0.5; benderaAman.push({ x: n.x + Math.cos(a) * radiusAman(), y: n.y + Math.sin(a) * radiusAman() * 0.62 }); }
 }
