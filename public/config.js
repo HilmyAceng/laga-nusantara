@@ -53,6 +53,7 @@ const ATURAN = {
   },
 
   jamuPulih: 0.4,                         // jamu memulihkan 40% nyawa maksimal
+  jamuJeda: 10,                           // detik jeda setelah minum jamu sebelum bisa minum lagi (65-jamu-jeda.js)
 
   // hindar (berguling) punya `lapis` muatan. Tiap lapis terisi lagi setelah `isiUlang` detik (satu per satu).
   // jeda = jarak minimal antar-gulingan supaya 2 lapis bisa dipakai beruntun.
@@ -339,7 +340,7 @@ const SPAWN = [
   { monster: "harimauKumbang", zona: "laranganTengah", jumlah: 6 },
   { monster: "ularWelang", zona: "laranganSelatan", jumlah: 5 },
   { monster: "hantuBajak", zona: "kuilAula", jumlah: 7 },
-  { monster: "uburUbur", zona: "kuilKolam", jumlah: 4 },
+  { monster: "uburUbur", zona: "kuilAula", jumlah: 4 },
   // Dunia 3 · Negeri Awan
   { monster: "arcaHidup", zona: "batuSelatan", jumlah: 6 },
   { monster: "elangBatu", zona: "batuUtara", jumlah: 7 },

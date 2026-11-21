@@ -42,7 +42,7 @@ Object.assign(AREAS, {
       { x0: 21, y0: 0, x1: 23, y1: 0, ke: "puncakNaga", masuk: { x: 30.5, y: 56.5 }, label: "Puncak Naga", labelEn: "Dragon Peak", kunci: "bos:kelabang" },
     ],
     teleport: { id: "hutanBatu", x: 26.5, y: 39.5 },
-    bos: { x: 22, y: 7.5, monster: "kelabang" },
+    bos: { x: 20, y: 7.5, monster: "kelabang" },   // lapangan diperluas: 27×11 petak
     build(r) {
       const lewat = S && S.bos && S.bos.kelabang;
       for (let y = 0; y < MH; y++) for (let x = 0; x < MW; x++) {
@@ -50,9 +50,9 @@ Object.assign(AREAS, {
         else { const v = r(); setT(x, y, v < 0.15 ? ROCK : v < 0.19 ? TREE : v < 0.5 ? STONE : G); }
       }
       // sarang kelabang: lapangan batu di utara
-      fillRect(12, 2, 32, 12, STONE);
-      for (let x = 12; x <= 32; x++) if (x < 20 || x > 24) setT(x, 13, ROCK);
-      for (const [x, y] of [[14, 4], [30, 4], [14, 10], [30, 10]]) setT(x, y, ROCK);
+      fillRect(5, 2, 32, 12, STONE);
+      for (let x = 5; x <= 32; x++) if (x < 20 || x > 24) setT(x, 13, ROCK);
+      for (const [x, y] of [[8, 4], [30, 4], [8, 10], [30, 10]]) setT(x, y, ROCK);
       fillRect(21, 0, 23, 1, lewat ? STONE : ROCK);
       // jalan setapak berkelok
       jalanKelok(r, 22, 41, 8, 30, 2, PATH);

@@ -88,14 +88,14 @@ Object.assign(AREAS, {
   },
   menaraKala: {
     dunia: 4, nama: "Menara Kala", sub: "Menara tiga lantai Kalamurka · Lv 41+", namaEn: "Kala Tower", subEn: "Kalamurka's three-storey tower · Lv 41+",
-    lagu: "gua", tepi: WALL, w: 40, h: 40, gelap: true, bayang: true,
+    lagu: "gua", tepi: WALL, w: 50, h: 40, gelap: true, bayang: true,
     zona: { menaraBawah: { x0: 3, y0: 30, x1: 14, y1: 36 } },
     gerbang: [
       { x0: 22, y0: 39, x1: 24, y1: 39, ke: "kotaMati", masuk: { x: 23.5, y: 2.5 }, label: "Ke Kota", labelEn: "To City" },
       { x0: 22, y0: 0, x1: 24, y1: 0, ke: "singgasana", masuk: { x: 24.5, y: 36.5 }, label: "Singgasana", labelEn: "Throne", kunci: "bos:penjagaMenara" },
     ],
     teleport: { id: "menaraKala", x: 6.5, y: 35.5 },
-    bos: { x: 23, y: 6.5, monster: "penjagaMenara" },
+    bos: { x: 25, y: 6.5, monster: "penjagaMenara" },   // lantai atas diperluas: 48×12 petak
     objek: [
       { kind: "petunjuk", id: "lenteraKala", x: 27.5, y: 34.5 },
       { kind: "saklar", id: "lenteraKala", simbol: "biru", x: 6.5, y: 29.5 },
@@ -116,7 +116,7 @@ Object.assign(AREAS, {
       fillRect(1, 26, MW - 2, 26, WALL); if (tekaBeres("lenteraKala")) fillRect(21, 26, 25, 26, STONE);
       fillRect(1, 13, MW - 2, 13, WALL); if (tekaBeres("batuKala")) fillRect(21, 13, 25, 13, STONE);
       if (S && S.bos && S.bos.penjagaMenara) fillRect(22, 0, 24, 0, STONE);
-      for (const [x, y] of [[5, 4], [35, 4], [5, 10], [35, 10], [3, 37], [36, 37]]) setT(x, y, WALL);
+      for (const [x, y] of [[6, 4], [MW - 7, 4], [6, 10], [MW - 7, 10], [3, 37], [MW - 4, 37]]) setT(x, y, WALL);
     },
   },
   singgasana: {

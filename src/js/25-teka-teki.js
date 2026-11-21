@@ -95,7 +95,7 @@ function tanyaPitutur(n, i) {
 // Teka-teki selesai: simpan, ubah peta (pintu/jembatan), lanjutkan cerita
 function selesaiTeka(id) {
   S.teka[id] = true;
-  if (id === "obor" && areaId === "candi") fillRect(13, 9, 17, 9, CAVE);
+  if (id === "obor" && areaId === "candi") fillRect(13, 11, 17, 11, CAVE);
   if (id === "pitutur" && areaId === "rawa") fillRect(21, 19, 22, 22, BRIDGE);
   if (id === "altar" && areaId === "kawah") fillRect(16, 13, 18, 15, ASH);
   buildMiniBase(); resetPetaDunia();

@@ -280,6 +280,12 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 .slot.ready .sec { display: none; }
 .slot.pop { animation: pop 0.25s ease-out; }
 
+/* jamu: slot desktop bisa diklik; tombol HP punya lencana jumlah / hitung mundur (js/65-jamu-jeda.js) */
+.slot.jamu { pointer-events: auto; cursor: pointer; background: rgba(90, 209, 122, 0.28); }
+.slot.jamu.habis { opacity: 0.45; }
+#bPot span { transform: translateY(-6px); }
+#bPot::before { content: attr(data-jamu); position: absolute; z-index: 3; left: 50%; bottom: 5px; transform: translateX(-50%); min-width: 22px; padding: 1px 4px; border-radius: 8px; background: rgba(5, 3, 12, 0.75); border: 1px solid #5ad17a; font: 900 0.68rem/1 var(--font-display, sans-serif); color: #8ff0a8; text-align: center; }
+
 /* ---------- Overlay & dialog ---------- */
 .overlay {
   position: absolute; inset: 0; display: grid; place-items: safe center; overflow-y: auto; touch-action: pan-y;
@@ -461,7 +467,7 @@ h1 span { color: var(--gold); }
     <div class="pad">
       <button class="tb talk" id="bTalk" type="button" hidden><span data-t="h.bicara">Bicara</span></button>
       <button class="tb roll cd" id="bRoll" type="button"><span data-t="h.hindar">Hindar</span></button>
-      <button class="tb pot" id="bPot" type="button"><span data-t="h.jamuBtn">Jamu</span></button>
+      <button class="tb pot cd" id="bPot" type="button"><span data-t="h.jamuBtn">Jamu</span></button>
       <button class="tb skill cd" id="bSkill" type="button"><span>Jurus</span></button>
       <button class="tb skill2 cd" id="bSkill2" type="button"><span>Jurus 2</span></button>
       <button class="tb ult cd" id="bUlt" type="button" hidden><span data-t="h.pamungkas">Pamungkas</span></button>
@@ -474,6 +480,7 @@ h1 span { color: var(--gold); }
     <div class="slot skill ready" id="sSkill"><kbd id="sSkillKey">S</kbd><small id="sSkillName">Jurus</small><span class="sec" id="sSkillSec"></span></div>
     <div class="slot skill ready" id="sSkill2"><kbd id="sSkill2Key">F</kbd><small id="sSkill2Name">Jurus</small><span class="sec" id="sSkill2Sec"></span></div>
     <div class="slot ult" id="sUlt" hidden><kbd id="sUltKey">R</kbd><small id="sUltName">Pamungkas</small><span class="sec" id="sUltSec"></span></div>
+    <div class="slot jamu ready" id="sPot" title="Jamu"><kbd id="sPotKey">W</kbd><small id="sPotName">Jamu ×0</small><span class="sec" id="sPotSec"></span></div>
     <div class="slot ready" id="sRoll"><kbd id="sRollKey">A</kbd><small data-t="h.hindar">Hindar</small><span class="sec" id="sRollSec"></span></div>
   </div>
 
@@ -777,12 +784,14 @@ h1 span { color: var(--gold); }
         <span><i style="background:#e98a7a"></i><b data-t="h.lgMonster">Monster</b></span>
         <span><i style="background:#ff3b3b"></i><b data-t="h.lgBos">Bos</b></span>
         <span><i style="background:#7dffa8"></i><b data-t="h.lgTele">Mesin teleport (klik)</b></span>
+        <span><i style="background:#c9a6ff"></i><b data-t="h.lgCermin">Cermin Gaib (klik)</b></span>
       </div>
       <div class="map-legend" id="legendWorld" hidden>
         <span><i style="background:#fff"></i><b data-t="h.lgKamu">Kamu</b></span>
         <span><i style="background:#8fd3ff"></i><b data-t="h.lgJalan">Jalan antar-area</b></span>
         <span><i style="background:#f4b942"></i><b data-t="h.lgMisi">Tujuan misi</b></span>
         <span><i style="background:#7dffa8"></i><b data-t="h.lgTele">Mesin teleport (klik)</b></span>
+        <span><i style="background:#c9a6ff"></i><b data-t="h.lgCermin">Cermin Gaib (klik)</b></span>
       </div>
       <p class="map-hint" id="mapHint"></p>
     </div>
@@ -887,6 +896,8 @@ h1 span { color: var(--gold); }
 <script src="js/61-suara-makhluk.js"></script>
 <script src="js/62-fase-bos.js"></script>
 <script src="js/63-area-bos.js"></script>
-<script src="js/64-main.js"></script>
+<script src="js/64-cermin-peta.js"></script>
+<script src="js/65-jamu-jeda.js"></script>
+<script src="js/66-main.js"></script>
 <script>if("serviceWorker" in navigator){addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}</script>
 </body></html>

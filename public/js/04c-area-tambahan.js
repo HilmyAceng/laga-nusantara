@@ -36,7 +36,7 @@ Object.assign(AREAS, {
   },
   makam: {
     dunia: 1, nama: "Makam Kuno", sub: "Pemakaman raja-raja lama · Lv 29+", namaEn: "Ancient Tomb", subEn: "Resting place of old kings · Lv 29+",
-    lagu: "gua", tepi: WALL, w: 36, h: 30, gelap: true,
+    lagu: "gua", tepi: WALL, w: 46, h: 30, gelap: true,
     zona: { makamAula: { x0: 3, y0: 17, x1: 10, y1: 27 }, makamTengah: { x0: 14, y0: 2, x1: 24, y1: 9 } },
     gerbang: [
       { x0: 0, y0: 14, x1: 0, y1: 16, ke: "sawah", masuk: { x: 37.5, y: 15.5 }, label: "← Sawah", labelEn: "← Paddies" },
@@ -44,7 +44,7 @@ Object.assign(AREAS, {
       { x0: 29, y0: 0, x1: 31, y1: 0, ke: "perkemahan", masuk: { x: 16.5, y: 22.5 }, label: "Gerbang Bayang", labelEn: "Shadow Gate", kunci: "bayang" },
     ],
     teleport: { id: "makam", x: 4.5, y: 24.5 },
-    bos: { x: 30, y: 15.5, monster: "rajaJerangkong" },
+    bos: { x: 35, y: 15.5, monster: "rajaJerangkong" },   // ruang raja diperluas: 19×28 petak
     objek: [
       // gong berselang-seling (zig-zag) supaya jaraknya ±4 petak dan mudah dipilih satu per satu
       { kind: "petunjuk", id: "gong", x: 6.5, y: 11 },
@@ -64,7 +64,7 @@ Object.assign(AREAS, {
       fillRect(12, 1, 12, MH - 2, WALL); if (tekaBeres("gong")) fillRect(12, 14, 12, 16, CAVE);
       fillRect(25, 1, 25, MH - 2, WALL); if (tekaBeres("batuMakam")) fillRect(25, 13, 25, 17, CAVE);
       if (kunciBuka("bayang")) fillRect(29, 0, 31, 0, CAVE);
-      for (const [x, y] of [[3, 12], [10, 12], [28, 6], [33, 6], [28, 24], [33, 24]]) setT(x, y, WALL);
+      for (const [x, y] of [[3, 12], [10, 12], [29, 6], [41, 6], [29, 24], [41, 24]]) setT(x, y, WALL);
     },
   },
 
@@ -91,11 +91,11 @@ Object.assign(AREAS, {
   },
   goaLaut: {
     dunia: 2, nama: "Gua Laut", sub: "Gua karang yang tergenang · Lv 32+", namaEn: "Sea Cave", subEn: "A flooded coral cave · Lv 32+",
-    lagu: "gua", tepi: WALL, w: 38, h: 30, gelap: true,
+    lagu: "gua", tepi: WALL, w: 48, h: 30, gelap: true,
     zona: { goaLautA: { x0: 2, y0: 16, x1: 13, y1: 27 }, goaLautB: { x0: 17, y0: 18, x1: 25, y1: 27 } },
     gerbang: [{ x0: 0, y0: 13, x1: 0, y1: 15, ke: "desaApung", masuk: { x: 32.5, y: 14.5 }, label: "← Desa Apung", labelEn: "← Floating Village" }],
     teleport: { id: "goaLaut", x: 4.5, y: 24.5 },
-    bos: { x: 31.5, y: 14.5, monster: "guritaRaksasa" },
+    bos: { x: 36.5, y: 14.5, monster: "guritaRaksasa" },   // ruang gurita diperluas: 20×28 petak
     objek: [
       { kind: "batuMemori", id: "pasang", x: 8.5, y: 6.5 },
       { kind: "lempengMemori", id: "pasang", i: 0, x: 5, y: 10 }, { kind: "lempengMemori", id: "pasang", i: 1, x: 7, y: 10 },
@@ -109,7 +109,7 @@ Object.assign(AREAS, {
       fillRect(15, 1, 15, MH - 2, WALL); if (tekaBeres("pasang")) fillRect(15, 12, 15, 16, CAVE);
       fillRect(26, 1, 26, MH - 2, WALL); if (tekaBeres("tebakLaut")) fillRect(26, 12, 26, 16, CAVE);
       // kolam air & karang
-      for (const [x, y] of [[29, 4], [30, 4], [34, 5], [34, 24], [33, 24], [29, 25], [3, 3], [12, 26]]) setT(x, y, WATER);
+      for (const [x, y] of [[29, 4], [30, 4], [44, 5], [44, 24], [43, 24], [29, 25], [3, 3], [12, 26]]) setT(x, y, WATER);
       for (let i = 0; i < 8; i++) { const x = 17 + Math.floor(r() * 8), y = 19 + Math.floor(r() * 8); setT(x, y, CORAL); }
       bersihkan([[4, 24], [20, 8], [8, 6]], CAVE);
     },
@@ -138,11 +138,11 @@ Object.assign(AREAS, {
   },
   istanaAwan: {
     dunia: 3, nama: "Istana Awan", sub: "Istana runtuh yang melayang · Lv 35+", namaEn: "Cloud Palace", subEn: "A ruined floating palace · Lv 35+",
-    lagu: "gua", tepi: CLOUD, w: 42, h: 34,
+    lagu: "gua", tepi: CLOUD, w: 52, h: 34,
     zona: { istanaTengah: { x0: 30, y0: 11, x1: 38, y1: 13 } },
     gerbang: [{ x0: 20, y0: 33, x1: 22, y1: 33, ke: "lembahAngin", masuk: { x: 21.5, y: 2.5 }, label: "Ke Lembah", labelEn: "To Valley" }],
     teleport: { id: "istanaAwan", x: 7.5, y: 28.5 },
-    bos: { x: 21, y: 5.5, monster: "rajawaliPetir" },
+    bos: { x: 26, y: 5.5, monster: "rajawaliPetir" },   // balairung diperluas: 48×8 petak
     objek: [
       { kind: "petunjuk", id: "lonceng", x: 25.5, y: 28.5 },
       { kind: "saklar", id: "lonceng", simbol: "merah", x: 6.5, y: 23.5 },
@@ -160,7 +160,7 @@ Object.assign(AREAS, {
       fillRect(20, MH - 3, 22, MH - 1, BRIDGE);
       fillRect(2, 20, MW - 3, 20, WALL); if (tekaBeres("lonceng")) fillRect(19, 20, 23, 20, STONE);
       fillRect(2, 10, MW - 3, 10, WALL); if (tekaBeres("batuAwan")) fillRect(19, 10, 23, 10, STONE);
-      for (const [x, y] of [[5, 4], [37, 4], [5, 8], [37, 8], [3, 30], [38, 30]]) setT(x, y, WALL);
+      for (const [x, y] of [[6, 4], [MW - 7, 4], [6, 8], [MW - 7, 8], [3, 30], [MW - 4, 30]]) setT(x, y, WALL);
     },
   },
 });

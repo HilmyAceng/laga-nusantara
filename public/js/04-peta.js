@@ -106,21 +106,21 @@ const AREAS = {
     },
   },
   candi: {
-    dunia: 1, nama: "Candi Wingit", sub: "Reruntuhan angker di utara hutan · Lv 5+", lagu: "gua", tepi: WALL, w: 30, h: 26, gelap: true,
+    dunia: 1, nama: "Candi Wingit", sub: "Reruntuhan angker di utara hutan · Lv 5+", lagu: "gua", tepi: WALL, w: 40, h: 26, gelap: true,
     // monster di aula tengah; aula masuk (selatan) aman; ruang dalam (utara) = sarang Dwarapala
-    zona: { candi: { x0: 3, y0: 10, x1: 26, y1: 16 } },
+    zona: { candi: { x0: 3, y0: 12, x1: 36, y1: 16 } },
     gerbang: [
       { x0: 14, y0: 25, x1: 16, y1: 25, ke: "alam", masuk: { x: 16.5, y: 2.5 }, label: "Ke Hutan" },
       { x0: 14, y0: 0, x1: 16, y1: 0, ke: "kawah", masuk: { x: 17.5, y: 27.5 }, label: "Ke Kawah" },
     ],
     teleport: { id: "candi", x: 18.5, y: 22.5 },
-    bos: { x: 15, y: 4.5, monster: "dwarapala" },
+    bos: { x: 20, y: 5.5, monster: "dwarapala" },   // ruang dalam diperluas: 38×10 petak
     objek: [
       { kind: "prasasti", id: "obor", x: 11.5, y: 20.5 },
-      { kind: "obor", simbol: "senja", x: 2.5, y: 10.6 },
-      { kind: "obor", simbol: "fajar", x: 27.5, y: 10.6 },
+      { kind: "obor", simbol: "senja", x: 2.5, y: 12.6 },
+      { kind: "obor", simbol: "fajar", x: 37.5, y: 12.6 },
       { kind: "obor", simbol: "siang", x: 2.5, y: 15.6 },
-      { kind: "obor", simbol: "malam", x: 27.5, y: 15.6 },
+      { kind: "obor", simbol: "malam", x: 37.5, y: 15.6 },
     ],
     build() {
       const st = S || {}, teka = st.teka || {}, bos = st.bos || {};
@@ -128,12 +128,12 @@ const AREAS = {
       fillRect(1, 1, MW - 2, MH - 2, CAVE);
       fillRect(14, 25, 16, 25, CAVE);              // pintu masuk dari hutan
       // aula masuk | aula tengah (4 obor) | ruang dalam
-      fillRect(1, 17, 28, 17, WALL); fillRect(13, 17, 17, 17, CAVE);
-      fillRect(1, 9, 28, 9, WALL);
-      if (teka.obor) fillRect(13, 9, 17, 9, CAVE);  // terbuka setelah teka-teki obor
+      fillRect(1, 17, MW - 2, 17, WALL); fillRect(13, 17, 17, 17, CAVE);
+      fillRect(1, 11, MW - 2, 11, WALL);
+      if (teka.obor) fillRect(13, 11, 17, 11, CAVE);  // terbuka setelah teka-teki obor
       if (bos.dwarapala) fillRect(14, 0, 16, 0, CAVE);   // lorong ke kawah setelah Dwarapala kalah
       // tiang-tiang batu
-      for (const [x, y] of [[6, 12], [6, 14], [11, 12], [11, 14], [19, 12], [19, 14], [24, 12], [24, 14], [8, 21], [22, 21], [5, 3], [25, 3], [5, 7], [25, 7]]) setT(x, y, WALL);
+      for (const [x, y] of [[6, 13], [6, 15], [11, 13], [11, 15], [19, 13], [19, 15], [24, 13], [24, 15], [30, 13], [30, 15], [8, 21], [22, 21], [31, 21], [6, 3], [33, 3], [6, 8], [33, 8]]) setT(x, y, WALL);
     },
   },
   rawa: {
@@ -148,7 +148,7 @@ const AREAS = {
       { x0: 39, y0: 15, x1: 39, y1: 17, ke: "pesisir", masuk: { x: 1.5, y: 16.5 }, label: "Kampung →" },
     ],
     teleport: { id: "rawa", x: 16.5, y: 5.5 },
-    bos: { x: 22, y: 26.5, monster: "buayaPutih" },
+    bos: { x: 21, y: 25.5, monster: "buayaPutih" },   // pulau diperluas: 17×10 petak
     objek: [{ kind: "pitutur", id: "pitutur", x: 12.5, y: 18.2 }],
     build(r) {
       const teka = (S && S.teka) || {};
@@ -164,7 +164,7 @@ const AREAS = {
         const edge = (x === d.x0 || x === d.x1 || y === d.y1) && r() < 0.5;
         setT(x, y, edge ? REED : WATER);
       }
-      fillRect(18, 23, 26, 29, MUD); fillRect(19, 24, 25, 28, G);
+      fillRect(12, 21, 29, 30, MUD); fillRect(13, 22, 28, 29, G);
       for (let y = 19; y <= 32; y++) for (let x = 32; x <= 37; x++) if (tileAt(x, y) === WATER) setT(x, y, MUD);
       // jembatan ke pulau (muncul setelah teka-teki Batu Pitutur)
       if (teka.pitutur) fillRect(21, 19, 22, 22, BRIDGE);
@@ -211,11 +211,11 @@ const AREAS = {
     },
   },
   kawah: {
-    dunia: 1, nama: "Kawah Geni", sub: "Puncak gunung berapi · Lv 11+", lagu: "kawah", tepi: WALL, w: 34, h: 30, panas: true,
+    dunia: 1, nama: "Kawah Geni", sub: "Puncak gunung berapi · Lv 11+", lagu: "kawah", tepi: WALL, w: 42, h: 30, panas: true,
     zona: { kawahTengah: { x0: 3, y0: 17, x1: 30, y1: 23 } },
     gerbang: [{ x0: 16, y0: 29, x1: 18, y1: 29, ke: "candi", masuk: { x: 15.5, y: 1.5 }, label: "Ke Candi" }],
     teleport: { id: "kawah", x: 13.5, y: 26.5 },
-    bos: { x: 17, y: 6.5, monster: "rajaBanaspati" },
+    bos: { x: 21, y: 6.5, monster: "rajaBanaspati" },   // arena diperluas: 36×10 petak
     objek: [{ kind: "altar", id: "altar", x: 17.5, y: 17.6 }],
     build(r) {
       const teka = (S && S.teka) || {};
@@ -226,23 +226,23 @@ const AREAS = {
       fillRect(1, 13, MW - 2, 15, LAVA);
       if (teka.altar) fillRect(16, 13, 18, 15, ASH);   // jembatan batu setelah altar
       // arena bos di utara: bersih, dikelilingi kolam lava
-      fillRect(6, 2, 28, 11, ASH);
-      for (const [x, y] of [[3, 3], [4, 3], [3, 4], [30, 3], [29, 3], [30, 4], [3, 10], [30, 10]]) setT(x, y, LAVA);
-      for (const [x, y] of [[8, 4], [26, 4], [8, 9], [26, 9], [5, 20], [28, 20], [10, 25], [24, 25]]) setT(x, y, WALL);
+      fillRect(3, 2, MW - 4, 11, ASH);
+      for (const [x, y] of [[2, 2], [3, 2], [2, 3], [MW - 3, 2], [MW - 4, 2], [MW - 3, 3], [2, 11], [MW - 3, 11]]) setT(x, y, LAVA);
+      for (const [x, y] of [[8, 4], [33, 4], [8, 9], [33, 9], [5, 20], [28, 20], [36, 20], [10, 25], [24, 25], [33, 25]]) setT(x, y, WALL);
       // area aman sekitar pintu, teleport & altar
       fillRect(12, 25, 22, 28, ASH); fillRect(15, 16, 20, 19, ASH);
     },
   },
   gua: {
-    dunia: 1, nama: "Gua Genderuwo", sub: "Sarang penunggu hutan", lagu: "gua", tepi: WALL, w: 22, h: 17, gelap: true,
+    dunia: 1, nama: "Gua Genderuwo", sub: "Sarang penunggu hutan", lagu: "gua", tepi: WALL, w: 30, h: 23, gelap: true,
     zona: {},
     gerbang: [{ x0: 0, y0: 7, x1: 0, y1: 9, ke: "alam", masuk: { x: 23.5, y: 22.5 }, label: "← Keluar" }],
-    bos: { x: 16.5, y: 8.5, monster: "genderuwo" },   // titik bos & jenisnya (cermin gaib juga di sini)
+    bos: { x: 18.5, y: 11.5, monster: "genderuwo" },   // titik bos & jenisnya (cermin gaib juga di sini)
     build() {
       fillRect(0, 0, MW - 1, MH - 1, WALL);
       fillRect(1, 1, MW - 2, MH - 2, CAVE);
       fillRect(0, 7, 0, 9, CAVE);
-      for (const [x, y] of [[6, 4], [6, 12], [10, 6], [10, 11], [14, 3], [14, 13], [19, 5], [19, 12]]) setT(x, y, WALL);
+      for (const [x, y] of [[6, 4], [6, 17], [11, 7], [11, 15], [17, 3], [17, 19], [25, 5], [25, 17]]) setT(x, y, WALL);
     },
   },
 };

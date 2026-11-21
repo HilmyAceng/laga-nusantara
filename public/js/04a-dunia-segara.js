@@ -91,36 +91,35 @@ Object.assign(AREAS, {
     dunia: 2, nama: "Hutan Larangan", sub: "Hutan lebat yang dikeramatkan · Lv 15+", namaEn: "Forbidden Forest", subEn: "A dense, sacred jungle · Lv 15+",
     lagu: "luar", tepi: TREE, w: 40, h: 40, gelap: true,
     zona: {
-      laranganTengah: { x0: 4, y0: 14, x1: 35, y1: 24 },
+      laranganTengah: { x0: 4, y0: 15, x1: 35, y1: 24 },
       laranganSelatan: { x0: 4, y0: 27, x1: 35, y1: 35 },
     },
     gerbang: [{ x0: 18, y0: 39, x1: 20, y1: 39, ke: "bandar", masuk: { x: 19.5, y: 2.5 }, label: "Ke Bandar", labelEn: "To Harbor" }],
     teleport: { id: "larangan", x: 23.5, y: 35.5 },
-    bos: { x: 20, y: 6.5, monster: "silumanUlar" },
+    bos: { x: 20, y: 7.5, monster: "silumanUlar" },   // lapangan diperluas: 30×12 petak
     build(r) {
       for (let y = 0; y < MH; y++) for (let x = 0; x < MW; x++) {
         if (x < 2 || y < 2 || x >= MW - 2 || y >= MH - 1) setT(x, y, TREE);
         else { const v = r(); setT(x, y, v < 0.2 ? TREE : v < 0.25 ? FLOWER : v < 0.28 ? ROCK : G); }
       }
       // tanah lapang sarang siluman di utara, dikelilingi pohon
-      fillRect(11, 2, 29, 11, G);
-      for (let x = 11; x <= 29; x++) setT(x, 12, TREE);
-      fillRect(18, 12, 21, 12, PATH);
-      for (const [x, y] of [[13, 4], [27, 4], [13, 9], [27, 9]]) setT(x, y, ROCK);
+      fillRect(5, 2, 34, 13, G);
+      for (let x = 5; x <= 34; x++) setT(x, 14, TREE);
+      fillRect(18, 14, 21, 14, PATH);
+      for (const [x, y] of [[8, 4], [31, 4], [8, 11], [31, 11]]) setT(x, y, ROCK);
       // jalan berkelok dari selatan ke sarang
       jalanKelok(r, 19, 37, 8, 26, 2, PATH);
       jalanKelok(r, 8, 26, 30, 18, 2, PATH);
-      jalanKelok(r, 30, 18, 19, 12, 2, PATH);
+      jalanKelok(r, 30, 18, 19, 14, 2, PATH);
       fillRect(18, 36, 20, 39, PATH);
       bersihkan([[23, 35], [19, 37]], G);
     },
   },
   kuil: {
     dunia: 2, nama: "Kuil Samudra", sub: "Reruntuhan kuil di atas karang · Lv 17+", namaEn: "Sea Temple", subEn: "Temple ruins on the reef · Lv 17+",
-    lagu: "gua", tepi: WATER, w: 36, h: 32,
+    lagu: "gua", tepi: WATER, w: 44, h: 32,
     zona: {
-      kuilAula: { x0: 5, y0: 13, x1: 30, y1: 26 },
-      kuilKolam: { x0: 22, y0: 4, x1: 30, y1: 10 },
+      kuilAula: { x0: 5, y0: 14, x1: 38, y1: 26 },
     },
     gerbang: [
       { x0: 0, y0: 15, x1: 0, y1: 17, ke: "bakau", masuk: { x: 40.5, y: 14.5 }, label: "← Bakau", labelEn: "← Mangrove" },
@@ -128,7 +127,7 @@ Object.assign(AREAS, {
       { x0: 16, y0: 0, x1: 18, y1: 0, ke: "awan", masuk: { x: 17.5, y: 24.5 }, label: "Tangga Pelangi", labelEn: "Rainbow Stair", kunci: "pelangi" },
     ],
     teleport: { id: "kuil", x: 6.5, y: 23.5 },
-    bos: { x: 12, y: 6.5, monster: "panglimaKarang" },
+    bos: { x: 22, y: 7.5, monster: "panglimaKarang" },   // ruang suci (dulu 16×8, kini 36×9 petak)
     build(r) {
       const buka = (S && S.buka) || {};
       fillRect(0, 0, MW - 1, MH - 1, WATER);
@@ -139,18 +138,17 @@ Object.assign(AREAS, {
         if (tepi && r() < 0.7) setT(x, y, CORAL);
       }
       fillRect(0, 15, 4, 17, BRIDGE);
-      // tembok pemisah: ruang suci (barat laut) | kolam (timur laut) | aula besar (selatan)
-      fillRect(4, 11, MW - 5, 11, WALL); fillRect(10, 11, 14, 11, STONE); fillRect(24, 11, 27, 11, STONE);
-      fillRect(20, 3, 20, 10, WALL); fillRect(20, 6, 20, 7, STONE);
-      // kolam air di timur laut
-      for (const [x, y] of [[23, 5], [24, 5], [27, 7], [28, 7], [28, 8], [24, 9]]) setT(x, y, WATER);
-      // tiang-tiang aula
-      for (const [x, y] of [[8, 15], [8, 22], [14, 15], [14, 22], [21, 15], [21, 22], [27, 15], [27, 22], [6, 4], [16, 4], [6, 9], [16, 9]]) setT(x, y, WALL);
-      for (let i = 0; i < 10; i++) setT(Math.floor(r() * 24) + 6, Math.floor(r() * 10) + 13, CORAL);
+      // tembok pemisah: ruang suci bos (utara, lapang) | aula besar (selatan)
+      fillRect(4, 12, MW - 5, 12, WALL); fillRect(10, 12, 14, 12, STONE); fillRect(29, 12, 32, 12, STONE);
+      // kolam kecil di sudut ruang suci
+      for (const [x, y] of [[5, 3], [6, 3], [5, 4], [MW - 6, 3], [MW - 7, 3], [MW - 6, 4]]) setT(x, y, WATER);
+      // tiang-tiang aula & ruang suci
+      for (const [x, y] of [[8, 16], [8, 22], [14, 16], [14, 22], [21, 16], [21, 22], [27, 16], [27, 22], [34, 16], [34, 22], [9, 5], [MW - 10, 5], [9, 10], [MW - 10, 10]]) setT(x, y, WALL);
+      for (let i = 0; i < 12; i++) setT(Math.floor(r() * 32) + 6, Math.floor(r() * 10) + 14, CORAL);
       // jalan ke Tangga Pelangi
       fillRect(16, 0, 18, 2, buka.pelangi ? BRIDGE : WATER);
       if (buka.pelangi) fillRect(16, 2, 18, 2, STONE);
-      bersihkan([[6, 23], [2, 16], [17, 3], [12, 12], [25, 12]], STONE);
+      bersihkan([[6, 23], [2, 16], [17, 3], [12, 13], [30, 13], [12, 11], [30, 11]], STONE);
     },
   },
 });

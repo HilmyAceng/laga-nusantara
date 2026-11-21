@@ -39,6 +39,7 @@ function refreshHud(force) {
   if (boss) { ui.bossFill.style.width = (100 * boss.hp / boss.d.hp) + "%"; setText(ui.bossName, "bossName", hudFaseBos(boss)); }   // "Fase n/m" (62-fase-bos.js)
   hudJurus();                       // jurus slot 1 & 2, pamungkas (48-jurus.js, 49-pamungkas.js)
   hudHindar();                      // lapis hindar (50-hindar-tangkis.js)
+  hudJamu();                        // jumlah & jeda jamu (65-jamu-jeda.js)
   if (!isTouch) {
     if (last.sn !== S.cls) {
       last.sn = S.cls;

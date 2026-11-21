@@ -53,7 +53,8 @@ function updatePlayer(dt) {
     latihanAksi("jamu");
     // jamu: pulihkan nyawa; setelah belajar resep penawar (Pak Joko) juga menyembuhkan semua debuff
     const obati = S.penawar && adaDebuff();
-    if (S.potions > 0 && (P.hp < maxHp() || obati)) { S.potions--; const h = Math.round(maxHp() * ATURAN.jamuPulih * (1 + bonusStat("jamu"))); P.hp = Math.min(maxHp(), P.hp + h); numbers.push({ x: P.x, y: P.y - 56, v: "+" + h, life: 0.9, color: "#5ad17a", size: 22 }); sfx.drink(); if (obati) sembuhkanDebuff("jamu"); saveSoon(); }
+    if (P.jamuCd > 0) { if (S.potions > 0) toast(t("jamu.jeda", { detik: Math.ceil(P.jamuCd) }), false); }   // jeda jamu (65-jamu-jeda.js)
+    else if (S.potions > 0 && (P.hp < maxHp() || obati)) { S.potions--; P.jamuCd = ATURAN.jamuJeda; const h = Math.round(maxHp() * ATURAN.jamuPulih * (1 + bonusStat("jamu"))); P.hp = Math.min(maxHp(), P.hp + h); numbers.push({ x: P.x, y: P.y - 56, v: "+" + h, life: 0.9, color: "#5ad17a", size: 22 }); sfx.drink(); if (obati) sembuhkanDebuff("jamu"); saveSoon(); }
     else if (S.potions <= 0) toast(t("toast.jamuHabis"), false);
   }
   nearNpc = null;

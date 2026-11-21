@@ -65,7 +65,7 @@ let teleTujuan = null;
 function tanyaTeleport(tp) {
   if (!P || P.dead) return;
   teleTujuan = tp;
-  $("teleText").textContent = t("tele.tanya", { area: AREAS[tp.areaId].nama });
+  $("teleText").textContent = t(tp.cermin ? "cermin.tanya" : "tele.tanya", { area: AREAS[tp.areaId].nama });
   $("teleAsk").hidden = false;
   $("btnTeleGo").focus({ preventScroll: true });
 }

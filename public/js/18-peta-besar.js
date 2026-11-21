@@ -98,6 +98,7 @@ function drawAreaMap(time) {
       mapHits.push({ x: X(n.x), y: Y(n.y), r: 20 * DPR, tele: n.tele });
       continue;
     }
+    if (n.kind === "cermin") { cerminDiPetaArea(c, X(n.x), Y(n.y), time, label); continue; }   // 64-cermin-peta.js
     dot(X(n.x), Y(n.y), "#f4b942", 5); label(n.name, X(n.x), Y(n.y) - 9 * DPR, "#f4b942");
   }
   // tujuan cerita di area ini (atau gerbang menuju tujuan)
@@ -291,6 +292,7 @@ function drawWorldMap(time) {
     drawTeleportIcon(c, tx, ty, DPR * fs, time);
     mapHits.push({ x: tx, y: ty, r: 20 * DPR, tele: tp });
   }
+  cerminDiPetaDunia(c, X, Y, fs, time);   // cermin gaib yang sudah muncul (64-cermin-peta.js)
   for (const [t, x, y, col, uk] of names) text(t, x, y, col, uk, 900);
   // tujuan cerita ada di dunia lain
   if (goal0 && !goal) text(t("peta.tujuanDunia", { dunia: DUNIA.find((x) => x.id === AREAS[goal0].dunia).nama }), cw / 2, ch - 10 * DPR, "#f4b942", 13);

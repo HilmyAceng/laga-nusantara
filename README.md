@@ -8,6 +8,9 @@ Bisa dimainkan di HP (joystick + tombol sentuh, mode lanskap) dan desktop (keybo
 - **Sistem tarung lanjutan**:
   - **4 jurus per kelas** (terbuka di Lv 1, 8, 18, 30), dua dipasang sekaligus (`S` & `F`). Contoh: Badai Golok, Gelombang Angin, Langkah Bayang, Panah Jerat, Hujan Panah, Panah Tembus, Benteng, Lompatan Palu, Raungan, Perisai Api, Tapak Es, Meteor
   - **Jurus pamungkas** (`R`, mulai Lv 5) saat bar **Tenaga Dalam** (garis emas di bawah nyawa) penuh: Seribu Tebasan, Panah Garuda, Palu Bumi, Hujan Meteor
+  - **Jeda jamu**: setelah minum jamu harus menunggu 10 detik; desktop punya kotak Jamu (tombol `W` atau klik)
+  - **Teleport ke Cermin Gaib**: setiap cermin yang sudah muncul tampil (ikon ungu) di peta; ketuk untuk pindah ke depan cermin itu
+  - **Arena bos lapang**: ruang bos di Candi, Rawa (pulau), Kawah, Gua Genderuwo, Hutan Larangan, Kuil, Hutan Batu, Makam, Gua Laut, Istana Awan & Menara Kala diperluas (mis. Kuil 16×8 → 36×9 petak, Rawa 9×7 → 18×10), dan bos mengejar lebih jauh sebelum pulang
   - **Hindar 2 lapis**: berguling atau tangkis bisa 2 kali beruntun (keduanya memakai lapis yang sama), tiap lapis terisi lagi 5 detik (di HP angka ×2 di bawah tulisan Hindar, berubah jadi hitung mundur detik saat habis; `ATURAN.hindar.lapis` & `isiUlang`)
   - **Hindar sempurna**: berguling tepat sebelum kena → waktu melambat, pukulan berikutnya pasti kritis
   - **Tangkis**: Hindar tanpa arah → serangan ditahan, penyerang lumpuh, kamu membalas
@@ -150,7 +153,9 @@ Semua menu memakai tombol. `Esc` = kembali satu halaman.
 | `61-suara-makhluk.js` | Suara sintetis monster, bos, hero & ocehan NPC; batas suara bersamaan & jarak |
 | `62-fase-bos.js` | Fase bos 2-3: bangkit dengan nyawa penuh, kekuatan tambahan tiap fase |
 | `63-area-bos.js` | Area bos: jarak bos mengejar sebelum menyerah & pulang (`ATURAN.areaBos`) |
-| `64-main.js` | Loop utama (dimuat paling akhir) |
+| `64-cermin-peta.js` | Cermin Gaib yang sudah muncul tampil di peta mini, peta area & peta dunia; ketuk ikonnya untuk teleport ke depan cermin |
+| `65-jamu-jeda.js` | Jeda jamu 10 detik (`ATURAN.jamuJeda`), kotak Jamu di desktop (W / klik) & lencana jumlah di tombol HP |
+| `66-main.js` | Loop utama (dimuat paling akhir) |
 
 Cerita utama ada di folder `src/cerita/`: `bab-1.js` ... `bab-5.js` (satu file per bab), digabung di `semua.js`.
 
