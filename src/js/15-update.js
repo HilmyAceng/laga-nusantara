@@ -157,7 +157,7 @@ function update(dt) {
     for (const m of monsters) {
       if (m.dead) continue;
       if (Math.hypot(m.x - p.x, m.y - p.y) < m.r + 10) {
-        if (p.kind === "fire") explode(p); else damageMonster(m, p.dmg, Math.atan2(p.vy, p.vx), 120);
+        if (p.kind === "fire") explode(p); else damageMonster(m, p.dmg, Math.atan2(p.vy, p.vx), 120, { proj: p.kind, sekutu: p.sekutu });
         p.life = 0; break;
       }
     }

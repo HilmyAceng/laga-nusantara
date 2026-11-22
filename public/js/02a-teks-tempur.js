@@ -6,6 +6,9 @@
 "use strict";
 
 Object.assign(TEKS.id, {
+  // hero baru (89-92)
+  "hd.wayang": "Lindungan Wayang!", "hd.sembur": "Sembur Jamu!", "hd.bayang": "Lebur Bayang!", "tabib.ruwatan": "Ruwatan!",
+  "jurus.naik10": "Mahir: damage +25% & jeda -10% tambahan", "toast.pingsanAman": "Kamu pingsan... dibawa pulang ke desa. Koinmu aman.",
   // hindar diam per hero (87-hindar-diam.js)
   "hd.balasSiap": "Siaga!", "hd.balas": "Tebas Balas!", "hd.lompatKritis": "Bidikan siap!",
   // ukuran HUD (85-ukuran-hud.js)
@@ -238,14 +241,14 @@ Object.assign(TEKS.id, {
   "cara.hindar.isi": "{hindar} + arah = berguling dan kebal sesaat. Berguling dan tangkis berbagi 2 lapis (Pendekar & Pendobrak 3 lapis; angka di pojok kotak Hindar); tiap lapis terisi lagi 5 detik, jadi pakai dengan cermat. Berguling TEPAT saat serangan datang = HINDAR SEMPURNA: waktu melambat, pukulan berikutnya pasti kritis, dan Tenaga Dalam bertambah banyak.",
   "cara.hindar.sentuh": "Hindar sambil menggeser joystick = berguling dan kebal sesaat. Berguling dan tangkis berbagi 2 lapis (Pendekar & Pendobrak 3 lapis; angka di tombol); tiap lapis terisi lagi 5 detik. Berguling TEPAT saat serangan datang = HINDAR SEMPURNA: waktu melambat dan pukulan berikutnya pasti kritis.",
   "cara.tangkis.judul": "Hindar Diam (aksi khas hero)",
-  "cara.tangkis.isi": "{hindar} TANPA arah = aksi khas hero (memakai 1 lapis). PENDOBRAK: Tangkis — serangan ditahan, penyerang lumpuh lama, kau membalas. PENDEKAR: Tebas Balas — saat diserang, melesat ke belakang penyerang & menebas kritis. PEMANAH: Lompat Mundur — salto menjauh; kalau musuh dekat, panah berikutnya kritis. PENYIHIR: Kedip — teleport menjauh & meninggalkan ledakan es. Dipakai TEPAT saat diserang, semuanya memecahkan perisai biru (kuda-kuda) bos.",
-  "cara.tangkis.sentuh": "Ketuk Hindar TANPA menyentuh joystick = aksi khas hero (1 lapis). Pendobrak: Tangkis. Pendekar: Tebas Balas (melesat ke belakang penyerang & menebas kritis). Pemanah: Lompat Mundur (panah berikutnya kritis). Penyihir: Kedip (teleport + ledakan es). Tepat waktu = memecahkan perisai biru bos.",
+  "cara.tangkis.isi": "{hindar} TANPA arah = aksi khas hero (memakai 1 lapis). PENDOBRAK: Tangkis — serangan ditahan, penyerang lumpuh lama, kau membalas. PENDEKAR: Tebas Balas — saat diserang, melesat ke belakang penyerang & menebas kritis. PEMANAH: Lompat Mundur — salto menjauh; kalau musuh dekat, panah berikutnya kritis. PENYIHIR: Kedip — teleport menjauh & meninggalkan ledakan es. DALANG: Lindungan Wayang — serangan ditahan & Arjuna muncul membalas. TABIB: Sembur Jamu — serangan ditahan & nyawa pulih. JAWARA: Lebur Bayang — muncul di belakang musuh, pukulan berikutnya kritis. Dipakai TEPAT saat diserang, semuanya memecahkan perisai biru (kuda-kuda) bos.",
+  "cara.tangkis.sentuh": "Ketuk Hindar TANPA menyentuh joystick = aksi khas hero (1 lapis). Pendobrak: Tangkis. Pendekar: Tebas Balas (melesat ke belakang penyerang & menebas kritis). Pemanah: Lompat Mundur (panah berikutnya kritis). Penyihir: Kedip (teleport + ledakan es). Dalang: Lindungan Wayang. Tabib: Sembur Jamu (pulih). Jawara: Lebur Bayang. Tepat waktu = memecahkan perisai biru bos.",
   "cara.jimat.judul": "Jimat",
   "cara.jimat.isi": "Jimat memberi kekuatan tambahan. Pasang di 2 slot (slot ke-3 di Lv {slot}) lewat halaman Jimat ({mjimat}). Biasa dijual di warung, Langka jatuh dari bos, hadiah Cermin Gaib: tingkat 1-2 jimat Biasa, 3-5 Biasa + Langka, 6-7 Langka + Legenda khas bos itu.",
   "cara.jimat.sentuh": "Jimat memberi kekuatan tambahan. Pasang di 2 slot (slot ke-3 di Lv {slot}) lewat tombol 💎 di kanan atas. Biasa dijual di warung, Langka jatuh dari bos, hadiah Cermin Gaib: tingkat 1-2 Biasa, 3-5 Biasa + Langka, 6-7 Langka + Legenda khas bos.",
   "cara.koin.judul": "Kegunaan Koin",
-  "cara.koin.isi": "Di warung: beli jamu, jimat, dan ramuan 2 menit (kuat, baja, penangkal, gesit). Di Tukang Pahat: tingkatkan senjata & tempa jimat (koin + Serpih Pusaka → bintang naik). Poin jurus juga bisa diatur ulang dengan koin. Hati-hati: pingsan = 20% koin hilang!",
-  "cara.koin.sentuh": "Di warung: beli jamu, jimat, & ramuan 2 menit. Di Tukang Pahat: tingkatkan senjata & tempa jimat. Poin jurus juga bisa diatur ulang dengan koin. Hati-hati: pingsan = 20% koin hilang!",
+  "cara.koin.isi": "Di warung: beli jamu, jimat, dan ramuan 2 menit (kuat, baja, penangkal, gesit). Di Tukang Pahat: tingkatkan senjata & tempa jimat (koin + Serpih Pusaka → bintang naik). Poin jurus juga bisa diatur ulang dengan koin.",
+  "cara.koin.sentuh": "Di warung: beli jamu, jimat, & ramuan 2 menit. Di Tukang Pahat: tingkatkan senjata & tempa jimat. Poin jurus juga bisa diatur ulang dengan koin.",
   "cara.musuh.judul": "Kekuatan Musuh",
   "cara.musuh.isi": "Monster ikut menguat sesuai levelmu (sampai beberapa level di atas aslinya). Musuh yang levelnya di atasmu lebih sulit dilukai dan pukulannya lebih sakit. Monster bertanda merah di atas kepala sudah belajar trik: lebih cepat dan kadang memukul dua kali.",
   "cara.musuh.sentuh": "Monster ikut menguat sesuai levelmu. Musuh yang levelnya di atasmu lebih sulit dilukai. Monster bertanda merah di atas kepala lebih cepat dan kadang memukul dua kali.",
@@ -258,6 +261,8 @@ Object.assign(TEKS.id, {
 });
 
 Object.assign(TEKS.en, {
+  "hd.wayang": "Puppet Guard!", "hd.sembur": "Jamu Spray!", "hd.bayang": "Shadow Merge!", "tabib.ruwatan": "Ruwatan!",
+  "jurus.naik10": "Mastery: +25% damage & -10% cooldown extra", "toast.pingsanAman": "You fainted... carried back to the village. Your coins are safe.",
   "hd.balasSiap": "Ready!", "hd.balas": "Counter Slash!", "hd.lompatKritis": "Aim ready!",
   "h.ukPeta": "Minimap size", "h.ukMisi": "Quest box size", "h.ukIkon": "Icon size", "h.ukReset": "Default sizes",
   "h.ukNote": "The minimap, the quest box at the top left, and the icons at the top right (Skills, Charms, Status, coins, jamu, pause).",
@@ -462,14 +467,14 @@ Object.assign(TEKS.en, {
   "cara.hindar.isi": "{hindar} + direction = roll, briefly invincible. Rolling and parrying share 2 charges (Warrior & Breaker get 3; the number on the Dodge box); each refills in 5 seconds, so use them wisely. Roll RIGHT as an attack arrives = PERFECT DODGE: time slows, your next hit is a guaranteed crit, and you gain lots of Inner Power.",
   "cara.hindar.sentuh": "Dodge while moving the joystick = roll, briefly invincible. Rolling and parrying share 2 charges (Warrior & Breaker get 3; the number on the button); each refills in 5 seconds. Roll RIGHT as an attack arrives = PERFECT DODGE: time slows and your next hit is a guaranteed crit.",
   "cara.tangkis.judul": "Still Dodge (hero move)",
-  "cara.tangkis.isi": "{hindar} with NO direction = your hero's own move (uses 1 charge). BREAKER: Parry — the attack is blocked, the attacker is stunned long, you strike back. WARRIOR: Counter Slash — when attacked, dash behind the attacker & land a critical slash. ARCHER: Backflip — flip away; if an enemy was close, your next arrow crits. MAGE: Blink — teleport away leaving a frost burst. Used RIGHT as an attack lands, all of them break a boss's blue shield (guard stance).",
-  "cara.tangkis.sentuh": "Tap Dodge WITHOUT touching the joystick = your hero's own move (1 charge). Breaker: Parry. Warrior: Counter Slash (dash behind the attacker & crit). Archer: Backflip (next arrow crits). Mage: Blink (teleport + frost burst). Perfect timing breaks a boss's blue shield.",
+  "cara.tangkis.isi": "{hindar} with NO direction = your hero's own move (uses 1 charge). BREAKER: Parry — the attack is blocked, the attacker is stunned long, you strike back. WARRIOR: Counter Slash — when attacked, dash behind the attacker & land a critical slash. ARCHER: Backflip — flip away; if an enemy was close, your next arrow crits. MAGE: Blink — teleport away leaving a frost burst. PUPPETEER: Puppet Guard — the attack is blocked & Arjuna strikes back. HEALER: Jamu Spray — the attack is blocked & you heal. SHADOW FIGHTER: Shadow Merge — appear behind an enemy, your next hit crits. Used RIGHT as an attack lands, all of them break a boss's blue shield (guard stance).",
+  "cara.tangkis.sentuh": "Tap Dodge WITHOUT touching the joystick = your hero's own move (1 charge). Breaker: Parry. Warrior: Counter Slash (dash behind the attacker & crit). Archer: Backflip (next arrow crits). Mage: Blink (teleport + frost burst). Puppeteer: Puppet Guard. Healer: Jamu Spray (heal). Shadow Fighter: Shadow Merge. Perfect timing breaks a boss's blue shield.",
   "cara.jimat.judul": "Charms",
   "cara.jimat.isi": "Charms grant extra power. Equip them in 2 slots (a 3rd at Lv {slot}) on the Charms page ({mjimat}). Common ones are sold at stalls, Rare ones drop from bosses, and Mystic Mirror rewards: levels 1-2 a Common charm, 3-5 Common + Rare, 6-7 Rare + the boss's own Legendary.",
   "cara.jimat.sentuh": "Charms grant extra power. Equip them in 2 slots (a 3rd at Lv {slot}) via the 💎 button (top right). Common ones are sold at stalls, Rare ones drop from bosses, Mystic Mirror rewards: levels 1-2 Common, 3-5 Common + Rare, 6-7 Rare + the boss's Legendary.",
   "cara.koin.judul": "What Coins Are For",
-  "cara.koin.isi": "At stalls: buy jamu, charms, and 2-minute brews (strength, iron, warding, swift). At the Carver: upgrade your weapon & forge charms (coins + Heirloom Shards → more stars). You can also reset skill points with coins. Careful: getting knocked out costs 20% of your coins!",
-  "cara.koin.sentuh": "At stalls: buy jamu, charms, & 2-minute brews. At the Carver: upgrade your weapon & forge charms. You can also reset skill points with coins. Careful: getting knocked out costs 20% of your coins!",
+  "cara.koin.isi": "At stalls: buy jamu, charms, and 2-minute brews (strength, iron, warding, swift). At the Carver: upgrade your weapon & forge charms (coins + Heirloom Shards → more stars). You can also reset skill points with coins.",
+  "cara.koin.sentuh": "At stalls: buy jamu, charms, & 2-minute brews. At the Carver: upgrade your weapon & forge charms. You can also reset skill points with coins.",
   "cara.musuh.judul": "Enemy Strength",
   "cara.musuh.isi": "Monsters grow with your level (up to a few levels above their own). Enemies above your level are harder to hurt and hit harder. Monsters with a red mark over their head have learned tricks: faster, and sometimes hit twice.",
   "cara.musuh.sentuh": "Monsters grow with your level. Enemies above your level are harder to hurt. Monsters with a red mark over their head are faster and sometimes hit twice.",

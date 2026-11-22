@@ -8,6 +8,9 @@ Bisa dimainkan di HP (joystick + tombol sentuh, mode lanskap) dan desktop (keybo
 - **Sistem tarung lanjutan**:
   - **4 jurus per kelas** (terbuka di Lv 1, 8, 18, 30), dua dipasang sekaligus (`S` & `F`). Contoh: Badai Golok, Gelombang Angin, Langkah Bayang, Panah Jerat, Hujan Panah, Panah Tembus, Benteng, Lompatan Palu, Raungan, Perisai Api, Tapak Es, Meteor
   - **Jurus pamungkas** (`R`, mulai Lv 5) saat bar **Tenaga Dalam** (garis emas di bawah nyawa) penuh: Seribu Tebasan, Panah Garuda, Palu Bumi, Hujan Meteor
+  - **3 hero baru**: Dalang (pemanggil wayang), Tabib (pendukung/penyembuh), Jawara (pembunuh senyap) — total 7 hero
+  - **Poin jurus lebih dalam**: rank jurus & pasif sampai ★10 (★10 = Mahir: damage +25% & jeda -10%)
+  - **Pingsan tidak mengurangi koin**
   - **Hindar diam khas tiap hero**: Pendobrak Tangkis, Pendekar Tebas Balas (melesat ke belakang penyerang & menebas kritis), Pemanah Lompat Mundur (panah berikutnya kritis), Penyihir Kedip (teleport + ledakan es). Semua memecahkan perisai biru bos kalau tepat waktu
   - **Ukuran HUD**: peta mini, kotak misi, dan ikon kanan atas bisa diperbesar / diperkecil di Menu › Pengaturan › Layar
   - **Pasif unik jimat legenda**: ke-13 jimat legenda masing-masing punya kemampuan khas (✦), mis. Bulu Genderuwo (Amukan saat sekarat), Bulu Rajawali (berguling memanggil petir), Kunci Menara Kala (pamungkas menghentikan waktu)
@@ -187,7 +190,11 @@ Semua menu memakai tombol. `Esc` = kembali satu halaman.
 | `83-pasif-legenda.js` | Pasif unik (✦) tiap jimat legenda: amukan, hantaman ke-5, pulih diam, racun peka, perisai karang, pulih bunuh, tumpuk tulang, awan tinta, petir guling, henti waktu, gema bayangan (`LEGENDA`) |
 | `85-ukuran-hud.js` | Menu › Pengaturan › Layar: ukuran peta mini, kotak misi, & ikon kanan atas (60–160%, per perangkat) |
 | `87-hindar-diam.js` | Hindar tanpa arah = aksi khas hero: Tangkis (Pendobrak), Tebas Balas (Pendekar), Lompat Mundur (Pemanah), Kedip (Penyihir) (`ATURAN.hindarDiam`) |
-| `88-main.js` | Loop utama (dimuat paling akhir) |
+| `89-hero-baru.js` | Bagian bersama hero baru: `daftarkanHero`, senjata wayang/labu/kerambit, jurus & pamungkas jenis baru |
+| `90-hero-dalang.js` | Hero Dalang (pemanggil): sekutu wayang Arjuna, Bima, Gatotkaca; Kelir Bayang; pamungkas Bharatayuddha |
+| `91-hero-tabib.js` | Hero Tabib (pendukung): Ramuan Sembuh, Jimat Penghalang, Kutukan, Tebar Kembang; pamungkas Ruwatan |
+| `92-hero-jawara.js` | Hero Jawara (pembunuh senyap): Tusukan Bayang, Asap Hilang, Kerambit Berantai, Racun Kerambit; kritis +12% |
+| `93-main.js` | Loop utama (dimuat paling akhir) |
 
 Cerita utama ada di folder `src/cerita/`: `bab-1.js` ... `bab-5.js` (satu file per bab), digabung di `semua.js`.
 

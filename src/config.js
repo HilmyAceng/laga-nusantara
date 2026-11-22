@@ -75,14 +75,14 @@ const ATURAN = {
   areaBos: { kali: 1.8, minimal: 820 },
   // hero jarak dekat (76-melee.js): lapis hindar tambahan, kebal setelah jurus terjang,
   // Kulit Baja (pasif Pendobrak), perisai jurus Benteng (bagian dari nyawa maksimal)
-  melee: { kelas: ["pendekar", "pendobrak"], lapisTambah: 1, kebalKilat: 1, kebalBalik: 1, kebalBalik3: 1.5,
+  melee: { kelas: ["pendekar", "pendobrak", "jawara"], lapisTambah: 1, kebalKilat: 1, kebalBalik: 1, kebalBalik3: 1.5,
     tahanKelas: { pendekar: 0.1, pendobrak: 0.2 },   // pasif: Kuda-kuda Pendekar -10%, Kulit Baja Pendobrak -20% damage diterima
     perisai: 0.3, perisai3: 0.4, bentengTahan: 0.5, perisaiDobrak: 0.15 },
   hindar: { lama: 0.22, jeda: 0.3, kecepatan: 470, kebal: 0.28, lapis: 2, isiUlang: 5 },
 
   kritis: { peluang: 0.12, kali: 1.6 },   // pukulan kritis: peluang & pengali damage
 
-  pingsan: { koinHilang: 0.2, lama: 2.2 },// saat nyawa habis: kehilangan 20% koin
+  pingsan: { koinHilang: 0, lama: 2.2 },  // saat nyawa habis: koin TIDAK hilang (drop koin sudah dikurangi)
 
   jarakBicara: 84,
 
@@ -193,7 +193,8 @@ ATURAN.hindarSempurna = {                 // berguling TEPAT saat serangan datan
 };
 // Hindar TANPA arah = aksi khas tiap hero (87-hindar-diam.js). Pendobrak = tangkis biasa.
 ATURAN.hindarDiam = {
-  aksi: { pendobrak: "tangkis", pendekar: "balas", pemanah: "lompat", penyihir: "kedip" },
+  aksi: { pendobrak: "tangkis", pendekar: "balas", pemanah: "lompat", penyihir: "kedip", dalang: "wayang", tabib: "sembur", jawara: "bayang" },
+  bayangJarak: 230,                                             // Lebur Bayang (Jawara)
   balasKali: 1.8, balasLumpuh: 0.7, balasLumpuhBos: 0.25,      // Tebas Balas (Pendekar)
   lompatLama: 0.32, lompatKritisJarak: 160,                     // Lompat Mundur (Pemanah)
   kedipJarak: 170, esR: 95, esLambat: 2, esKali: 0.6,           // Kedip (Penyihir)
@@ -204,8 +205,9 @@ ATURAN.tangkis = {                        // Hindar TANPA arah = kuda-kuda tangk
   balas: 1.5,                             // serangan balik = serangan × 1.5
 };
 ATURAN.poinJurus = {
-  rankMaks: 5,                            // tiap jurus/pasif bisa dinaikkan sampai 5
+  rankMaks: 10,                           // tiap jurus/pasif bisa dinaikkan sampai 10 (★3 & ★5 membuka kemampuan, ★10 = Mahir)
   damagePerRank: 0.12, cdPerRank: 0.04,   // tiap rank: damage +12%, jeda -4%
+  mahirDamage: 0.25, mahirCd: 0.1, cdMin: 0.35,   // ★10 Mahir: damage +25% & jeda -10% tambahan; jeda tidak bisa di bawah 35%
   resetHarga: 60,                         // atur ulang poin = 60 koin × level
 };
 ATURAN.jimat = {

@@ -37,6 +37,7 @@ function isiHalamanJurus() {
       <p>${teksJ(j, "desc")} <small>${t("jurus.cd", { cd: (buka ? cdJurus(j) : j.cd).toFixed(1) })}</small></p>
       <p class="jr-naik${r >= 3 ? " on" : ""}">★3 · ${teksJ(j, "naik3")}</p>
       <p class="jr-naik${r >= 5 ? " on" : ""}">★5 · ${teksJ(j, "naik5")}</p>
+      <p class="jr-naik${r >= 10 ? " on" : ""}">★10 · ${t("jurus.naik10")}</p>
       ${buka ? `<div class="jr-aksi">
         <button type="button" data-aksi="rank" data-id="${j.id}" ${sisa > 0 && r < M ? "" : "disabled"}>+ ${t("jurus.rank")}</button>
         <button type="button" data-aksi="slot" data-i="0" data-id="${j.id}" aria-pressed="${di === 0}">${t("jurus.slot", { n: 1 })}</button>

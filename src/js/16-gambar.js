@@ -18,6 +18,7 @@ const hash = (x, y) => ((x * 73856093) ^ (y * 19349663)) >>> 0;
 // BENDA_TINGGI = fungsi(time) yang mengembalikan [{ y, f }] (ikut urutan kedalaman)
 // GAMBAR_ATAS = fungsi(time) digambar di atas semua makhluk (efek jurus, bintang lumpuh, ...)
 const GAMBAR_TANAH = [], BENDA_TINGGI = [], GAMBAR_ATAS = [];
+const GAMBAR_PELURU = {};   // gambar peluru jenis baru: GAMBAR_PELURU[kind](p, time)
 function drawGround(tx, ty, time) {
   const x = tx * T, y = ty * T, t = tileAt(tx, ty), h = hash(tx, ty);
   if (t === WATER || t === BRIDGE) {
@@ -153,7 +154,7 @@ function drawPerson(c, e, look, time, opts = {}) {
   const drawArm = () => {
     if (!look.weapon) return;
     let a = flip > 0 ? e.face : Math.PI - e.face;
-    if (e.swing > 0 && (look.weapon === "golok" || look.weapon === "hammer")) a += lerp(-1.5, 1.4, 1 - e.swing / e.swingDur);
+    if (e.swing > 0 && (look.weapon === "golok" || look.weapon === "hammer" || look.weapon === "kerambit")) a += lerp(-1.5, 1.4, 1 - e.swing / e.swingDur);
     c.save(); c.translate(3, -22 - bob); c.rotate(a - Math.PI / 2);
     c.strokeStyle = white ? "#fff" : "#e3ae7f"; c.lineWidth = 5; c.lineCap = "round"; c.beginPath(); c.moveTo(0, 0); c.lineTo(0, 12); c.stroke();
     drawWeapon(c, look.weapon, e.swing > 0 && look.weapon === "bow" ? 6 : 0);
@@ -368,7 +369,8 @@ function render(now) {
       const a = Math.atan2(p.vy, p.vx); ctx.save(); ctx.translate(p.x, p.y - 18); ctx.rotate(a);
       ctx.strokeStyle = "#e8d6b5"; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.moveTo(-18, 0); ctx.lineTo(6, 0); ctx.stroke();
       ctx.fillStyle = "#dfe6ee"; ctx.beginPath(); ctx.moveTo(11, 0); ctx.lineTo(4, -3.5); ctx.lineTo(4, 3.5); ctx.closePath(); ctx.fill(); ctx.restore();
-    } else {
+    } else if (GAMBAR_PELURU[p.kind]) GAMBAR_PELURU[p.kind](p, time);   // peluru hero baru (89-hero-baru.js)
+    else {
       ctx.fillStyle = "rgba(255,140,60,0.3)"; ctx.beginPath(); ctx.arc(p.x, p.y - 18, 15, 0, 6.28); ctx.fill();
       ctx.fillStyle = "#ff7b39"; ctx.beginPath(); ctx.arc(p.x, p.y - 18, 8, 0, 6.28); ctx.fill();
       ctx.fillStyle = "#ffe08a"; ctx.beginPath(); ctx.arc(p.x, p.y - 18, 3.5, 0, 6.28); ctx.fill();

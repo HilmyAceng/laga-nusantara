@@ -138,7 +138,7 @@ function hurtPlayer(amount, ang, deb, opts = {}) {
   if (P.hp <= 0) {
     P.hp = 0; P.dead = true; P.deadT = ATURAN.pingsan.lama; sfx.faint();
     const lost = Math.floor(S.gold * ATURAN.pingsan.koinHilang); S.gold -= lost;
-    toast(t("toast.pingsan", { koin: lost }), false);
+    toast(lost > 0 ? t("toast.pingsan", { koin: lost }) : t("toast.pingsanAman"), false);
     saveSoon();
   } else beriDebuff(sumber);
 }

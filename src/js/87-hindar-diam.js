@@ -45,8 +45,9 @@ function latihanDiam() { if (monsters.some((m) => m.d.latihan && dist(m, P) < 22
   const hindarLama = hindarAtauTangkis;
   hindarAtauTangkis = function (inp) {
     const aksi = aksiDiam();
-    if (inp.mx || inp.my || aksi === "tangkis" || aksi === "balas") {
+    if (inp.mx || inp.my || ["tangkis", "balas", "wayang", "sembur"].includes(aksi)) {
       const ok = hindarLama(inp);
+      if (ok && !inp.mx && !inp.my) P.jenisDiam = aksi;   // wayang / sembur ditangani hero baru (90, 91)
       if (ok && !inp.mx && !inp.my && aksi === "balas") { P.balas = true; numbers.push({ x: P.x, y: P.y - 80, v: t("hd.balasSiap"), life: 0.5, color: "#ffd166", size: 16 }); }
       return ok;
     }
@@ -59,6 +60,15 @@ function latihanDiam() { if (monsters.some((m) => m.d.latihan && dist(m, P) < 22
       P.inv = Math.max(P.inv, C.lompatLama + 0.12); P.lompat = 18;
       if (m && dist(m, P) < C.lompatKritisJarak) { P.kritisSiap = true; numbers.push({ x: P.x, y: P.y - 80, v: t("hd.lompatKritis"), life: 0.8, color: "#ffd166", size: 18 }); }
       sfx.roll();
+    } else if (aksi === "bayang") {   // Jawara: muncul di belakang musuh terdekat, pukulan berikutnya kritis
+      const m = musuhDekat(C.bayangJarak)[0];
+      if (m) {
+        const a = Math.atan2(m.y - P.y, m.x - P.x), x1 = m.x + Math.cos(a) * (m.r + 30), y1 = m.y + Math.sin(a) * (m.r + 30);
+        kedipFx.push({ x0: P.x, y0: P.y, x1, y1, t: 0, dur: 0.35, emas: true });
+        if (!solidAt(x1, y1)) { P.x = x1; P.y = y1; P.face = a + Math.PI; }
+      } else { const { a } = arahMenjauh(200); const x1 = P.x + Math.cos(a) * 120, y1 = P.y + Math.sin(a) * 120; if (!solidAt(x1, y1)) { P.x = x1; P.y = y1; } }
+      P.kritisSiap = true; P.inv = Math.max(P.inv, 0.4); P.rollCd = ATURAN.hindar.jeda;
+      numbers.push({ x: P.x, y: P.y - 80, v: t("hd.bayang"), life: 0.8, color: "#c9a6ff", size: 18 }); sfx.roll();
     } else if (aksi === "kedip") {
       const { a } = arahMenjauh(300), x0 = P.x, y0 = P.y;
       let d = C.kedipJarak;

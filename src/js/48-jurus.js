@@ -37,8 +37,8 @@ function aturSlotAwal() {
 }
 const jurusSlot = (i) => { const id = S.jurus && S.jurus.slot[i]; return id ? jurusById(id) : null; };
 // jeda & damage setelah rank, jimat, dan ramuan
-const cdJurus = (j) => j.cd * (1 - ATURAN.poinJurus.cdPerRank * rankJurus(j.id)) * (1 - bonusStat("cd"));
-const multJurus = (j) => (j.mult || 1) * (1 + ATURAN.poinJurus.damagePerRank * rankJurus(j.id));
+const cdJurus = (j) => { const PJ = ATURAN.poinJurus, r = rankJurus(j.id); return j.cd * Math.max(PJ.cdMin, (1 - PJ.cdPerRank * r) * (1 - bonusStat("cd")) * (r >= 10 ? 1 - PJ.mahirCd : 1)); };
+const multJurus = (j) => (j.mult || 1) * (1 + ATURAN.poinJurus.damagePerRank * rankJurus(j.id) + (rankJurus(j.id) >= 10 ? ATURAN.poinJurus.mahirDamage : 0));
 const dmgJurus = (j) => atkPower() * multJurus(j);
 
 // musuh hidup dalam jarak tertentu, terdekat dulu
