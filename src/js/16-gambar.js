@@ -7,7 +7,7 @@
 let W = 0, H = 0, DPR = 1;
 function resize() {
   const r = cv.getBoundingClientRect();
-  DPR = Math.min(2, window.devicePixelRatio || 1);
+  DPR = store.get("laga.grafisRingan", false) ? 1 : Math.min(2, window.devicePixelRatio || 1);   // mode grafis ringan (73-grafis-ringan.js)
   W = Math.max(1, r.width); H = Math.max(1, r.height);
   cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR);
   $("rotate").hidden = !(isTouch && H > W && mode === "play");

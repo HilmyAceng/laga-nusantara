@@ -8,6 +8,8 @@ Bisa dimainkan di HP (joystick + tombol sentuh, mode lanskap) dan desktop (keybo
 - **Sistem tarung lanjutan**:
   - **4 jurus per kelas** (terbuka di Lv 1, 8, 18, 30), dua dipasang sekaligus (`S` & `F`). Contoh: Badai Golok, Gelombang Angin, Langkah Bayang, Panah Jerat, Hujan Panah, Panah Tembus, Benteng, Lompatan Palu, Raungan, Perisai Api, Tapak Es, Meteor
   - **Jurus pamungkas** (`R`, mulai Lv 5) saat bar **Tenaga Dalam** (garis emas di bawah nyawa) penuh: Seribu Tebasan, Panah Garuda, Palu Bumi, Hujan Meteor
+  - **Siap beta (v0.9.0-beta)**: pilihan kesulitan Santai / Normal / Sulit, Kode Save untuk cadangan & pindah perangkat, mode grafis ringan, nomor versi & tombol Kirim Masukan
+  - **Koin lebih sulit**: monster kecil hanya kadang menjatuhkan koin (40%) dan jumlahnya ×0,7 (`ATURAN.monster.koinPeluang` / `koinKali`); bos tetap seperti biasa
   - **Warung & Tukang Pahat** di setiap desa: warung menjual jamu, ramuan & jimat; Tukang Pahat menaikkan tingkat senjata & menempa jimat. Pedagang lama (Mbok Darmi, Mak Inah, Mbak Sari, Empu Gora, Pak Sanip, Lintang) kini NPC obrolan. Misi panduan baru "Belanja di Warung" & "Senjata Lebih Tajam"
   - **Misi panduan diutamakan**: Latihan Dasar → Belanja di Warung → Senjata Lebih Tajam → Ramuan Penawar tampil & dilacak lebih dulu daripada cerita utama
   - **Warga keliling**: 15 warga (bocah, ibu, petani, nelayan, pedagang, pelaut, dll.) berjalan-jalan di 6 desa, bergumam, dan bisa diajak ngobrol; NPC cerita tetap diam
@@ -167,7 +169,11 @@ Semua menu memakai tombol. `Esc` = kembali satu halaman.
 | `68-hiasan.js` | Hiasan desa: warung, gerobak, perahu, jemuran, lampion, dll. + kucing & ayam yang bergerak sendiri (`HIASAN`) |
 | `69-warga-keliling.js` | Warga keliling di desa: berjalan sendiri, bergumam, bisa diajak ngobrol (`WARGA`, `JENIS_WARGA`) |
 | `70-warung-pahat.js` | Warung (jamu, ramuan, jimat) & Tukang Pahat + bengkel (tingkatkan senjata, tempa jimat) di 6 desa; misi panduan tipe `aksi`; misi panduan diutamakan di daftar misi |
-| `71-main.js` | Loop utama (dimuat paling akhir) |
+| `71-kesulitan.js` | Tingkat kesulitan Santai / Normal / Sulit (`ATURAN.kesulitan`), dipilih di layar judul atau Menu › Pengaturan |
+| `72-kode-save.js` | Kode Save: ekspor (salin / unduh) & impor progres antar perangkat |
+| `73-grafis-ringan.js` | Mode grafis ringan (resolusi 1×, partikel dikurangi) di Menu › Pengaturan › Layar |
+| `74-versi-masukan.js` | Nomor versi (`ATURAN.versi`) di layar judul & menu jeda, tombol Kirim Masukan (`ATURAN.masukan.url`) |
+| `75-main.js` | Loop utama (dimuat paling akhir) |
 
 Cerita utama ada di folder `src/cerita/`: `bab-1.js` ... `bab-5.js` (satu file per bab), digabung di `semua.js`.
 

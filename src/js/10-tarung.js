@@ -46,7 +46,7 @@ function damageMonster(m, amount, ang, kb, opts = {}) {
   if (m.dead || m.kebal) return;   // kebal: misalnya naga yang sedang terbang
   if (m.d.latihan) latihanAksi("serang");   // latihan dasar (56-cara-bermain.js)
   // pengali: selisih level (54), keadaan bos (57), jimat bos & beku rentan
-  amount *= kaliKeMusuh(m) * (m.d.boss ? kaliKeadaanBos(m) * (1 + bonusStat("bos")) : 1) * (!m.d.boss && m.rentan > 0 ? 1.3 : 1);
+  amount *= kaliKesulitan("keMusuh") * kaliKeMusuh(m) * (m.d.boss ? kaliKeadaanBos(m) * (1 + bonusStat("bos")) : 1) * (!m.d.boss && m.rentan > 0 ? 1.3 : 1);
   if (opts.dot) {
     const dmg = Math.max(1, Math.round(amount));
     m.hp -= dmg; m.aggro = true; m.seen = 4;
@@ -81,8 +81,11 @@ function killMonster(m) {
   spark(m.x, m.y - m.d.h * 0.5, "#c9bfd6", 18);
   tambahTenaga(ATURAN.tenaga.bunuh, true);
   dropMonster(m);                         // jimat & serpih (53-drop-langka.js)
-  const coins = Math.round(rand(m.d.gold[0], m.d.gold[1]) * (1 + bonusStat("koin")));
-  for (let i = 0; i < Math.min(6, coins); i++) pickups.push({ kind: "coin", v: Math.ceil(coins / Math.min(6, coins)), x: m.x + rand(-16, 16), y: m.y + rand(-12, 12), t: 0 });
+  // monster kecil: koin hanya kadang jatuh & lebih sedikit (ATURAN.monster.koinPeluang / koinKali); bos selalu
+  const M0 = ATURAN.monster, kecil = !m.d.boss;
+  const coins = kecil && Math.random() >= M0.koinPeluang ? 0 : Math.max(1, Math.round(rand(m.d.gold[0], m.d.gold[1]) * (kecil ? M0.koinKali : 1) * kaliKesulitan("koin") * (1 + bonusStat("koin"))));
+  const tumpuk = Math.min(kecil ? 3 : 6, coins);
+  for (let i = 0; i < tumpuk; i++) pickups.push({ kind: "coin", v: Math.ceil(coins / tumpuk), x: m.x + rand(-16, 16), y: m.y + rand(-12, 12), t: 0 });
   if (Math.random() < ATURAN.monster.dropJamu) pickups.push({ kind: "jamu", x: m.x, y: m.y + 6, t: 0 });
   const q = QUESTS[S.q.idx];
   if (q && S.q.status === "active") {
@@ -91,7 +94,7 @@ function killMonster(m) {
   }
   kembalikanCurian(m);                    // tuyul: koin curian kembali (26-monster-baru.js)
   ceritaDrop(m); sampinganDrop(m);        // kantong curian / sisik buaya
-  gainExp(m.d.exp);
+  gainExp(Math.round(m.d.exp * kaliKesulitan("exp")));
   if (m.d.boss) {
     S.bos[m.type] = true; if (m.type === "genderuwo") S.bossDown = true;
     shake = 0.6; toast(t("toast.bosTumbang", { nama: m.d.name }), true); victory();
@@ -111,7 +114,7 @@ function hurtPlayer(amount, ang, deb, opts = {}) {
   const dari = opts.dari || musuhAktif;
   const sumber = deb !== undefined ? deb : dari ? dari.d.debuff : null;
   // pengali: selisih level, monster melemah, jimat/ramuan tahan, jurus benteng
-  let kali = (opts.mutlak ? 1 : kaliDariMusuh(dari) * kaliLemahMonster(dari)) * (1 - bonusStat("tahan"));
+  let kali = (opts.mutlak ? 1 : kaliDariMusuh(dari) * kaliLemahMonster(dari)) * (1 - bonusStat("tahan")) * kaliKesulitan("dariMusuh");   // kesulitan: 71-kesulitan.js
   if (P.benteng > 0) kali *= 0.3;
   const dmg = Math.max(1, Math.round(amount * rand(0.9, 1.1) * kali));
   P.hp -= dmg; P.inv = 0.6; P.flash = 0.15;

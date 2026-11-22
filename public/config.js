@@ -59,6 +59,17 @@ const ATURAN = {
 
   // hindar (berguling) punya `lapis` muatan. Tiap lapis terisi lagi setelah `isiUlang` detik (satu per satu).
   // jeda = jarak minimal antar-gulingan supaya 2 lapis bisa dipakai beruntun.
+  // versi game (tampil di layar judul & menu jeda) & halaman laporan masukan (74-versi-masukan.js).
+  // Ganti url ke formulir lain (mis. Google Form) kalau mau; judul & isi laporan dikirim lewat ?title=&body=.
+  versi: "0.9.0-beta",
+  masukan: { url: "https://github.com/HilmyAceng/laga-nusantara/issues/new" },
+  // tingkat kesulitan (71-kesulitan.js): keMusuh = damage pemain ke musuh, dariMusuh = damage musuh
+  // ke pemain, exp & koin = hadiah dari monster
+  kesulitan: {
+    santai: { keMusuh: 1.6, dariMusuh: 0.55, exp: 1.4, koin: 1.5 },
+    normal: { keMusuh: 1, dariMusuh: 1, exp: 1, koin: 1 },
+    sulit:  { keMusuh: 0.8, dariMusuh: 1.3, exp: 1.15, koin: 1.2 },
+  },
   // area bos: seberapa jauh bos (cerita & Cermin Gaib) mengejar dari sarangnya sebelum menyerah & pulang.
   // jarak = max(jarak dasar bos × kali, minimal) piksel (1 petak = 40 px)
   areaBos: { kali: 1.8, minimal: 820 },
@@ -145,6 +156,10 @@ const ATURAN = {
   monster: {
     munculLagi: 16,                       // detik sampai monster biasa muncul lagi
     dropJamu: 0.08,                       // peluang monster menjatuhkan jamu
+    // koin dari monster kecil (bukan bos): hanya kadang jatuh & jumlahnya dikurangi,
+    // supaya koin terasa hasil "farming". Rata-rata = peluang × kali ≈ 28% dari dulu.
+    koinPeluang: 0.4,                     // peluang monster kecil menjatuhkan koin
+    koinKali: 0.7,                        // pengali jumlah koin monster kecil
     dropTaring: 0.6,                      // peluang babi menjatuhkan taring (saat misi 2)
     dropKantong: 0.45,                    // peluang tuyul menjatuhkan kantong curian (cerita bab 3)
     dropSisik: 0.5,                       // peluang buaya rawa menjatuhkan sisik (misi Mbah Tirto)
