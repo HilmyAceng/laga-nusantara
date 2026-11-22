@@ -199,7 +199,8 @@ Semua menu memakai tombol. `Esc` = kembali satu halaman.
 | `92-hero-jawara.js` | Hero Jawara (pembunuh senyap): Tusukan Bayang, Asap Hilang, Kerambit Berantai, Racun Kerambit; kritis +12% |
 | `94-gerbang-cerita.js` | Gerbang ke area yang belum dibutuhkan cerita/misi dipalang (garis merah-putih) sampai ceritanya sampai ke sana |
 | `95-arena-bos-bersih.js` | Saat melawan bos, monster kecil dari zona disingkirkan dari sekitar pertarungan (anak buah panggilan bos tetap) |
-| `96-main.js` | Loop utama (dimuat paling akhir) |
+| `97-kepala-menu.js` | Kepala menu jeda di HP: label pecah di "›", judul tepat di tengah & dikecilkan otomatis bila tidak muat |
+| `98-main.js` | Loop utama (dimuat paling akhir) |
 
 Cerita utama ada di folder `src/cerita/`: `bab-1.js` ... `bab-5.js` (satu file per bab), digabung di `semua.js`.
 

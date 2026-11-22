@@ -474,8 +474,9 @@ h1 span { color: var(--gold); }
 @media (max-width: 760px), (max-height: 560px) {
   .panel.small .pview { grid-template-columns: auto minmax(0, 1fr); column-gap: 12px; row-gap: 10px; align-items: center; }
   .panel.small .pview > * { grid-column: 1 / -1; }
-  .panel.small .pview > .eyebrow { grid-column: 1; max-width: 9.5em; text-align: left; line-height: 1.25; padding: 4px 8px; border: 1px solid var(--line); border-radius: 8px; background: rgba(244, 185, 66, 0.08); }
-  .panel.small .pview > h1 { grid-column: 2; text-align: center; font-size: 2rem; line-height: 0.95; }
+  /* label kecil di kiri atas, judul besar tepat di tengah panel (satu baris dengan label) */
+  .panel.small .pview > .eyebrow { grid-column: 1; grid-row: 1; justify-self: start; position: relative; z-index: 1; width: min-content; max-width: none; white-space: normal; overflow-wrap: normal; text-align: left; font-size: 0.56rem; letter-spacing: 0.12em; line-height: 1.25; padding: 3px 6px; border: 1px solid var(--line); border-radius: 7px; background: rgba(244, 185, 66, 0.08); }
+  .panel.small .pview > h1 { grid-column: 1 / -1; grid-row: 1; text-align: center; padding-inline: 4.6rem; font-size: clamp(1.5rem, 6.5vw, 2rem); line-height: 0.95; }
   .panel.small .pview > .lead, .panel.small .pview > .set-note { text-align: left; max-width: none; }
 }
 @media (max-height: 520px) {
@@ -1096,4 +1097,5 @@ h1 span { color: var(--gold); }
 <script src="js/92-hero-jawara.js"></script>
 <script src="js/94-gerbang-cerita.js"></script>
 <script src="js/95-arena-bos-bersih.js"></script>
-<script src="js/96-main.js"></script>
+<script src="js/97-kepala-menu.js"></script>
+<script src="js/98-main.js"></script>
