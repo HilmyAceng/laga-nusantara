@@ -337,6 +337,26 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 .adegan-lewati { position: absolute; top: calc(12vh + 10px); right: 16px; padding: 7px 14px; border-radius: 999px; border: 1px solid var(--line); background: rgba(12, 8, 22, 0.7); color: #f7efe3; font: 800 0.8rem/1 inherit; cursor: pointer; }
 .adegan-petunjuk { position: absolute; bottom: 3vh; left: 0; right: 0; margin: 0; text-align: center; font-size: 0.7rem; color: rgba(247, 239, 227, 0.6); pointer-events: none; }
 
+/* ensiklopedia musuh (js/81-ensiklopedia-musuh.js) */
+.ens-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 8px; }
+.ens-kartu { display: grid; justify-items: center; gap: 2px; padding: 6px 6px 8px; border-radius: 12px; border: 1px solid var(--line); background: rgba(255, 255, 255, 0.05); color: var(--ink); font: inherit; cursor: pointer; }
+.ens-kartu:hover, .ens-kartu:focus-visible { border-color: var(--gold); }
+.ens-kartu img { width: 84px; height: 84px; object-fit: contain; }
+.ens-kartu b { font-size: 0.78rem; text-align: center; line-height: 1.15; }
+.ens-kartu small { font-size: 0.66rem; color: var(--ink-dim); }
+.ens-kartu.ens-bos { border-color: rgba(229, 72, 77, 0.5); background: rgba(229, 72, 77, 0.08); }
+.ens-belum img { filter: brightness(0) drop-shadow(0 0 1px rgba(255, 255, 255, 0.35)); opacity: 0.85; }
+.ens-kartu.ens-belum b { color: var(--ink-dim); letter-spacing: 0.15em; }
+.ens-kembali { justify-self: start; }
+.ens-detail { display: grid; grid-template-columns: 120px 1fr; gap: 12px; align-items: center; padding: 10px; border-radius: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--line); }
+.ens-detail.ens-bos { border-color: rgba(229, 72, 77, 0.55); }
+.ens-detail img { width: 120px; height: 120px; object-fit: contain; }
+.ens-detail h3 { margin: 0 0 4px; }
+.ens-detail p { margin: 0 0 4px; font-size: 0.85rem; line-height: 1.4; }
+.ens-julukan { color: #ff8080; font-weight: 800; font-size: 0.75rem !important; letter-spacing: 0.1em; text-transform: uppercase; }
+.ens-kutip { font-style: italic; color: var(--ink-dim); }
+@media (max-width: 520px) { .ens-detail { grid-template-columns: 1fr; justify-items: center; text-align: center; } }
+
 /* ---------- Overlay & dialog ---------- */
 .overlay {
   position: absolute; inset: 0; display: grid; place-items: safe center; overflow-y: auto; touch-action: pan-y;
@@ -653,6 +673,7 @@ h1 span { color: var(--gold); }
         <div class="menu">
           <button class="go alt" type="button" data-go="cara" data-t="h.cara">Cara Bermain</button>
           <button class="go alt" type="button" data-go="koleksi" data-t="h.koleksi">Koleksi Jimat</button>
+          <button class="go alt" type="button" data-go="ensiklopedia" data-t="h.ens">Ensiklopedia Musuh</button>
           <button class="go alt" type="button" data-go="debuff" data-t="h.debuff">Debuff</button>
           <button class="go alt back" type="button" data-go="main" data-t="h.kembali">← Kembali</button>
         </div>
@@ -680,6 +701,14 @@ h1 span { color: var(--gold); }
         <h1 data-th="h.kesJudul">Kesu<span>litan</span></h1>
         <div class="gp-list" id="kesIsi"></div>
         <div class="menu"><button class="go alt back" type="button" data-go="settings" data-t="h.kembali">← Kembali</button></div>
+      </div>
+
+      <!-- Halaman: ensiklopedia musuh (js/81-ensiklopedia-musuh.js) -->
+      <div class="pview" data-view="ensiklopedia" hidden>
+        <p class="eyebrow" data-t="h.ensEyebrow">Gameplay › Ensiklopedia</p>
+        <h1 data-th="h.ensJudul">Ensiklopedia <span>Musuh</span></h1>
+        <div class="gp-list" id="ensIsi"></div>
+        <div class="menu"><button class="go alt back" type="button" data-go="gameplay" data-t="h.kembali">← Kembali</button></div>
       </div>
 
       <!-- Halaman: koleksi jimat (js/67-koleksi-jimat.js) -->
@@ -1036,6 +1065,7 @@ h1 span { color: var(--gold); }
 <script src="js/78-sutradara.js"></script>
 <script src="js/79-prolog.js"></script>
 <script src="js/80-adegan-bos.js"></script>
-<script src="js/81-main.js"></script>
+<script src="js/81-ensiklopedia-musuh.js"></script>
+<script src="js/82-main.js"></script>
 <script>if("serviceWorker" in navigator){addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}</script>
 </body></html>

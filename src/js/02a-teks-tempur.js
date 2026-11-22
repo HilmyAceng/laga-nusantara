@@ -6,6 +6,17 @@
 "use strict";
 
 Object.assign(TEKS.id, {
+  // ensiklopedia musuh (81-ensiklopedia-musuh.js)
+  "h.ens": "Ensiklopedia Musuh", "h.ensEyebrow": "Gameplay › Ensiklopedia", "h.ensJudul": "Ensiklopedia <span>Musuh</span>",
+  "ens.ringkas": "Ditemui {lihat} · Dikalahkan {kalah} · dari {total} musuh", "ens.info": "Ketuk kartu untuk melihat detail. Musuh yang belum pernah ditemui tampil sebagai bayangan.",
+  "ens.biasa": "Monster", "ens.bos": "Bos", "ens.ditemui": "Pernah ditemui", "ens.kalahN": "Dikalahkan {n}×", "ens.daftar": "Daftar musuh",
+  "ens.belumTeks": "Belum pernah ditemui. Jelajahi dunia untuk menemukannya. Petunjuk: musuh ini sekitar Lv {lv}.",
+  "ens.level": "Level dasar", "ens.kecepatan": "Kecepatan", "ens.hadiah": "Hadiah", "ens.koin": "koin", "ens.tempat": "Tempat", "ens.kalah": "Dikalahkan", "ens.fase": "Jumlah fase",
+  "ens.sifat": "Sifat & kemampuan", "ens.sDekat": "Menyerang jarak dekat", "ens.sJauh": "Menyerang dari jauh", "ens.sTerbang": "Terbang (melewati rintangan)",
+  "ens.sTerjang": "Suka menerjang — lihat tanda merah, lalu menghindar ke samping", "ens.sTembak": "Menembakkan peluru", "ens.sCopet": "Mencuri koin saat memukul (kembali kalau dikalahkan)",
+  "ens.sCepat": "Bergerak cepat", "ens.sLambat": "Bergerak lambat",
+  "ens.debuff": "Serangannya bisa memberi: {daftar}", "ens.khas": "Jurus khas: {daftar}", "ens.legenda": "Jimat legenda: {nama} (Cermin Gaib tingkat tinggi)",
+  "ens.catatanAngka": "Angka di atas adalah nilai dasar. Musuh makin kuat sesuai level & kesulitan.",
   // cutscene (78-80)
   "h.lewati": "Lewati ⏭", "h.adeganPetunjuk": "Ketuk = lanjut · tahan = lewati",
   // hero jarak dekat (76-melee.js)
@@ -230,6 +241,16 @@ Object.assign(TEKS.id, {
 });
 
 Object.assign(TEKS.en, {
+  "h.ens": "Bestiary", "h.ensEyebrow": "Gameplay › Bestiary", "h.ensJudul": "Best<span>iary</span>",
+  "ens.ringkas": "Seen {lihat} · Defeated {kalah} · of {total} enemies", "ens.info": "Tap a card for details. Enemies you haven't met yet appear as shadows.",
+  "ens.biasa": "Monsters", "ens.bos": "Bosses", "ens.ditemui": "Seen", "ens.kalahN": "Defeated {n}×", "ens.daftar": "Enemy list",
+  "ens.belumTeks": "Not met yet. Explore the world to find it. Hint: this enemy is around Lv {lv}.",
+  "ens.level": "Base level", "ens.kecepatan": "Speed", "ens.hadiah": "Reward", "ens.koin": "coins", "ens.tempat": "Location", "ens.kalah": "Defeated", "ens.fase": "Phases",
+  "ens.sifat": "Traits & abilities", "ens.sDekat": "Melee attacker", "ens.sJauh": "Ranged attacker", "ens.sTerbang": "Flies (passes over obstacles)",
+  "ens.sTerjang": "Charges — watch the red mark, then dodge sideways", "ens.sTembak": "Fires projectiles", "ens.sCopet": "Steals coins on hit (returned when defeated)",
+  "ens.sCepat": "Moves fast", "ens.sLambat": "Moves slowly",
+  "ens.debuff": "Its attacks can inflict: {daftar}", "ens.khas": "Signature moves: {daftar}", "ens.legenda": "Legendary charm: {nama} (high-tier Magic Mirror)",
+  "ens.catatanAngka": "Numbers above are base values. Enemies grow stronger with level & difficulty.",
   "h.lewati": "Skip ⏭", "h.adeganPetunjuk": "Tap = next · hold = skip",
   "melee.refund": "Skills updated! {n} skill points refunded, reassign them with the ⚔ button.", "melee.serap": "Shield",
   "kes.judul": "Difficulty (new game)", "kes.santai": "Relaxed", "kes.normal": "Normal", "kes.sulit": "Hard",

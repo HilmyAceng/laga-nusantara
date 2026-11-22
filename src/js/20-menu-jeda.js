@@ -66,12 +66,12 @@ function showCtlTab(which) {
 $("tabKey").addEventListener("click", () => showCtlTab("key"));
 
 // Pindah halaman di menu jeda: main → settings → volume / layar / control.
-const PAUSE_BACK = { main: null, settings: "main", bahasa: "settings", control: "settings", volume: "settings", layar: "settings", credit: "main", keluar: "main", gameplay: "main", debuff: "gameplay", jurus: null, jimat: null, cara: "gameplay", status: null, koleksi: "gameplay", kesulitan: "settings" };
+const PAUSE_BACK = { main: null, settings: "main", bahasa: "settings", control: "settings", volume: "settings", layar: "settings", credit: "main", keluar: "main", gameplay: "main", debuff: "gameplay", jurus: null, jimat: null, cara: "gameplay", status: null, koleksi: "gameplay", kesulitan: "settings", ensiklopedia: "gameplay" };
 let pauseView = "main";
 function showPauseView(view, silent) {
   pauseView = view;
   document.querySelectorAll("#pauseBox .pview").forEach((el) => { el.hidden = el.dataset.view !== view; });
-  $("pausePanel").classList.toggle("wide", ["volume", "control", "jurus", "jimat", "cara", "status", "koleksi", "kesulitan"].includes(view));
+  $("pausePanel").classList.toggle("wide", ["volume", "control", "jurus", "jimat", "cara", "status", "koleksi", "kesulitan", "ensiklopedia"].includes(view));
   if (view !== "jimat") jimatDariToko = false;
   if (view === "volume") refreshAudioButtons();
   if (view === "layar") { refreshLayar(); refreshPanah(); }
@@ -85,6 +85,7 @@ function showPauseView(view, silent) {
   if (view === "status") isiHalamanStatus();   // 66-status-karakter.js
   if (view === "koleksi") isiKoleksiJimat();   // 67-koleksi-jimat.js
   if (view === "kesulitan") isiHalamanKesulitan();   // 71-kesulitan.js
+  if (view === "ensiklopedia") { if (pauseView !== "ensiklopedia" || !silent) musuhDipilih = null; isiEnsiklopedia(); }   // 81-ensiklopedia-musuh.js
   if (!silent) sfx.click();
   $("pauseBox").scrollTop = 0;
   const first = document.querySelector(`#pauseBox .pview[data-view="${view}"] button:not(:disabled)`);
