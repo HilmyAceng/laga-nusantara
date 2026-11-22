@@ -6,6 +6,18 @@
 "use strict";
 
 Object.assign(TEKS.id, {
+  // pasif unik jimat legenda (83-pasif-legenda.js)
+  "efek.amuk": "Amukan: saat nyawa di bawah 30%, serangan +35% & damage diterima -15%",
+  "efek.hantam5": "Hantaman Penjaga: tiap pukulan ke-5 menghantam tanah & melumpuhkan musuh sekitar",
+  "efek.pulihDiam": "Kulit Rawa: 4 detik tak terkena pukulan → pulih 2% nyawa per detik",
+  "efek.racunPeka": "Bisa Berlipat: musuh yang keracunan menerima damage +25% darimu",
+  "efek.karangHidup": "Karang Hidup: tiap 12 detik mendapat perisai 10% nyawa maksimal",
+  "efek.pulihBunuh": "Seribu Gigitan: tiap mengalahkan musuh pulih 4% nyawa maksimal",
+  "efek.tumpukTulang": "Tulang Abadi: tiap mengalahkan musuh serangan +3% (maks 10 tumpuk, hilang saat pindah area)",
+  "efek.tintaGuling": "Awan Tinta: berguling meninggalkan awan tinta, musuh di dalamnya lambat & lemah",
+  "efek.petirGuling": "Sambaran Petir: berguling memanggil petir ke musuh terdekat & melumpuhkannya",
+  "efek.hentiWaktu": "Hentian Waktu: memakai pamungkas melumpuhkan semua musuh di sekitar",
+  "efek.gemaBayang": "Gema Bayangan: 25% pukulanmu disusul tebasan bayangan (50% damage)",
   // ensiklopedia musuh (81-ensiklopedia-musuh.js)
   "h.ens": "Ensiklopedia Musuh", "h.ensEyebrow": "Gameplay › Ensiklopedia", "h.ensJudul": "Ensiklopedia <span>Musuh</span>",
   "ens.ringkas": "Ditemui {lihat} · Dikalahkan {kalah} · dari {total} musuh", "ens.info": "Ketuk kartu untuk melihat detail. Musuh yang belum pernah ditemui tampil sebagai bayangan.",
@@ -128,7 +140,7 @@ Object.assign(TEKS.id, {
   "efek.tenaga": "Tenaga Dalam +{n}%", "efek.pamungkas": "Damage pamungkas +{n}%", "efek.hindarCd": "Jeda hindar -{n}%",
   "efek.kritis": "Peluang kritis +{n}%", "efek.kritisKali": "Damage kritis +{n}%", "efek.hisap": "Hisap nyawa {n}% dari damage",
   "efek.duri": "Pantulkan {n}% damage", "efek.lumpuh": "{n}% peluang musuh lumpuh", "efek.tangkis": "Kuda-kuda tangkis +{n} dtk",
-  "efek.kebal": "Kebal {daftar}", "efek.dot": "{n}% peluang memberi {jenis}", "efek.jejakApi": "Berguling meninggalkan jejak api", "efek.bangkit": "Bangkit sekali saat pingsan (tiap 5 menit)",
+  "efek.kebal": "Kebal {daftar}", "efek.dot": "{n}% peluang memberi {jenis}", "efek.jejakApi": "Jejak Api: berguling meninggalkan jejak api", "efek.bangkit": "Napas Naga: bangkit sekali saat pingsan (tiap 5 menit)",
   // ramuan & toko
   "ramuan.tawar": "Ramuan ini langsung diminum, khasiatnya 2 menit. Cocok sebelum melawan bos! (Koinmu: {koin})",
   "ramuan.koin": "koin",
@@ -241,6 +253,17 @@ Object.assign(TEKS.id, {
 });
 
 Object.assign(TEKS.en, {
+  "efek.amuk": "Rampage: below 30% health, attack +35% & damage taken -15%",
+  "efek.hantam5": "Guardian Slam: every 5th hit slams the ground & stuns nearby enemies",
+  "efek.pulihDiam": "Swamp Hide: 4s without being hit → heal 2% health per second",
+  "efek.racunPeka": "Doubled Venom: poisoned enemies take +25% damage from you",
+  "efek.karangHidup": "Living Coral: every 12s gain a shield worth 10% max health",
+  "efek.pulihBunuh": "Thousand Bites: every enemy defeated heals 4% max health",
+  "efek.tumpukTulang": "Undying Bones: every enemy defeated grants +3% attack (max 10 stacks, lost when changing area)",
+  "efek.tintaGuling": "Ink Cloud: rolling leaves an ink cloud that slows & weakens enemies inside",
+  "efek.petirGuling": "Thunder Strike: rolling calls lightning on the nearest enemy & stuns it",
+  "efek.hentiWaktu": "Time Stop: using your ultimate stuns every enemy nearby",
+  "efek.gemaBayang": "Shadow Echo: 25% of your hits are followed by a shadow slash (50% damage)",
   "h.ens": "Bestiary", "h.ensEyebrow": "Gameplay › Bestiary", "h.ensJudul": "Best<span>iary</span>",
   "ens.ringkas": "Seen {lihat} · Defeated {kalah} · of {total} enemies", "ens.info": "Tap a card for details. Enemies you haven't met yet appear as shadows.",
   "ens.biasa": "Monsters", "ens.bos": "Bosses", "ens.ditemui": "Seen", "ens.kalahN": "Defeated {n}×", "ens.daftar": "Enemy list",
@@ -350,7 +373,7 @@ Object.assign(TEKS.en, {
   "efek.tenaga": "Inner Power +{n}%", "efek.pamungkas": "Ultimate damage +{n}%", "efek.hindarCd": "Dodge cooldown -{n}%",
   "efek.kritis": "Crit chance +{n}%", "efek.kritisKali": "Crit damage +{n}%", "efek.hisap": "Lifesteal {n}% of damage",
   "efek.duri": "Reflect {n}% damage", "efek.lumpuh": "{n}% chance to stun", "efek.tangkis": "Parry stance +{n}s",
-  "efek.kebal": "Immune to {daftar}", "efek.dot": "{n}% chance to inflict {jenis}", "efek.jejakApi": "Rolling leaves a trail of fire", "efek.bangkit": "Revive once when knocked out (every 5 min)",
+  "efek.kebal": "Immune to {daftar}", "efek.dot": "{n}% chance to inflict {jenis}", "efek.jejakApi": "Fire Trail: rolling leaves a trail of fire", "efek.bangkit": "Dragon's Breath: revive once when knocked out (every 5 min)",
   "ramuan.tawar": "These brews are drunk on the spot and last 2 minutes. Perfect before a boss! (Your coins: {koin})",
   "ramuan.koin": "coins",
   "dlg.ramuan": "Brews ▸", "dlg.jimat": "Charms & Forge ▸", "dlg.kembali": "← Back",

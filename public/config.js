@@ -748,19 +748,19 @@ const JIMAT = {
   wesiKuning:   { name: "Wesi Kuning", rarity: "langka", efek: { tangkis: 0.08, duri: 0.3 }, en: { name: "Yellow Iron" } },
 
   // legenda: khas tiap bos (bos = jenis bos yang menjatuhkannya)
-  buluGenderuwo:  { name: "Bulu Genderuwo", rarity: "legenda", bos: "genderuwo", efek: { tahan: 0.1, duri: 0.5 }, en: { name: "Genderuwo Fur" } },
-  gadaDwarapala:  { name: "Gada Dwarapala Mini", rarity: "legenda", bos: "dwarapala", efek: { atk: 0.08, lumpuh: 0.08 }, en: { name: "Miniature Dwarapala Club" } },
-  sisikBuayaPutih:{ name: "Sisik Buaya Putih", rarity: "legenda", bos: "buayaPutih", efek: { hp: 0.15, kebal: ["lambat"] }, en: { name: "White Crocodile Scale" } },
+  buluGenderuwo:  { name: "Bulu Genderuwo", rarity: "legenda", bos: "genderuwo", efek: { tahan: 0.1, duri: 0.5, amuk: 1 }, en: { name: "Genderuwo Fur" } },
+  gadaDwarapala:  { name: "Gada Dwarapala Mini", rarity: "legenda", bos: "dwarapala", efek: { atk: 0.08, lumpuh: 0.08, hantam5: 1 }, en: { name: "Miniature Dwarapala Club" } },
+  sisikBuayaPutih:{ name: "Sisik Buaya Putih", rarity: "legenda", bos: "buayaPutih", efek: { hp: 0.15, kebal: ["lambat"], pulihDiam: 1 }, en: { name: "White Crocodile Scale" } },
   mahkotaBanaspati:{ name: "Mahkota Banaspati", rarity: "legenda", bos: "rajaBanaspati", efek: { jejakApi: 1, atk: 0.06, kebal: ["terbakar"] }, en: { name: "Banaspati Crown" } },
-  mustikaUlar:    { name: "Mustika Ular", rarity: "legenda", bos: "silumanUlar", efek: { dot: { jenis: "racun", peluang: 0.2 }, kebal: ["racun"] }, en: { name: "Serpent Gem" } },
-  perisaiKarang:  { name: "Perisai Karang", rarity: "legenda", bos: "panglimaKarang", efek: { tahan: 0.15, tangkis: 0.06 }, en: { name: "Coral Shield" } },
-  taringKelabang: { name: "Taring Kelabang", rarity: "legenda", bos: "kelabang", efek: { hisap: 0.06, dot: { jenis: "berdarah", peluang: 0.15 } }, en: { name: "Centipede Fang" } },
+  mustikaUlar:    { name: "Mustika Ular", rarity: "legenda", bos: "silumanUlar", efek: { dot: { jenis: "racun", peluang: 0.2 }, kebal: ["racun"], racunPeka: 1 }, en: { name: "Serpent Gem" } },
+  perisaiKarang:  { name: "Perisai Karang", rarity: "legenda", bos: "panglimaKarang", efek: { tahan: 0.15, tangkis: 0.06, karangHidup: 1 }, en: { name: "Coral Shield" } },
+  taringKelabang: { name: "Taring Kelabang", rarity: "legenda", bos: "kelabang", efek: { hisap: 0.06, dot: { jenis: "berdarah", peluang: 0.15 }, pulihBunuh: 1 }, en: { name: "Centipede Fang" } },
   sisikNaga:      { name: "Sisik Naga Kencana", rarity: "legenda", bos: "naga", efek: { atk: 0.15, kebal: ["terbakar"], bangkit: 1 }, en: { name: "Golden Dragon Scale" } },
-  tulangRaja:     { name: "Tulang Raja Jerangkong", rarity: "legenda", bos: "rajaJerangkong", efek: { exp: 0.2, kritisKali: 0.3 }, en: { name: "Skeleton King's Bone" } },
-  tintaGurita:    { name: "Tinta Gurita", rarity: "legenda", bos: "guritaRaksasa", efek: { cd: 0.12, kebal: ["bingung"] }, en: { name: "Octopus Ink" } },
-  buluRajawali:   { name: "Bulu Rajawali Petir", rarity: "legenda", bos: "rajawaliPetir", efek: { gerak: 0.12, hindarCd: 0.25, kebal: ["lumpuh"] }, en: { name: "Thunder Eagle Feather" } },
-  kunciMenara:    { name: "Kunci Menara Kala", rarity: "legenda", bos: "penjagaMenara", efek: { tenaga: 0.35, pamungkas: 0.2 }, en: { name: "Kala Tower Key" } },
-  mahkotaKalamurka:{ name: "Mahkota Kalamurka", rarity: "legenda", bos: "kalamurka", efek: { bos: 0.2, atk: 0.1, kritis: 0.06 }, en: { name: "Kalamurka's Crown" } },
+  tulangRaja:     { name: "Tulang Raja Jerangkong", rarity: "legenda", bos: "rajaJerangkong", efek: { exp: 0.2, kritisKali: 0.3, tumpukTulang: 1 }, en: { name: "Skeleton King's Bone" } },
+  tintaGurita:    { name: "Tinta Gurita", rarity: "legenda", bos: "guritaRaksasa", efek: { cd: 0.12, kebal: ["bingung"], tintaGuling: 1 }, en: { name: "Octopus Ink" } },
+  buluRajawali:   { name: "Bulu Rajawali Petir", rarity: "legenda", bos: "rajawaliPetir", efek: { gerak: 0.12, hindarCd: 0.25, kebal: ["lumpuh"], petirGuling: 1 }, en: { name: "Thunder Eagle Feather" } },
+  kunciMenara:    { name: "Kunci Menara Kala", rarity: "legenda", bos: "penjagaMenara", efek: { tenaga: 0.35, pamungkas: 0.2, hentiWaktu: 1 }, en: { name: "Kala Tower Key" } },
+  mahkotaKalamurka:{ name: "Mahkota Kalamurka", rarity: "legenda", bos: "kalamurka", efek: { bos: 0.2, atk: 0.1, kritis: 0.06, gemaBayang: 1 }, en: { name: "Kalamurka's Crown" } },
 };
 const WARNA_RARITY = { biasa: "#e8e2d0", langka: "#6fb7ff", legenda: "#f4b942" };
 

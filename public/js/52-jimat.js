@@ -61,7 +61,7 @@ function teksEfek(id) {
   for (const [e, v] of Object.entries(J.efek)) {
     if (e === "kebal") out.push(t("efek.kebal", { daftar: v.map((j) => t("debuff." + j)).join(", ") }));
     else if (e === "dot") out.push(t("efek.dot", { n: Math.round(v.peluang * k * 100), jenis: t("debuff." + v.jenis) }));
-    else if (e === "jejakApi" || e === "bangkit") out.push(t("efek." + e));
+    else if (EFEK_UNIK.has(e)) out.push("✦ " + t("efek." + e));   // pasif unik jimat legenda (83-pasif-legenda.js)
     else if (e === "tangkis") out.push(t("efek.tangkis", { n: (v * k).toFixed(2) }));
     else out.push(t("efek." + e, { n: Math.round(v * k * 100) }));
   }
