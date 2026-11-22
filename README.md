@@ -8,6 +8,7 @@ Bisa dimainkan di HP (joystick + tombol sentuh, mode lanskap) dan desktop (keybo
 - **Sistem tarung lanjutan**:
   - **4 jurus per kelas** (terbuka di Lv 1, 8, 18, 30), dua dipasang sekaligus (`S` & `F`). Contoh: Badai Golok, Gelombang Angin, Langkah Bayang, Panah Jerat, Hujan Panah, Panah Tembus, Benteng, Lompatan Palu, Raungan, Perisai Api, Tapak Es, Meteor
   - **Jurus pamungkas** (`R`, mulai Lv 5) saat bar **Tenaga Dalam** (garis emas di bawah nyawa) penuh: Seribu Tebasan, Panah Garuda, Palu Bumi, Hujan Meteor
+  - **Masukan beta pertama**: notif tengah di HP kecil & di pita atas (maks 2), panah petunjuk berjarak tetap, layar penuh + mendatar otomatis pada sentuhan pertama, dan pembaruan otomatis tiap ada versi baru (`build.sh` membuat nomor build, cache SW, & `versi.json`)
   - **Siap dibagikan**: pratinjau link (gambar `public/icons/og.jpg` + deskripsi, dibuat di `build.sh`), deskripsi manifest baru, dan teks ajakan beta di `AJAKAN-BETA.md`
   - **Bahasa di layar judul**: tombol Indonesia / English saat memilih hero; pemain baru otomatis Inggris, pemain lama tetap Indonesia, pilihan tersimpan
   - **Area terbuka mengikuti cerita**: pemain baru tidak bisa keluar ke area yang belum dituju cerita / misi (gerbang dipalang); area yang pernah dikunjungi tetap terbuka
@@ -201,7 +202,8 @@ Semua menu memakai tombol. `Esc` = kembali satu halaman.
 | `94-gerbang-cerita.js` | Gerbang ke area yang belum dibutuhkan cerita/misi dipalang (garis merah-putih) sampai ceritanya sampai ke sana |
 | `95-arena-bos-bersih.js` | Saat melawan bos, monster kecil dari zona disingkirkan dari sekitar pertarungan (anak buah panggilan bos tetap) |
 | `97-kepala-menu.js` | Kepala menu jeda di HP: label pecah di "›", judul tepat di tengah & dikecilkan otomatis bila tidak muat |
-| `98-main.js` | Loop utama (dimuat paling akhir) |
+| `99-pembaruan.js` | Pembaruan otomatis: cek `versi.json`, muat ulang ke versi terbaru (langsung di layar judul/menu, atau saat menu dibuka) |
+| `100-main.js` | Loop utama (dimuat paling akhir) |
 
 Cerita utama ada di folder `src/cerita/`: `bab-1.js` ... `bab-5.js` (satu file per bab), digabung di `semua.js`.
 

@@ -3,6 +3,9 @@
 # ke public/, lalu perbarui daftar file offline di public/sw.js.
 set -euo pipefail
 cd "$(dirname "$0")"
+# Nomor build unik (waktu build). Dipakai untuk: nama cache service worker, versi.json,
+# dan window.LAGA_BUILD di halaman → game tahu kalau ada versi yang lebih baru (99-pembaruan.js).
+BUILD_ID="$(date +%Y%m%d%H%M%S)"
 {
   echo '<!doctype html>'
   echo '<html lang="id"><head>'
@@ -30,6 +33,7 @@ cd "$(dirname "$0")"
   echo '<meta name="twitter:card" content="summary_large_image">'
   echo '<meta name="twitter:image" content="https://hilmyaceng.github.io/laga-nusantara/icons/og.jpg">'
   echo '<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);box-sizing:border-box;height:100%}[hidden]{display:none!important}</style>'
+  echo "<script>window.LAGA_BUILD=\"$BUILD_ID\";</script>"
   echo '</head><body>'
   cat src/game.html
   echo '<script>if("serviceWorker" in navigator){addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}</script>'
@@ -44,5 +48,8 @@ files='"./", "./index.html", "./config.js", "./manifest.webmanifest", "./icons/i
 for f in src/cerita/*.js; do files="$files, \"./cerita/$(basename "$f")\""; done
 for f in src/js/*.js; do files="$files, \"./js/$(basename "$f")\""; done
 sed -i "s|^const FILES = .*|const FILES = [$files];|" public/sw.js
+# cache service worker ikut berganti tiap build (tidak perlu dinaikkan manual lagi)
+sed -i "s|^const CACHE = .*|const CACHE = \"laga-$BUILD_ID\";|" public/sw.js
+echo "{\"build\": \"$BUILD_ID\"}" > public/versi.json
 
-echo "OK -> public/index.html, public/config.js, public/js/ ($(ls src/js | wc -l) file), sw.js"
+echo "OK -> public/index.html, public/config.js, public/js/ ($(ls src/js | wc -l) file), sw.js, versi.json (build $BUILD_ID)"

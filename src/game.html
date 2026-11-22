@@ -350,6 +350,15 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 .bahasa-judul .go { padding: 6px 12px; font-size: 0.8rem; }
 .bahasa-judul .go[aria-pressed="true"] { background: var(--gold); color: #1b1208; border-color: var(--gold); }
 
+/* HP: notif tengah kecil & tepat di bawah baris HUD atas, supaya tidak menutupi pertempuran */
+@media (max-width: 760px), (max-height: 560px) {
+  .toasts { top: calc(8px + env(safe-area-inset-top, 0px)); width: max-content; max-width: min(36vw, 280px); gap: 3px; }
+  .toasts .toast:nth-last-child(n+3) { display: none; }   /* paling banyak 2 notif sekaligus */
+  .stage.dn-on .toasts { top: calc(8px + 64px + env(safe-area-inset-top, 0px)); }
+  .toast { font-size: 0.68rem; padding: 3px 9px; border-radius: 8px; white-space: normal; text-align: center; line-height: 1.25; opacity: 0.92; }
+  .toast.big { font-size: 1.15rem; padding: 2px 12px 0; }
+}
+
 /* ---------- Overlay & dialog ---------- */
 .overlay {
   position: absolute; inset: 0; display: grid; place-items: safe center; overflow-y: auto; touch-action: pan-y;
@@ -1098,4 +1107,5 @@ h1 span { color: var(--gold); }
 <script src="js/94-gerbang-cerita.js"></script>
 <script src="js/95-arena-bos-bersih.js"></script>
 <script src="js/97-kepala-menu.js"></script>
-<script src="js/98-main.js"></script>
+<script src="js/99-pembaruan.js"></script>
+<script src="js/100-main.js"></script>

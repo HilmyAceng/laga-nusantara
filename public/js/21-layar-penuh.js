@@ -8,7 +8,7 @@
 "use strict";
 
 const LAYAR_KEY = "laga.layar";
-const layar = Object.assign({ penuh: false }, store.get(LAYAR_KEY, {}));
+const layar = Object.assign({ penuh: true }, store.get(LAYAR_KEY, {}));   // bawaan: layar penuh otomatis (sentuhan/tombol pertama)
 const docEl = document.documentElement;
 // Bisa layar penuh? (iPhone Safari belum mendukung untuk halaman web biasa)
 const fsBisa = !!(docEl.requestFullscreen || docEl.webkitRequestFullscreen);
@@ -23,7 +23,13 @@ function masukPenuh() {
   if (!fsBisa || fsAktif()) return;
   fsDariSaya = true;
   const req = docEl.requestFullscreen ? docEl.requestFullscreen({ navigationUI: "hide" }) : docEl.webkitRequestFullscreen();
-  if (req && req.catch) req.catch(() => { fsDariSaya = false; refreshLayar(); });
+  if (req && req.then) req.then(kunciMendatar).catch(() => { fsDariSaya = false; refreshLayar(); });
+  else kunciMendatar();
+}
+// HP: kunci layar mendatar (hanya bisa saat layar penuh; iPhone belum mendukung → petunjuk "putar HP")
+function kunciMendatar() {
+  if (!isTouch || !screen.orientation || !screen.orientation.lock) return;
+  screen.orientation.lock("landscape").catch(() => {});
 }
 function keluarPenuh() {
   if (!fsAktif()) return;

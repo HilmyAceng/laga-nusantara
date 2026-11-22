@@ -6,6 +6,7 @@
 "use strict";
 
 Object.assign(TEKS.id, {
+  "baru.ada": "Versi baru tersedia — akan dimuat saat kamu membuka menu ❚❚", "baru.memuat": "Memuat versi terbaru…",
   "masukan.info": "Kalau aplikasi email tidak terbuka, kirim masukan ke {email}",
   // hero baru (89-92)
   "hd.wayang": "Lindungan Wayang!", "hd.sembur": "Sembur Jamu!", "hd.bayang": "Lebur Bayang!", "tabib.ruwatan": "Ruwatan!",
@@ -262,6 +263,7 @@ Object.assign(TEKS.id, {
 });
 
 Object.assign(TEKS.en, {
+  "baru.ada": "A new version is available — it will load when you open the ❚❚ menu", "baru.memuat": "Loading the latest version…",
   "masukan.info": "If your email app didn't open, send feedback to {email}",
   "hd.wayang": "Puppet Guard!", "hd.sembur": "Jamu Spray!", "hd.bayang": "Shadow Merge!", "tabib.ruwatan": "Ruwatan!",
   "jurus.naik10": "Mastery: +25% damage & -10% cooldown extra", "toast.pingsanAman": "You fainted... carried back to the village. Your coins are safe.",

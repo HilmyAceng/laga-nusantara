@@ -11,6 +11,7 @@
 
 const PANAH_KEY = "laga.panah";
 let panahNyala = store.get(PANAH_KEY, true) !== false;
+let panahSudut = null;   // arah panah yang dihaluskan
 
 // Jalur terpendek antar-area lewat gerbang: ["alam", "rawa", "pesisir"]
 function jalurArea(dari, ke) {
@@ -44,7 +45,7 @@ function tujuanDiArea() {
 function drawPanahTujuan(toScreen, time) {
   if (!panahNyala) return;
   const tj = tujuanDiArea();
-  if (!tj) return;
+  if (!tj) { panahSudut = null; return; }
   const [sx, sy] = toScreen(tj.x, tj.y), [px, py] = toScreen(P.x, P.y - 20);
   // batas aman: hindari kotak misi (atas) dan tombol/jurus (bawah)
   const m = 46, atas = 96, bawah = isTouch ? 150 : 110;
@@ -60,21 +61,21 @@ function drawPanahTujuan(toScreen, time) {
       ctx.beginPath(); ctx.moveTo(sx - 10, by - 12); ctx.lineTo(sx + 10, by - 12); ctx.lineTo(sx, by); ctx.closePath(); ctx.fill(); ctx.stroke();
     }
   } else {
-    // di luar layar: panah di tepi layar menunjuk arahnya
-    const a = Math.atan2(sy - py, sx - px);
-    const kx = Math.cos(a), ky = Math.sin(a);
-    const tx = kx > 0 ? (W - m - px) / kx : kx < 0 ? (m - px) / kx : Infinity;
-    const ty = ky > 0 ? (H - bawah - py) / ky : ky < 0 ? (atas - py) / ky : Infinity;
-    const k = Math.min(tx, ty), ax = px + kx * k, ay = py + ky * k;
-    const nyut = 1 + 0.08 * Math.sin(time * 6);
+    // di luar layar: panah mengitari hero pada jarak TETAP (tidak melompat dekat-jauh mengikuti tepi layar),
+    // arahnya dihaluskan supaya tidak bergoyang
+    const aTarget = Math.atan2(sy - py, sx - px);
+    if (panahSudut == null) panahSudut = aTarget;
+    panahSudut += Math.atan2(Math.sin(aTarget - panahSudut), Math.cos(aTarget - panahSudut)) * 0.18;
+    const a = panahSudut, R = clamp(Math.min(W, H) * 0.24, 70, 120);
+    const ax = clamp(px + Math.cos(a) * R, m, W - m), ay = clamp(py + Math.sin(a) * R, atas * 0.6, H - bawah * 0.6);
     ctx.translate(ax, ay);
-    ctx.fillStyle = "rgba(20,14,34,0.75)"; ctx.beginPath(); ctx.arc(0, 0, 22, 0, 6.28); ctx.fill();
-    ctx.rotate(a); ctx.scale(nyut, nyut);
-    ctx.fillStyle = "#f4b942"; ctx.beginPath(); ctx.moveTo(14, 0); ctx.lineTo(-8, -10); ctx.lineTo(-3, 0); ctx.lineTo(-8, 10); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = "rgba(20,14,34,0.6)"; ctx.beginPath(); ctx.arc(0, 0, 17, 0, 6.28); ctx.fill();
+    ctx.rotate(a);
+    ctx.fillStyle = "#f4b942"; ctx.beginPath(); ctx.moveTo(11, 0); ctx.lineTo(-6, -8); ctx.lineTo(-2, 0); ctx.lineTo(-6, 8); ctx.closePath(); ctx.fill();
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
     ctx.font = "700 15px Teko, sans-serif"; ctx.textAlign = "center"; ctx.lineWidth = 3; ctx.strokeStyle = "rgba(10,6,20,0.85)";
     const teks = (tj.ke ? AREAS[tj.ke].nama + " · " : "") + jarak + " m";
-    const ly = ay + (ay > H / 2 ? -30 : 38);
+    const ly = ay + (Math.sin(a) > 0 ? 32 : -24);
     const lx = clamp(ax, 70, W - 70);
     ctx.strokeText(teks, lx, ly); ctx.fillStyle = "#f4b942"; ctx.fillText(teks, lx, ly);
   }
