@@ -6,6 +6,8 @@
 "use strict";
 
 Object.assign(TEKS.id, {
+  // cutscene (78-80)
+  "h.lewati": "Lewati ⏭", "h.adeganPetunjuk": "Ketuk = lanjut · tahan = lewati",
   // hero jarak dekat (76-melee.js)
   "melee.refund": "Jurus diperbarui! {n} poin jurus dikembalikan, atur lagi lewat tombol ⚔.", "melee.serap": "Perisai",
   // kesulitan, kode save, grafis ringan, versi & masukan (71-74)
@@ -228,6 +230,7 @@ Object.assign(TEKS.id, {
 });
 
 Object.assign(TEKS.en, {
+  "h.lewati": "Skip ⏭", "h.adeganPetunjuk": "Tap = next · hold = skip",
   "melee.refund": "Skills updated! {n} skill points refunded, reassign them with the ⚔ button.", "melee.serap": "Shield",
   "kes.judul": "Difficulty (new game)", "kes.santai": "Relaxed", "kes.normal": "Normal", "kes.sulit": "Hard",
   "kes.santai.desc": "For enjoying the story. Enemies are much weaker, more EXP & coins.",

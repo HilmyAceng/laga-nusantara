@@ -300,7 +300,9 @@ function render(now) {
   const scale = clamp(Math.min(W / 720, H / 420), 0.75, 2.2);
   const vw = W / scale, vh = H / scale;
   let tx, ty;
-  if (P && mode !== "select") { tx = P.x; ty = P.y - 20; }
+  const tk = typeof targetKamera === "function" && targetKamera();   // cutscene (78-sutradara.js)
+  if (tk) { tx = tk.x; ty = tk.y; }
+  else if (P && mode !== "select") { tx = P.x; ty = P.y - 20; }
   else { tx = MW * T / 2 + Math.sin(time * 0.12) * 200; ty = 11 * T; }
   cam.x += (tx - cam.x) * 0.12; cam.y += (ty - cam.y) * 0.12;
   if (mode === "select") { cam.x = tx; cam.y = ty; }

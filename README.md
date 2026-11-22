@@ -8,6 +8,7 @@ Bisa dimainkan di HP (joystick + tombol sentuh, mode lanskap) dan desktop (keybo
 - **Sistem tarung lanjutan**:
   - **4 jurus per kelas** (terbuka di Lv 1, 8, 18, 30), dua dipasang sekaligus (`S` & `F`). Contoh: Badai Golok, Gelombang Angin, Langkah Bayang, Panah Jerat, Hujan Panah, Panah Tembus, Benteng, Lompatan Palu, Raungan, Perisai Api, Tapak Es, Meteor
   - **Jurus pamungkas** (`R`, mulai Lv 5) saat bar **Tenaga Dalam** (garis emas di bawah nyawa) penuh: Seribu Tebasan, Panah Garuda, Palu Bumi, Hujan Meteor
+  - **Cutscene**: prolog di awal permainan baru (dunia, ancaman kabut merah, tujuan pemain) & kemunculan dramatis tiap bos (kamera menyorot, nama & julukan besar, kalimat khas). Bisa dilewati (Lewati / Esc / tahan ketuk)
   - **Hero jarak dekat diperkuat**: Pendekar & Pendobrak 3 lapis hindar; pasif pengurang damage (Pendekar -10%, Pendobrak -20%); Tebasan Kilat kebal 1 detik; jurus baru Tebas Balik (ganti Badai Golok) & Dobrakan Perisai (ganti Raungan); Pendobrak punya Kulit Baja (-20% damage) & Benteng berupa perisai penyerap sejak Lv 1. Poin jurus lama dikembalikan otomatis
   - **Siap beta (v0.9.0-beta)**: pilihan kesulitan Santai / Normal / Sulit, Kode Save untuk cadangan & pindah perangkat, mode grafis ringan, nomor versi & tombol Kirim Masukan
   - **Koin lebih sulit**: monster kecil hanya kadang menjatuhkan koin (40%) dan jumlahnya ×0,7 (`ATURAN.monster.koinPeluang` / `koinKali`); bos tetap seperti biasa
@@ -175,7 +176,10 @@ Semua menu memakai tombol. `Esc` = kembali satu halaman.
 | `73-grafis-ringan.js` | Mode grafis ringan (resolusi 1×, partikel dikurangi) di Menu › Pengaturan › Layar |
 | `74-versi-masukan.js` | Nomor versi (`ATURAN.versi`) di layar judul & menu jeda, tombol Kirim Masukan (`ATURAN.masukan.url`) |
 | `76-melee.js` | Hero jarak dekat: 3 lapis hindar, kebal Tebasan Kilat, Tebas Balik, Kulit Baja, Benteng berperisai, Dobrakan Perisai (`ATURAN.melee`) |
-| `77-main.js` | Loop utama (dimuat paling akhir) |
+| `78-sutradara.js` | Sistem cutscene: kamera, teks, judul, gelap/terang, guncang, kilat, pita film, tombol Lewati (`mainkanAdegan`) |
+| `79-prolog.js` | Prolog saat permainan baru: cerita dunia & apa yang harus dilakukan pemain |
+| `80-adegan-bos.js` | Cutscene kemunculan 13 bos (sekali per bos; tidak untuk Cermin Gaib), julukan & kalimat khas (`ADEGAN_BOS`) |
+| `81-main.js` | Loop utama (dimuat paling akhir) |
 
 Cerita utama ada di folder `src/cerita/`: `bab-1.js` ... `bab-5.js` (satu file per bab), digabung di `semua.js`.
 

@@ -305,6 +305,24 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 #kodeBox { z-index: 60; }
 .versi-game { margin: 8px 0 0; text-align: center; font-size: 0.7rem; color: var(--ink-dim); letter-spacing: 0.06em; }
 
+/* cutscene (js/78-sutradara.js) */
+.adegan { position: absolute; inset: 0; z-index: 55; pointer-events: auto; touch-action: none; user-select: none; }
+.adegan-gelap { position: absolute; inset: 0; background: #000; opacity: 0; transition: opacity 0.6s ease; pointer-events: none; }
+.adegan-pita { position: absolute; left: 0; right: 0; height: 12vh; background: #000; transition: transform 0.45s ease; pointer-events: none; }
+.adegan-pita.atas { top: 0; transform: translateY(-100%); } .adegan-pita.bawah { bottom: 0; transform: translateY(100%); }
+.adegan.buka .adegan-pita { transform: none; }
+.adegan-judul { position: absolute; left: 50%; top: 42%; transform: translate(-50%, -50%); display: grid; gap: 4px; text-align: center; pointer-events: none; width: min(90vw, 720px); }
+.adegan-judul b { font: 700 clamp(2rem, 7vw, 3.6rem)/1 var(--font-display, serif); color: var(--gold); text-shadow: 0 3px 0 #1b1208, 0 0 24px rgba(244, 185, 66, 0.5); letter-spacing: 0.02em; }
+.adegan-judul span { font-size: clamp(0.85rem, 2.6vw, 1.1rem); font-weight: 800; color: #f7efe3; letter-spacing: 0.18em; text-transform: uppercase; text-shadow: 0 2px 4px #000; }
+.adegan-judul.muncul { animation: judulMasuk 0.7s ease-out both; }
+@keyframes judulMasuk { from { opacity: 0; transform: translate(-50%, -40%) scale(1.15); letter-spacing: 0.3em; } to { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
+.adegan-teks { position: absolute; left: 50%; bottom: calc(12vh + 14px); transform: translateX(-50%); width: min(92vw, 760px); padding: 12px 18px; border-radius: 14px; background: rgba(12, 8, 22, 0.82); border: 1px solid var(--line); text-align: center; pointer-events: none; animation: teksMasuk 0.35s ease-out both; }
+.adegan-teks b { display: block; margin-bottom: 4px; color: var(--gold); font-size: 0.85rem; letter-spacing: 0.06em; }
+.adegan-teks p { margin: 0; font-size: clamp(0.9rem, 2.4vw, 1.08rem); line-height: 1.45; color: #f7efe3; }
+@keyframes teksMasuk { from { opacity: 0; transform: translate(-50%, 8px); } to { opacity: 1; transform: translate(-50%, 0); } }
+.adegan-lewati { position: absolute; top: calc(12vh + 10px); right: 16px; padding: 7px 14px; border-radius: 999px; border: 1px solid var(--line); background: rgba(12, 8, 22, 0.7); color: #f7efe3; font: 800 0.8rem/1 inherit; cursor: pointer; }
+.adegan-petunjuk { position: absolute; bottom: 3vh; left: 0; right: 0; margin: 0; text-align: center; font-size: 0.7rem; color: rgba(247, 239, 227, 0.6); pointer-events: none; }
+
 /* ---------- Overlay & dialog ---------- */
 .overlay {
   position: absolute; inset: 0; display: grid; place-items: safe center; overflow-y: auto; touch-action: pan-y;
@@ -543,6 +561,17 @@ h1 span { color: var(--gold); }
       <p class="keys" id="keysHint"></p>
       <p class="versi-game"></p>
     </div>
+  </div>
+
+  <!-- Cutscene: pita film, teks, judul, layar gelap, tombol Lewati (js/78-sutradara.js) -->
+  <div class="adegan" id="adegan" hidden>
+    <div class="adegan-gelap" id="adeganGelap"></div>
+    <div class="adegan-pita atas"></div>
+    <div class="adegan-pita bawah"></div>
+    <div class="adegan-judul" id="adeganJudul" hidden><b id="adeganJudulBesar"></b><span id="adeganJudulKecil"></span></div>
+    <div class="adegan-teks" id="adeganTeks" hidden><b id="adeganNama"></b><p id="adeganIsi"></p></div>
+    <button class="adegan-lewati" id="btnAdeganLewati" type="button" data-t="h.lewati">Lewati ⏭</button>
+    <p class="adegan-petunjuk" data-t="h.adeganPetunjuk">Ketuk = lanjut · tahan = lewati</p>
   </div>
 
   <!-- Kode save: ekspor / impor progres (js/72-kode-save.js) -->
@@ -990,4 +1019,7 @@ h1 span { color: var(--gold); }
 <script src="js/73-grafis-ringan.js"></script>
 <script src="js/74-versi-masukan.js"></script>
 <script src="js/76-melee.js"></script>
-<script src="js/77-main.js"></script>
+<script src="js/78-sutradara.js"></script>
+<script src="js/79-prolog.js"></script>
+<script src="js/80-adegan-bos.js"></script>
+<script src="js/81-main.js"></script>
