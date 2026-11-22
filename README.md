@@ -8,6 +8,9 @@ Bisa dimainkan di HP (joystick + tombol sentuh, mode lanskap) dan desktop (keybo
 - **Sistem tarung lanjutan**:
   - **4 jurus per kelas** (terbuka di Lv 1, 8, 18, 30), dua dipasang sekaligus (`S` & `F`). Contoh: Badai Golok, Gelombang Angin, Langkah Bayang, Panah Jerat, Hujan Panah, Panah Tembus, Benteng, Lompatan Palu, Raungan, Perisai Api, Tapak Es, Meteor
   - **Jurus pamungkas** (`R`, mulai Lv 5) saat bar **Tenaga Dalam** (garis emas di bawah nyawa) penuh: Seribu Tebasan, Panah Garuda, Palu Bumi, Hujan Meteor
+  - **Bahasa di layar judul**: tombol Indonesia / English saat memilih hero; pemain baru otomatis Inggris, pemain lama tetap Indonesia, pilihan tersimpan
+  - **Area terbuka mengikuti cerita**: pemain baru tidak bisa keluar ke area yang belum dituju cerita / misi (gerbang dipalang); area yang pernah dikunjungi tetap terbuka
+  - **Arena bos bebas gangguan**: monster kecil tidak ikut campur saat melawan bos, kecuali yang dipanggil bos
   - **3 hero baru**: Dalang (pemanggil wayang), Tabib (pendukung/penyembuh), Jawara (pembunuh senyap) — total 7 hero
   - **Poin jurus lebih dalam**: rank jurus & pasif sampai ★10 (★10 = Mahir: damage +25% & jeda -10%)
   - **Pingsan tidak mengurangi koin**
@@ -181,7 +184,7 @@ Semua menu memakai tombol. `Esc` = kembali satu halaman.
 | `71-kesulitan.js` | Tingkat kesulitan Santai / Normal / Sulit (`ATURAN.kesulitan`), dipilih di layar judul atau Menu › Pengaturan |
 | `72-kode-save.js` | Kode Save: ekspor (salin / unduh) & impor progres antar perangkat |
 | `73-grafis-ringan.js` | Mode grafis ringan (resolusi 1×, partikel dikurangi) di Menu › Pengaturan › Layar |
-| `74-versi-masukan.js` | Nomor versi (`ATURAN.versi`) di layar judul & menu jeda, tombol Kirim Masukan (`ATURAN.masukan.url`) |
+| `74-versi-masukan.js` | Nomor versi (`ATURAN.versi`) di layar judul & menu jeda, tombol Kirim Masukan lewat email (`ATURAN.masukan.email`) |
 | `76-melee.js` | Hero jarak dekat: 3 lapis hindar, kebal Tebasan Kilat, Tebas Balik, Kulit Baja, Benteng berperisai, Dobrakan Perisai (`ATURAN.melee`) |
 | `78-sutradara.js` | Sistem cutscene: kamera, teks, judul, gelap/terang, guncang, kilat, pita film, tombol Lewati (`mainkanAdegan`) |
 | `79-prolog.js` | Prolog saat permainan baru: cerita dunia & apa yang harus dilakukan pemain |
@@ -194,7 +197,9 @@ Semua menu memakai tombol. `Esc` = kembali satu halaman.
 | `90-hero-dalang.js` | Hero Dalang (pemanggil): sekutu wayang Arjuna, Bima, Gatotkaca; Kelir Bayang; pamungkas Bharatayuddha |
 | `91-hero-tabib.js` | Hero Tabib (pendukung): Ramuan Sembuh, Jimat Penghalang, Kutukan, Tebar Kembang; pamungkas Ruwatan |
 | `92-hero-jawara.js` | Hero Jawara (pembunuh senyap): Tusukan Bayang, Asap Hilang, Kerambit Berantai, Racun Kerambit; kritis +12% |
-| `93-main.js` | Loop utama (dimuat paling akhir) |
+| `94-gerbang-cerita.js` | Gerbang ke area yang belum dibutuhkan cerita/misi dipalang (garis merah-putih) sampai ceritanya sampai ke sana |
+| `95-arena-bos-bersih.js` | Saat melawan bos, monster kecil dari zona disingkirkan dari sekitar pertarungan (anak buah panggilan bos tetap) |
+| `96-main.js` | Loop utama (dimuat paling akhir) |
 
 Cerita utama ada di folder `src/cerita/`: `bab-1.js` ... `bab-5.js` (satu file per bab), digabung di `semua.js`.
 

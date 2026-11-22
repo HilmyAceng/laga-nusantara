@@ -346,6 +346,10 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 .uk-ctl { display: inline-flex; align-items: center; gap: 8px; }
 .uk-ctl .vol-val { min-width: 3.2em; text-align: center; }
 
+.bahasa-judul { display: flex; gap: 6px; }
+.bahasa-judul .go { padding: 6px 12px; font-size: 0.8rem; }
+.bahasa-judul .go[aria-pressed="true"] { background: var(--gold); color: #1b1208; border-color: var(--gold); }
+
 /* ---------- Overlay & dialog ---------- */
 .overlay {
   position: absolute; inset: 0; display: grid; place-items: safe center; overflow-y: auto; touch-action: pan-y;
@@ -576,6 +580,11 @@ h1 span { color: var(--gold); }
         <div>
           <p class="eyebrow" data-t="h.eyebrowJudul">Petualangan aksi</p>
           <h1>Laga <span>Nusantara</span></h1>
+        </div>
+        <!-- pilih bahasa langsung di layar judul (02-bahasa.js) -->
+        <div class="bahasa-judul" role="group" aria-label="Bahasa / Language">
+          <button class="go alt pick" type="button" data-bahasa="id" lang="id" aria-pressed="false">🇮🇩 Indonesia</button>
+          <button class="go alt pick" type="button" data-bahasa="en" lang="en" aria-pressed="false">🇬🇧 English</button>
         </div>
         <p class="lead" data-t="h.lead">Kabut merah turun dari Gunung Geni dan makhluk hutan menjadi beringas. Pilih jagoanmu, kumpulkan tiga mustika, dan hadapi Raja Banaspati.</p>
       </div>
@@ -1085,4 +1094,6 @@ h1 span { color: var(--gold); }
 <script src="js/90-hero-dalang.js"></script>
 <script src="js/91-hero-tabib.js"></script>
 <script src="js/92-hero-jawara.js"></script>
-<script src="js/93-main.js"></script>
+<script src="js/94-gerbang-cerita.js"></script>
+<script src="js/95-arena-bos-bersih.js"></script>
+<script src="js/96-main.js"></script>

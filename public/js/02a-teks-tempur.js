@@ -6,6 +6,7 @@
 "use strict";
 
 Object.assign(TEKS.id, {
+  "masukan.info": "Kalau aplikasi email tidak terbuka, kirim masukan ke {email}",
   // hero baru (89-92)
   "hd.wayang": "Lindungan Wayang!", "hd.sembur": "Sembur Jamu!", "hd.bayang": "Lebur Bayang!", "tabib.ruwatan": "Ruwatan!",
   "jurus.naik10": "Mahir: damage +25% & jeda -10% tambahan", "toast.pingsanAman": "Kamu pingsan... dibawa pulang ke desa. Koinmu aman.",
@@ -261,6 +262,7 @@ Object.assign(TEKS.id, {
 });
 
 Object.assign(TEKS.en, {
+  "masukan.info": "If your email app didn't open, send feedback to {email}",
   "hd.wayang": "Puppet Guard!", "hd.sembur": "Jamu Spray!", "hd.bayang": "Shadow Merge!", "tabib.ruwatan": "Ruwatan!",
   "jurus.naik10": "Mastery: +25% damage & -10% cooldown extra", "toast.pingsanAman": "You fainted... carried back to the village. Your coins are safe.",
   "hd.balasSiap": "Ready!", "hd.balas": "Counter Slash!", "hd.lompatKritis": "Aim ready!",

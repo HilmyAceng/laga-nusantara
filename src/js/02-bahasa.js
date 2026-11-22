@@ -15,7 +15,15 @@
 "use strict";
 
 const BAHASA_KEY = "laga.bahasa";
-let bahasa = store.get(BAHASA_KEY, "id");
+// Bahasa awal: pilihan yang tersimpan. Belum pernah memilih: pemain lama (sudah punya save)
+// tetap Indonesia, pemain baru memakai Inggris. Pilihan langsung disimpan.
+let bahasa = (() => {
+  const b = store.get(BAHASA_KEY, null);
+  if (b === "id" || b === "en") return b;
+  const awal = store.get("laga.rpg.save", null) ? "id" : "en";
+  store.set(BAHASA_KEY, awal);
+  return awal;
+})();
 if (bahasa !== "id" && bahasa !== "en") bahasa = "id";
 
 const TEKS = {
