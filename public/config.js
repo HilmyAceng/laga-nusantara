@@ -191,6 +191,13 @@ ATURAN.hindarSempurna = {                 // berguling TEPAT saat serangan datan
   jendela: 0.2,                           // detik pertama gulingan yang dihitung "tepat"
   lambat: 0.3, lamaLambat: 0.6,           // waktu melambat jadi 30% selama 0.6 detik
 };
+// Hindar TANPA arah = aksi khas tiap hero (87-hindar-diam.js). Pendobrak = tangkis biasa.
+ATURAN.hindarDiam = {
+  aksi: { pendobrak: "tangkis", pendekar: "balas", pemanah: "lompat", penyihir: "kedip" },
+  balasKali: 1.8, balasLumpuh: 0.7, balasLumpuhBos: 0.25,      // Tebas Balas (Pendekar)
+  lompatLama: 0.32, lompatKritisJarak: 160,                     // Lompat Mundur (Pemanah)
+  kedipJarak: 170, esR: 95, esLambat: 2, esKali: 0.6,           // Kedip (Penyihir)
+};
 ATURAN.tangkis = {                        // Hindar TANPA arah = kuda-kuda tangkis
   jendela: 0.32, jeda: 0.75,              // lama kuda-kuda & jeda sebelum bisa menangkis/berguling lagi
   lumpuhMusuh: 1.6, lumpuhBos: 0.5,       // musuh yang ditangkis jadi lumpuh

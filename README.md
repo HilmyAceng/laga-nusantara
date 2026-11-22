@@ -8,6 +8,7 @@ Bisa dimainkan di HP (joystick + tombol sentuh, mode lanskap) dan desktop (keybo
 - **Sistem tarung lanjutan**:
   - **4 jurus per kelas** (terbuka di Lv 1, 8, 18, 30), dua dipasang sekaligus (`S` & `F`). Contoh: Badai Golok, Gelombang Angin, Langkah Bayang, Panah Jerat, Hujan Panah, Panah Tembus, Benteng, Lompatan Palu, Raungan, Perisai Api, Tapak Es, Meteor
   - **Jurus pamungkas** (`R`, mulai Lv 5) saat bar **Tenaga Dalam** (garis emas di bawah nyawa) penuh: Seribu Tebasan, Panah Garuda, Palu Bumi, Hujan Meteor
+  - **Hindar diam khas tiap hero**: Pendobrak Tangkis, Pendekar Tebas Balas (melesat ke belakang penyerang & menebas kritis), Pemanah Lompat Mundur (panah berikutnya kritis), Penyihir Kedip (teleport + ledakan es). Semua memecahkan perisai biru bos kalau tepat waktu
   - **Ukuran HUD**: peta mini, kotak misi, dan ikon kanan atas bisa diperbesar / diperkecil di Menu › Pengaturan › Layar
   - **Pasif unik jimat legenda**: ke-13 jimat legenda masing-masing punya kemampuan khas (✦), mis. Bulu Genderuwo (Amukan saat sekarat), Bulu Rajawali (berguling memanggil petir), Kunci Menara Kala (pamungkas menghentikan waktu)
   - **Ensiklopedia Musuh**: semua 35 musuh & bos dengan potret; yang belum ditemui berupa bayangan hitam "???"; ketuk untuk kisah, statistik, tempat, debuff, sifat, jurus khas & jimat legenda bos
@@ -185,7 +186,8 @@ Semua menu memakai tombol. `Esc` = kembali satu halaman.
 | `81-ensiklopedia-musuh.js` | Menu › Gameplay › Ensiklopedia Musuh: 35 musuh & bos, dicatat saat ditemui / dikalahkan (`S.bestiari`), bayangan untuk yang belum ditemui, detail saat diketuk (`KISAH_MUSUH`) |
 | `83-pasif-legenda.js` | Pasif unik (✦) tiap jimat legenda: amukan, hantaman ke-5, pulih diam, racun peka, perisai karang, pulih bunuh, tumpuk tulang, awan tinta, petir guling, henti waktu, gema bayangan (`LEGENDA`) |
 | `85-ukuran-hud.js` | Menu › Pengaturan › Layar: ukuran peta mini, kotak misi, & ikon kanan atas (60–160%, per perangkat) |
-| `86-main.js` | Loop utama (dimuat paling akhir) |
+| `87-hindar-diam.js` | Hindar tanpa arah = aksi khas hero: Tangkis (Pendobrak), Tebas Balas (Pendekar), Lompat Mundur (Pemanah), Kedip (Penyihir) (`ATURAN.hindarDiam`) |
+| `88-main.js` | Loop utama (dimuat paling akhir) |
 
 Cerita utama ada di folder `src/cerita/`: `bab-1.js` ... `bab-5.js` (satu file per bab), digabung di `semua.js`.
 

@@ -6,6 +6,8 @@
 "use strict";
 
 Object.assign(TEKS.id, {
+  // hindar diam per hero (87-hindar-diam.js)
+  "hd.balasSiap": "Siaga!", "hd.balas": "Tebas Balas!", "hd.lompatKritis": "Bidikan siap!",
   // ukuran HUD (85-ukuran-hud.js)
   "h.ukPeta": "Ukuran peta mini", "h.ukMisi": "Ukuran kotak misi", "h.ukIkon": "Ukuran ikon", "h.ukReset": "Ukuran awal",
   "h.ukNote": "Peta mini, kotak misi di kiri atas, dan ikon di kanan atas (Jurus, Jimat, Status, koin, jamu, jeda).",
@@ -154,7 +156,7 @@ Object.assign(TEKS.id, {
   // bos tangguh
   "bos.tipu": "?!",
   "bos.kudaKuda": "KUDA-KUDA!",
-  "bos.kudaKudaInfo": "Bos berkuda-kuda (perisai biru): seranganmu hampir tak terasa. TANGKIS serangannya ({k} tanpa arah) untuk memecahkannya!",
+  "bos.kudaKudaInfo": "Bos berkuda-kuda (perisai biru): seranganmu hampir tak terasa. Pakai HINDAR DIAM ({k} tanpa arah) tepat saat ia menyerang untuk memecahkannya!",
   "bos.tanpaArahSentuh": "Hindar tanpa menyentuh joystick",
   "bos.amukan": "{nama} MENGAMUK! Lari ke lingkaran hijau!",
   "bos.amukanJurus": "{bos}: {nama}! Lari ke lingkaran hijau!",
@@ -191,7 +193,7 @@ Object.assign(TEKS.id, {
   // kontrol
   "ctl.jurusSlot": "Jurus slot {n}: {nama}",
   "ctl.pamungkas": "Jurus pamungkas: {nama} <small>— saat Tenaga Dalam penuh (Lv {lv}+)</small>",
-  "ctl.hindar2": "Hindar <small>— + arah = berguling · tanpa arah = tangkis (keduanya memakai 1 lapis: 2 lapis, hero jarak dekat 3; tiap lapis terisi 5 detik)</small>",
+  "ctl.hindar2": "Hindar <small>— + arah = berguling · tanpa arah = aksi khas hero: tangkis / tebas balas / lompat mundur / kedip (keduanya memakai 1 lapis: 2 lapis, hero jarak dekat 3; tiap lapis terisi 5 detik)</small>",
   "ctl.menuJurus": "Halaman Jurus & Poin Jurus",
   "ctl.menuJimat": "Halaman Jimat",
   "ctlT.jurus2": "<b>Jurus & Jurus 2</b> — dua jurus yang kamu pasang (atur lewat tombol ⚔ di kanan atas)",
@@ -212,8 +214,8 @@ Object.assign(TEKS.id, {
   "latihan.hindarT": "Berguling: tekan Hindar sambil menggeser joystick",
   "latihan.sempurna": "Hindar sempurna: saat lengan boneka memerah, berguling TEPAT sebelum pukulannya kena",
   "latihan.sempurnaT": "Hindar sempurna: saat lengan boneka memerah, berguling TEPAT sebelum pukulannya kena",
-  "latihan.tangkis": "Tangkis: tekan {hindar} TANPA tombol arah tepat saat boneka memukul",
-  "latihan.tangkisT": "Tangkis: tekan Hindar TANPA menyentuh joystick tepat saat boneka memukul",
+  "latihan.tangkis": "Hindar diam: tekan {hindar} TANPA tombol arah tepat saat boneka memukul (aksi khas heromu)",
+  "latihan.tangkisT": "Hindar diam: ketuk Hindar TANPA menyentuh joystick tepat saat boneka memukul (aksi khas heromu)",
   "latihan.jamu": "Minum jamu dengan {jamu} (pulihkan nyawa saat terluka)",
   "latihan.jamuT": "Minum jamu dengan tombol Jamu (pulihkan nyawa saat terluka)",
   "latihan.peta": "Buka peta dengan {peta}",
@@ -235,9 +237,9 @@ Object.assign(TEKS.id, {
   "cara.hindar.judul": "Berguling & Hindar Sempurna",
   "cara.hindar.isi": "{hindar} + arah = berguling dan kebal sesaat. Berguling dan tangkis berbagi 2 lapis (Pendekar & Pendobrak 3 lapis; angka di pojok kotak Hindar); tiap lapis terisi lagi 5 detik, jadi pakai dengan cermat. Berguling TEPAT saat serangan datang = HINDAR SEMPURNA: waktu melambat, pukulan berikutnya pasti kritis, dan Tenaga Dalam bertambah banyak.",
   "cara.hindar.sentuh": "Hindar sambil menggeser joystick = berguling dan kebal sesaat. Berguling dan tangkis berbagi 2 lapis (Pendekar & Pendobrak 3 lapis; angka di tombol); tiap lapis terisi lagi 5 detik. Berguling TEPAT saat serangan datang = HINDAR SEMPURNA: waktu melambat dan pukulan berikutnya pasti kritis.",
-  "cara.tangkis.judul": "Tangkis",
-  "cara.tangkis.isi": "{hindar} TANPA arah = kuda-kuda tangkis sebentar. Serangan yang datang saat itu tidak terasa, penyerangnya lumpuh, dan kau membalas. Bos dengan perisai biru (kuda-kuda) hanya bisa dipecahkan dengan tangkisan. Tangkis memakai 1 lapis hindar.",
-  "cara.tangkis.sentuh": "Ketuk Hindar TANPA menyentuh joystick = kuda-kuda tangkis. Serangan yang datang saat itu tidak terasa dan penyerangnya lumpuh. Bos berperisai biru hanya bisa dipecahkan dengan tangkisan. Tangkis memakai 1 lapis hindar.",
+  "cara.tangkis.judul": "Hindar Diam (aksi khas hero)",
+  "cara.tangkis.isi": "{hindar} TANPA arah = aksi khas hero (memakai 1 lapis). PENDOBRAK: Tangkis — serangan ditahan, penyerang lumpuh lama, kau membalas. PENDEKAR: Tebas Balas — saat diserang, melesat ke belakang penyerang & menebas kritis. PEMANAH: Lompat Mundur — salto menjauh; kalau musuh dekat, panah berikutnya kritis. PENYIHIR: Kedip — teleport menjauh & meninggalkan ledakan es. Dipakai TEPAT saat diserang, semuanya memecahkan perisai biru (kuda-kuda) bos.",
+  "cara.tangkis.sentuh": "Ketuk Hindar TANPA menyentuh joystick = aksi khas hero (1 lapis). Pendobrak: Tangkis. Pendekar: Tebas Balas (melesat ke belakang penyerang & menebas kritis). Pemanah: Lompat Mundur (panah berikutnya kritis). Penyihir: Kedip (teleport + ledakan es). Tepat waktu = memecahkan perisai biru bos.",
   "cara.jimat.judul": "Jimat",
   "cara.jimat.isi": "Jimat memberi kekuatan tambahan. Pasang di 2 slot (slot ke-3 di Lv {slot}) lewat halaman Jimat ({mjimat}). Biasa dijual di warung, Langka jatuh dari bos, hadiah Cermin Gaib: tingkat 1-2 jimat Biasa, 3-5 Biasa + Langka, 6-7 Langka + Legenda khas bos itu.",
   "cara.jimat.sentuh": "Jimat memberi kekuatan tambahan. Pasang di 2 slot (slot ke-3 di Lv {slot}) lewat tombol 💎 di kanan atas. Biasa dijual di warung, Langka jatuh dari bos, hadiah Cermin Gaib: tingkat 1-2 Biasa, 3-5 Biasa + Langka, 6-7 Langka + Legenda khas bos.",
@@ -256,6 +258,7 @@ Object.assign(TEKS.id, {
 });
 
 Object.assign(TEKS.en, {
+  "hd.balasSiap": "Ready!", "hd.balas": "Counter Slash!", "hd.lompatKritis": "Aim ready!",
   "h.ukPeta": "Minimap size", "h.ukMisi": "Quest box size", "h.ukIkon": "Icon size", "h.ukReset": "Default sizes",
   "h.ukNote": "The minimap, the quest box at the top left, and the icons at the top right (Skills, Charms, Status, coins, jamu, pause).",
   "efek.amuk": "Rampage: below 30% health, attack +35% & damage taken -15%",
@@ -386,7 +389,7 @@ Object.assign(TEKS.en, {
   "drop.hampir": "The mirror trembles... a legendary charm will drop within {n} more wins",
   "bos.tipu": "?!",
   "bos.kudaKuda": "GUARD STANCE!",
-  "bos.kudaKudaInfo": "The boss is guarding (blue shield): your hits barely land. PARRY its attack ({k} with no direction) to break it!",
+  "bos.kudaKudaInfo": "The boss is guarding (blue shield): your hits barely land. Use your STILL DODGE ({k} with no direction) right as it attacks to break it!",
   "bos.tanpaArahSentuh": "Dodge without touching the joystick",
   "bos.amukan": "{nama} IS ENRAGED! Run to a green circle!",
   "bos.amukanJurus": "{bos}: {nama}! Run to a green circle!",
@@ -416,7 +419,7 @@ Object.assign(TEKS.en, {
   "debuff.efek.berdarah": "health keeps draining; every new hit adds a stack (max 3) and hurts more.",
   "ctl.jurusSlot": "Skill slot {n}: {nama}",
   "ctl.pamungkas": "Ultimate: {nama} <small>— when Inner Power is full (Lv {lv}+)</small>",
-  "ctl.hindar2": "Dodge <small>— + direction = roll · no direction = parry (both use 1 charge: 2 charges, melee heroes 3; each refills in 5s)</small>",
+  "ctl.hindar2": "Dodge <small>— + direction = roll · no direction = hero move: parry / counter slash / backflip / blink (both use 1 charge: 2 charges, melee heroes 3; each refills in 5s)</small>",
   "ctl.menuJurus": "Skills & Skill Points page",
   "ctl.menuJimat": "Charms page",
   "ctlT.jurus2": "<b>Skill & Skill 2</b> — your two equipped skills (set them with the ⚔ button, top right)",
@@ -436,8 +439,8 @@ Object.assign(TEKS.en, {
   "latihan.hindarT": "Roll: tap Dodge while moving the joystick",
   "latihan.sempurna": "Perfect dodge: when the dummy's arm glows red, roll RIGHT before the hit lands",
   "latihan.sempurnaT": "Perfect dodge: when the dummy's arm glows red, roll RIGHT before the hit lands",
-  "latihan.tangkis": "Parry: press {hindar} WITHOUT an arrow key right as the dummy swings",
-  "latihan.tangkisT": "Parry: tap Dodge WITHOUT touching the joystick right as the dummy swings",
+  "latihan.tangkis": "Still dodge: press {hindar} WITHOUT an arrow key right as the dummy swings (your hero's own move)",
+  "latihan.tangkisT": "Still dodge: tap Dodge WITHOUT touching the joystick right as the dummy swings (your hero's own move)",
   "latihan.jamu": "Drink jamu with {jamu} (heals you when hurt)",
   "latihan.jamuT": "Drink jamu with the Jamu button (heals you when hurt)",
   "latihan.peta": "Open the map with {peta}",
@@ -458,9 +461,9 @@ Object.assign(TEKS.en, {
   "cara.hindar.judul": "Rolling & Perfect Dodge",
   "cara.hindar.isi": "{hindar} + direction = roll, briefly invincible. Rolling and parrying share 2 charges (Warrior & Breaker get 3; the number on the Dodge box); each refills in 5 seconds, so use them wisely. Roll RIGHT as an attack arrives = PERFECT DODGE: time slows, your next hit is a guaranteed crit, and you gain lots of Inner Power.",
   "cara.hindar.sentuh": "Dodge while moving the joystick = roll, briefly invincible. Rolling and parrying share 2 charges (Warrior & Breaker get 3; the number on the button); each refills in 5 seconds. Roll RIGHT as an attack arrives = PERFECT DODGE: time slows and your next hit is a guaranteed crit.",
-  "cara.tangkis.judul": "Parry",
-  "cara.tangkis.isi": "{hindar} with NO direction = a brief parry stance. Attacks landing then do nothing, the attacker is stunned, and you strike back. Bosses with a blue shield (guard stance) can only be broken by a parry. A parry uses 1 dodge charge.",
-  "cara.tangkis.sentuh": "Tap Dodge WITHOUT touching the joystick = parry stance. Attacks landing then do nothing and the attacker is stunned. Blue-shielded bosses can only be broken by a parry. A parry uses 1 dodge charge.",
+  "cara.tangkis.judul": "Still Dodge (hero move)",
+  "cara.tangkis.isi": "{hindar} with NO direction = your hero's own move (uses 1 charge). BREAKER: Parry — the attack is blocked, the attacker is stunned long, you strike back. WARRIOR: Counter Slash — when attacked, dash behind the attacker & land a critical slash. ARCHER: Backflip — flip away; if an enemy was close, your next arrow crits. MAGE: Blink — teleport away leaving a frost burst. Used RIGHT as an attack lands, all of them break a boss's blue shield (guard stance).",
+  "cara.tangkis.sentuh": "Tap Dodge WITHOUT touching the joystick = your hero's own move (1 charge). Breaker: Parry. Warrior: Counter Slash (dash behind the attacker & crit). Archer: Backflip (next arrow crits). Mage: Blink (teleport + frost burst). Perfect timing breaks a boss's blue shield.",
   "cara.jimat.judul": "Charms",
   "cara.jimat.isi": "Charms grant extra power. Equip them in 2 slots (a 3rd at Lv {slot}) on the Charms page ({mjimat}). Common ones are sold at stalls, Rare ones drop from bosses, and Mystic Mirror rewards: levels 1-2 a Common charm, 3-5 Common + Rare, 6-7 Rare + the boss's own Legendary.",
   "cara.jimat.sentuh": "Charms grant extra power. Equip them in 2 slots (a 3rd at Lv {slot}) via the 💎 button (top right). Common ones are sold at stalls, Rare ones drop from bosses, Mystic Mirror rewards: levels 1-2 Common, 3-5 Common + Rare, 6-7 Rare + the boss's Legendary.",
