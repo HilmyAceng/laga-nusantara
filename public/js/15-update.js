@@ -24,7 +24,7 @@ function updatePlayer(dt) {
   if (P.dash > 0) {
     P.dash -= dt;
     moveEnt(P, P.rdx * 1150 * dt, P.rdy * 1150 * dt);
-    for (const m of monsters) if (!m.dead && !P.dashHit.has(m) && dist(P, m) < m.r + 26) { P.dashHit.add(m); damageMonster(m, P.dashDmg, Math.atan2(P.rdy, P.rdx), 300); if (P.dashDot) beriDotMonster(m, P.dashDot); }
+    for (const m of monsters) if (!m.dead && !P.dashHit.has(m) && dist(P, m) < m.r + 26) { P.dashHit.add(m); damageMonster(m, P.dashDmg, Math.atan2(P.rdy, P.rdx), 300); if (P.dashDot) beriDotMonster(m, P.dashDot); if (P.dashLumpuh) lumpuhkanMonster(m, m.d.boss ? P.dashLumpuh[1] : P.dashLumpuh[0]); }
     if (Math.random() < 0.8) parts.push({ x: P.x, y: P.y - rand(5, 35), z: 0, vz: 0, vx: -P.rdx * 60, vy: -P.rdy * 60, life: 0.25, max: 0.25, color: C.color });
     return;
   }

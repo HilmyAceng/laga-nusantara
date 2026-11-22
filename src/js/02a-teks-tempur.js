@@ -6,6 +6,8 @@
 "use strict";
 
 Object.assign(TEKS.id, {
+  // hero jarak dekat (76-melee.js)
+  "melee.refund": "Jurus diperbarui! {n} poin jurus dikembalikan, atur lagi lewat tombol ⚔.", "melee.serap": "Perisai",
   // kesulitan, kode save, grafis ringan, versi & masukan (71-74)
   "kes.judul": "Tingkat kesulitan (permainan baru)", "kes.santai": "Santai", "kes.normal": "Normal", "kes.sulit": "Sulit",
   "kes.santai.desc": "Untuk menikmati cerita. Musuh jauh lebih lemah, EXP & koin lebih banyak.",
@@ -161,12 +163,12 @@ Object.assign(TEKS.id, {
   // kontrol
   "ctl.jurusSlot": "Jurus slot {n}: {nama}",
   "ctl.pamungkas": "Jurus pamungkas: {nama} <small>— saat Tenaga Dalam penuh (Lv {lv}+)</small>",
-  "ctl.hindar2": "Hindar <small>— + arah = berguling · tanpa arah = tangkis (keduanya memakai 1 dari 2 lapis, tiap lapis terisi 5 detik)</small>",
+  "ctl.hindar2": "Hindar <small>— + arah = berguling · tanpa arah = tangkis (keduanya memakai 1 lapis: 2 lapis, hero jarak dekat 3; tiap lapis terisi 5 detik)</small>",
   "ctl.menuJurus": "Halaman Jurus & Poin Jurus",
   "ctl.menuJimat": "Halaman Jimat",
   "ctlT.jurus2": "<b>Jurus & Jurus 2</b> — dua jurus yang kamu pasang (atur lewat tombol ⚔ di kanan atas)",
   "ctlT.pamungkas": "<b>Pamungkas</b> — {nama}, muncul mulai Lv {lv}, menyala saat Tenaga Dalam penuh",
-  "ctlT.hindar2": "<b>Hindar</b> — sambil menggeser joystick = berguling · tanpa joystick = tangkis. Keduanya memakai 1 dari 2 lapis (angka di pojok = sisa lapis, tiap lapis terisi 5 detik)",
+  "ctlT.hindar2": "<b>Hindar</b> — sambil menggeser joystick = berguling · tanpa joystick = tangkis. Keduanya memakai 1 lapis (2 lapis, hero jarak dekat 3; angka di pojok = sisa lapis, tiap lapis terisi 5 detik)",
   "jeda.poin": "{n} poin jurus belum dipakai",
   // latihan dasar (Ki Sabda)
   "latihan.kena": "Kena!",
@@ -203,8 +205,8 @@ Object.assign(TEKS.id, {
   "cara.pamungkas.isi": "Mulai Lv {lv}, garis emas di bawah nyawamu adalah Tenaga Dalam. Terisi saat memukul, dipukul, mengalahkan musuh, hindar sempurna, dan menangkis. Penuh? Tekan {pamungkas} untuk jurus pamungkas yang dahsyat.",
   "cara.pamungkas.sentuh": "Mulai Lv {lv}, garis emas di bawah nyawamu adalah Tenaga Dalam. Saat penuh, tombol Pamungkas menyala — ketuk untuk jurus pamungkas yang dahsyat.",
   "cara.hindar.judul": "Berguling & Hindar Sempurna",
-  "cara.hindar.isi": "{hindar} + arah = berguling dan kebal sesaat. Berguling dan tangkis berbagi 2 lapis (angka di pojok kotak Hindar); tiap lapis terisi lagi 5 detik, jadi pakai dengan cermat. Berguling TEPAT saat serangan datang = HINDAR SEMPURNA: waktu melambat, pukulan berikutnya pasti kritis, dan Tenaga Dalam bertambah banyak.",
-  "cara.hindar.sentuh": "Hindar sambil menggeser joystick = berguling dan kebal sesaat. Berguling dan tangkis berbagi 2 lapis (angka di pojok tombol); tiap lapis terisi lagi 5 detik. Berguling TEPAT saat serangan datang = HINDAR SEMPURNA: waktu melambat dan pukulan berikutnya pasti kritis.",
+  "cara.hindar.isi": "{hindar} + arah = berguling dan kebal sesaat. Berguling dan tangkis berbagi 2 lapis (Pendekar & Pendobrak 3 lapis; angka di pojok kotak Hindar); tiap lapis terisi lagi 5 detik, jadi pakai dengan cermat. Berguling TEPAT saat serangan datang = HINDAR SEMPURNA: waktu melambat, pukulan berikutnya pasti kritis, dan Tenaga Dalam bertambah banyak.",
+  "cara.hindar.sentuh": "Hindar sambil menggeser joystick = berguling dan kebal sesaat. Berguling dan tangkis berbagi 2 lapis (Pendekar & Pendobrak 3 lapis; angka di tombol); tiap lapis terisi lagi 5 detik. Berguling TEPAT saat serangan datang = HINDAR SEMPURNA: waktu melambat dan pukulan berikutnya pasti kritis.",
   "cara.tangkis.judul": "Tangkis",
   "cara.tangkis.isi": "{hindar} TANPA arah = kuda-kuda tangkis sebentar. Serangan yang datang saat itu tidak terasa, penyerangnya lumpuh, dan kau membalas. Bos dengan perisai biru (kuda-kuda) hanya bisa dipecahkan dengan tangkisan. Tangkis memakai 1 lapis hindar.",
   "cara.tangkis.sentuh": "Ketuk Hindar TANPA menyentuh joystick = kuda-kuda tangkis. Serangan yang datang saat itu tidak terasa dan penyerangnya lumpuh. Bos berperisai biru hanya bisa dipecahkan dengan tangkisan. Tangkis memakai 1 lapis hindar.",
@@ -226,6 +228,7 @@ Object.assign(TEKS.id, {
 });
 
 Object.assign(TEKS.en, {
+  "melee.refund": "Skills updated! {n} skill points refunded, reassign them with the ⚔ button.", "melee.serap": "Shield",
   "kes.judul": "Difficulty (new game)", "kes.santai": "Relaxed", "kes.normal": "Normal", "kes.sulit": "Hard",
   "kes.santai.desc": "For enjoying the story. Enemies are much weaker, more EXP & coins.",
   "kes.normal.desc": "Balanced challenge, as designed.",
@@ -361,12 +364,12 @@ Object.assign(TEKS.en, {
   "debuff.efek.berdarah": "health keeps draining; every new hit adds a stack (max 3) and hurts more.",
   "ctl.jurusSlot": "Skill slot {n}: {nama}",
   "ctl.pamungkas": "Ultimate: {nama} <small>— when Inner Power is full (Lv {lv}+)</small>",
-  "ctl.hindar2": "Dodge <small>— + direction = roll · no direction = parry (both use 1 of 2 charges, each refills in 5s)</small>",
+  "ctl.hindar2": "Dodge <small>— + direction = roll · no direction = parry (both use 1 charge: 2 charges, melee heroes 3; each refills in 5s)</small>",
   "ctl.menuJurus": "Skills & Skill Points page",
   "ctl.menuJimat": "Charms page",
   "ctlT.jurus2": "<b>Skill & Skill 2</b> — your two equipped skills (set them with the ⚔ button, top right)",
   "ctlT.pamungkas": "<b>Ultimate</b> — {nama}, appears from Lv {lv}, glows when Inner Power is full",
-  "ctlT.hindar2": "<b>Dodge</b> — while moving the joystick = roll · without the joystick = parry. Both use 1 of 2 charges (the corner number = charges left, each refills in 5s)",
+  "ctlT.hindar2": "<b>Dodge</b> — while moving the joystick = roll · without the joystick = parry. Both use 1 charge (2 charges, melee heroes 3; the corner number = charges left, each refills in 5s)",
   "jeda.poin": "{n} unspent skill points",
   "latihan.kena": "Hit!",
   "latihan.ajak": "New player? Meet Ki Sabda (the ! mark) in the south of the village for basic training",
@@ -401,8 +404,8 @@ Object.assign(TEKS.en, {
   "cara.pamungkas.isi": "From Lv {lv}, the gold line under your health is Inner Power. It fills when you hit, get hit, defeat enemies, perfect-dodge, and parry. Full? Press {pamungkas} to unleash your devastating ultimate.",
   "cara.pamungkas.sentuh": "From Lv {lv}, the gold line under your health is Inner Power. When full, the Ultimate button glows — tap it to unleash your devastating ultimate.",
   "cara.hindar.judul": "Rolling & Perfect Dodge",
-  "cara.hindar.isi": "{hindar} + direction = roll, briefly invincible. Rolling and parrying share 2 charges (the number on the Dodge box); each refills in 5 seconds, so use them wisely. Roll RIGHT as an attack arrives = PERFECT DODGE: time slows, your next hit is a guaranteed crit, and you gain lots of Inner Power.",
-  "cara.hindar.sentuh": "Dodge while moving the joystick = roll, briefly invincible. Rolling and parrying share 2 charges (the number on the button); each refills in 5 seconds. Roll RIGHT as an attack arrives = PERFECT DODGE: time slows and your next hit is a guaranteed crit.",
+  "cara.hindar.isi": "{hindar} + direction = roll, briefly invincible. Rolling and parrying share 2 charges (Warrior & Breaker get 3; the number on the Dodge box); each refills in 5 seconds, so use them wisely. Roll RIGHT as an attack arrives = PERFECT DODGE: time slows, your next hit is a guaranteed crit, and you gain lots of Inner Power.",
+  "cara.hindar.sentuh": "Dodge while moving the joystick = roll, briefly invincible. Rolling and parrying share 2 charges (Warrior & Breaker get 3; the number on the button); each refills in 5 seconds. Roll RIGHT as an attack arrives = PERFECT DODGE: time slows and your next hit is a guaranteed crit.",
   "cara.tangkis.judul": "Parry",
   "cara.tangkis.isi": "{hindar} with NO direction = a brief parry stance. Attacks landing then do nothing, the attacker is stunned, and you strike back. Bosses with a blue shield (guard stance) can only be broken by a parry. A parry uses 1 dodge charge.",
   "cara.tangkis.sentuh": "Tap Dodge WITHOUT touching the joystick = parry stance. Attacks landing then do nothing and the attacker is stunned. Blue-shielded bosses can only be broken by a parry. A parry uses 1 dodge charge.",

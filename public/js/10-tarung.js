@@ -115,8 +115,11 @@ function hurtPlayer(amount, ang, deb, opts = {}) {
   const sumber = deb !== undefined ? deb : dari ? dari.d.debuff : null;
   // pengali: selisih level, monster melemah, jimat/ramuan tahan, jurus benteng
   let kali = (opts.mutlak ? 1 : kaliDariMusuh(dari) * kaliLemahMonster(dari)) * (1 - bonusStat("tahan")) * kaliKesulitan("dariMusuh");   // kesulitan: 71-kesulitan.js
-  if (P.benteng > 0) kali *= 0.3;
-  const dmg = Math.max(1, Math.round(amount * rand(0.9, 1.1) * kali));
+  if (P.benteng > 0) kali *= ATURAN.melee.bentengTahan;
+  kali *= 1 - kulitBaja();                                   // pasif Pendobrak (76-melee.js)
+  let dmg = Math.max(1, Math.round(amount * rand(0.9, 1.1) * kali));
+  dmg = serapPerisai(dmg);                                  // perisai Benteng / Dobrakan menyerap dulu (76-melee.js)
+  if (dmg <= 0) { P.inv = 0.3; sfx.heavy(); return; }
   P.hp -= dmg; P.inv = 0.6; P.flash = 0.15;
   if (!(P.benteng > 0)) { P.kbx = Math.cos(ang) * 280; P.kby = Math.sin(ang) * 280; }
   shake = Math.max(shake, 0.25); sfx.hurt();

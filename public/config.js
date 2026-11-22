@@ -73,6 +73,10 @@ const ATURAN = {
   // area bos: seberapa jauh bos (cerita & Cermin Gaib) mengejar dari sarangnya sebelum menyerah & pulang.
   // jarak = max(jarak dasar bos × kali, minimal) piksel (1 petak = 40 px)
   areaBos: { kali: 1.8, minimal: 820 },
+  // hero jarak dekat (76-melee.js): lapis hindar tambahan, kebal setelah jurus terjang,
+  // Kulit Baja (pasif Pendobrak), perisai jurus Benteng (bagian dari nyawa maksimal)
+  melee: { kelas: ["pendekar", "pendobrak"], lapisTambah: 1, kebalKilat: 1, kebalBalik: 1, kebalBalik3: 1.5,
+    kulitBaja: 0.2, perisai: 0.3, perisai3: 0.4, bentengTahan: 0.5, perisaiDobrak: 0.15 },
   hindar: { lama: 0.22, jeda: 0.3, kecepatan: 470, kebal: 0.28, lapis: 2, isiUlang: 5 },
 
   kritis: { peluang: 0.12, kali: 1.6 },   // pukulan kritis: peluang & pengali damage
@@ -250,9 +254,9 @@ const CLASSES = {
   pendobrak: {
     name: "Pendobrak", role: "Tank", color: "#b5651d", accent: "#e5484d", weapon: "hammer",
     hp: 170, atk: 13, speed: 165,
-    desc: "Nyawa tebal, pukulan palu berat. Jurus Gempa menghantam semua musuh di sekitar.",
+    desc: "Nyawa tebal, pukulan palu berat, kulit baja (damage diterima -20%). Jurus Benteng menahan serangan dengan perisai.",
     attack: { type: "melee", range: 72, arc: 1.35, cd: 0.5, combo: [1, 1, 1.9] },
-    skill: { name: "Gempa", type: "quake", cd: 7, mult: 2.6, r: 140 },
+    skill: { name: "Benteng", type: "guard", cd: 10 },
   },
   penyihir: {
     name: "Penyihir", role: "Sihir area", color: "#8e5bd6", accent: "#ff9f43", weapon: "staff",
@@ -637,11 +641,11 @@ const SAMPINGAN = [
 const JURUS = {
   pendekar: [
     { id: "tebasanKilat", name: "Tebasan Kilat", type: "dash", buka: 1, cd: 5, mult: 2.4, dist: 230,
-      desc: "Menerjang lurus menembus musuh.", naik3: "Langsung menerjang sekali lagi ke musuh terdekat.", naik5: "Musuh yang ditembus jadi berdarah.",
-      en: { name: "Lightning Slash", desc: "Dash straight through enemies.", naik3: "Instantly dash again at the nearest enemy.", naik5: "Enemies you pass through start bleeding." } },
-    { id: "badaiGolok", name: "Badai Golok", type: "spin", buka: 8, cd: 7, mult: 0.9, r: 95, hits: 5,
-      desc: "Berputar sambil menebas semua musuh di sekeliling (5 kali).", naik3: "Jangkauan putaran +30%.", naik5: "Menarik musuh mendekat & membuat berdarah.",
-      en: { name: "Blade Storm", desc: "Spin and slash every enemy around you (5 hits).", naik3: "Spin range +30%.", naik5: "Pulls enemies in and makes them bleed." } },
+      desc: "Menerjang lurus menembus musuh, lalu kebal 1 detik.", naik3: "Langsung menerjang sekali lagi ke musuh terdekat.", naik5: "Musuh yang ditembus jadi berdarah.",
+      en: { name: "Lightning Slash", desc: "Dash straight through enemies, then stay invulnerable for 1s.", naik3: "Instantly dash again at the nearest enemy.", naik5: "Enemies you pass through start bleeding." } },
+    { id: "tebasBalik", name: "Tebas Balik", type: "tebasBalik", buka: 8, cd: 6, mult: 2.2, r: 100,
+      desc: "Menebas musuh di depan lalu melompat mundur menjauhi bahaya. Kebal 1 detik.", naik3: "Tebasan lebih lebar & kebal 1,5 detik.", naik5: "Musuh yang kena berdarah & pukulan berikutnya pasti kritis.",
+      en: { name: "Backslash", desc: "Slash enemies in front, then leap back out of danger. Invulnerable for 1s.", naik3: "Wider slash & 1.5s invulnerability.", naik5: "Enemies hit bleed & your next hit is a guaranteed critical." } },
     { id: "gelombangAngin", name: "Gelombang Angin", type: "wave", buka: 18, cd: 6, mult: 2.2, speed: 700, range: 440,
       desc: "Melempar gelombang tebasan yang menembus barisan musuh.", naik3: "Tiga gelombang sekaligus, menyebar.", naik5: "Musuh yang kena jadi lumpuh sebentar.",
       en: { name: "Wind Wave", desc: "Hurl a slashing wave that pierces enemy lines.", naik3: "Three waves at once, fanned out.", naik5: "Enemies hit are briefly stunned." } },
@@ -664,18 +668,18 @@ const JURUS = {
       en: { name: "Piercing Shot", desc: "A giant arrow pierces every enemy. ×1.5 damage to bosses.", naik3: "Two giant arrows.", naik5: "Enemies hit start bleeding." } },
   ],
   pendobrak: [
-    { id: "gempa", name: "Gempa", type: "quake", buka: 1, cd: 7, mult: 2.6, r: 140,
+    { id: "benteng", name: "Benteng", type: "guard", buka: 1, cd: 10, lama: 4,
+      desc: "Perisai menyerap damage sebesar 30% nyawa maksimal & damage diterima -50% selama 4 detik. Tak terpental, memantulkan pukulan.", naik3: "Perisai 40% & bertahan 5 detik.", naik5: "Saat selesai: pulih 15% nyawa & semua debuff hilang.",
+      en: { name: "Bulwark", desc: "A shield absorbs damage equal to 30% max HP and you take 50% less damage for 4s. No knockback, reflects hits.", naik3: "40% shield & lasts 5s.", naik5: "When it ends: heal 15% HP and clear all debuffs." } },
+    { id: "gempa", name: "Gempa", type: "quake", buka: 8, cd: 7, mult: 2.6, r: 140,
       desc: "Menghantam tanah, semua musuh di sekitar terkena.", naik3: "Area +30% & musuh biasa lumpuh.", naik5: "Gempa susulan setengah detik kemudian.",
       en: { name: "Earthquake", desc: "Slam the ground, hitting every enemy around.", naik3: "Area +30% and normal enemies are stunned.", naik5: "An aftershock half a second later." } },
-    { id: "benteng", name: "Benteng", type: "guard", buka: 8, cd: 12, lama: 3,
-      desc: "Selama 3 detik damage yang diterima -70%, tak terpental, & memantulkan pukulan.", naik3: "Bertahan 4,5 detik.", naik5: "Saat selesai: pulih 15% nyawa & semua debuff hilang.",
-      en: { name: "Bulwark", desc: "For 3s take 70% less damage, no knockback, and reflect hits.", naik3: "Lasts 4.5s.", naik5: "When it ends: heal 15% HP and clear all debuffs." } },
     { id: "lompatanPalu", name: "Lompatan Palu", type: "leap", buka: 18, cd: 8, mult: 3, r: 110, jarak: 300,
       desc: "Melompat ke musuh terdekat lalu menghantam: musuh di sekitar lumpuh.", naik3: "Area hantaman lebih luas.", naik5: "Lumpuh lebih lama, bos ikut goyah.",
       en: { name: "Hammer Leap", desc: "Leap to the nearest enemy and slam: nearby enemies are stunned.", naik3: "Wider slam area.", naik5: "Longer stun, bosses stagger too." } },
-    { id: "raungan", name: "Raungan", type: "roar", buka: 30, cd: 14, r: 220, lama: 6,
-      desc: "Musuh di sekitar lumpuh & melemah 6 detik, seranganmu +30%.", naik3: "Efek bertahan 9 detik.", naik5: "Langsung mengisi Tenaga Dalam +30.",
-      en: { name: "War Cry", desc: "Nearby enemies are stunned and weakened for 6s, your attack +30%.", naik3: "Effects last 9s.", naik5: "Instantly fills Inner Power +30." } },
+    { id: "dobrakan", name: "Dobrakan Perisai", type: "dobrak", buka: 30, cd: 9, mult: 3.2,
+      desc: "Menerjang dengan perisai, kebal selama menerjang: musuh terpental & lumpuh, bos goyah sebentar.", naik3: "Setelah menerjang dapat perisai 15% nyawa maksimal.", naik5: "Lumpuh lebih lama (bos 1 detik).",
+      en: { name: "Shield Bash", desc: "Charge with your shield, invulnerable while charging: enemies are knocked back and stunned, bosses briefly stagger.", naik3: "Gain a 15% max HP shield after charging.", naik5: "Longer stun (bosses 1s)." } },
   ],
   penyihir: [
     { id: "pilarApi", name: "Pilar Api", type: "pillar", buka: 1, cd: 6, mult: 3, dist: 150, r: 70,

@@ -40,7 +40,7 @@ function isiHalamanStatus() {
       ${kotakStat(t("st.kritisKali"), "×" + kritisKali.toFixed(2))}
       ${kotakStat(t("st.gerak"), gerak, gerak !== C.speed ? t("st.dasar", { n: C.speed }) : "")}
       ${kotakStat(t("st.tahan"), tahan > 0 ? "-" + persen(tahan) : "100%")}
-      ${kotakStat(t("st.hindar"), `${P.lapis} / ${ATURAN.hindar.lapis}`, t("st.hindarIsi", { n: isiUlangHindar().toFixed(1) }))}
+      ${kotakStat(t("st.hindar"), `${P.lapis} / ${lapisMaks()}`, t("st.hindarIsi", { n: isiUlangHindar().toFixed(1) }))}
       ${kotakStat(t("st.jamuPulih"), persen(ATURAN.jamuPulih * (1 + bonusStat("jamu"))))}
     </div>
     <h3>${t("st.bonus")}</h3>

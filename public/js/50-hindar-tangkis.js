@@ -24,7 +24,7 @@ function hindarAtauTangkis(inp) {
     if (!(P.habisT > 0)) { P.habisT = 0.6; numbers.push({ x: P.x, y: P.y - 80, v: t("hindar.habis"), life: 0.7, color: "#c9bfd6", size: 18 }); sfx.click(); }
     return false;
   }
-  if (P.lapis === ATURAN.hindar.lapis) P.lapisT = isiUlangHindar();   // mulai mengisi lapis yang terpakai
+  if (P.lapis === lapisMaks()) P.lapisT = isiUlangHindar();   // mulai mengisi lapis yang terpakai
   P.lapis--;
   if (!inp.mx && !inp.my) {
     P.tangkis = ATURAN.tangkis.jendela + bonusStat("tangkis") + pasifNilai("tangkas") * 0.5;
@@ -114,9 +114,9 @@ function updateHindarTangkis(dt) {
   if (P.tangkis > 0) P.tangkis -= dt;
   if (P.habisT > 0) P.habisT -= dt;
   // isi ulang lapis hindar satu per satu
-  if (P.lapis < ATURAN.hindar.lapis) {
+  if (P.lapis < lapisMaks()) {
     P.lapisT -= dt;
-    if (P.lapisT <= 0) { P.lapis++; if (P.lapis < ATURAN.hindar.lapis) P.lapisT = isiUlangHindar(); }
+    if (P.lapisT <= 0) { P.lapis++; if (P.lapis < lapisMaks()) P.lapisT = isiUlangHindar(); }
   }
   if (P.roll > 0) P.rollT = (P.rollT || 0) + dt;
   if (P.sempurnaT > 0) P.sempurnaT -= dt;
@@ -142,7 +142,7 @@ GAMBAR_ATAS.push(function (time) {
 });
 // HUD: kotak Hindar (PC) & tombol Hindar (HP) — angka = sisa lapis, lingkaran gelap = lapis berikutnya sedang terisi
 function hudHindar() {
-  const maks = ATURAN.hindar.lapis, penuh = P.lapis >= maks;
+  const maks = lapisMaks(), penuh = P.lapis >= maks;
   const isi = penuh ? 0 : clamp(P.lapisT / isiUlangHindar(), 0, 1);
   // putaran gelap selalu penuh 360° → 0° selama satu lapis terisi; kalau masih ada lapis, gelapnya tipis (kelas "masih")
   const c = Math.round(isi * 60) / 60;
