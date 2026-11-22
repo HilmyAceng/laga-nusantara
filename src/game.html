@@ -343,6 +343,9 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 .ens-kutip { font-style: italic; color: var(--ink-dim); }
 @media (max-width: 520px) { .ens-detail { grid-template-columns: 1fr; justify-items: center; text-align: center; } }
 
+.uk-ctl { display: inline-flex; align-items: center; gap: 8px; }
+.uk-ctl .vol-val { min-width: 3.2em; text-align: center; }
+
 /* ---------- Overlay & dialog ---------- */
 .overlay {
   position: absolute; inset: 0; display: grid; place-items: safe center; overflow-y: auto; touch-action: pan-y;
@@ -830,6 +833,21 @@ h1 span { color: var(--gold); }
             <button class="vbtn mute" id="btnGrafis" type="button" aria-pressed="false">Mati</button>
           </div>
           <p class="set-note" data-t="h.grafisNote">Untuk HP yang patah-patah: resolusi lebih rendah & efek partikel dikurangi.</p>
+          <!-- ukuran HUD (js/85-ukuran-hud.js) -->
+          <div class="set-row uk-row">
+            <span class="vol-name" data-t="h.ukPeta">Ukuran peta mini</span>
+            <span class="uk-ctl"><button class="vbtn" type="button" data-ukuran="peta:-" aria-label="−">−</button><span class="vol-val" id="uk-peta">100%</span><button class="vbtn" type="button" data-ukuran="peta:+" aria-label="+">+</button></span>
+          </div>
+          <div class="set-row uk-row">
+            <span class="vol-name" data-t="h.ukMisi">Ukuran kotak misi</span>
+            <span class="uk-ctl"><button class="vbtn" type="button" data-ukuran="misi:-" aria-label="−">−</button><span class="vol-val" id="uk-misi">100%</span><button class="vbtn" type="button" data-ukuran="misi:+" aria-label="+">+</button></span>
+          </div>
+          <div class="set-row uk-row">
+            <span class="vol-name" data-t="h.ukIkon">Ukuran ikon</span>
+            <span class="uk-ctl"><button class="vbtn" type="button" data-ukuran="ikon:-" aria-label="−">−</button><span class="vol-val" id="uk-ikon">100%</span><button class="vbtn" type="button" data-ukuran="ikon:+" aria-label="+">+</button></span>
+          </div>
+          <p class="set-note" data-t="h.ukNote">Peta mini, kotak misi di kiri atas, dan ikon di kanan atas (Jurus, Jimat, Status, koin, jamu, jeda).</p>
+          <div class="set-row"><span></span><button class="vbtn mute" id="btnUkuranReset" type="button" data-t="h.ukReset">Ukuran awal</button></div>
         </section>
         <div class="menu"><button class="go alt back" type="button" data-go="settings" data-t="h.kembali">← Kembali</button></div>
       </div>
@@ -1061,4 +1079,5 @@ h1 span { color: var(--gold); }
 <script src="js/80-adegan-bos.js"></script>
 <script src="js/81-ensiklopedia-musuh.js"></script>
 <script src="js/83-pasif-legenda.js"></script>
-<script src="js/84-main.js"></script>
+<script src="js/85-ukuran-hud.js"></script>
+<script src="js/86-main.js"></script>

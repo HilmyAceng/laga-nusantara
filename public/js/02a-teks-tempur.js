@@ -6,6 +6,9 @@
 "use strict";
 
 Object.assign(TEKS.id, {
+  // ukuran HUD (85-ukuran-hud.js)
+  "h.ukPeta": "Ukuran peta mini", "h.ukMisi": "Ukuran kotak misi", "h.ukIkon": "Ukuran ikon", "h.ukReset": "Ukuran awal",
+  "h.ukNote": "Peta mini, kotak misi di kiri atas, dan ikon di kanan atas (Jurus, Jimat, Status, koin, jamu, jeda).",
   // pasif unik jimat legenda (83-pasif-legenda.js)
   "efek.amuk": "Amukan: saat nyawa di bawah 30%, serangan +35% & damage diterima -15%",
   "efek.hantam5": "Hantaman Penjaga: tiap pukulan ke-5 menghantam tanah & melumpuhkan musuh sekitar",
@@ -253,6 +256,8 @@ Object.assign(TEKS.id, {
 });
 
 Object.assign(TEKS.en, {
+  "h.ukPeta": "Minimap size", "h.ukMisi": "Quest box size", "h.ukIkon": "Icon size", "h.ukReset": "Default sizes",
+  "h.ukNote": "The minimap, the quest box at the top left, and the icons at the top right (Skills, Charms, Status, coins, jamu, pause).",
   "efek.amuk": "Rampage: below 30% health, attack +35% & damage taken -15%",
   "efek.hantam5": "Guardian Slam: every 5th hit slams the ground & stuns nearby enemies",
   "efek.pulihDiam": "Swamp Hide: 4s without being hit → heal 2% health per second",
