@@ -8,6 +8,7 @@ Bisa dimainkan di HP (joystick + tombol sentuh, mode lanskap) dan desktop (keybo
 - **Sistem tarung lanjutan**:
   - **4 jurus per kelas** (terbuka di Lv 1, 8, 18, 30), dua dipasang sekaligus (`S` & `F`). Contoh: Badai Golok, Gelombang Angin, Langkah Bayang, Panah Jerat, Hujan Panah, Panah Tembus, Benteng, Lompatan Palu, Raungan, Perisai Api, Tapak Es, Meteor
   - **Jurus pamungkas** (`R`, mulai Lv 5) saat bar **Tenaga Dalam** (garis emas di bawah nyawa) penuh: Seribu Tebasan, Panah Garuda, Palu Bumi, Hujan Meteor
+  - **Siap dibagikan**: pratinjau link (gambar `public/icons/og.jpg` + deskripsi, dibuat di `build.sh`), deskripsi manifest baru, dan teks ajakan beta di `AJAKAN-BETA.md`
   - **Bahasa di layar judul**: tombol Indonesia / English saat memilih hero; pemain baru otomatis Inggris, pemain lama tetap Indonesia, pilihan tersimpan
   - **Area terbuka mengikuti cerita**: pemain baru tidak bisa keluar ke area yang belum dituju cerita / misi (gerbang dipalang); area yang pernah dikunjungi tetap terbuka
   - **Arena bos bebas gangguan**: monster kecil tidak ikut campur saat melawan bos, kecuali yang dipanggil bos
