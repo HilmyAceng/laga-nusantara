@@ -452,7 +452,7 @@ const TEKS = {
 const DATA_EN = {
   kelas: {
     pendekar: { name: "Warrior", role: "Melee", skill: "Lightning Slash",
-      desc: "Three-hit machete combo. Lightning Slash dashes straight through enemies." },
+      desc: "Three-hit machete combo, sturdy stance (10% less damage taken). Lightning Slash dashes through enemies, then grants brief invulnerability." },
     pemanah: { name: "Archer", role: "Ranged", skill: "Triple Shot",
       desc: "Shoots arrows from afar, auto-aims at the nearest enemy. Triple Shot fires a spread." },
     pendobrak: { name: "Breaker", role: "Tank", skill: "Bulwark",

@@ -18,7 +18,7 @@ const EFEK_STATUS = ["atk", "hp", "tahan", "bos", "cd", "koin", "exp", "gerak", 
 function isiHalamanStatus() {
   const C = CLASSES[S.cls], need = expNeed(S.lv);
   const kritis = ATURAN.kritis.peluang + bonusStat("kritis"), kritisKali = ATURAN.kritis.kali + bonusStat("kritisKali");
-  const gerak = Math.round(C.speed * (1 + bonusStat("gerak"))), tahan = bonusStat("tahan");
+  const gerak = Math.round(C.speed * (1 + bonusStat("gerak"))), tahan = 1 - (1 - bonusStat("tahan")) * (1 - kulitBaja());   // jimat + pasif kelas (76-melee.js)
   const atkB = atkPower(), atkD = atkDasar();
   const bosKalah = Object.keys(S.bos || {}).filter((k) => MONSTERS[k] && MONSTERS[k].boss).length;
   const totalBos = Object.values(MONSTERS).filter((d) => d.boss).length;

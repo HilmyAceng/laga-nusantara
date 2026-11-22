@@ -76,7 +76,8 @@ const ATURAN = {
   // hero jarak dekat (76-melee.js): lapis hindar tambahan, kebal setelah jurus terjang,
   // Kulit Baja (pasif Pendobrak), perisai jurus Benteng (bagian dari nyawa maksimal)
   melee: { kelas: ["pendekar", "pendobrak"], lapisTambah: 1, kebalKilat: 1, kebalBalik: 1, kebalBalik3: 1.5,
-    kulitBaja: 0.2, perisai: 0.3, perisai3: 0.4, bentengTahan: 0.5, perisaiDobrak: 0.15 },
+    tahanKelas: { pendekar: 0.1, pendobrak: 0.2 },   // pasif: Kuda-kuda Pendekar -10%, Kulit Baja Pendobrak -20% damage diterima
+    perisai: 0.3, perisai3: 0.4, bentengTahan: 0.5, perisaiDobrak: 0.15 },
   hindar: { lama: 0.22, jeda: 0.3, kecepatan: 470, kebal: 0.28, lapis: 2, isiUlang: 5 },
 
   kritis: { peluang: 0.12, kali: 1.6 },   // pukulan kritis: peluang & pengali damage
@@ -240,7 +241,7 @@ const CLASSES = {
   pendekar: {
     name: "Pendekar", role: "Jarak dekat", color: "#2a9d8f", accent: "#f4b942", weapon: "golok",
     hp: 120, atk: 10, speed: 190,
-    desc: "Combo golok tiga tebasan. Jurus Tebasan Kilat menerjang menembus musuh.",
+    desc: "Combo golok tiga tebasan, kuda-kuda kokoh (damage diterima -10%). Jurus Tebasan Kilat menerjang menembus musuh lalu kebal sesaat.",
     attack: { type: "melee", range: 64, arc: 1.1, cd: 0.3, combo: [1, 1, 1.7] },
     skill: { name: "Tebasan Kilat", type: "dash", cd: 5, mult: 2.4, dist: 230 },
   },

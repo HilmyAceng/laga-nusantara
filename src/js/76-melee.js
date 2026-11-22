@@ -2,7 +2,7 @@
 // HERO JARAK DEKAT (Pendekar & Pendobrak)
 // Supaya hero melee tidak kewalahan melawan bos (angka di ATURAN.melee, config.js):
 //  - +1 lapis hindar (3 lapis, ranged tetap 2).
-//  - Pendekar: Tebasan Kilat kini kebal 1 detik setelah menerjang; jurus baru
+//  - Pendekar: pasif Kuda-kuda (damage diterima -10%); Tebasan Kilat kini kebal 1 detik setelah menerjang; jurus baru
 //    Tebas Balik (tebas lalu lompat mundur, kebal) menggantikan Badai Golok.
 //  - Pendobrak: pasif Kulit Baja (damage diterima -20%); Benteng kini perisai yang
 //    menyerap damage (30% nyawa maks) & terbuka sejak Lv 1; jurus baru Dobrakan
@@ -15,8 +15,8 @@ const M = ATURAN.melee;
 const heroMelee = () => !!(S && M.kelas.includes(S.cls));
 // lapis hindar maksimal (dipakai 50-hindar-tangkis.js, 05-status.js, 66-status-karakter.js)
 const lapisMaks = () => ATURAN.hindar.lapis + (heroMelee() ? M.lapisTambah : 0);
-// pasif Kulit Baja khusus Pendobrak (dipakai hurtPlayer)
-const kulitBaja = () => (S && S.cls === "pendobrak" ? M.kulitBaja : 0);
+// pasif pengurang damage per kelas: Kuda-kuda Pendekar & Kulit Baja Pendobrak (dipakai hurtPlayer)
+const kulitBaja = () => (S && M.tahanKelas[S.cls]) || 0;
 
 // ---------- Perisai (Benteng & Dobrakan) ----------
 // perisai menyerap damage lebih dulu; sisanya mengenai nyawa (dipanggil hurtPlayer)
