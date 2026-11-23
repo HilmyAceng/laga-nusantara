@@ -16,6 +16,7 @@ function sumberJimat(id) {
   // tingkat Cermin Gaib terendah yang memberi hadiah legenda (ATURAN.cermin.jimat)
   const tingkat = Object.keys(ATURAN.cermin.jimat).find((n) => ATURAN.cermin.jimat[n].includes("legenda"));
   if (J.bos) return t("koleksi.dariBos", { bos: MONSTERS[J.bos].name, tingkat });
+  if (J.sumber) return t(J.sumber);   // sumber khusus (mis. hadiah Catur Laga)
   return t("koleksi.sumber." + J.rarity);
 }
 function kartuKoleksi(id) {

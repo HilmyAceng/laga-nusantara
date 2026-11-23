@@ -70,6 +70,7 @@ Bisa dimainkan di HP (joystick + tombol sentuh, mode lanskap) dan desktop (keybo
 - **Notif "belum saatnya"**: benda teka-teki & batu dorong yang disentuh sebelum waktunya memberi tahu di bab/episode mana ia dipakai; gerbang tertutup menyebut alasannya; sarang bos yang masih sepi memberi tanda
 - **Teka-teki**: nyalakan obor sesuai petunjuk prasasti, jawab 3 teka-teki Batu Pitutur (salah = hantu muncul), letakkan 3 mustika di altar
 - **Mesin Teleport** hanya di desa & kota (Desa Wanasari, Kampung Nelayan, Bandar Segara, Desa Apung, Kampung Awan, Perkemahan Cahaya; atur di `ATURAN.teleport.area`): pulihkan nyawa (energi 1000, terisi 1 tiap 5 menit), dan pindah cepat lewat peta besar (aktif setelah areanya didatangi)
+- **Event & Catur Laga** (terbuka setelah Bab 2 "Bersiap Melaut"): ikon Event berdenyut di HUD membuka daftar event dengan trailer & pelacak. Event pertama: catur melawan Pak Wowo di Desa Wanasari. Pilih hero untuk tiap bidak, 3 tingkat kesulitan, dan setiap kali bidak memakan ada duel 20 detik (menang = memakan, kalah = penyerang hilang dari papan). Keluar di tengah = partai berakhir. Hadiah menang pertama tiap tingkat; tingkat Jago memberi jimat Bidak Emas Pak Wowo
 - **Cermin Gaib** di sarang tiap bos (Genderuwo: setelah misi Ki Lurah selesai; bos lain: setelah bos itu dikalahkan): tantang lagi dengan tingkat 1-7, jeda 30 detik
 - **Navigasi nyaman**: panah emas di tepi layar menuju tujuan cerita (lengkap dengan jarak & nama area berikutnya), bintang tujuan di peta mini & peta besar, jalur emas di peta dunia, area yang belum didatangi tertutup kabut "???", tanda **!** / **?** di atas NPC (emas = cerita, biru = misi sampingan)
 - **4 kelas hero**: Pendekar, Pemanah, Pendobrak, Penyihir. Masing-masing punya serangan dan jurus sendiri
@@ -204,6 +205,10 @@ Semua menu memakai tombol. `Esc` = kembali satu halaman.
 | `97-kepala-menu.js` | Kepala menu jeda di HP: label pecah di "›", judul tepat di tengah & dikecilkan otomatis bila tidak muat |
 | `99a-ikon-teks.js` | Lambang ⚔ 💎 👤 di teks notif/panduan otomatis diganti ikon SVG yang sama dengan tombol HUD |
 | `99-pembaruan.js` | Pembaruan otomatis: cek `versi.json`, muat ulang ke versi terbaru (langsung di layar judul/menu, atau saat menu dibuka) |
+| `99b-event.js` | Sistem event: ikon Event di HUD (berdenyut saat ada event baru), popup daftar event + trailer + pelacak ke NPC, konfirmasi teleport |
+| `99c-catur-aturan.js` | Mesin catur: langkah sah (rokade, en passant, promosi otomatis jadi Menteri), skak/skakmat/remis, AI 3 tingkat (negamax) |
+| `99d-catur-papan.js` | Catur Laga Pak Wowo: dialog, tutorial, pilih hero tiap bidak, papan, hasil & hadiah (jimat Bidak Emas) |
+| `99e-catur-duel.js` | Duel 20 detik saat bidak memakan: menang = memakan, kalah = penyerang hilang dari papan |
 | `100-main.js` | Loop utama (dimuat paling akhir) |
 
 Cerita utama ada di folder `src/cerita/`: `bab-1.js` ... `bab-5.js` (satu file per bab), digabung di `semua.js`.

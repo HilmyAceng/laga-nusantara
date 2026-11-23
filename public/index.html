@@ -23,7 +23,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://hilmyaceng.github.io/laga-nusantara/icons/og.jpg">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);box-sizing:border-box;height:100%}[hidden]{display:none!important}</style>
-<script>window.LAGA_BUILD="20261123072732";</script>
+<script>window.LAGA_BUILD="20261123080116";</script>
 </head><body>
 <title>Laga Nusantara</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -391,6 +391,68 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 .ikon-teks { display: inline-grid; place-items: center; width: 1.45em; height: 1.45em; margin: 0 0.15em; vertical-align: -0.38em; border-radius: 0.35em; background: var(--panel); border: 1px solid var(--line); color: var(--ink); }
 .ikon-teks svg { width: 70%; height: 70%; display: block; }
 
+/* Event & Catur Laga (js/99b-99e) */
+.ev-hud { position: relative; }
+.ev-hud.baru { animation: evDenyut 1.1s ease-in-out infinite; box-shadow: 0 0 0 0 rgba(244, 185, 66, 0.7); }
+.ev-hud .ev-tanda { display: none; } .ev-hud.baru .ev-tanda { display: block; background: #e5484d; color: #fff; }
+@keyframes evDenyut { 0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(244, 185, 66, 0.6); } 50% { transform: scale(1.12); box-shadow: 0 0 0 6px rgba(244, 185, 66, 0); } }
+.ev-panel { width: min(900px, 100%); position: relative; }
+.ev-kepala { display: flex; justify-content: space-between; align-items: start; gap: 10px; }
+.ev-isi { display: grid; grid-template-columns: minmax(150px, 230px) 1fr; gap: 12px; min-height: 0; }
+.ev-daftar { display: grid; gap: 8px; align-content: start; }
+.ev-item { position: relative; display: grid; gap: 2px; text-align: left; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line); background: rgba(255, 255, 255, 0.05); color: var(--ink); font: inherit; cursor: pointer; }
+.ev-item.pilih { border-color: var(--gold); background: rgba(244, 185, 66, 0.14); }
+.ev-item.kunci { opacity: 0.55; } .ev-item.segera { cursor: default; }
+.ev-item small { color: var(--ink-dim); font-size: 0.72rem; }
+.ev-baru { position: absolute; top: 6px; right: 8px; width: 18px; height: 18px; border-radius: 50%; background: #e5484d; color: #fff; font: 900 0.7rem/18px var(--font-display); text-align: center; font-style: normal; }
+.ev-detail { display: grid; gap: 6px; align-content: start; max-height: 52vh; overflow-y: auto; }
+.ev-detail canvas { width: 100%; max-width: 480px; aspect-ratio: 2 / 1; border-radius: 12px; background: #1f1a2e; border: 1px solid var(--line); }
+.ev-detail h3, .ev-detail h4, .ev-detail p { margin: 0; } .ev-detail p { font-size: 0.85rem; line-height: 1.45; }
+.ev-ringkas { color: var(--gold); font-weight: 800; }
+.ev-hadiah { margin: 0; padding-left: 18px; font-size: 0.8rem; } .ev-hadiah .dapat { color: #8ff0a8; }
+.ev-lacak { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; border-radius: 12px; background: rgba(244, 185, 66, 0.1); border: 1px solid rgba(244, 185, 66, 0.4); font-weight: 800; font-size: 0.85rem; }
+.ev-tanya { position: absolute; inset: 0; display: grid; place-content: center; gap: 12px; padding: 20px; text-align: center; background: rgba(12, 8, 22, 0.92); border-radius: 20px; z-index: 2; font-weight: 800; }
+.ct-box { z-index: 25; }
+.ct-panel { width: min(980px, 100%); position: relative; }
+.ct-setup { display: grid; grid-template-columns: minmax(180px, 260px) 1fr; gap: 14px; }
+.ct-setup h3 { margin: 0 0 6px; font-size: 1rem; color: var(--gold); }
+.ct-pasukan { display: grid; gap: 6px; }
+.ct-baris { display: grid; grid-template-columns: 34px 70px auto 52px 1fr auto; align-items: center; gap: 8px; padding: 4px 8px; border-radius: 10px; background: rgba(255, 255, 255, 0.04); border: 1px solid var(--line); }
+.ct-ikon svg { width: 30px; height: 30px; display: block; }
+.ct-potret { width: 46px; height: 52px; }
+.ct-hero { display: grid; font-weight: 800; font-size: 0.85rem; } .ct-hero small { color: var(--ink-dim); font-size: 0.68rem; font-weight: 700; }
+.ct-main { display: grid; grid-template-columns: auto minmax(160px, 1fr); gap: 14px; align-items: start; }
+.ct-papan { display: grid; grid-template-columns: repeat(8, 1fr); width: min(64vh, 62vw, 560px); aspect-ratio: 1; border: 4px solid #5b3a24; border-radius: 6px; overflow: hidden; }
+.ct-kotak { position: relative; padding: 0; border: 0; display: grid; place-items: center; cursor: pointer; aspect-ratio: 1; }
+.ct-kotak.terang { background: #ecd9b3; } .ct-kotak.gelap { background: #a5754b; }
+.ct-kotak.akhir { box-shadow: inset 0 0 0 999px rgba(244, 185, 66, 0.35); }
+.ct-kotak.pilih { box-shadow: inset 0 0 0 999px rgba(90, 209, 122, 0.45); }
+.ct-kotak.skak { box-shadow: inset 0 0 0 999px rgba(229, 72, 77, 0.6); }
+.ct-kotak.bisa::after { content: ""; position: absolute; width: 28%; height: 28%; border-radius: 50%; background: rgba(43, 34, 56, 0.45); }
+.ct-kotak.bisa-makan::after { content: ""; position: absolute; inset: 6%; border-radius: 50%; border: 4px solid rgba(229, 72, 77, 0.85); }
+.bidak { width: 86%; height: 86%; display: block; position: relative; z-index: 1; }
+.bidak.putih path { fill: #f5efe2; stroke: #2b2238; stroke-width: 4; }
+.bidak.hitam path { fill: #2b2238; stroke: #e9d3a9; stroke-width: 4; }
+.ct-samping { display: grid; gap: 10px; }
+.ct-pesan { margin: 0; padding: 8px 10px; border-radius: 10px; background: rgba(244, 185, 66, 0.12); border: 1px solid rgba(244, 185, 66, 0.4); font-weight: 800; color: var(--gold); }
+.ct-info { display: grid; gap: 6px; font-size: 0.8rem; }
+.ct-dimakan { display: flex; flex-wrap: wrap; gap: 1px; min-height: 22px; } .ct-dimakan svg { width: 22px; height: 22px; }
+.ct-log { display: grid; gap: 2px; color: var(--ink-dim); font-size: 0.74rem; }
+#touch.mode-duel #bPot, #touch.mode-duel #bSkill2, #touch.mode-duel #bUlt, #touch.mode-duel #bTalk { display: none !important; }
+#touch.mode-duel #bRoll::before { display: none; }
+.ct-tip { position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%); width: min(90%, 520px); margin: 0; padding: 8px 12px; border-radius: 10px; background: rgba(12, 8, 22, 0.95); border: 1px solid var(--gold); font-size: 0.82rem; font-weight: 700; text-align: center; z-index: 2; }
+.ct-tutor-isi { min-height: 4.5em; font-size: 0.9rem; line-height: 1.45; }
+#ctTutorGambar { display: block; margin: 0 auto; max-width: 100%; }
+.ct-tutor-nav { align-items: center; } .ct-tutor-nav span { color: var(--ink-dim); font-weight: 800; font-size: 0.8rem; }
+.ct-hasil { text-align: center; } .ct-wowo { color: var(--ink-dim); font-style: italic; }
+@media (max-width: 760px), (max-height: 560px) {
+  .ev-isi { grid-template-columns: 1fr; } .ev-daftar { grid-auto-flow: column; overflow-x: auto; } .ev-detail { max-height: 40vh; }
+  .ct-setup { grid-template-columns: 1fr; }
+  .ct-papan { width: min(80vh, 58vw); } .ct-panel { padding: 10px; }
+  .ct-baris { grid-template-columns: 26px 56px auto 40px 1fr auto; gap: 5px; } .ct-potret { width: 36px; height: 40px; }
+  .ct-tip { left: auto; right: 12px; transform: none; width: calc(100% - min(80vh, 58vw) - 56px); font-size: 0.74rem; }
+}
+
 /* ---------- Overlay & dialog ---------- */
 .overlay {
   position: absolute; inset: 0; display: grid; place-items: safe center; overflow-y: auto; touch-action: pan-y;
@@ -555,6 +617,7 @@ h1 span { color: var(--gold); }
     <div class="right">
       <div class="chips">
         <!-- pintasan halaman (js/66-status-karakter.js): Jurus (+ poin sisa), Jimat, Status -->
+        <button class="icon-btn pintas ev-hud" id="btnEventHud" type="button" data-ta="h.event" aria-label="Event" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.6 5.6 6.1.7-4.5 4.2 1.2 6-5.4-3-5.4 3 1.2-6L3.3 8.8l6.1-.7Z" fill="#f4b942" stroke="#8a5a12" stroke-width="1.2" stroke-linejoin="round"/></svg><b class="pintas-poin ev-tanda">!</b></button>
         <button class="icon-btn pintas" id="btnJurusHud" type="button" data-ta="h.jurusMenu" aria-label="Jurus"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 3.5 20.5 3.5 20.5 9.5 9 21 3 15Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M6.5 13.5 10.5 17.5M3 21l3-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><b class="pintas-poin" id="poinHud" hidden>0</b></button>
         <button class="icon-btn pintas" id="btnJimatHud" type="button" data-ta="h.jimatMenu" aria-label="Jimat"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4h10l4 5-9 11L3 9Z" fill="#8fd3ff" stroke="#2d6a96" stroke-width="1.6" stroke-linejoin="round"/><path d="M3 9h18M9 4 12 20 15 4" fill="none" stroke="#2d6a96" stroke-width="1.2" stroke-linejoin="round"/></svg></button>
         <button class="icon-btn pintas" id="btnStatus" type="button" data-ta="h.statusMenu" aria-label="Status"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4" fill="currentColor"/><path d="M4 21c0-4.4 3.6-7.5 8-7.5s8 3.1 8 7.5Z" fill="currentColor"/></svg></button>
@@ -654,6 +717,56 @@ h1 span { color: var(--gold); }
     <div class="adegan-teks" id="adeganTeks" hidden><b id="adeganNama"></b><p id="adeganIsi"></p></div>
     <button class="adegan-lewati" id="btnAdeganLewati" type="button" data-t="h.lewati">Lewati ⏭</button>
     <p class="adegan-petunjuk" data-t="h.adeganPetunjuk">Ketuk = lanjut · tahan = lewati</p>
+  </div>
+
+  <!-- Event (js/99b-event.js) -->
+  <div class="overlay" id="eventBox" hidden>
+    <div class="panel ev-panel">
+      <div class="ev-kepala"><div><p class="eyebrow" data-t="h.eventEyebrow">Kegiatan</p><h1 data-th="h.eventJudul">Ev<span>ent</span></h1></div>
+        <button class="icon-btn" id="btnEventTutup" type="button" aria-label="✕">✕</button></div>
+      <div class="ev-isi"><div class="ev-daftar" id="eventDaftar"></div><div class="ev-detail" id="eventDetail"></div></div>
+      <div class="ev-lacak" id="eventLacak"></div>
+      <div class="ev-tanya" id="eventTanya" hidden><p id="eventTanyaTeks"></p>
+        <div class="row"><button class="go alt kecil" id="btnEventBatal" type="button" data-t="h.batal">Batal</button><button class="go kecil" id="btnEventYa" type="button" data-t="h.teleportYa">Teleport</button></div></div>
+    </div>
+  </div>
+
+  <!-- Catur Laga (js/99c-99e) -->
+  <div class="overlay ct-box" id="caturBox" hidden>
+    <div class="panel ct-panel">
+      <div class="ct-layar" data-layar="tutor" hidden>
+        <p class="eyebrow" data-t="h.ctTutorEyebrow">Cara bermain · Catur Laga</p>
+        <h2 id="ctTutorJudul"></h2>
+        <canvas id="ctTutorGambar" width="300" height="130"></canvas>
+        <p id="ctTutorIsi" class="ct-tutor-isi"></p>
+        <div class="row ct-tutor-nav"><button class="go alt kecil" id="btnCtTutorLewati" type="button" data-t="h.lewati">Lewati ⏭</button><span id="ctTutorHal"></span>
+          <button class="go alt kecil" id="btnCtTutorMundur" type="button">◀</button><button class="go kecil" id="btnCtTutorMaju" type="button"></button></div>
+      </div>
+      <div class="ct-layar" data-layar="setup" hidden>
+        <div class="ev-kepala"><div><p class="eyebrow" data-t="h.ctSetupEyebrow">Catur Laga · Pak Wowo</p><h1 data-th="h.ctSetupJudul">Pilih <span>Pasukan</span></h1></div>
+          <button class="go alt kecil" id="btnCtCara2" type="button" data-t="h.ctCara">Cara main</button></div>
+        <div class="ct-setup"><div><h3 data-t="h.ctTingkat">Tingkat kesulitan</h3><div class="kes-list" id="ctTingkat"></div></div>
+          <div><h3 data-t="h.ctPasukan">Hero untuk tiap bidak</h3><div class="ct-pasukan" id="ctPasukan"></div></div></div>
+        <div class="row"><button class="go alt" id="btnCtBatal" type="button" data-t="h.kembali">← Kembali</button><button class="go" id="btnCtMulai" type="button" data-t="h.ctMulai">Mulai bermain</button></div>
+      </div>
+      <div class="ct-layar" data-layar="papan" hidden>
+        <div class="ct-main">
+          <div class="ct-papan" id="ctPapan"></div>
+          <div class="ct-samping">
+            <p class="ct-pesan" id="ctPesan"></p>
+            <div class="ct-info" id="ctInfo"></div>
+            <div class="row"><button class="go alt kecil" id="btnCtCara" type="button" data-t="h.ctCara">Cara main</button><button class="go alt kecil" id="btnCtKeluar" type="button" data-t="h.ctKeluar">Keluar</button></div>
+          </div>
+        </div>
+        <p class="ct-tip" id="ctTip" hidden></p>
+        <div class="ev-tanya" id="ctKonfirm" hidden><p data-t="h.ctKeluarTanya">Keluar sekarang? Partai ini dianggap selesai dan harus diulang dari awal.</p>
+          <div class="row"><button class="go alt kecil" id="btnCtKeluarTidak" type="button" data-t="h.ctLanjutMain">Lanjut main</button><button class="go kecil" id="btnCtKeluarYa" type="button" data-t="h.ctKeluarYa">Keluar</button></div></div>
+      </div>
+      <div class="ct-layar ct-hasil" data-layar="hasil" hidden>
+        <h1 id="ctHasilJudul"></h1><p id="ctHasilTeks"></p><p class="ct-wowo" id="ctHasilWowo"></p>
+        <div class="row"><button class="go alt" id="btnCtSelesai" type="button" data-t="h.ctSelesai">Selesai</button><button class="go" id="btnCtLagi" type="button" data-t="h.ctLagi">Main lagi</button></div>
+      </div>
+    </div>
   </div>
 
   <!-- Kode save: ekspor / impor progres (js/72-kode-save.js) -->
@@ -1140,6 +1253,10 @@ h1 span { color: var(--gold); }
 <script src="js/95-arena-bos-bersih.js"></script>
 <script src="js/97-kepala-menu.js"></script>
 <script src="js/99-pembaruan.js"></script>
+<script src="js/99b-event.js"></script>
+<script src="js/99c-catur-aturan.js"></script>
+<script src="js/99d-catur-papan.js"></script>
+<script src="js/99e-catur-duel.js"></script>
 <script src="js/99a-ikon-teks.js"></script>
 <script src="js/100-main.js"></script>
 <script>if("serviceWorker" in navigator){addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}</script>
