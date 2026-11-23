@@ -202,6 +202,7 @@ Semua menu memakai tombol. `Esc` = kembali satu halaman.
 | `94-gerbang-cerita.js` | Gerbang ke area yang belum dibutuhkan cerita/misi dipalang (garis merah-putih) sampai ceritanya sampai ke sana |
 | `95-arena-bos-bersih.js` | Saat melawan bos, monster kecil dari zona disingkirkan dari sekitar pertarungan (anak buah panggilan bos tetap) |
 | `97-kepala-menu.js` | Kepala menu jeda di HP: label pecah di "›", judul tepat di tengah & dikecilkan otomatis bila tidak muat |
+| `99a-ikon-teks.js` | Lambang ⚔ 💎 👤 di teks notif/panduan otomatis diganti ikon SVG yang sama dengan tombol HUD |
 | `99-pembaruan.js` | Pembaruan otomatis: cek `versi.json`, muat ulang ke versi terbaru (langsung di layar judul/menu, atau saat menu dibuka) |
 | `100-main.js` | Loop utama (dimuat paling akhir) |
 

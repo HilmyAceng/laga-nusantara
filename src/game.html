@@ -348,6 +348,7 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 
 .bahasa-judul { display: flex; gap: 6px; }
 .bahasa-judul .go { padding: 6px 12px; font-size: 0.8rem; }
+.bahasa-judul .kode-bahasa { display: inline-block; margin-right: 4px; padding: 0 4px; border-radius: 4px; border: 1px solid currentColor; font-size: 0.68rem; line-height: 1.3; }
 .bahasa-judul .go[aria-pressed="true"] { background: var(--gold); color: #1b1208; border-color: var(--gold); }
 
 /* HP: notif tengah kecil & tepat di bawah baris HUD atas, supaya tidak menutupi pertempuran */
@@ -358,6 +359,10 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
   .toast { font-size: 0.68rem; padding: 3px 9px; border-radius: 8px; white-space: normal; text-align: center; line-height: 1.25; opacity: 0.92; }
   .toast.big { font-size: 1.15rem; padding: 2px 12px 0; }
 }
+
+/* ikon tombol pintas di dalam teks (js/99a-ikon-teks.js): sama dengan ikon di HUD */
+.ikon-teks { display: inline-grid; place-items: center; width: 1.45em; height: 1.45em; margin: 0 0.15em; vertical-align: -0.38em; border-radius: 0.35em; background: var(--panel); border: 1px solid var(--line); color: var(--ink); }
+.ikon-teks svg { width: 70%; height: 70%; display: block; }
 
 /* ---------- Overlay & dialog ---------- */
 .overlay {
@@ -593,8 +598,8 @@ h1 span { color: var(--gold); }
         </div>
         <!-- pilih bahasa langsung di layar judul (02-bahasa.js) -->
         <div class="bahasa-judul" role="group" aria-label="Bahasa / Language">
-          <button class="go alt pick" type="button" data-bahasa="id" lang="id" aria-pressed="false">🇮🇩 Indonesia</button>
-          <button class="go alt pick" type="button" data-bahasa="en" lang="en" aria-pressed="false">🇬🇧 English</button>
+          <button class="go alt pick" type="button" data-bahasa="id" lang="id" aria-pressed="false"><b class="kode-bahasa">ID</b> Indonesia</button>
+          <button class="go alt pick" type="button" data-bahasa="en" lang="en" aria-pressed="false"><b class="kode-bahasa">EN</b> English</button>
         </div>
         <p class="lead" data-t="h.lead">Kabut merah turun dari Gunung Geni dan makhluk hutan menjadi beringas. Pilih jagoanmu, kumpulkan tiga mustika, dan hadapi Raja Banaspati.</p>
       </div>
@@ -1108,4 +1113,5 @@ h1 span { color: var(--gold); }
 <script src="js/95-arena-bos-bersih.js"></script>
 <script src="js/97-kepala-menu.js"></script>
 <script src="js/99-pembaruan.js"></script>
+<script src="js/99a-ikon-teks.js"></script>
 <script src="js/100-main.js"></script>
