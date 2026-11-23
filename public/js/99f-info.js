@@ -31,6 +31,8 @@ const CATATAN_RILIS = [
       ["Kirim masukan sekarang lewat email.", "Feedback is now sent by email."],
     ],
     baik: [
+      ["HP dengan browser lama: game tidak lagi error lalu layar hitam saat masuk. Terima kasih atas laporannya!", "Phones with older browsers: the game no longer errors and goes black on entry. Thanks for the report!"],
+      ["Kalau terjadi error, game tetap berjalan (tidak membeku).", "If an error happens, the game keeps running instead of freezing."],
       ["Panah petunjuk arah tidak lagi kadang dekat kadang jauh.", "The guide arrow no longer jumps between near and far."],
       ["Ikon di teks notifikasi sekarang sama dengan ikon tombol HUD.", "Icons in notification text now match the HUD buttons."],
       ["Teks judul menu di HP tidak lagi keluar kotak.", "Menu titles on phones no longer overflow their box."],

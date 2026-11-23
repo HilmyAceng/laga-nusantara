@@ -115,6 +115,7 @@ Semua menu memakai tombol. `Esc` = kembali satu halaman.
 | File | Fitur |
 |---|---|
 | `00-galat.js` | Layar galat: kalau game gagal dimuat/error, tampilkan pesan + tombol "Perbaiki & muat ulang" (dimuat paling awal) |
+| `00a-kompat.js` | Tambalan untuk browser HP lama (mis. `ctx.roundRect` di Chrome < 99 / Safari iOS < 16) supaya game tidak error & layar tidak hitam |
 | `01-alat.js` | Fungsi bantu kecil (`$`, `clamp`, `rand`, `store` untuk simpanan) |
 | `02-bahasa.js` | Bahasa Indonesia / English: kamus teks (`TEKS`), terjemahan data game (`DATA_EN`), fungsi `t()` |
 | `02a-teks-tempur.js` | Teks ID/EN untuk jurus, jimat, bos tangguh, debuff baru, cara bermain |

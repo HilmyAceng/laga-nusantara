@@ -506,9 +506,9 @@ function t(key, v) {
 
 // ---------- Teks di HTML ----------
 // Teks Indonesia dibaca langsung dari HTML (sekali, saat pertama dimuat).
-for (const el of document.querySelectorAll("[data-t]")) TEKS.id[el.dataset.t] ??= el.textContent;
-for (const el of document.querySelectorAll("[data-th]")) TEKS.id[el.dataset.th] ??= el.innerHTML;
-for (const el of document.querySelectorAll("[data-ta]")) TEKS.id[el.dataset.ta] ??= el.getAttribute("aria-label");
+for (const el of document.querySelectorAll("[data-t]")) { if (TEKS.id[el.dataset.t] == null) TEKS.id[el.dataset.t] = el.textContent; }
+for (const el of document.querySelectorAll("[data-th]")) { if (TEKS.id[el.dataset.th] == null) TEKS.id[el.dataset.th] = el.innerHTML; }
+for (const el of document.querySelectorAll("[data-ta]")) { if (TEKS.id[el.dataset.ta] == null) TEKS.id[el.dataset.ta] = el.getAttribute("aria-label"); }
 function terapkanHTML() {
   document.documentElement.lang = bahasa;
   for (const el of document.querySelectorAll("[data-t]")) el.textContent = t(el.dataset.t);
