@@ -241,7 +241,8 @@ function gambarDuel(time) {
     ctx.fillStyle = "rgba(10,6,20,0.75)"; ctx.fillRect(kanan ? x - w : x, y + 18, w, 12);
     ctx.fillStyle = f.pemain ? "#5ad17a" : "#e5484d"; const isi = w * Math.max(0, f.hp / f.maxHp); ctx.fillRect(kanan ? x - isi : x, y + 19, isi, 10);
     ctx.font = "800 13px Nunito, sans-serif"; ctx.textAlign = kanan ? "right" : "left"; ctx.fillStyle = "#f7efe3";
-    ctx.fillText((f.putih ? "⚪ " : "⚫ ") + nama, x, y + 12);
+    const warnaPutih = f.pemain === (D.opsi.pemainPutih !== false);   // warna bidak sebenarnya
+    ctx.fillText((warnaPutih ? "⚪ " : "⚫ ") + nama, x, y + 12);
   };
   bar(D.p, 16, false); bar(D.k, W - 16, true);
   ctx.font = "700 30px Teko, sans-serif"; ctx.textAlign = "center"; ctx.fillStyle = D.waktu < 5 ? "#ff8b8e" : "#f4b942";
