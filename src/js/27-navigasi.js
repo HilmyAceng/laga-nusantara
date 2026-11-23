@@ -73,10 +73,10 @@ function drawPanahTujuan(toScreen, time) {
     ctx.rotate(a);
     ctx.fillStyle = "#f4b942"; ctx.beginPath(); ctx.moveTo(11, 0); ctx.lineTo(-6, -8); ctx.lineTo(-2, 0); ctx.lineTo(-6, 8); ctx.closePath(); ctx.fill();
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-    ctx.font = "700 15px Teko, sans-serif"; ctx.textAlign = "center"; ctx.lineWidth = 3; ctx.strokeStyle = "rgba(10,6,20,0.85)";
+    ctx.font = "700 21px Teko, sans-serif"; ctx.textAlign = "center"; ctx.lineWidth = 4; ctx.strokeStyle = "rgba(10,6,20,0.85)"; ctx.lineJoin = "round";
     const teks = (tj.ke ? AREAS[tj.ke].nama + " · " : "") + jarak + " m";
-    const ly = ay + (Math.sin(a) > 0 ? 32 : -24);
-    const lx = clamp(ax, 70, W - 70);
+    const ly = ay + (Math.sin(a) > 0 ? 38 : -26);
+    const lx = clamp(ax, ctx.measureText(teks).width / 2 + 12, W - ctx.measureText(teks).width / 2 - 12);   // tulisan tidak terpotong di tepi layar
     ctx.strokeText(teks, lx, ly); ctx.fillStyle = "#f4b942"; ctx.fillText(teks, lx, ly);
   }
   ctx.restore();
