@@ -1,8 +1,9 @@
 // =====================================================================
 // MONSTER MENGUAT SESUAI LEVEL
 //  - Level monster = level pemain, tapi tidak di bawah level aslinya dan tidak
-//    lebih dari ATURAN.skalaMonster.batasAtas level di atasnya. Nyawa, serangan,
+//    lebih dari ATURAN.skalaMonster.batasAtas (3) level di atasnya. Nyawa, serangan,
 //    dan hadiahnya ikut naik. (Di area awal kamu tetap terasa kuat.)
+//  - Monster yang jauh lebih lemah darimu memberi EXP lebih sedikit (expLemah*).
 //  - Selisih level: musuh yang levelnya di atasmu lebih sulit dilukai dan
 //    pukulannya lebih sakit.
 //  - Trik baru: monster dunia 2 ke atas, atau yang sudah menguat beberapa level,
@@ -23,7 +24,7 @@ makeMonster = function (type, spot) {
   const nd = { ...d, lv: ef,
     hp: Math.round(d.hp * kaliNyawaAsli(d) * (1 + (b ? SK.bosNyawaPerLv : SK.nyawaPerLv) * k)),
     atk: Math.round(d.atk * kaliSerangAsli(d) * (1 + (b ? SK.bosSeranganPerLv : SK.seranganPerLv) * k)),
-    exp: Math.round(d.exp * (1 + SK.hadiahPerLv * k)),
+    exp: Math.round(d.exp * (1 + SK.hadiahPerLv * k) * (b ? 1 : kaliExpLemah(S.lv - ef))),
     gold: d.gold.map((g) => Math.round(g * (1 + SK.hadiahPerLv * k))) };
   if (b) {   // bos: gerak & kecepatan serang naik sesuai level
     nd.kaliSerangCepat = Math.min(SK.bosCepatMaks, 1 + SK.bosSeranganCepatPerLv * k);
@@ -35,6 +36,9 @@ makeMonster = function (type, spot) {
   m.d = nd; m.hp = nd.hp;
   return m;
 };
+
+// EXP monster lemah: selisih level di atas expLemahMulai → berkurang bertahap (min expLemahMin)
+const kaliExpLemah = (selisih) => Math.max(SK.expLemahMin, 1 - SK.expLemahPerLv * Math.max(0, selisih - SK.expLemahMulai));
 
 // pengali dari level asli monster (makin jauh dunianya, makin kuat)
 function kaliNyawaAsli(d) { return SK.kaliNyawa * (1 + (d.boss ? SK.bosNyawaPerLvAsli : SK.nyawaPerLvAsli) * d.lv); }

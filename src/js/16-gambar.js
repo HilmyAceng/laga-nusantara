@@ -226,7 +226,10 @@ function drawMonster(m, time) {
     const y = m.y - d.h - 14;
     ctx.fillStyle = "rgba(0,0,0,0.55)"; ctx.fillRect(m.x - 21, y, 42, 5);
     ctx.fillStyle = "#e5484d"; ctx.fillRect(m.x - 20, y + 1, 40 * clamp(m.hp / d.hp, 0, 1), 3);
-    ctx.font = "700 10px Nunito, sans-serif"; ctx.textAlign = "center"; ctx.fillStyle = "rgba(247,239,227,0.9)";
+    // warna level: abu-abu = jauh lebih lemah, putih = setara, jingga = sedikit lebih kuat, merah = jauh lebih kuat
+    const beda = d.lv - S.lv;
+    ctx.font = "700 10px Nunito, sans-serif"; ctx.textAlign = "center";
+    ctx.fillStyle = beda <= -ATURAN.skalaMonster.expLemahMulai ? "rgba(170,163,184,0.9)" : beda >= 3 ? "#ff7b7b" : beda >= 1 ? "#ffb86b" : "rgba(247,239,227,0.9)";
     ctx.fillText(`${d.name} Lv${d.lv}`, m.x, y - 3);
   }
 }

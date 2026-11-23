@@ -61,7 +61,7 @@ const ATURAN = {
   // jeda = jarak minimal antar-gulingan supaya 2 lapis bisa dipakai beruntun.
   // versi game (tampil di layar judul & menu jeda) & halaman laporan masukan (74-versi-masukan.js).
   // Kirim Masukan membuka aplikasi email pemain dengan subjek & isi laporan yang sudah terisi.
-  versi: "0.9.0-beta",
+  versi: "0.9.1-beta",
   masukan: { email: "laganusantara28@gmail.com" },
   // tingkat kesulitan (71-kesulitan.js): keMusuh = damage pemain ke musuh, dariMusuh = damage musuh
   // ke pemain, exp & koin = hadiah dari monster
@@ -219,8 +219,12 @@ ATURAN.jimat = {
   dropMonster: { serpih: 0.03, biasa: 0.004, langka: 0.0012 },   // peluang drop dari monster biasa
 };
 ATURAN.skalaMonster = {
-  // Monster ikut menguat sesuai level pemain, tapi tidak lebih dari `batasAtas` level di atas level aslinya.
-  batasAtas: 12,
+  // Monster ikut menguat sesuai level pemain, tapi tidak lebih dari `batasAtas` level di atas level aslinya
+  // (Kera Liar Lv 1 → paling tinggi Lv 4). Jadi monster area awal tetap terasa lemah saat kamu sudah kuat.
+  batasAtas: 3,
+  // EXP dari monster yang jauh lebih lemah (selisih > expLemahMulai level) berkurang expLemahPerLv tiap level,
+  // paling sedikit expLemahMin (10%). Bos tidak terkena. Supaya tidak "farming" di area awal.
+  expLemahMulai: 5, expLemahPerLv: 0.15, expLemahMin: 0.1,
   nyawaPerLv: 0.16, seranganPerLv: 0.1, hadiahPerLv: 0.08,
   kaliSerang: 1.15, kaliNyawa: 1.1,       // semua monster sedikit lebih galak dari dulu
   // makin tinggi level asli monster (dunia berikutnya), makin tebal nyawa & makin sakit pukulannya:

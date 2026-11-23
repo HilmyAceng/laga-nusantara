@@ -39,13 +39,13 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
   padding-left: max(16px, env(safe-area-inset-left, 0px));
   padding-right: max(16px, env(safe-area-inset-right, 0px));
 }
-.me { display: grid; gap: 4px; width: min(230px, 40vw); padding: 7px 10px; border-radius: 12px; pointer-events: auto; cursor: pointer; background: var(--panel); border: 1px solid var(--line); }
+.me { display: grid; gap: 4px; width: min(275px, 42vw); padding: 8px 12px; border-radius: 12px; pointer-events: auto; cursor: pointer; background: var(--panel); border: 1px solid var(--line); }
 .bar { position: relative; height: 16px; border-radius: 6px; background: rgba(255, 255, 255, 0.1); overflow: hidden; }
 .bar i { position: absolute; inset: 0 auto 0 0; width: 100%; background: var(--hp); transition: width 0.12s linear; }
 .bar span { position: relative; display: block; font-size: 0.76rem; font-weight: 800; line-height: 16px; text-align: center; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8); font-variant-numeric: tabular-nums; }
-.quest { font-size: 0.78rem; line-height: 1.25; color: var(--ink-dim); }
+.quest { font-size: 0.88rem; line-height: 1.28; color: var(--ink-dim); }
 .me:hover { border-color: var(--gold); }
-.quest b { color: var(--gold); display: block; font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.quest b { color: var(--gold); display: block; font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; }
 .right { display: grid; justify-items: end; gap: 6px; }
 .area-name { font-family: var(--font-display); font-size: 0.95rem; line-height: 1; padding: 4px 10px 1px; border-radius: 8px; background: var(--panel); color: var(--gold); }
 /* layar transisi antar area */
@@ -387,6 +387,29 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 .ev-tanya { position: absolute; inset: 0; display: grid; place-content: center; gap: 12px; padding: 20px; text-align: center; background: rgba(12, 8, 22, 0.92); border-radius: 20px; z-index: 2; font-weight: 800; }
 .ct-box { z-index: 25; }
 .ct-panel { width: min(980px, 100%); position: relative; }
+/* Info & catatan pembaruan */
+#infoBox .ev-panel { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; height: min(620px, calc(100dvh - 40px)); box-sizing: border-box; }
+#infoBox .ev-isi { min-height: 0; } #infoBox .ev-daftar { overflow-y: auto; min-height: 0; } #infoBox .ev-detail { max-height: none; height: 100%; min-height: 0; overflow-y: auto; }
+.info-detail h3 { color: var(--gold); font-size: 1.2rem; } .info-detail h4 { margin-top: 6px !important; font-size: 0.9rem; }
+.info-detail ul { margin: 0; padding-left: 18px; display: grid; gap: 3px; font-size: 0.84rem; line-height: 1.4; }
+.info-tgl { color: var(--ink-dim); font-size: 0.78rem; }
+.info-label { display: inline-block; padding: 1px 7px; border-radius: 6px; font-size: 0.68rem; font-weight: 900; letter-spacing: 0.04em; text-transform: uppercase; }
+.info-label.baru { background: rgba(90, 209, 122, 0.2); color: #8ff0a8; } .info-label.ubah { background: rgba(143, 211, 255, 0.18); color: #8fd3ff; } .info-label.baik { background: rgba(244, 185, 66, 0.18); color: var(--gold); }
+/* Panduan kontrol keyboard */
+.pk-panel { width: min(720px, 100%); text-align: center; justify-items: center; }
+.pk-isi { display: grid; grid-template-columns: auto 1fr; gap: 18px; align-items: center; width: 100%; text-align: left; }
+.pk-panah { display: grid; grid-template-columns: repeat(3, 46px); grid-template-rows: repeat(2, 46px); gap: 5px; justify-items: center; }
+.pk-panah kbd:nth-child(1) { grid-column: 2; grid-row: 1; } .pk-panah kbd:nth-child(2) { grid-column: 1; grid-row: 2; } .pk-panah kbd:nth-child(3) { grid-column: 2; grid-row: 2; } .pk-panah kbd:nth-child(4) { grid-column: 3; grid-row: 2; } .pk-panah small { grid-column: 1 / -1; text-align: center; font-weight: 800; color: var(--gold); }
+.pk-panah { grid-template-rows: 46px 46px auto; }
+.pk-isi kbd { display: inline-grid; place-items: center; min-width: 46px; height: 46px; padding: 0 8px; box-sizing: border-box; border-radius: 9px; background: #f5efe2; color: #2b2238; border-bottom: 4px solid #b9a98a; font: 800 1.1rem/1 var(--font-display, sans-serif); }
+.pk-daftar { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px 14px; }
+.pk-daftar div { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 0.9rem; }
+.pk-daftar div.utama span { color: var(--gold); }
+.pk-catatan { margin: 0; color: var(--ink-dim); font-size: 0.82rem; }
+.pk-strip { position: absolute; left: 50%; bottom: calc(118px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); display: flex; gap: 12px; align-items: center; padding: 7px 14px; border-radius: 12px; background: var(--panel); border: 1px solid var(--gold); font-weight: 800; font-size: 0.85rem; z-index: 5; pointer-events: none; white-space: nowrap; }
+.pk-strip kbd { display: inline-grid; place-items: center; min-width: 24px; height: 24px; padding: 0 5px; border-radius: 6px; background: #f5efe2; color: #2b2238; border-bottom: 3px solid #b9a98a; font: 800 0.85rem/1 var(--font-display, sans-serif); margin-right: 4px; }
+.pk-strip span.sudah { opacity: 0.45; text-decoration: line-through; } .pk-strip span.sudah::after { content: " ✓"; color: #8ff0a8; }
+@media (max-height: 560px) { .pk-isi kbd { min-width: 38px; height: 38px; font-size: 0.95rem; } .pk-panah { grid-template-columns: repeat(3, 38px); grid-template-rows: 38px 38px auto; } .pk-daftar div { font-size: 0.8rem; } }
 .ct-setup { display: grid; grid-template-columns: minmax(220px, 330px) 1fr; gap: 14px; }
 .ct-setup h3 { margin: 0 0 6px; font-size: 1rem; color: var(--gold); }
 .ct-opsi h3 { margin-top: 12px; } .ct-opsi h3:first-child { margin-top: 0; }
@@ -584,9 +607,9 @@ h1 span { color: var(--gold); }
   .hero b { font-size: 1.25rem; }
   .heroes { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .me { padding: 6px 8px; gap: 4px; }
-  .quest { font-size: 0.62rem; }
-  .quest b { font-size: 0.56rem; }
-  .me { width: min(200px, 36vw); padding: 5px 8px; }
+  .quest { font-size: 0.72rem; }
+  .quest b { font-size: 0.6rem; }
+  .me { width: min(235px, 40vw); padding: 6px 9px; }
   .chip { height: 28px; padding: 0 7px; font-size: 0.75rem; }
   .hud .icon-btn { width: 28px; height: 28px; }
   #mini { width: 104px; height: 70px; }
@@ -610,6 +633,7 @@ h1 span { color: var(--gold); }
     <div class="right">
       <div class="chips">
         <!-- pintasan halaman (js/66-status-karakter.js): Jurus (+ poin sisa), Jimat, Status -->
+        <button class="icon-btn pintas ev-hud" id="btnInfoHud" type="button" data-ta="h.info" aria-label="Info"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.2" fill="#8fd3ff" stroke="#2d6a96" stroke-width="1.6"/><circle cx="12" cy="7.6" r="1.5" fill="#1d4466"/><path d="M12 11v6.2" stroke="#1d4466" stroke-width="2.4" stroke-linecap="round"/></svg><b class="pintas-poin ev-tanda">!</b></button>
         <button class="icon-btn pintas ev-hud" id="btnEventHud" type="button" data-ta="h.event" aria-label="Event" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l2.6 5.6 6.1.7-4.5 4.2 1.2 6-5.4-3-5.4 3 1.2-6L3.3 8.8l6.1-.7Z" fill="#f4b942" stroke="#8a5a12" stroke-width="1.2" stroke-linejoin="round"/></svg><b class="pintas-poin ev-tanda">!</b></button>
         <button class="icon-btn pintas" id="btnJurusHud" type="button" data-ta="h.jurusMenu" aria-label="Jurus"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 3.5 20.5 3.5 20.5 9.5 9 21 3 15Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M6.5 13.5 10.5 17.5M3 21l3-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><b class="pintas-poin" id="poinHud" hidden>0</b></button>
         <button class="icon-btn pintas" id="btnJimatHud" type="button" data-ta="h.jimatMenu" aria-label="Jimat"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4h10l4 5-9 11L3 9Z" fill="#8fd3ff" stroke="#2d6a96" stroke-width="1.6" stroke-linejoin="round"/><path d="M3 9h18M9 4 12 20 15 4" fill="none" stroke="#2d6a96" stroke-width="1.2" stroke-linejoin="round"/></svg></button>
@@ -723,6 +747,28 @@ h1 span { color: var(--gold); }
         <div class="row"><button class="go alt kecil" id="btnEventBatal" type="button" data-t="h.batal">Batal</button><button class="go kecil" id="btnEventYa" type="button" data-t="h.teleportYa">Teleport</button></div></div>
     </div>
   </div>
+
+  <!-- Info & catatan pembaruan (js/99f-info.js) -->
+  <div class="overlay" id="infoBox" hidden>
+    <div class="panel ev-panel">
+      <div class="ev-kepala"><div><p class="eyebrow" data-t="h.infoEyebrow">Laga Nusantara</p><h1 data-th="h.infoJudul">In<span>fo</span></h1></div>
+        <button class="icon-btn" id="btnInfoTutup" type="button" aria-label="✕">✕</button></div>
+      <div class="ev-isi"><div class="ev-daftar" id="infoDaftar"></div><div class="ev-detail info-detail" id="infoDetail"></div></div>
+      <div class="ev-lacak" id="infoKaki"></div>
+    </div>
+  </div>
+
+  <!-- Panduan kontrol keyboard untuk pemain desktop (js/99g-panduan-kontrol.js) -->
+  <div class="overlay" id="panduanBox" hidden>
+    <div class="panel pk-panel">
+      <p class="eyebrow" data-t="h.pkEyebrow">Sebelum bertualang</p>
+      <h1 data-th="h.pkJudul">Kontrol <span>Keyboard</span></h1>
+      <div class="pk-isi"><div class="pk-panah" id="pkPanah"></div><div class="pk-daftar" id="pkDaftar"></div></div>
+      <p class="pk-catatan" data-t="h.pkCatatan">Daftar lengkap ada di menu (Esc) › Kontrol.</p>
+      <button class="go" id="btnPkOke" type="button" data-t="h.pkOke">Mengerti, ayo main! (Enter)</button>
+    </div>
+  </div>
+  <div class="pk-strip" id="pkStrip" hidden></div>
 
   <!-- Catur Laga (js/99c-99e) -->
   <div class="overlay ct-box" id="caturBox" hidden>
@@ -1255,4 +1301,6 @@ h1 span { color: var(--gold); }
 <script src="js/99d-catur-papan.js"></script>
 <script src="js/99e-catur-duel.js"></script>
 <script src="js/99a-ikon-teks.js"></script>
+<script src="js/99f-info.js"></script>
+<script src="js/99g-panduan-kontrol.js"></script>
 <script src="js/100-main.js"></script>

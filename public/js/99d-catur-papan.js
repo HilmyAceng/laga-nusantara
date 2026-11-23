@@ -89,7 +89,7 @@ function isiSetup() {
   const C = dataCatur();
   $("ctTingkat").innerHTML = ["santai", "sedang", "jago"].map((k) => `<button type="button" class="kes-btn kes-${k === "santai" ? "santai" : k === "sedang" ? "normal" : "sulit"}" data-ct-tingkat="${k}" aria-pressed="${C.tingkat === k}"><b>${t("catur.t." + k)}${C.menang[k] ? " ✓" : ""}</b><small>${teksHadiahCatur(k)}</small></button>`).join("");
   const chip = (attr, nilai, aktif, isi) => `<button type="button" class="ct-chip" data-${attr}="${nilai}" aria-pressed="${aktif}">${isi}</button>`;
-  $("ctWarna").innerHTML = ["putih", "hitam"].map((w) => chip("ct-warna", w, C.warna === w, `${svgBidak("k", w === "putih")}<span>${t("catur." + w)}<small>${t("catur." + w + "Ket")}</small></span>`)).join("");
+  $("ctWarna").innerHTML = ["putih", "hitam"].map((w) => chip("ct-warna", w, C.warna === w, `${svgBidak("k", w === "putih")}<span>${t("catur." + w)}</span>`)).join("");
   $("ctWaktu").innerHTML = WAKTU_CATUR.map((d) => chip("ct-waktu", d, C.waktu === d, teksWaktuCatur(d))).join("");
   $("ctDuel").innerHTML = [[true, "duelYa"], [false, "duelTidak"]].map(([v, k]) => chip("ct-duel", v ? 1 : 0, C.duel === v, `<span>${t("catur." + k)}<small>${t("catur." + k + "Ket")}</small></span>`)).join("");
   $("ctPasukan").classList.toggle("mati", !C.duel);
