@@ -23,7 +23,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://hilmyaceng.github.io/laga-nusantara/icons/og.jpg">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);box-sizing:border-box;height:100%}[hidden]{display:none!important}</style>
-<script>window.LAGA_BUILD="20261123080116";</script>
+<script>window.LAGA_BUILD="20261123081547";</script>
 </head><body>
 <title>Laga Nusantara</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -446,7 +446,15 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 .ct-tutor-nav { align-items: center; } .ct-tutor-nav span { color: var(--ink-dim); font-weight: 800; font-size: 0.8rem; }
 .ct-hasil { text-align: center; } .ct-wowo { color: var(--ink-dim); font-style: italic; }
 @media (max-width: 760px), (max-height: 560px) {
-  .ev-isi { grid-template-columns: 1fr; } .ev-daftar { grid-auto-flow: column; overflow-x: auto; } .ev-detail { max-height: 40vh; }
+  /* HP: judul + daftar event di kolom kiri, isi (trailer, penjelasan, pelacak) di kanan */
+  .ev-panel { display: grid; grid-template-columns: minmax(150px, 30%) 1fr; grid-template-rows: auto 1fr auto; gap: 8px 12px; height: calc(100dvh - 20px); max-height: none; overflow: hidden; }
+  .ev-kepala { grid-column: 1; grid-row: 1; } .ev-kepala h1 { font-size: 1.6rem; }
+  .ev-isi { display: contents; }
+  .ev-daftar { grid-column: 1; grid-row: 2 / 4; overflow-y: auto; min-height: 0; }
+  .ev-item { padding: 8px 10px; }
+  .ev-detail { grid-column: 2; grid-row: 1 / 3; max-height: none; min-height: 0; }
+  .ev-detail canvas { max-height: 42dvh; width: auto; max-width: 100%; }
+  .ev-lacak { grid-column: 2; grid-row: 3; padding: 8px 10px; font-size: 0.8rem; }
   .ct-setup { grid-template-columns: 1fr; }
   .ct-papan { width: min(80vh, 58vw); } .ct-panel { padding: 10px; }
   .ct-baris { grid-template-columns: 26px 56px auto 40px 1fr auto; gap: 5px; } .ct-potret { width: 36px; height: 40px; }
