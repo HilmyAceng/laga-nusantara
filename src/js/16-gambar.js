@@ -299,9 +299,12 @@ function drawPickup(k, time) {
   else if (k.kind === "taring") { ctx.fillStyle = "#f2ead8"; ctx.beginPath(); ctx.moveTo(k.x - 5, k.y + by + 4); ctx.quadraticCurveTo(k.x - 4, k.y + by - 10, k.x + 6, k.y + by - 10); ctx.quadraticCurveTo(k.x, k.y + by - 4, k.x + 1, k.y + by + 4); ctx.fill(); }
 }
 
+// zoomKamera: pembesaran tambahan (mis. papan catur di tanah, 99l-catur-dunia.js); kameraTerakhir: untuk ubah titik layar → dunia
+let zoomKamera = 1, zoomTuju = 1, kameraTerakhir = { cx: 0, cy: 0, scale: 1 };
 function render(now) {
   const time = now / 1000;
-  const scale = clamp(Math.min(W / 720, H / 420), 0.75, 2.2);
+  zoomKamera += (zoomTuju - zoomKamera) * 0.12;
+  const scale = clamp(Math.min(W / 720, H / 420), 0.75, 2.2) * zoomKamera;
   const vw = W / scale, vh = H / scale;
   let tx, ty;
   const tk = typeof targetKamera === "function" && targetKamera();   // cutscene (78-sutradara.js)
@@ -313,6 +316,7 @@ function render(now) {
   // kalau peta lebih kecil dari layar (misalnya gua), peta ditaruh di tengah
   const cx = MW * T <= vw ? MW * T / 2 : clamp(cam.x, vw / 2, MW * T - vw / 2);
   const cy = MH * T <= vh ? MH * T / 2 : clamp(cam.y, vh / 2, MH * T - vh / 2);
+  kameraTerakhir = { cx, cy, scale };
   let sx = 0, sy = 0;
   if (shake > 0) { sx = rand(-7, 7) * shake; sy = rand(-7, 7) * shake; }
   ctx.setTransform(DPR, 0, 0, DPR, 0, 0);

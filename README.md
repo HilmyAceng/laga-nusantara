@@ -220,6 +220,7 @@ Semua menu memakai tombol. `Esc` = kembali satu halaman.
 | `99i-pencapaian.js` | Pencapaian (Menu › Gameplay › Pencapaian): daftar `CAPAI`, statistik `S.statistik`, hadiah koin/serpih, catatan `S.capai` untuk hadiah kosmetik nanti. File lain menambah lewat `daftarkanCapai()` |
 | `99j-harta.js` | Harta karun semua dunia: 2–3 peti per area (dipilih otomatis di ceruk yang bisa dicapai), peti dalam batu retak, peti terkunci bos, hitungan di peta besar |
 | `99k-memancing.js` | Event Memancing: Pak Udin (sungai desa) & dermaga Kampung Nelayan, mini game tarik-ulur, 10 ikan (`IKAN`), jual & koleksi |
+| `99l-catur-dunia.js` | Catur Laga di dunia game: papan digelar di tanah Desa Wanasari (`PAPAN_DUNIA`), kamera menyorot & zoom otomatis, ketuk petak di layar game, hero & Pak Wowo di samping papan, info sebagai HUD (`#ctHud`) |
 | `100-main.js` | Loop utama (dimuat paling akhir) |
 
 Cerita utama ada di folder `src/cerita/`: `bab-1.js` ... `bab-5.js` (satu file per bab), digabung di `semua.js`.

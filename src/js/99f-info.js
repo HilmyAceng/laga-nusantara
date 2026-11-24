@@ -17,6 +17,8 @@ const CATATAN_RILIS = [
       ["Event Memancing bersama Pak Udin: 10 jenis ikan di sungai desa dan dermaga Kampung Nelayan, jual tangkapan & lengkapi koleksi.", "Fishing event with Pak Udin: 10 kinds of fish in the village river and Fishermen's Village pier; sell your catch & complete the collection."],
     ],
     ubah: [
+      ["Memancing langsung di dunia game: hero berdiri di tepi air dan pelampung tampil di sungai/laut, tanpa kotak popup. Hasil tangkapan tetap terlihat walau tombol ditekan beruntun, dan menarik terlalu cepat membuat ikan kabur.", "Fishing happens right in the game world: your hero stands at the water's edge and the float appears in the river/sea, no popup box. Your catch stays visible even if you spam the button, and pulling too early scares the fish."],
+      ["Catur Laga dimainkan di papan yang digelar di tanah Desa Wanasari: hero & Pak Wowo berdiri di samping papan, kamera menyorot papan, dan petak diketuk langsung di layar game.", "Battle Chess is played on a board laid out on the ground in Wanasari Village: your hero and Pak Wowo stand beside it, the camera focuses on it, and you tap squares right in the game view."],
       ["Slot jimat ke-4 terbuka di level 50.", "A 4th charm slot unlocks at level 50."],
       ["Tulisan di komputer lebih besar, termasuk percakapan, notifikasi, dan tulisan panah misi.", "Larger text on computers, including dialogue, notifications, and the quest arrow label."],
       ["Notifikasi barang pindah ke tengah kiri layar; joystick HP sedikit ke kanan.", "Item notifications moved to the middle-left; the phone joystick moved slightly right."],

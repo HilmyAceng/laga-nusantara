@@ -43,7 +43,7 @@ function mulaiDuelCatur(opsi, selesai) {
     k: buatPetarung("kanan", kB.cls, kB.t, false, false, opsi.tingkat),
     peluru: [], efek: [], waktu: ARENA.waktu, fase: "intro", faseT: opsi.tutor ? 3.2 : 1.4, hasil: null,
   };
-  $("caturBox").hidden = true;
+  $("caturBox").hidden = true; $("ctHud").hidden = true; zoomTuju = 1;   // papan di tanah disembunyikan selama duel
   mode = "duel"; showUI(); $("hud").hidden = true;
   sfx.charge ? sfx.charge() : sfx.click();
 }
@@ -194,7 +194,7 @@ function detakDuel(dt) {
 }
 function akhiriDuel() {
   const D = duel; duel = null;
-  mode = "catur"; showUI(); $("hud").hidden = true; $("caturBox").hidden = false;
+  mode = "catur"; showUI(); $("hud").hidden = true; tampilLayarCatur($("caturBox").dataset.layar || "papan");   // kembali ke papan di tanah
   D.selesai(D.hasil.penyerangMenang);
 }
 {

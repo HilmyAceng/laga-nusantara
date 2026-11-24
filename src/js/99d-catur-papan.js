@@ -141,18 +141,9 @@ function mulaiPartai() {
   if (!C.tipLangkah) { C.tipLangkah = true; tipCatur(t("catur.tipLangkah")); }
   setelahLangkah();   // pemain hitam → Pak Wowo (putih) jalan duluan
 }
-function gambarPapan() {
+function gambarPapan() {   // papannya digambar di tanah (99l-catur-dunia.js); di sini hanya info samping
   if (!catur) return;
-  const s = catur.s, skak = kenaSkak(s, s.putih) ? posisiRaja(s, s.putih) : -1;
-  const tujuan = new Map(catur.langkahPilih.map((m) => [m.ke, m]));
-  let html = "";
-  for (let v = 0; v < 64; v++) {
-    const i = catur.pemainPutih ? v : 63 - v;   // bidak pemain selalu di bawah
-    const r = i >> 3, c = i & 7, x = s.b[i], gelap = (r + c) % 2 === 1;
-    const kls = ["ct-kotak", gelap ? "gelap" : "terang", i === catur.pilih ? "pilih" : "", catur.terakhir && (i === catur.terakhir.dari || i === catur.terakhir.ke) ? "akhir" : "", i === skak ? "skak" : "", tujuan.has(i) ? (tujuan.get(i).makan ? "bisa-makan" : "bisa") : ""].join(" ");
-    html += `<button type="button" class="${kls}" data-ct="${i}">${x ? svgBidak(x.t, x.w) : ""}</button>`;
-  }
-  $("ctPapan").innerHTML = html;
+  const s = catur.s;
   const atas = catur.pemainPutih ? "hitam" : "putih", bawah = catur.pemainPutih ? "putih" : "hitam";
   $("ctInfo").innerHTML = `<b>${t("catur.t." + catur.tingkat)}</b> · ${t("catur.langkahKe", { n: Math.floor(s.langkah / 2) + 1 })}
     <div class="ct-dimakan">${catur.dimakan[atas].map((tp) => svgBidak(tp, atas === "putih")).join("")}</div>
@@ -185,9 +176,10 @@ setInterval(() => {
 let tipT = 0;
 function tipCatur(teks) { const el = $("ctTip"); el.textContent = teks; el.hidden = false; clearTimeout(tipT); tipT = setTimeout(() => { el.hidden = true; }, 6000); }
 
-$("ctPapan").addEventListener("click", (e) => {
-  const b = e.target.closest("[data-ct]"); if (!b || !catur || catur.sibuk || catur.selesai || !giliranPemain()) return;
-  const i = +b.dataset.ct, s = catur.s, x = s.b[i];
+// pemain mengetuk kotak i (indeks papan 0..63) — dipanggil dari papan di tanah (99l-catur-dunia.js)
+function klikKotakCatur(i) {
+  if (!catur || catur.sibuk || catur.selesai || !giliranPemain()) return;
+  const s = catur.s, x = s.b[i];
   const m = catur.langkahPilih.find((l) => l.ke === i);
   if (m) { catur.pilih = -1; catur.langkahPilih = []; return lakukanLangkah(m); }
   if (x && x.w === catur.pemainPutih) {
@@ -196,7 +188,7 @@ $("ctPapan").addEventListener("click", (e) => {
     sfx.click();
   } else { catur.pilih = -1; catur.langkahPilih = []; }
   gambarPapan();
-});
+}
 
 // menjalankan satu langkah (pemain atau komputer); memakan → duel
 function lakukanLangkah(m) {

@@ -3,6 +3,7 @@
 //  - Pak Udin, pemancing di tepi sungai Desa Wanasari, meminjamkan joran (ikan sungai).
 //  - Dermaga di Kampung Nelayan (pesisir) untuk ikan laut.
 //  - Terbuka bersama event catur (akhir Bab 2) dan tampil di popup Event.
+// Memancing langsung di dunia game (hero di tepi air, pelampung di petak air sungguhan).
 // Cara main (mode "mancing"):
 //  1. Lempar kail → tunggu pelampung bergoyang (beberapa detik).
 //  2. "Ada yang menggigit!" → tekan TARIK secepatnya (kurang dari 1 detik).
@@ -102,49 +103,69 @@ function bicaraUdin(npc) {
   tandaNpc = function (n) { if (n.id === "udin" && eventTerbuka("mancing") && !(S.ikan && S.ikan.total > 0)) return { mark: "!", warna: "#f4b942" }; return tandaAsli(n); };
 }
 
-// ---------- Mini game ----------
-let mc = null;   // { tempat, fase, t, ikan, berat, zonaY, zonaV, ikanY, ikanTuju, ikanT, progres, tahan, goyang }
+// ---------- Mini game (langsung di dunia game, bukan kotak popup) ----------
+// Hero berdiri di tepi air, kail dilempar ke petak air sungguhan di depannya.
+// HUD memancing: pesan di atas, kartu hasil, meter tarik-ulur di kanan, tombol aksi besar.
+let mc = null;   // { tempat, fase, t, kunci, ikan, zonaY, zonaV, ikanY, ikanTuju, ikanT, progres, tahan, goyang, bx, by, hasil, terbang }
+function titikPelampung() {
+  const px = P.x / T, py = P.y / T;
+  let terbaik = null, nilai = 1e9;
+  for (let y = Math.floor(py) - 6; y <= Math.floor(py) + 6; y++) for (let x = Math.floor(px) - 6; x <= Math.floor(px) + 6; x++) {
+    if (tileAt(x, y) !== WATER) continue;
+    const d = Math.hypot(x + 0.5 - px, y + 0.5 - py), v = Math.abs(d - 2.6);   // paling enak ±2,6 petak dari hero
+    if (d >= 1.1 && v < nilai) { nilai = v; terbaik = { x: (x + 0.5) * T, y: (y + 0.5) * T }; }
+  }
+  return terbaik;
+}
 function bukaMancing(tempat) {
-  mc = { tempat, fase: "siap", t: 0, progres: 0, tahan: false, zonaY: 0.5, zonaV: 0, ikanY: 0.5, ikanTuju: 0.5, ikanT: 0, goyang: 0, hasil: null };
-  mode = "mancing"; showUI(); $("hud").hidden = true;
-  $("mancingBox").hidden = false;
-  $("mcJudul").textContent = Lx(tempat === "laut" ? ["Memancing di Laut", "Sea Fishing"] : ["Memancing di Sungai", "River Fishing"]);
-  aturTombolMc(); pesanMc(Lx(["Tekan tombol untuk melempar kail.", "Press the button to cast your line."]));
+  const titik = titikPelampung();
+  if (!titik) { toast(Lx(["Tidak ada air di dekat sini.", "There's no water nearby."]), false); return; }
+  mc = { tempat, fase: "siap", t: 0, kunci: 0, progres: 0, tahan: false, zonaY: 0.5, zonaV: 0, ikanY: 0.5, ikanTuju: 0.5, ikanT: 0, goyang: 0, hasil: null, terbang: 0, bx: titik.x, by: titik.y };
+  P.face = Math.atan2(titik.y - P.y, titik.x - P.x); P.moving = false;
+  mode = "mancing"; showUI();
+  $("mcHud").hidden = false; $("mcHasil").hidden = true;
+  aturTombolMc(); pesanMc(Lx(["Tekan tombol untuk melempar kail.", "Press the button to cast your line."]) + (isTouch ? "" : " " + Lx(["(Spasi)", "(Space)"])));
   let lalu = performance.now();
   const loop = (now) => {
     if (!mc) return;
     const dt = Math.min(0.05, (now - lalu) / 1000); lalu = now;
-    detakMancing(dt); gambarMancing(now / 1000);
+    detakMancing(dt); gambarMeter(now / 1000);
     requestAnimationFrame(loop);
   };
   requestAnimationFrame(loop);
 }
 function tutupMancing() {
-  mc = null; $("mancingBox").hidden = true;
-  mode = "play"; showUI(); $("hud").hidden = false; refreshHud(true); saveSoon();
+  mc = null; $("mcHud").hidden = true;
+  if (mode === "mancing") { mode = "play"; showUI(); }
+  refreshHud(true); saveSoon();
 }
 const pesanMc = (teks) => { $("mcPesan").textContent = teks; };
 function aturTombolMc() {
   const b = $("btnMcAksi"), f = mc.fase;
-  b.textContent = Lx(f === "siap" || f === "hasil" ? [f === "hasil" ? "Lempar lagi" : "Lempar kail", f === "hasil" ? "Cast again" : "Cast line"]
-    : f === "tunggu" ? ["Menunggu...", "Waiting..."] : f === "gigit" ? ["TARIK!", "PULL!"] : ["TAHAN untuk menarik", "HOLD to reel"]);
+  b.textContent = Lx(f === "siap" ? ["Lempar", "Cast"] : f === "hasil" ? ["Lempar lagi", "Cast again"]
+    : f === "tunggu" ? ["Tunggu...", "Wait..."] : f === "gigit" ? ["TARIK!", "PULL!"] : ["TAHAN", "HOLD"]);
   b.classList.toggle("mc-gigit", f === "gigit");
-  b.disabled = f === "tunggu";
+  b.classList.toggle("mc-tunggu", f === "tunggu" || mc.kunci > 0);
+  $("mcMeter").hidden = f !== "tarik";
 }
 function pilihIkan(tempat) {
   const daftar = Object.keys(IKAN).filter((id) => IKAN[id].tempat === tempat);
-  const total = daftar.reduce((a, id) => a + RAR_IKAN[IKAN[id].rar].bobot / daftar.filter((x) => IKAN[x].rar === IKAN[id].rar).length, 0);
-  let r = Math.random() * total;
-  for (const id of daftar) { r -= RAR_IKAN[IKAN[id].rar].bobot / daftar.filter((x) => IKAN[x].rar === IKAN[id].rar).length; if (r <= 0) return id; }
+  const bobot = (id) => RAR_IKAN[IKAN[id].rar].bobot / daftar.filter((x) => IKAN[x].rar === IKAN[id].rar).length;
+  let r = Math.random() * daftar.reduce((a, id) => a + bobot(id), 0);
+  for (const id of daftar) { r -= bobot(id); if (r <= 0) return id; }
   return daftar[0];
 }
 // tombol aksi ditekan / dilepas
 function tekanMc(turun) {
   if (!mc) return;
   if (!turun) { mc.tahan = false; return; }
+  if (mc.kunci > 0) return;   // jeda singkat setelah dapat/lepas ikan: tekanan beruntun (spam) diabaikan
   if (mc.fase === "siap" || mc.fase === "hasil") {
-    mc.fase = "tunggu"; mc.t = 1.8 + Math.random() * 3.6; mc.goyang = 0; mc.hasil = null; sfx.roll();
-    pesanMc(Lx(["Kail dilempar... tunggu pelampungnya bergoyang.", "Line cast... wait for the float to bob."]));
+    mc.fase = "tunggu"; mc.t = 1.8 + Math.random() * 3.6; mc.goyang = 0; mc.hasil = null; $("mcHasil").hidden = true; sfx.roll();
+    pesanMc(Lx(["Kail dilempar... tunggu sampai ada yang menggigit. Jangan ditarik dulu!", "Line cast... wait for a bite. Don't pull yet!"]));
+  } else if (mc.fase === "tunggu") {   // menarik terlalu cepat: ikan kaget & kabur (supaya tidak asal tekan)
+    mc.fase = "siap"; mc.kunci = 0.8; sfx.click();
+    pesanMc(Lx(["Terlalu cepat! Ikannya kaget dan kabur. Tunggu sampai ada tanda “!”.", "Too soon! The fish got spooked. Wait for the “!” sign."]));
   } else if (mc.fase === "gigit") {
     mc.fase = "tarik"; mc.ikan = pilihIkan(mc.tempat); mc.progres = 0.3; mc.zonaY = 0.5; mc.zonaV = 0; mc.ikanY = 0.5; mc.ikanTuju = 0.5; mc.ikanT = 0; mc.tahan = true;
     sfx.hit ? sfx.hit() : sfx.click();
@@ -154,13 +175,15 @@ function tekanMc(turun) {
 }
 function detakMancing(dt) {
   const m = mc;
+  if (m.kunci > 0) { m.kunci -= dt; if (m.kunci <= 0) aturTombolMc(); }
+  if (m.terbang > 0) m.terbang = Math.max(0, m.terbang - dt);
   if (m.fase === "tunggu") {
     m.t -= dt; m.goyang = Math.max(0, m.goyang - dt);
     if (Math.random() < dt * 0.6) m.goyang = 0.25;   // gigitan kecil (pengecoh)
     if (m.t <= 0) { m.fase = "gigit"; m.t = 0.95; sfx.zap ? sfx.zap() : sfx.click(); pesanMc(Lx(["Ada yang menggigit! TARIK sekarang!", "Something's biting! PULL now!"])); aturTombolMc(); }
   } else if (m.fase === "gigit") {
     m.t -= dt;
-    if (m.t <= 0) { m.fase = "siap"; pesanMc(Lx(["Terlambat... ikannya kabur. Coba lagi!", "Too slow... it got away. Try again!"])); aturTombolMc(); }
+    if (m.t <= 0) { m.fase = "siap"; m.kunci = 0.6; pesanMc(Lx(["Terlambat... ikannya kabur. Coba lagi!", "Too slow... it got away. Try again!"])); aturTombolMc(); }
   } else if (m.fase === "tarik") {
     const R = RAR_IKAN[IKAN[m.ikan].rar], tinggi = R.zona;
     // kotak hijau: naik saat ditahan, jatuh saat dilepas
@@ -174,69 +197,62 @@ function detakMancing(dt) {
     const masuk = Math.abs(m.ikanY - m.zonaY) < tinggi / 2;
     m.progres = clamp(m.progres + (masuk ? 0.32 : -0.24) * dt, 0, 1);
     if (m.progres >= 1) dapatIkan(m.ikan);
-    else if (m.progres <= 0) { m.fase = "siap"; sfx.click(); pesanMc(Lx(["Talinya mengendur... ikannya lepas. Coba lagi!", "The line went slack... it escaped. Try again!"])); aturTombolMc(); }
+    else if (m.progres <= 0) { m.fase = "siap"; m.kunci = 0.6; m.tahan = false; sfx.click(); pesanMc(Lx(["Talinya mengendur... ikannya lepas. Coba lagi!", "The line went slack... it escaped. Try again!"])); aturTombolMc(); }
   }
 }
 function dapatIkan(id) {
   const F = IKAN[id], D = dataIkan(), berat = +(F.berat[0] + Math.random() * (F.berat[1] - F.berat[0])).toFixed(2);
   D.tas[id] = (D.tas[id] || 0) + 1; D.total = (D.total || 0) + 1;
   const k = D.koleksi[id] = D.koleksi[id] || { n: 0, berat: 0 };
-  const baru = k.n === 0, rekor = berat > k.berat;
-  k.n++; if (rekor) k.berat = berat;
-  mc.fase = "hasil"; mc.hasil = { id, berat };
-  pesanMc(`${Lx(["Dapat", "Caught"])}: ${namaIkan(id)} (${berat} kg)${baru ? " · " + Lx(["BARU!", "NEW!"]) : rekor ? " · " + Lx(["Rekor!", "Record!"]) : ""}`);
+  const baru = k.n === 0, rekor = !baru && berat > k.berat;
+  k.n++; if (berat > k.berat) k.berat = berat;
+  mc.fase = "hasil"; mc.hasil = { id, berat }; mc.kunci = 1.4; mc.tahan = false; mc.terbang = 0.8;
+  // kartu hasil: tetap tampil sampai melempar lagi (tidak hilang walau tombol ditekan beruntun)
+  const R = RAR_IKAN[F.rar], label = F.rar === "biasa" ? ["Biasa", "Common"] : F.rar === "langka" ? ["Langka", "Rare"] : ["Legenda", "Legendary"];
+  $("mcHasil").innerHTML = `<small>${Lx(["Kamu mendapat", "You caught"])}</small><b style="color:${R.warna}">${namaIkan(id)}</b>
+    <span>${berat} kg · ${Lx(label)} · ${Lx(["harga", "value"])} ${F.harga}</span>${baru ? `<i>${Lx(["IKAN BARU!", "NEW FISH!"])}</i>` : rekor ? `<i>${Lx(["REKOR BARU!", "NEW RECORD!"])}</i>` : ""}`;
+  $("mcHasil").hidden = false;
+  pesanMc(Lx([`Tas ikan: ${isiTas().reduce((a, [, n]) => a + n, 0)} ekor · jual ke Pak Udin atau di dermaga.`, `Fish bag: ${isiTas().reduce((a, [, n]) => a + n, 0)} · sell to Pak Udin or at the pier.`]));
   if (F.rar !== "biasa") toast(`${F.rar === "legenda" ? "✦ " : ""}${namaIkan(id)}!`, true);
   sfx.level ? sfx.level() : sfx.coin(); tambahStat("ikan"); aturTombolMc(); saveSoon();
 }
 
-// ---------- Gambar ----------
-function gambarMancing(time) {
-  const cv = $("mcKanvas"), c = cv.getContext("2d"), W2 = cv.width, H2 = cv.height, m = mc;
-  const laut = m.tempat === "laut";
-  // pemandangan: langit, air, tepi
-  const g = c.createLinearGradient(0, 0, 0, H2);
-  g.addColorStop(0, laut ? "#8fd3ff" : "#9fd6a8"); g.addColorStop(0.35, laut ? "#cfe9ff" : "#d8efd0"); g.addColorStop(0.36, laut ? "#2d6a96" : "#3d7a6c"); g.addColorStop(1, laut ? "#123a5c" : "#1f4a40");
-  c.fillStyle = g; c.fillRect(0, 0, W2, H2);
-  c.strokeStyle = "rgba(255,255,255,0.18)"; c.lineWidth = 2;
-  for (let i = 0; i < 6; i++) { const y = 130 + i * 28, o = Math.sin(time * 1.5 + i) * 20; c.beginPath(); c.moveTo(20 + o, y); c.lineTo(160 + o, y); c.moveTo(260 - o, y + 12); c.lineTo(400 - o, y + 12); c.stroke(); }
-  c.fillStyle = laut ? "#c9a96e" : "#5a8f3c"; c.fillRect(0, H2 - 40, 140, 40);
-  // pemancing (hero) di tepi kiri bawah
-  c.save(); c.translate(70, H2 - 34); c.scale(1.3, 1.3);
-  const Cls = CLASSES[S.cls];
-  drawPerson(c, { x: 0, y: 0, face: -0.6, run: 0, moving: false, swing: 0, inv: 0, flash: 0 }, { color: Cls.color, accent: Cls.accent, hair: Cls.hair, hat: Cls.hat }, time, { preview: true });
-  c.restore();
-  // joran & tali ke pelampung
-  const px = 320, dasar = 150, gigit = m.fase === "gigit", goy = m.fase === "tunggu" ? Math.sin(time * 4) * 2 + (m.goyang > 0 ? Math.sin(time * 40) * 4 : 0) : gigit ? Math.sin(time * 50) * 7 + 6 : 0;
-  const tarik = m.fase === "tarik";
-  c.strokeStyle = "#7a4a26"; c.lineWidth = 4; c.beginPath(); c.moveTo(86, H2 - 70); c.lineTo(150, H2 - 170); c.stroke();
-  if (m.fase !== "siap" && m.fase !== "hasil") {
-    const py = dasar + goy + (tarik ? Math.sin(time * 9) * 6 : 0);
-    c.strokeStyle = "rgba(255,255,255,0.7)"; c.lineWidth = 1.2; c.beginPath(); c.moveTo(150, H2 - 170); c.quadraticCurveTo(240, tarik ? 80 : 120, px, py - 6); c.stroke();
-    c.fillStyle = "#e5484d"; c.beginPath(); c.arc(px, py - 6, 6, Math.PI, 0); c.fill();
-    c.fillStyle = "#f7efe3"; c.beginPath(); c.arc(px, py - 6, 6, 0, Math.PI); c.fill();
-    if (gigit || m.goyang > 0) { c.strokeStyle = "rgba(255,255,255,0.6)"; c.beginPath(); c.ellipse(px, py, 16 + (time * 30) % 12, 5, 0, 0, 6.28); c.stroke(); }
-    if (gigit) { c.fillStyle = "#f4b942"; c.font = "700 38px Teko, sans-serif"; c.textAlign = "center"; c.fillText("!", px, py - 22); }
+// ---------- Gambar di dunia: joran, tali, pelampung, ikan yang terangkat ----------
+GAMBAR_ATAS.push(function (time) {
+  if (!mc || !P) return;
+  const m = mc, f = P.face, ujung = { x: P.x + Math.cos(f) * 34, y: P.y - 46 + Math.sin(f) * 12 };
+  ctx.strokeStyle = "#7a4a26"; ctx.lineWidth = 3; ctx.lineCap = "round";
+  ctx.beginPath(); ctx.moveTo(P.x + Math.cos(f) * 8, P.y - 26); ctx.lineTo(ujung.x, ujung.y); ctx.stroke();
+  if (m.fase === "tunggu" || m.fase === "gigit" || m.fase === "tarik") {
+    const gigit = m.fase === "gigit", tarik = m.fase === "tarik";
+    const goy = m.fase === "tunggu" ? Math.sin(time * 4) * 1.5 + (m.goyang > 0 ? Math.sin(time * 40) * 3 : 0) : gigit ? Math.sin(time * 50) * 5 + 4 : Math.sin(time * 9) * 4;
+    const bx = m.bx + (tarik ? Math.sin(time * 3) * 10 : 0), by = m.by + goy;
+    ctx.strokeStyle = "rgba(255,255,255,0.75)"; ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.moveTo(ujung.x, ujung.y); ctx.quadraticCurveTo((ujung.x + bx) / 2, Math.max(ujung.y, by) + (tarik ? -4 : 14), bx, by - 4); ctx.stroke();
+    ctx.strokeStyle = `rgba(255,255,255,${gigit || m.goyang > 0 ? 0.7 : 0.3})`; ctx.beginPath(); ctx.ellipse(bx, by + 2, 10 + (time * 24) % 10, 4, 0, 0, 6.28); ctx.stroke();
+    ctx.fillStyle = "#e5484d"; ctx.beginPath(); ctx.arc(bx, by - 4, 5, Math.PI, 0); ctx.fill();
+    ctx.fillStyle = "#f7efe3"; ctx.beginPath(); ctx.arc(bx, by - 4, 5, 0, Math.PI); ctx.fill();
+    if (gigit) { ctx.fillStyle = "#f4b942"; ctx.strokeStyle = "#1b1208"; ctx.lineWidth = 3; ctx.font = "700 34px Teko, sans-serif"; ctx.textAlign = "center"; ctx.strokeText("!", bx, by - 16); ctx.fillText("!", bx, by - 16); }
   }
-  // hasil tangkapan
-  if (m.fase === "hasil" && m.hasil) {
-    const F = IKAN[m.hasil.id], R = RAR_IKAN[F.rar];
-    c.fillStyle = "rgba(10,6,20,0.7)"; c.fillRect(170, 40, 260, 110);
-    gambarIkan(c, 300, 80, 1.6, F.rar, time);
-    c.textAlign = "center"; c.fillStyle = R.warna; c.font = "700 26px Teko, sans-serif"; c.fillText(namaIkan(m.hasil.id), 300, 125);
-    c.fillStyle = "#f7efe3"; c.font = "700 13px Nunito, sans-serif"; c.fillText(`${m.hasil.berat} kg · ${Lx(["harga", "value"])} ${F.harga}`, 300, 143);
+  // ikan terangkat dari air ke tangan hero
+  if (m.terbang > 0 && m.hasil) {
+    const k = 1 - m.terbang / 0.8, x = m.bx + (P.x - m.bx) * k, y = m.by + (P.y - 50 - m.by) * k - Math.sin(k * Math.PI) * 60;
+    gambarIkan(ctx, x, y, 1.1, IKAN[m.hasil.id].rar, time);
   }
-  // meter tarik-ulur (kanan)
-  const mx = W2 - 70, my = 18, mh = H2 - 36;
-  c.fillStyle = "rgba(10,6,20,0.75)"; c.fillRect(mx - 6, my - 6, 46, mh + 12);
-  c.fillStyle = "#1b2a3a"; c.fillRect(mx, my, 22, mh);
-  if (tarik) {
-    const R = RAR_IKAN[IKAN[m.ikan].rar], zy = my + (1 - m.zonaY) * mh, zh = R.zona * mh;
-    const masuk = Math.abs(m.ikanY - m.zonaY) < R.zona / 2;
-    c.fillStyle = masuk ? "rgba(90,209,122,0.85)" : "rgba(90,209,122,0.5)"; c.fillRect(mx, zy - zh / 2, 22, zh);
-    gambarIkan(c, mx + 11, my + (1 - m.ikanY) * mh, 0.7, IKAN[m.ikan].rar, time);
-    c.fillStyle = "#2b2238"; c.fillRect(mx + 28, my, 8, mh);
-    c.fillStyle = m.progres > 0.66 ? "#5ad17a" : m.progres > 0.33 ? "#f4b942" : "#e5484d"; c.fillRect(mx + 28, my + mh * (1 - m.progres), 8, mh * m.progres);
-  } else { c.fillStyle = "rgba(247,239,227,0.35)"; c.font = "700 12px Nunito, sans-serif"; c.textAlign = "center"; c.save(); c.translate(mx + 17, my + mh / 2); c.rotate(-Math.PI / 2); c.fillText(Lx(["TARIK-ULUR", "REEL METER"]), 0, 4); c.restore(); }
+});
+// meter tarik-ulur (HUD, kanvas kecil di kanan layar)
+function gambarMeter(time) {
+  const m = mc, cv = $("mcMeter"); if (cv.hidden || m.fase !== "tarik") return;
+  const c = cv.getContext("2d"), w = cv.width, h = cv.height, my = 8, mh = h - 16, mx = 8;
+  c.clearRect(0, 0, w, h);
+  c.fillStyle = "rgba(10,6,20,0.8)"; c.fillRect(0, 0, w, h);
+  c.fillStyle = "#1b2a3a"; c.fillRect(mx, my, 26, mh);
+  const R = RAR_IKAN[IKAN[m.ikan].rar], zy = my + (1 - m.zonaY) * mh, zh = R.zona * mh;
+  const masuk = Math.abs(m.ikanY - m.zonaY) < R.zona / 2;
+  c.fillStyle = masuk ? "rgba(90,209,122,0.9)" : "rgba(90,209,122,0.5)"; c.fillRect(mx, zy - zh / 2, 26, zh);
+  gambarIkan(c, mx + 13, my + (1 - m.ikanY) * mh, 0.75, IKAN[m.ikan].rar, time);
+  c.fillStyle = "#2b2238"; c.fillRect(mx + 34, my, 10, mh);
+  c.fillStyle = m.progres > 0.66 ? "#5ad17a" : m.progres > 0.33 ? "#f4b942" : "#e5484d"; c.fillRect(mx + 34, my + mh * (1 - m.progres), 10, mh * m.progres);
 }
 function gambarIkan(c, x, y, s, rar, time) {
   c.save(); c.translate(x, y); c.scale(s, s); c.rotate(Math.sin(time * 6) * 0.12);
@@ -247,16 +263,17 @@ function gambarIkan(c, x, y, s, rar, time) {
   if (rar === "legenda") { c.strokeStyle = "rgba(255,240,180,0.8)"; c.lineWidth = 1.5; c.beginPath(); c.arc(0, 0, 18 + Math.sin(time * 5) * 2, 0, 6.28); c.stroke(); }
   c.restore();
 }
-
-// ---------- Kontrol: tombol (tahan), kanvas (tahan), Spasi/Enter (tahan), Esc ----------
+// selama memancing: HUD biasa tetap tampil, tombol sentuh & bar jurus disembunyikan
 {
-  const b = $("btnMcAksi"), cv = $("mcKanvas");
-  for (const el of [b, cv]) {
-    el.addEventListener("pointerdown", (e) => { e.preventDefault(); tekanMc(true); });
-    el.addEventListener("pointerup", () => tekanMc(false));
-    el.addEventListener("pointerleave", () => tekanMc(false));
-    el.addEventListener("pointercancel", () => tekanMc(false));
-  }
+  const showUIAsli = showUI;
+  showUI = function () { showUIAsli(); if (mode === "mancing") { ui.touch.hidden = true; ui.skills.hidden = true; } };
+}
+
+// ---------- Kontrol: tombol (tahan), Spasi/Enter/serang (tahan), Esc = selesai ----------
+{
+  const b = $("btnMcAksi");
+  b.addEventListener("pointerdown", (e) => { e.preventDefault(); tekanMc(true); });
+  for (const ev of ["pointerup", "pointerleave", "pointercancel"]) b.addEventListener(ev, () => tekanMc(false));
   $("btnMcTutup").addEventListener("click", () => { sfx.click(); tutupMancing(); });
   addEventListener("keydown", (e) => {
     if (mode !== "mancing") return;
