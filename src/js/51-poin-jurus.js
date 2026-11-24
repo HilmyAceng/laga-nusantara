@@ -22,6 +22,7 @@ function setelahNaikLevel(lv) {
   }
   if (lv === ATURAN.tenaga.bukaLevel) setTimeout(() => toast(t("pam.terbuka", { nama: teksPam("name"), k: kb("pamungkas").replace(/<[^>]+>/g, "") }), true), 1800);
   if (lv === ATURAN.jimat.slotTambah) setTimeout(() => toast(t("jimat.slotBaru"), true), 2600);
+  if (lv === ATURAN.jimat.slotTambah2) setTimeout(() => toast(t("jimat.slotBaru4"), true), 2600);
   setTimeout(() => toast(t("jurus.poinBaru", { n: poinSisa(), k: isTouch ? t("jurus.lewatMenu") : "K" }), false), 1300);
 }
 

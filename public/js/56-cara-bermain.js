@@ -93,6 +93,6 @@ function isiCaraBermain() {
   $("caraIsi").innerHTML = bagian.map((b) => `
     <section class="cara">
       <h3>${t("cara." + b + ".judul")}</h3>
-      <p>${t("cara." + b + (isTouch ? ".sentuh" : ".isi"), { serang: k("serang"), jurus: k("jurus"), jurus2: k("jurus2"), hindar: k("hindar"), jamu: k("jamu"), pamungkas: k("pamungkas"), peta: k("peta"), misi: k("misi"), mjurus: k("menuJurus"), mjimat: k("menuJimat"), lv: ATURAN.tenaga.bukaLevel, slot: ATURAN.jimat.slotTambah })}</p>
+      <p>${t("cara." + b + (isTouch ? ".sentuh" : ".isi"), { serang: k("serang"), jurus: k("jurus"), jurus2: k("jurus2"), hindar: k("hindar"), jamu: k("jamu"), pamungkas: k("pamungkas"), peta: k("peta"), misi: k("misi"), mjurus: k("menuJurus"), mjimat: k("menuJimat"), lv: ATURAN.tenaga.bukaLevel, slot: ATURAN.jimat.slotTambah, slot4: ATURAN.jimat.slotTambah2 })}</p>
     </section>`).join("");
 }

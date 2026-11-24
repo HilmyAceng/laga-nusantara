@@ -1,6 +1,6 @@
 // =====================================================================
 // JIMAT, RAMUAN & KEGUNAAN KOIN
-//  - Jimat (JIMAT di config.js) dipasang di slot (2, ditambah 1 di level 25).
+//  - Jimat (JIMAT di config.js) dipasang di slot (2, +1 di level 25, +1 di level 50 → maks. 4).
 //    Rarity: Biasa (dibeli di toko), Langka & Legenda (drop bos: 53-drop-langka.js).
 //  - Tempa jimat di toko: koin + Serpih Pusaka → bintang naik, efek +25% per bintang.
 //    Jimat kembar otomatis dilebur jadi Serpih Pusaka.
@@ -11,7 +11,7 @@
 "use strict";
 
 const namaJimat = (id) => { const j = JIMAT[id]; return (bahasa === "en" && j.en && j.en.name) || j.name; };
-const slotJimat = () => ATURAN.jimat.slot + (S && S.lv >= ATURAN.jimat.slotTambah ? 1 : 0);
+const slotJimat = () => ATURAN.jimat.slot + (S && S.lv >= ATURAN.jimat.slotTambah ? 1 : 0) + (S && S.lv >= ATURAN.jimat.slotTambah2 ? 1 : 0);   // maks. 4
 const bintangJimat = (id) => (S && S.jimat && S.jimat.punya[id]) || 0;
 const kaliBintang = (id) => 1 + ATURAN.jimat.perBintang * (Math.max(1, bintangJimat(id)) - 1);   // belum punya = tampil sebagai bintang 1
 const ramuanAktif = (id) => !!(S && S.ramuan && S.ramuan[id] > Date.now());

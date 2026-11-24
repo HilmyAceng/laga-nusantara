@@ -497,11 +497,11 @@ h1 span { color: var(--gold); }
 .lead { margin: 0; color: var(--ink-dim); font-size: 0.9rem; line-height: 1.45; max-width: 60ch; }
 .heroes { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
 @media (max-width: 640px) { .heroes { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-.hero { display: grid; gap: 6px; padding: 10px; border-radius: 14px; cursor: pointer; text-align: left; background: rgba(255, 255, 255, 0.04); border: 2px solid rgba(255, 255, 255, 0.08); }
+.hero { display: grid; align-content: start; grid-template-rows: auto auto auto 1fr; gap: 6px; padding: 10px; border-radius: 14px; cursor: pointer; text-align: left; background: rgba(255, 255, 255, 0.04); border: 2px solid rgba(255, 255, 255, 0.08); }
 .hero[aria-pressed="true"] { border-color: var(--gold); background: rgba(244, 185, 66, 0.1); }
 .hero canvas { width: 100%; height: 120px; display: block; border-radius: 10px; background: #2f5e2c; }
-.hero b { font-family: var(--font-display); font-size: 1.5rem; font-weight: 600; line-height: 0.9; }
-.role { font-size: 0.7rem; color: var(--gold); font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; }
+.hero b { font-family: var(--font-display); font-size: 1.5rem; font-weight: 600; line-height: 0.9; margin-top: 4px; }
+.role { font-size: 0.7rem; color: var(--gold); font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; line-height: 1.3; min-height: 2.6em; }
 .desc { font-size: 0.75rem; color: var(--ink-dim); line-height: 1.35; margin: 0; }
 .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: flex-end; }
 .go {
@@ -612,7 +612,8 @@ h1 span { color: var(--gold); }
 @media (max-height: 520px) {
   .panel { padding: 14px; gap: 10px; }
   h1 { font-size: 2.3rem; }
-  .lead, .desc { display: none; }
+  .lead { display: none; }
+  .desc { font-size: 0.66rem; line-height: 1.3; }   /* HP: deskripsi hero tetap tampil, lebih kecil */
   .hero { padding: 8px; gap: 4px; }
   .hero canvas { height: 80px; }
   .hero b { font-size: 1.25rem; }

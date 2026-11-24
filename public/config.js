@@ -211,7 +211,7 @@ ATURAN.poinJurus = {
   resetHarga: 60,                         // atur ulang poin = 60 koin × level
 };
 ATURAN.jimat = {
-  slot: 2, slotTambah: 25,                // 2 slot jimat; slot ke-3 terbuka di level 25
+  slot: 2, slotTambah: 25, slotTambah2: 50,   // 2 slot jimat; slot ke-3 terbuka di level 25, slot ke-4 (maksimal) di level 50
   bintangMaks: 5, perBintang: 0.25,       // tiap bintang: efek +25%
   tempaKoin: [60, 180, 500],              // biaya tempa (× bintang sekarang): biasa, langka, legenda
   tempaSerpih: [3, 6, 12],
