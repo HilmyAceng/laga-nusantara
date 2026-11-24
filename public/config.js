@@ -843,18 +843,18 @@ const DEBUFF_TAMBAHAN = {
 // ---------------------------------------------------------------------
 // 12. CARA BERMAIN (56-cara-bermain.js): latihan dasar bersama Ki Sabda di desa.
 // Langkah dikerjakan berurutan. jumlah = berapa kali harus dilakukan.
+// Sengaja hanya 4 dasar. Sisanya (jamu, hindar sempurna, tangkis, peta, misi, jurus, jimat,
+// pamungkas, debuff, teleport, cermin) diajarkan SAAT dibutuhkan lewat kiat (99h-kiat.js).
 // ---------------------------------------------------------------------
 const LATIHAN = [
   { id: "gerak", jumlah: 1 }, { id: "serang", jumlah: 5 }, { id: "jurus", jumlah: 1 }, { id: "hindar", jumlah: 2 },
-  { id: "sempurna", jumlah: 1 }, { id: "tangkis", jumlah: 1 }, { id: "jamu", jumlah: 1 }, { id: "peta", jumlah: 1 },
-  { id: "misi", jumlah: 1 }, { id: "menu", jumlah: 1 },
 ];
 MONSTERS.boneka = { name: "Boneka Latihan", nameEn: "Training Dummy", lv: 1, hp: 99999, atk: 0, speed: 0, r: 14, h: 50, exp: 0, gold: [0, 0], range: 46, wind: 1, cd: 3, aggro: 170, ai: "boneka", latihan: true };
 SAMPINGAN.unshift({ id: "latihan", npc: "sabda", panduan: true, title: "Latihan Dasar", type: "latihan", need: LATIHAN.length,
-  offer: "Kisanak baru di sini? Sebelum keluar desa, berlatihlah dulu dengan bonekaku. Akan kuajari cara bergerak, menyerang, berguling, menangkis, dan banyak lagi.",
+  offer: "Kisanak baru di sini? Sebelum keluar desa, berlatihlah dulu dengan bonekaku. Kuajari empat dasar: bergerak, menyerang, jurus, dan berguling. Sisanya akan kau pelajari di perjalanan.",
   done: "Bagus sekali! Kau sudah siap menghadapi dunia luar. Ingat: musuh yang kuat bisa dikalahkan dengan sabar membaca gerakannya.",
   reward: { gold: 60, exp: 30, potion: 3, jimat: "gelangBesi" },
-  en: { title: "Basic Training", offer: "New around here? Before leaving the village, train with my dummy first. I'll teach you to move, attack, roll, parry, and more.",
+  en: { title: "Basic Training", offer: "New around here? Before leaving the village, train with my dummy first. I'll teach you four basics: moving, attacking, skills, and rolling. The rest you'll learn on the road.",
     done: "Excellent! You're ready for the outside world. Remember: strong foes can be beaten by patiently reading their moves." } });
 
 // ---------------------------------------------------------------------

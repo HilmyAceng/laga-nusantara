@@ -1,8 +1,8 @@
 // =====================================================================
 // CARA BERMAIN
 //  - Ki Sabda (guru silat di Desa Wanasari) memberi misi sampingan "Latihan Dasar":
-//    langkah demi langkah (LATIHAN di config.js) mengajari gerak, serang, jurus,
-//    berguling, hindar sempurna, tangkis, jamu, peta, daftar misi, dan menu.
+//    langkah demi langkah (LATIHAN di config.js) mengajari 4 dasar: gerak, serang, jurus,
+//    dan berguling. Mekanik lain diajarkan saat dibutuhkan lewat kiat (99h-kiat.js).
 //  - Boneka Latihan di desa: tidak bisa kalah, sesekali memukul pelan dengan tanda
 //    yang jelas → tempat aman untuk berlatih hindar sempurna & tangkis kapan saja.
 //  - Halaman Menu › Pengaturan › Gameplay › Cara Bermain: panduan lengkap.

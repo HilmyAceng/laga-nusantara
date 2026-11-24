@@ -23,7 +23,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://hilmyaceng.github.io/laga-nusantara/icons/og.jpg">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);box-sizing:border-box;height:100%}[hidden]{display:none!important}</style>
-<script>window.LAGA_BUILD="20261124063934";</script>
+<script>window.LAGA_BUILD="20261124071310";</script>
 </head><body>
 <title>Laga Nusantara</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -432,6 +432,18 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 .pk-daftar div { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 0.9rem; }
 .pk-daftar div.utama span { color: var(--gold); }
 .pk-catatan { margin: 0; color: var(--ink-dim); font-size: 0.82rem; }
+/* Kiat bertahap */
+.kiat { position: absolute; left: 50%; top: 26%; transform: translateX(-50%); z-index: 70; width: min(480px, calc(100% - 32px)); box-sizing: border-box; display: grid; gap: 8px; justify-items: start; padding: 14px 18px; border-radius: 16px; background: var(--panel); border: 2px solid var(--gold); box-shadow: 0 18px 50px rgba(0, 0, 0, 0.55); animation: kiatMasuk 0.25s ease-out; }
+@keyframes kiatMasuk { from { transform: translateX(-50%) scale(0.88); opacity: 0; } to { transform: translateX(-50%) scale(1); opacity: 1; } }
+.kiat .eyebrow { margin: 0; } .kiat h3 { margin: 0; font-family: var(--font-display); font-size: 1.45rem; line-height: 1; color: var(--gold); }
+.kiat p { margin: 0; font-size: 0.92rem; line-height: 1.45; } .kiat b { color: var(--gold); }
+.kiat kbd, .cara-kiat kbd { display: inline-grid; place-items: center; min-width: 22px; height: 22px; padding: 0 5px; border-radius: 6px; background: #f5efe2; color: #2b2238; border-bottom: 3px solid #b9a98a; font: 800 0.8rem/1 var(--font-display, sans-serif); vertical-align: middle; }
+.kiat .go { justify-self: end; }
+.kiat-sorot { animation: kiatKedip 0.9s ease-in-out infinite !important; }
+@keyframes kiatKedip { 0%, 100% { box-shadow: 0 0 0 0 rgba(244, 185, 66, 0.9); } 50% { box-shadow: 0 0 0 8px rgba(244, 185, 66, 0); outline: 3px solid #f4b942; } }
+.hud-tutup { display: none !important; }
+.cara-kiat p { margin: 0 0 8px; }
+@media (max-height: 520px) { .kiat { top: 8px; padding: 10px 14px; gap: 6px; } .kiat h3 { font-size: 1.2rem; } .kiat p { font-size: 0.8rem; } }
 .pk-strip { position: absolute; left: 50%; bottom: calc(118px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); display: flex; gap: 12px; align-items: center; padding: 7px 14px; border-radius: 12px; background: var(--panel); border: 1px solid var(--gold); font-weight: 800; font-size: 0.85rem; z-index: 5; pointer-events: none; white-space: nowrap; }
 .pk-strip kbd { display: inline-grid; place-items: center; min-width: 24px; height: 24px; padding: 0 5px; border-radius: 6px; background: #f5efe2; color: #2b2238; border-bottom: 3px solid #b9a98a; font: 800 0.85rem/1 var(--font-display, sans-serif); margin-right: 4px; }
 .pk-strip span.sudah { opacity: 0.45; text-decoration: line-through; } .pk-strip span.sudah::after { content: " ✓"; color: #8ff0a8; }
@@ -805,6 +817,14 @@ h1 span { color: var(--gold); }
     </div>
   </div>
   <div class="pk-strip" id="pkStrip" hidden></div>
+
+  <!-- Kiat bertahap: diajarkan saat dibutuhkan (js/99h-kiat.js) -->
+  <div class="kiat" id="kiatBox" role="dialog" aria-live="polite" hidden>
+    <p class="eyebrow" data-t="h.kiatEyebrow">Kiat</p>
+    <h3 id="kiatJudul"></h3>
+    <p id="kiatIsi"></p>
+    <button class="go kecil" id="btnKiatOke" type="button" data-t="h.kiatOke">Mengerti</button>
+  </div>
 
   <!-- Catur Laga (js/99c-99e) -->
   <div class="overlay ct-box" id="caturBox" hidden>
@@ -1340,6 +1360,7 @@ h1 span { color: var(--gold); }
 <script src="js/99a-ikon-teks.js"></script>
 <script src="js/99f-info.js"></script>
 <script src="js/99g-panduan-kontrol.js"></script>
+<script src="js/99h-kiat.js"></script>
 <script src="js/100-main.js"></script>
 <script>if("serviceWorker" in navigator){addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}</script>
 </body></html>

@@ -19,6 +19,8 @@ const CATATAN_RILIS = [
       ["Hadiah menang pertama tiap tingkat, termasuk jimat langka Bidak Emas Pak Wowo.", "First-win rewards for each level, including the rare Pak Wowo's Golden Pawn charm."],
       ["Ikon Info ini: catatan semua pembaruan game.", "This Info icon: notes on every game update."],
       ["Panduan kontrol keyboard saat pertama main di komputer.", "A keyboard controls guide the first time you play on a computer."],
+      ["Tutorial bertahap: latihan Ki Sabda kini hanya 4 dasar, dan mekanik lain (jamu, hindar sempurna, peta, poin jurus, jimat, pamungkas, debuff, teleport, cermin) diajarkan lewat kiat saat pertama kali dibutuhkan.", "Step-by-step tutorial: Ki Sabda's training now covers just 4 basics, and other mechanics (jamu, perfect dodge, map, skill points, charms, ultimate, ailments, teleport, mirrors) are taught through tips the first time you need them."],
+      ["Ikon Jimat, Jurus, dan tombol Jurus 2 muncul setelah kamu membutuhkannya, jadi layar awal lebih lega.", "The Charms and Skills icons and the Skill 2 button appear once you need them, so the opening screen is less cluttered."],
     ],
     ubah: [
       ["Level monster tidak lagi ikut naik jauh: paling banyak 3 level di atas aslinya (Kera Liar tetap Lv 1–4). Terima kasih atas masukannya!", "Monster levels no longer climb far: at most 3 levels above their own (Wild Monkeys stay Lv 1–4). Thanks for the feedback!"],
