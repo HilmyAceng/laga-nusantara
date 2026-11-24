@@ -205,7 +205,7 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 .boss .bar i { background: var(--red); }
 /* notif tengah: di atas, tepat di bawah bar bos, supaya tidak menutupi karakter */
 .toasts { position: absolute; left: 50%; top: calc(clamp(70px, 12vh, 150px) + env(safe-area-inset-top, 0px)); transform: translateX(-50%); display: grid; gap: 6px; justify-items: center; pointer-events: none; }
-.toast { padding: 6px 14px; border-radius: 10px; background: var(--panel); border: 1px solid var(--line); font-weight: 800; font-size: 0.85rem; white-space: nowrap; animation: pop 0.25s ease-out; }
+.toast { padding: 6px 14px; border-radius: 10px; background: var(--panel); border: 1px solid var(--line); font-weight: 800; font-size: 0.85rem; white-space: nowrap; max-width: min(92vw, 760px); overflow-wrap: anywhere; animation: pop 0.25s ease-out; }
 .toast.big { font-family: var(--font-display); font-size: 1.8rem; font-weight: 600; color: var(--gold); padding: 4px 18px 0; }
 @keyframes pop { from { transform: scale(0.85); } to { transform: scale(1); } }
 
@@ -405,6 +405,28 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 .pk-daftar div { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 0.9rem; }
 .pk-daftar div.utama span { color: var(--gold); }
 .pk-catatan { margin: 0; color: var(--ink-dim); font-size: 0.82rem; }
+/* Pencapaian (js/99i-pencapaian.js) */
+.cp-ringkas { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 4px 12px; font-weight: 800; }
+.cp-ringkas b { font: 700 1.8rem/1 var(--font-display); color: var(--gold); margin-right: 4px; }
+.cp-bar, .cp-prog { grid-column: 1 / -1; display: block; height: 8px; border-radius: 5px; background: rgba(255, 255, 255, 0.1); overflow: hidden; }
+.cp-bar i, .cp-prog i { display: block; height: 100%; background: var(--gold); border-radius: inherit; }
+.cp-prog { height: 6px; margin-top: 4px; } .cp-prog i { background: #8fd3ff; }
+.cp-kat { margin: 12px 0 6px; color: var(--gold); font-size: 1.05rem; } .cp-kat small { color: var(--ink-dim); font-weight: 700; font-size: 0.8rem; }
+.cp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 8px; }
+.cp-kartu { display: grid; grid-template-columns: 38px 1fr; gap: 10px; align-items: start; padding: 10px; border-radius: 12px; background: rgba(255, 255, 255, 0.04); border: 1px solid var(--line); opacity: 0.75; }
+.cp-kartu.dapat { opacity: 1; border-color: rgba(244, 185, 66, 0.55); background: rgba(244, 185, 66, 0.08); }
+.cp-ikon svg { width: 38px; height: 38px; display: block; }
+.cp-kartu b { display: block; font-size: 0.95rem; } .cp-kartu p { margin: 2px 0 0; font-size: 0.78rem; line-height: 1.35; color: var(--ink-dim); }
+.cp-angka { display: block; font-size: 0.7rem; color: #8fd3ff; margin-top: 2px; font-weight: 700; }
+.cp-hadiah { display: block; margin-top: 4px; font-size: 0.72rem; color: var(--gold); font-weight: 700; }
+/* Mini game memancing */
+.mc-panel { width: min(720px, 100%); gap: 10px; }
+.mc-panel h2 { margin: 0; font-family: var(--font-display); color: var(--gold); font-size: 1.8rem; line-height: 1; }
+#mcKanvas { width: 100%; aspect-ratio: 640 / 300; border-radius: 12px; border: 1px solid var(--line); touch-action: none; display: block; }
+.mc-pesan { margin: 0; min-height: 1.4em; text-align: center; font-weight: 800; }
+.mc-aksi { width: 100%; touch-action: none; user-select: none; -webkit-user-select: none; }
+.mc-aksi.mc-gigit { animation: kiatKedip 0.35s ease-in-out infinite; background: #e5484d; }
+@media (max-height: 520px) { .mc-panel { padding: 8px 12px; gap: 5px; } .mc-panel .eyebrow { display: none; } .mc-panel .icon-btn { width: 34px; height: 34px; } #mcKanvas { max-height: 44vh; width: auto; margin: 0 auto; } .mc-panel h2 { font-size: 1.2rem; } .mc-pesan { font-size: 0.75rem; } .mc-aksi { padding-top: 8px; padding-bottom: 8px; font-size: 1.1rem; } }
 /* Kiat bertahap */
 .kiat { position: absolute; left: 50%; top: 26%; transform: translateX(-50%); z-index: 70; width: min(480px, calc(100% - 32px)); box-sizing: border-box; display: grid; gap: 8px; justify-items: start; padding: 14px 18px; border-radius: 16px; background: var(--panel); border: 2px solid var(--gold); box-shadow: 0 18px 50px rgba(0, 0, 0, 0.55); animation: kiatMasuk 0.25s ease-out; }
 @keyframes kiatMasuk { from { transform: translateX(-50%) scale(0.88); opacity: 0; } to { transform: translateX(-50%) scale(1); opacity: 1; } }
@@ -662,7 +684,7 @@ h1 span { color: var(--gold); }
         <button class="icon-btn pintas" id="btnStatus" type="button" data-ta="h.statusMenu" aria-label="Status"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4" fill="currentColor"/><path d="M4 21c0-4.4 3.6-7.5 8-7.5s8 3.1 8 7.5Z" fill="currentColor"/></svg></button>
         <span class="chip" data-ta="h.koin" aria-label="Koin"><i class="coin"></i><span id="gold">0</span></span>
         <span class="chip" data-ta="h.jamu" aria-label="Jamu"><i class="jamu"></i><span id="pots">0</span></span>
-        <button class="icon-btn" id="btnPause" type="button" data-ta="h.jeda" aria-label="Jeda">❚❚</button>
+        <button class="icon-btn pintas" id="btnPause" type="button" data-ta="h.jeda" aria-label="Jeda"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6.5" y="5" width="4" height="14" rx="1.2" fill="currentColor"/><rect x="13.5" y="5" width="4" height="14" rx="1.2" fill="currentColor"/></svg></button>
       </div>
       <canvas id="mini" width="176" height="120" role="button" tabindex="-1" data-ta="h.petaMini" aria-label="Peta mini — klik untuk buka peta besar"></canvas>
       <span class="area-name" id="areaName">Desa Wanasari</span>
@@ -800,6 +822,17 @@ h1 span { color: var(--gold); }
     <button class="go kecil" id="btnKiatOke" type="button" data-t="h.kiatOke">Mengerti</button>
   </div>
 
+  <!-- Mini game memancing (js/99k-memancing.js) -->
+  <div class="overlay" id="mancingBox" hidden>
+    <div class="panel mc-panel">
+      <div class="ev-kepala"><div><p class="eyebrow">Event · Pak Udin</p><h2 id="mcJudul">Memancing</h2></div>
+        <button class="icon-btn" id="btnMcTutup" type="button" aria-label="✕">✕</button></div>
+      <canvas id="mcKanvas" width="640" height="300"></canvas>
+      <p class="mc-pesan" id="mcPesan"></p>
+      <button class="go mc-aksi" id="btnMcAksi" type="button">Lempar kail</button>
+    </div>
+  </div>
+
   <!-- Catur Laga (js/99c-99e) -->
   <div class="overlay ct-box" id="caturBox" hidden>
     <div class="panel ct-panel">
@@ -908,6 +941,7 @@ h1 span { color: var(--gold); }
           <button class="go alt" type="button" data-go="cara" data-t="h.cara">Cara Bermain</button>
           <button class="go alt" type="button" data-go="koleksi" data-t="h.koleksi">Koleksi Jimat</button>
           <button class="go alt" type="button" data-go="ensiklopedia" data-t="h.ens">Ensiklopedia Musuh</button>
+          <button class="go alt" type="button" data-go="capai" data-t="h.capai">Pencapaian</button>
           <button class="go alt" type="button" data-go="debuff" data-t="h.debuff">Debuff</button>
           <button class="go alt back" type="button" data-go="main" data-t="h.kembali">← Kembali</button>
         </div>
@@ -938,6 +972,13 @@ h1 span { color: var(--gold); }
       </div>
 
       <!-- Halaman: ensiklopedia musuh (js/81-ensiklopedia-musuh.js) -->
+      <div class="pview" data-view="capai" hidden>
+        <p class="eyebrow" data-t="h.capaiEyebrow">Gameplay › Pencapaian</p>
+        <h1 data-th="h.capaiJudul">Penca<span>paian</span></h1>
+        <div class="gp-list" id="capaiIsi"></div>
+        <div class="menu"><button class="go alt back" type="button" data-go="gameplay" data-t="h.kembali">← Kembali</button></div>
+      </div>
+
       <div class="pview" data-view="ensiklopedia" hidden>
         <p class="eyebrow" data-t="h.ensEyebrow">Gameplay › Ensiklopedia</p>
         <h1 data-th="h.ensJudul">Ensiklopedia <span>Musuh</span></h1>
@@ -1335,4 +1376,7 @@ h1 span { color: var(--gold); }
 <script src="js/99f-info.js"></script>
 <script src="js/99g-panduan-kontrol.js"></script>
 <script src="js/99h-kiat.js"></script>
+<script src="js/99i-pencapaian.js"></script>
+<script src="js/99j-harta.js"></script>
+<script src="js/99k-memancing.js"></script>
 <script src="js/100-main.js"></script>

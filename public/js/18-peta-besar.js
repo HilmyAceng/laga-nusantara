@@ -93,6 +93,7 @@ function drawAreaMap(time) {
   }
   // warga
   for (const n of NPCS) {
+    if (n.kind === "peti") continue;   // harta karun dirahasiakan (99j-harta.js)
     if (n.kind === "teleport") {
       drawTeleportIcon(c, X(n.x), Y(n.y), DPR, time); label(n.name, X(n.x), Y(n.y) - 16 * DPR, "#7dffa8");
       mapHits.push({ x: X(n.x), y: Y(n.y), r: 20 * DPR, tele: n.tele });

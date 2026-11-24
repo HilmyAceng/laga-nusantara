@@ -71,6 +71,7 @@ Bisa dimainkan di HP (joystick + tombol sentuh, mode lanskap) dan desktop (keybo
 - **Teka-teki**: nyalakan obor sesuai petunjuk prasasti, jawab 3 teka-teki Batu Pitutur (salah = hantu muncul), letakkan 3 mustika di altar
 - **Mesin Teleport** hanya di desa & kota (Desa Wanasari, Kampung Nelayan, Bandar Segara, Desa Apung, Kampung Awan, Perkemahan Cahaya; atur di `ATURAN.teleport.area`): pulihkan nyawa (energi 1000, terisi 1 tiap 5 menit), dan pindah cepat lewat peta besar (aktif setelah areanya didatangi)
 - **Info & catatan pembaruan**: ikon (i) di HUD menampilkan apa yang baru, berubah, dan diperbaiki di tiap versi (berdenyut kalau ada versi baru)
+- **Pencapaian, harta karun & memancing**: 45+ pencapaian di menu, peti tersembunyi di semua area (batu retak, peti terkunci bos), event Memancing bersama Pak Udin
 - **Tutorial bertahap**: latihan Ki Sabda hanya 4 dasar; mekanik lain diajarkan lewat kiat tepat saat pertama dibutuhkan (bisa dibaca ulang di Cara Bermain)
 - **Panduan kontrol keyboard** untuk pemain komputer saat pertama bermain
 - **Event & Catur Laga** (terbuka setelah Bab 2 "Bersiap Melaut"): ikon Event berdenyut di HUD membuka daftar event dengan trailer & pelacak. Event pertama: catur melawan Pak Wowo di Desa Wanasari. Pilih hero untuk tiap bidak, 3 tingkat kesulitan, warna putih/hitam (papan dibalik), jam catur (3/5/10/20 menit, 2 jam, atau tanpa waktu; waktu habis = kalah), duel hero bisa dimatikan untuk catur biasa, dan setiap kali bidak memakan ada duel 20 detik (menang = memakan, kalah = penyerang hilang dari papan). Keluar di tengah = partai berakhir. Hadiah menang pertama tiap tingkat; tingkat Jago memberi jimat Bidak Emas Pak Wowo
@@ -216,6 +217,9 @@ Semua menu memakai tombol. `Esc` = kembali satu halaman.
 | `99f-info.js` | Ikon Info di HUD (kiri Event): popup catatan pembaruan per versi (Baru / Perubahan / Perbaikan). Tambah versi baru di `CATATAN_RILIS` paling atas |
 | `99g-panduan-kontrol.js` | Pemain komputer: kartu "Kontrol Keyboard" saat pertama main, lalu strip latihan Serang/Jurus/Hindar sampai ketiganya dipakai |
 | `99h-kiat.js` | Tutorial bertahap: kiat sekali-muncul saat mekanik pertama dibutuhkan (jamu, baca serangan, keluar desa, poin jurus, jimat, pamungkas, debuff, teleport, cermin), tombol terkait berkedip; ikon HUD dibuka bertahap. Daftar kiat di `KIAT` |
+| `99i-pencapaian.js` | Pencapaian (Menu › Gameplay › Pencapaian): daftar `CAPAI`, statistik `S.statistik`, hadiah koin/serpih, catatan `S.capai` untuk hadiah kosmetik nanti. File lain menambah lewat `daftarkanCapai()` |
+| `99j-harta.js` | Harta karun semua dunia: 2–3 peti per area (dipilih otomatis di ceruk yang bisa dicapai), peti dalam batu retak, peti terkunci bos, hitungan di peta besar |
+| `99k-memancing.js` | Event Memancing: Pak Udin (sungai desa) & dermaga Kampung Nelayan, mini game tarik-ulur, 10 ikan (`IKAN`), jual & koleksi |
 | `100-main.js` | Loop utama (dimuat paling akhir) |
 
 Cerita utama ada di folder `src/cerita/`: `bab-1.js` ... `bab-5.js` (satu file per bab), digabung di `semua.js`.

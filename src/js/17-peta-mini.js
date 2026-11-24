@@ -26,7 +26,7 @@ function drawMini() {
   mctx.drawImage(miniBase, ox, oy, MW * k, MH * k);
   const dot = (x, y, c, r) => { mctx.fillStyle = c; mctx.beginPath(); mctx.arc(ox + x / T * k, oy + y / T * k, r, 0, 6.28); mctx.fill(); };
   for (const g of area.gerbang) dot((g.x0 + g.x1 + 1) / 2 * T, (g.y0 + g.y1 + 1) / 2 * T, "#8fd3ff", 3.5);
-  for (const n of NPCS) dot(n.x, n.y, n.kind === "teleport" ? "#7dffa8" : n.kind === "cermin" ? "#c9a6ff" : n.kind === "warga" ? "#b9b2c6" : "#f4b942", n.kind === "cermin" ? 4.5 : n.kind === "warga" ? 2.5 : 3.5);
+  for (const n of NPCS) if (n.kind !== "peti") dot(n.x, n.y, n.kind === "teleport" ? "#7dffa8" : n.kind === "cermin" ? "#c9a6ff" : n.kind === "warga" ? "#b9b2c6" : "#f4b942", n.kind === "cermin" ? 4.5 : n.kind === "warga" ? 2.5 : 3.5);
   for (const m of monsters) if (m.d.boss && !m.dead) dot(m.x, m.y, "#ff3b3b", 4.5);
   dot(P.x, P.y, "#ffffff", 4);
   const tj = tujuanDiArea();      // tujuan cerita (27-navigasi.js)

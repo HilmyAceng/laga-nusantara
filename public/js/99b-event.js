@@ -24,8 +24,14 @@ const EVENTS = [
     ],
     syarat: () => { const i = CERITA.findIndex((l) => l.buka === "kapal"); return S.cerita.idx > i; },
     syaratTeks: ["Selesaikan cerita Dunia 1 (Bab 2)", "Finish the World 1 story (Chapter 2)"],
+    // daftar hadiah di popup (HTML <li>), cuplikan bergerak, dan pembuka percakapan
+    hadiah: () => { const C = dataEvent().catur || {}; return ["santai", "sedang", "jago"].map((k) => `<li class="${(C.menang || {})[k] ? "dapat" : ""}">${(C.menang || {})[k] ? "✓ " : ""}<b>${t("catur.t." + k)}</b> — ${teksHadiahCatur(k)}</li>`).join(""); },
+    trailer: (c, tm) => trailerCatur(c, tm),
+    mulai: (npc) => bicaraWowo(npc),
   },
 ];
+// Event lain mendaftar lewat daftarkanEvent({...}) dari file-nya sendiri (mis. 99k-memancing.js)
+function daftarkanEvent(e) { if (!EVENTS.some((x) => x.id === e.id)) EVENTS.push(e); }
 const dataEvent = () => (S.event = S.event || { terbuka: {}, lihat: {}, catur: {} });
 const eventTerbuka = (id) => !!(S && dataEvent().terbuka[id]);
 const adaEventBaru = () => EVENTS.some((e) => eventTerbuka(e.id) && !dataEvent().lihat[e.id]);
@@ -70,19 +76,18 @@ function isiEvent() {
   }).join("") + `<div class="ev-item kunci segera"><b>🔒 ${t("event.segera")}</b><small>${t("event.segeraSub")}</small></div>`;
   const e = EVENTS.find((x) => x.id === eventDipilih), buka = eventTerbuka(e.id);
   if (buka) { D.lihat[e.id] = true; saveSoon(); hudEvent(); }
-  const npc = npcById(e.npc), C = D.catur || {};
-  const hadiah = ["santai", "sedang", "jago"].map((k) => `<li class="${(C.menang || {})[k] ? "dapat" : ""}">${(C.menang || {})[k] ? "✓ " : ""}<b>${t("catur.t." + k)}</b> — ${teksHadiahCatur(k)}</li>`).join("");
+  const npc = npcById(e.npc), hadiah = e.hadiah ? e.hadiah() : "";
   $("eventDetail").innerHTML = `
     <canvas id="eventTrailer" width="480" height="240"></canvas>
     <h3>${Lx(e.judul)}</h3>
     <p class="ev-ringkas">${Lx(e.ringkas)}</p>
     <p>${Lx(e.isi)}</p>
-    <h4>${t("event.hadiah")}</h4><ul class="ev-hadiah">${hadiah}</ul>`;
+    ${hadiah ? `<h4>${e.judulHadiah ? Lx(e.judulHadiah) : t("event.hadiah")}</h4><ul class="ev-hadiah">${hadiah}</ul>` : ""}`;
   $("eventLacak").innerHTML = buka
     ? `<span>📍 ${t("event.temui", { npc: npc.name, area: AREAS[e.area].nama })}</span><button type="button" class="go kecil" id="btnEventPergi">${t("event.pergi")}</button>`
     : `<span>🔒 ${Lx(e.syaratTeks)}</span>`;
   const p = $("btnEventPergi"); if (p) p.addEventListener("click", () => tanyaTeleportEvent(e));
-  mulaiTrailer();
+  mulaiTrailer(e);
 }
 $("eventDaftar").addEventListener("click", (ev) => { const b = ev.target.closest("[data-ev]"); if (b) { eventDipilih = b.dataset.ev; sfx.click(); isiEvent(); } });
 $("btnEventHud").addEventListener("click", bukaEvent);
@@ -103,7 +108,7 @@ function tanyaTeleportEvent(e) {
   $("btnEventBatal").onclick = () => { $("eventTanya").hidden = true; sfx.click(); };
 }
 // percakapan pembuka event (sekarang: catur Pak Wowo, 99d-catur-papan.js)
-function mulaiEventNpc(e, npc) { if (e.id === "catur") bicaraWowo(npc); }
+function mulaiEventNpc(e, npc) { if (e.mulai) e.mulai(npc); }
 
 // Pak Wowo bisa diajak bicara setelah event catur terbuka
 {
@@ -119,14 +124,21 @@ function mulaiEventNpc(e, npc) { if (e.id === "catur") bicaraWowo(npc); }
 }
 
 // ---------- Cuplikan bergerak (trailer) ----------
-function mulaiTrailer() {
+function mulaiTrailer(e) {
   cancelAnimationFrame(trailerRaf);
-  const cv = $("eventTrailer"); if (!cv) return;
+  const cv = $("eventTrailer"); if (!cv || !e || !e.trailer) return;
   const c = cv.getContext("2d"), mulai = performance.now();
   const gambar = (now) => {
     if ($("eventBox").hidden || !cv.isConnected) return;
-    const tm = (now - mulai) / 1000, siklus = tm % 6;
     c.clearRect(0, 0, 480, 240);
+    e.trailer(c, (now - mulai) / 1000);
+    trailerRaf = requestAnimationFrame(gambar);
+  };
+  trailerRaf = requestAnimationFrame(gambar);
+}
+function trailerCatur(c, tm) {
+  {
+    const siklus = tm % 6;
     if (siklus < 3) {   // papan catur mini: kuda putih maju memakan
       const uk = 26, ox = 136, oy = 16;
       for (let r = 0; r < 8; r++) for (let k = 0; k < 8; k++) { c.fillStyle = (r + k) % 2 ? "#8b5e3c" : "#e9d3a9"; c.fillRect(ox + k * uk, oy + r * uk, uk, uk); }
@@ -150,8 +162,6 @@ function mulaiTrailer() {
       c.fillStyle = "#e5484d"; c.fillRect(300, 120, 60 * (1 - k / 4), 6); c.fillStyle = "#5ad17a"; c.fillRect(120, 120, 60, 6);
       c.fillStyle = "#f7efe3"; c.font = "800 14px Nunito, sans-serif"; c.textAlign = "center"; c.fillText("0:" + String(20 - Math.floor(k * 4)).padStart(2, "0"), 240, 30);
     }
-    trailerRaf = requestAnimationFrame(gambar);
-  };
-  trailerRaf = requestAnimationFrame(gambar);
+  }
 }
 addEventListener("keydown", (e) => { if (mode === "event" && e.key === "Escape") { e.stopImmediatePropagation(); tutupEvent(); } }, true);

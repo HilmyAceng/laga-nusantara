@@ -9,6 +9,24 @@
 
 const CATATAN_RILIS = [
   {
+    versi: "0.9.2-beta", tanggal: ["24 November 2026", "November 24, 2026"],
+    judul: ["Pencapaian, Harta & Memancing", "Achievements, Treasure & Fishing"],
+    baru: [
+      ["Pencapaian: lebih dari 45 target (petualangan, pertarungan, koleksi, catur, rahasia) dengan hadiah koin & serpih. Lihat di Menu › Gameplay › Pencapaian.", "Achievements: 45+ goals (adventure, combat, collection, chess, secret) with coin & shard rewards. See Menu › Gameplay › Achievements."],
+      ["Harta karun di semua dunia: 2–3 peti tersembunyi tiap area, ada yang di dalam batu retak (pukul 3×) dan ada yang terkunci sampai bos area dikalahkan. Hitungannya tampil di peta besar.", "Treasure in every world: 2–3 hidden chests per area, some inside cracked rocks (hit 3×) and some sealed until the area's boss falls. The count shows on the big map."],
+      ["Event Memancing bersama Pak Udin: 10 jenis ikan di sungai desa dan dermaga Kampung Nelayan, jual tangkapan & lengkapi koleksi.", "Fishing event with Pak Udin: 10 kinds of fish in the village river and Fishermen's Village pier; sell your catch & complete the collection."],
+    ],
+    ubah: [
+      ["Slot jimat ke-4 terbuka di level 50.", "A 4th charm slot unlocks at level 50."],
+      ["Tulisan di komputer lebih besar, termasuk percakapan, notifikasi, dan tulisan panah misi.", "Larger text on computers, including dialogue, notifications, and the quest arrow label."],
+      ["Notifikasi barang pindah ke tengah kiri layar; joystick HP sedikit ke kanan.", "Item notifications moved to the middle-left; the phone joystick moved slightly right."],
+      ["Kartu hero di layar pilih karakter lebih rapi, dan deskripsinya tampil di HP.", "Hero cards on the character screen are tidier, with descriptions shown on phones."],
+    ],
+    baik: [
+      ["Ikon jeda di komputer kini tepat di tengah tombolnya.", "The pause icon on computers is now centered in its button."],
+    ],
+  },
+  {
     versi: "0.9.1-beta", tanggal: ["23 November 2026", "November 23, 2026"],
     judul: ["Event & Catur Laga", "Events & Battle Chess"],
     baru: [
