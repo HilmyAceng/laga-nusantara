@@ -23,7 +23,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://hilmyaceng.github.io/laga-nusantara/icons/og.jpg">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);box-sizing:border-box;height:100%}[hidden]{display:none!important}</style>
-<script>window.LAGA_BUILD="20261125195637";</script>
+<script>window.LAGA_BUILD="20261125201335";</script>
 </head><body>
 <title>Laga Nusantara</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -213,8 +213,9 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 .boss { position: absolute; left: 50%; top: calc(max(10px, env(safe-area-inset-top, 0px)) + 50px); transform: translateX(-50%); width: min(380px, calc(100% - 2 * (min(275px, 42vw) + 50px))); text-align: center; pointer-events: none; display: grid; gap: 2px; }
 #bossLemah { font: 800 0.72rem Nunito, sans-serif; color: #ffd27a; text-shadow: 0 1px 2px rgba(0,0,0,0.8); }
 #bossLemah:empty { display: none; }
-/* bar bos tampil → notif tengah turun sedikit supaya tidak menimpa bar */
-.boss:not([hidden]) ~ .toasts { top: calc(clamp(70px, 12vh, 150px) + 52px + env(safe-area-inset-top, 0px)); }
+/* bar bos tampil → notif tengah turun sedikit supaya tidak menimpa bar (desktop saja; di HP mendatar
+   notif tetap di posisi biasa & boleh menimpa bar bos, supaya tidak menutupi area main) */
+@media (min-height: 521px) { .boss:not([hidden]) ~ .toasts { top: calc(clamp(70px, 12vh, 150px) + 52px + env(safe-area-inset-top, 0px)); } }
 /* notif "Dukung Kami" tiap bab selesai (js/28-dukung.js): atas tengah, sejajar kotak misi */
 .dukung-notif { position: absolute; left: 50%; top: calc(10px + env(safe-area-inset-top, 0px)); transform: translateX(-50%); width: min(340px, 42vw); z-index: 16;
   display: grid; grid-template-columns: 1fr auto; gap: 4px 8px; align-items: center; padding: 8px 10px 10px 12px; border-radius: 12px; overflow: hidden;
