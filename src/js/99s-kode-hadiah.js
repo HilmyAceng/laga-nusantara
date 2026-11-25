@@ -1,12 +1,14 @@
 // =====================================================================
 // KODE HADIAH (di kaki tab Pesan, popup Kotak)
 // Dua jenis kode:
-//  1. Kode Pendukung pribadi untuk pendukung Saweria: LNP-NAMA-XXXXXX
-//     (NAMA = huruf/angka, XXXXXX = tanda tangan pendek dari nama). Dibuat dengan alat
+//  1. Kode Pendukung pribadi untuk pendukung Saweria: LNP-NAMA-SERI-XXXXXX
+//     (NAMA = huruf/angka, SERI = 4 karakter acak dari alat → nama yang sama tetap dapat kode berbeda,
+//     XXXXXX = tanda tangan pendek dari nama + seri). Format lama LNP-NAMA-XXXXXX tetap diterima. Dibuat dengan alat
 //     di luar repo (~/BikinGame/alat-laga-nusantara/kode-pendukung.html).
 //     Hadiah: set kosmetik Pendukung + gelar «Pendukung · Nama».
 //  2. Kode promo/event: daftar KODE_PROMO di bawah (huruf besar), bisa diberi batas tanggal.
-// Setiap kode hanya bisa dipakai sekali per save. Hadiah dikirim ke Kotak Pesan.
+// Setiap kode hanya bisa dipakai sekali per save DAN sekali per perangkat (localStorage "laga.kodeTerpakai"),
+// jadi tidak bisa ditukar ulang dengan membuat save baru di HP yang sama. Hadiah dikirim ke Kotak Pesan.
 // Simpanan: S.kodeDipakai = { KODE: waktu }
 // Catatan: game tanpa server, jadi kode ini "kunci sopan", bukan pengaman mutlak.
 // Karena hadiahnya hanya kosmetik, itu tidak merusak keseimbangan game.
@@ -24,6 +26,9 @@ function tandaKode(nama) {
   for (let i = 0; i < s.length; i++) { a = Math.imul(a ^ s.charCodeAt(i), 0x01000193) >>> 0; b = (Math.imul(b, 33) + s.charCodeAt(i)) >>> 0; }
   return ((a ^ (b << 7)) >>> 0).toString(36).toUpperCase().padStart(6, "0").slice(-6);
 }
+const KODE_PERANGKAT_KEY = "laga.kodeTerpakai";
+const kodeTerpakaiPerangkat = () => store.get(KODE_PERANGKAT_KEY, {}) || {};
+function tandaiKodePerangkat(kode) { const d = kodeTerpakaiPerangkat(); d[kode] = Date.now(); store.set(KODE_PERANGKAT_KEY, d); }
 const rapikanNama = (n) => n.charAt(0) + n.slice(1).toLowerCase();
 
 function tukarKode(teks) {
@@ -31,12 +36,13 @@ function tukarKode(teks) {
   if (!kode) return;
   S.kodeDipakai = S.kodeDipakai || {};
   if (S.kodeDipakai[kode]) return pesanKodeHadiah(Lx(["Kode ini sudah pernah dipakai.", "This code has already been used."]), false);
+  if (kodeTerpakaiPerangkat()[kode]) return pesanKodeHadiah(Lx(["Kode ini sudah dipakai di perangkat ini.", "This code has already been used on this device."]), false);
   // kode pendukung pribadi
-  const m = kode.match(/^LNP-([A-Z0-9]{2,12})-([A-Z0-9]{6})$/);
+  const m = kode.match(/^LNP-([A-Z0-9]{2,12})-(?:([A-Z0-9]{4})-)?([A-Z0-9]{6})$/);
   if (m) {
-    if (tandaKode(m[1]) !== m[2]) return pesanKodeHadiah(Lx(["Kode tidak valid. Periksa lagi hurufnya.", "Invalid code. Please check the letters."]), false);
+    if (tandaKode(m[2] ? `${m[1]}|${m[2]}` : m[1]) !== m[3]) return pesanKodeHadiah(Lx(["Kode tidak valid. Periksa lagi hurufnya.", "Invalid code. Please check the letters."]), false);
     const nama = rapikanNama(m[1]);
-    S.kodeDipakai[kode] = Date.now(); dataGaya().pendukung = nama;
+    S.kodeDipakai[kode] = Date.now(); tandaiKodePerangkat(kode); dataGaya().pendukung = nama;
     kirimPesan({
       id: "pendukung-" + kode, dari: ["Pengembang", "Developer"],
       judul: [`Terima kasih, ${nama}! 💛`, `Thank you, ${nama}! 💛`],
@@ -50,7 +56,7 @@ function tukarKode(teks) {
   const p = KODE_PROMO[kode];
   if (!p) return pesanKodeHadiah(Lx(["Kode tidak dikenal.", "Unknown code."]), false);
   if (p.sampai && Date.now() > new Date(p.sampai + "T23:59:59").getTime()) return pesanKodeHadiah(Lx(["Kode ini sudah kedaluwarsa.", "This code has expired."]), false);
-  S.kodeDipakai[kode] = Date.now();
+  S.kodeDipakai[kode] = Date.now(); tandaiKodePerangkat(kode);
   kirimPesan({ id: "promo-" + kode, dari: ["Pengembang", "Developer"], judul: p.judul, isi: p.isi || [`Hadiah dari kode ${kode}.`, `A gift from code ${kode}.`], hadiah: p.hadiah });
   pesanKodeHadiah(Lx(["Berhasil! Hadiah dikirim ke Pesan di atas.", "Success! Rewards sent to your Mail above."]), true);
   isiKotak();
@@ -65,7 +71,7 @@ function kakiKodeHadiah() {
   const p = pesanKodeSimpan; pesanKodeSimpan = null;
   return `<form class="kt-kode" id="formKodeHadiah" autocomplete="off">
     <label for="kodeHadiahIsi">${Lx(["Punya kode hadiah?", "Have a gift code?"])}</label>
-    <input id="kodeHadiahIsi" type="text" maxlength="24" spellcheck="false" placeholder="LNP-NAMA-XXXXXX">
+    <input id="kodeHadiahIsi" type="text" maxlength="30" spellcheck="false" placeholder="LNP-NAMA-XXXX-XXXXXX">
     <button type="submit" class="go kecil">${Lx(["Tukar", "Redeem"])}</button>
     <small id="kodeHadiahPesan" class="kt-kode-pesan ${p ? (p.bagus ? "bagus" : "gagal") : ""}">${p ? p.teks : Lx(["Pendukung Saweria mendapat kode pribadi berisi kosmetik & gelar khusus.", "Saweria supporters get a personal code with special cosmetics & a title."])}</small>
   </form>`;
