@@ -9,6 +9,32 @@
 
 const CATATAN_RILIS = [
   {
+    versi: "0.9.3-beta", tanggal: ["25 November 2026", "November 25, 2026"],
+    judul: ["Kisah, Teman & Kotak Hadiah", "Tales, Companions & Rewards"],
+    baru: [
+      ["Cutscene cerita: setiap akhir bab dan beberapa momen penting kini punya adegan dengan tokoh yang berjalan, berbicara, dan bereaksi.", "Story cutscenes: every chapter ending and several key moments now have scenes where characters walk, talk, and react."],
+      ["Percakapan lebih dalam: setelah dialog penting Bab 1–3, kamu bisa mengajukan pertanyaan tambahan (opsional).", "Deeper conversations: after key dialogues in Chapters 1–3, you can ask optional follow-up questions."],
+      ["Kisah NPC: Ki Lurah, Resi Wening, dan Mbah Tirto menceritakan asal-usul Genderuwo, Dwarapala, dan Buaya Putih. Ada NPC yang memandu jalan, prasasti kuno, dan catatan kisah di Ensiklopedia.", "NPC tales: Ki Lurah, Resi Wening, and Mbah Tirto reveal the origins of the Genderuwo, Dwarapala, and White Crocodile. Includes guiding NPCs, ancient inscriptions, and tale entries in the Bestiary."],
+      ["Teman seperjalanan: ajak Pak Joko, Bayu, atau Kirana ikut bertarung dan mengobrol di perjalanan.", "Companions: invite Pak Joko, Bayu, or Kirana to fight alongside you and chat on the road."],
+      ["Kotak (ikon surat): pesan berhadiah, kode hadiah, absen harian 7 hari, serta tantangan harian & mingguan.", "Mailbox (envelope icon): reward mail, gift codes, a 7-day check-in, and daily & weekly challenges."],
+      ["Kosmetik & gelar (Menu › Gameplay): baju, ikat kepala, topi, aura, dan gelar di atas nama hero. Hanya tampilan.", "Cosmetics & titles (Menu › Gameplay): outfits, headbands, hats, auras, and a title above your hero's name. Looks only."],
+      ["Jalan Pendekar (pohon jurus): mulai Lv 10, pilih satu dari dua jalan per hero dengan bonus pasif bertingkat.", "Warrior's Path (skill tree): from Lv 10, choose one of two paths per hero with tiered passive bonuses."],
+      ["Kelemahan & kekebalan bos: tiap bos lemah/kebal terhadap satu status. Temukan sendiri, lalu lihat di Ensiklopedia.", "Boss weaknesses & immunities: each boss is weak/immune to one status. Discover them yourself, then check the Bestiary."],
+      ["Mode Bertahan di Cermin Gaib: lawan gelombang musuh tanpa henti dan kejar rekor.", "Survival Mode at the Mystic Mirror: fight endless enemy waves and chase your record."],
+      ["Sulit+ (Pendekar Sejati) setelah tamat: tanpa tanda serangan, musuh lebih cepat & sakit.", "Hard+ (True Warrior) after finishing the story: no attack warnings, faster and deadlier enemies."],
+      ["Tombol Bagikan: kartu gambar untuk momen membanggakan (bos tumbang, ikan langka, bab tamat) & di Menu jeda.", "Share button: an image card for proud moments (boss down, rare fish, chapter cleared) & in the pause menu."],
+    ],
+    ubah: [
+      ["Rasa bertarung: angka damage meletup, tulisan KRITIS!, getar HP, tepi layar merah saat terluka. Guncangan & getar bisa dimatikan di Pengaturan › Layar.", "Combat feel: popping damage numbers, CRITICAL! text, phone vibration, red screen edges when hurt. Shake & vibration can be turned off in Settings › Display."],
+      ["Memancing: kamera diperbesar dan mengikuti hero & pelampung, seperti catur.", "Fishing: the camera zooms in and follows your hero & float, like chess."],
+      ["Saat main catur atau memancing, HUD lain disembunyikan; hanya tombol yang dibutuhkan yang tampil.", "While playing chess or fishing, the rest of the HUD hides; only the buttons you need remain."],
+    ],
+    baik: [
+      ["Memuat Kode Save dari Menu kini benar-benar mengganti progres (sebelumnya tertimpa simpan otomatis).", "Loading a Save Code from the Menu now really replaces your progress (it used to be overwritten by autosave)."],
+      ["Kartu tips tidak lagi muncul di tengah catur atau memancing.", "Tip cards no longer pop up during chess or fishing."],
+    ],
+  },
+  {
     versi: "0.9.2-beta", tanggal: ["24 November 2026", "November 24, 2026"],
     judul: ["Pencapaian, Harta & Memancing", "Achievements, Treasure & Fishing"],
     baru: [

@@ -124,7 +124,7 @@ UPDATE_TAMBAHAN.push((dt) => {
   if (sorotT > 0) { sorotT -= dt; if (sorotT <= 0) { sorotKiat([]); sorotT = 0; } }
   if (!S || !S.kiat || !P) return;
   kiatJeda -= dt; if (kiatJeda > 0) return;
-  if (adegan || (S.panduanKontrol === false && !isTouch) || dekatBos()) return;   // kartu kontrol keyboard hanya di komputer
+  if (mode !== "play" || adegan || (S.panduanKontrol === false && !isTouch) || dekatBos()) return;   // hanya saat bermain biasa (bukan catur, mancing, dll.); kartu kontrol keyboard hanya di komputer
   for (const k of KIAT) if (!S.kiat[k.id] && k.syarat()) { tampilKiat(k); return; }
 });
 

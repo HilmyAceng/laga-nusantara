@@ -240,7 +240,7 @@ function drawNpc(n, time) {
   if (n.kind && GAMBAR_OBJEK[n.kind]) return GAMBAR_OBJEK[n.kind](n, time);   // benda teka-teki (25-teka-teki.js)
   const look = { color: n.color, accent: n.accent, hat: n.hat, hair: n.hair || "#3b2a22" };
   const face = Math.atan2(P.y - n.y, P.x - n.x);
-  drawPerson(ctx, { x: n.x, y: n.y, face: dist(P, n) < 160 ? face : n.face, run: 0, moving: false, swing: 0, inv: 0, flash: 0 }, look, time);
+  drawPerson(ctx, { x: n.x, y: n.y, face: n.moving ? n.face : dist(P, n) < 160 ? face : n.face, run: n.run || 0, moving: !!n.moving, swing: 0, inv: 0, flash: 0 }, look, time);   // n.moving/run: NPC berjalan (cutscene, pemandu)
   // nama: putih bergaris tepi hitam supaya terbaca di latar apa pun
   ctx.font = "800 11px Nunito, sans-serif"; ctx.textAlign = "center"; ctx.lineJoin = "round";
   ctx.lineWidth = 3; ctx.strokeStyle = "#000"; ctx.strokeText(n.name, n.x, n.y - 66);
@@ -257,6 +257,8 @@ function drawNpc(n, time) {
 
 // Status hero di atas kepalanya: nama + level, bar nyawa (dengan angka), bar EXP tipis.
 // Digambar dalam ukuran layar (tidak ikut zoom) supaya selalu terbaca.
+// tampilan hero pemain (warna baju, ikat kepala, senjata). Kosmetik (99p-kosmetik.js) membungkus fungsi ini.
+function lookPemain() { const C = CLASSES[S.cls]; return { color: C.color, accent: C.accent, weapon: C.weapon }; }
 function drawPlayerTag(px, py) {
   const mh = maxHp(), hp = Math.max(0, Math.ceil(P.hp)), w = 104, x = Math.round(px - w / 2);
   let y = Math.round(py);
@@ -349,7 +351,7 @@ function render(now) {
     for (const b of benderaAman) list.push({ y: b.y, f: () => drawBenderaAman(b, time) });   // 33-zona-aman.js
     for (const f of BENDA_TINGGI) list.push(...f(time));
     for (const m of monsters) if (!m.dead) list.push({ y: m.y, f: () => drawMonster(m, time) });
-    if (!P.dead) { const C = CLASSES[S.cls]; list.push({ y: P.y, f: () => drawPerson(ctx, P, { color: C.color, accent: C.accent, weapon: C.weapon }, time) }); }
+    if (!P.dead) list.push({ y: P.y, f: () => drawPerson(ctx, P, lookPemain(), time) });
   }
   list.sort((a, b) => a.y - b.y);
   for (const o of list) o.f();
