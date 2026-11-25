@@ -769,7 +769,69 @@ h1 span { color: var(--gold); }
 .dk-hadiah { display: grid; gap: 4px; padding: 10px 12px; border-radius: 12px; border: 1px solid rgba(244,185,66,0.5); background: rgba(244,185,66,0.1); font-size: 0.8rem; }
 .dk-hadiah b { color: var(--gold); }
 .dk-panel .row { display: flex; justify-content: flex-end; gap: 8px; flex-wrap: wrap; position: sticky; bottom: -18px; margin: 0 -4px -4px; padding: 8px 4px 4px; background: rgba(24, 16, 42, 0.97); }
+/* layar muat (js/99zd-layar-muat.js; kerangka & penghitung script langsung di bawah ini, sebelum .stage) */
+#muat { position: fixed; inset: 0; z-index: 9999; display: grid; place-items: center; overflow: hidden; cursor: default; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent;
+  background: radial-gradient(ellipse at 50% 38%, #3a1f4f 0%, #1b1130 45%, #0b0714 100%); color: var(--ink); font-family: "Nunito", system-ui, sans-serif; transition: opacity 0.6s ease, transform 0.6s ease; }
+#muat.pergi { opacity: 0; transform: scale(1.04); pointer-events: none; }
+#muat.siap { cursor: pointer; }
+.mu-isi { position: relative; display: grid; justify-items: center; gap: 6px; width: min(520px, calc(100% - 32px)); text-align: center; }
+.mu-gunungan { width: clamp(70px, 18vh, 150px); height: auto; filter: drop-shadow(0 0 18px rgba(244, 185, 66, 0.45)); animation: muAyun 4s ease-in-out infinite; transform-origin: 50% 100%; }
+@keyframes muAyun { 0%, 100% { transform: rotate(-2.5deg); } 50% { transform: rotate(2.5deg); } }
+.mu-judul { margin: 4px 0 0; font-family: var(--font-display); font-weight: 700; font-size: clamp(2.4rem, min(11vh, 12vw), 5rem); line-height: 0.85; letter-spacing: 0.02em; white-space: nowrap; color: var(--gold); text-shadow: 0 0 24px rgba(244, 185, 66, 0.45), 0 3px 0 #6b3d0a; }
+.mu-sub { margin: 0; font-size: clamp(0.6rem, 2.4vh, 0.85rem); font-weight: 800; letter-spacing: 0.28em; text-transform: uppercase; color: var(--ink-dim); }
+.mu-bar { width: min(340px, 80%); height: 8px; margin-top: clamp(10px, 4vh, 26px); border-radius: 99px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(244, 185, 66, 0.35); overflow: hidden; }
+.mu-bar i { display: block; height: 100%; width: 0; border-radius: inherit; background: linear-gradient(90deg, #e5484d, #f4b942); box-shadow: 0 0 12px rgba(244, 185, 66, 0.7); transition: width 0.25s ease-out; }
+.mu-label { min-height: 1.4em; margin: 2px 0 0; font-size: 0.85rem; font-weight: 800; color: var(--ink); font-variant-numeric: tabular-nums; }
+#muat.siap .mu-label { font-family: var(--font-display); font-size: 1.6rem; font-weight: 600; color: var(--gold); animation: muDenyut 1.4s ease-in-out infinite; }
+#muat.siap .mu-bar { opacity: 0; transition: opacity 0.4s; }
+@keyframes muDenyut { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.55; transform: scale(0.97); } }
+.mu-kiat { min-height: 2.6em; max-width: 440px; margin: 0; font-size: 0.78rem; line-height: 1.35; color: var(--ink-dim); }
+.mu-kiat.muncul { animation: muKiat 0.5s ease-out; }
+@keyframes muKiat { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.mu-versi { position: absolute; right: max(14px, env(safe-area-inset-right, 0px)); bottom: max(10px, env(safe-area-inset-bottom, 0px)); font-size: 0.7rem; font-weight: 700; color: rgba(201, 191, 214, 0.6); }
+/* bara api melayang */
+.mu-bara { position: absolute; inset: 0; pointer-events: none; }
+.mu-bara b { position: absolute; bottom: -10px; width: 4px; height: 4px; border-radius: 50%; background: #f4b942; box-shadow: 0 0 8px 2px rgba(244, 140, 66, 0.8); opacity: 0; animation: muBara linear infinite; }
+@keyframes muBara { 0% { transform: translate(0, 0); opacity: 0; } 10% { opacity: 0.9; } 100% { transform: translate(var(--gx, 20px), -105vh); opacity: 0; } }
+@media (max-height: 420px) { .mu-kiat { font-size: 0.7rem; min-height: 2.4em; } .mu-isi { gap: 3px; } }
+@media (prefers-reduced-motion: reduce) { .mu-gunungan, .mu-bara b, #muat.siap .mu-label { animation: none; } }
 </style>
+
+<!-- LAYAR MUAT: tampil seketika, bar maju tiap script game termuat (data-jumlah diisi build.sh). Sisanya: js/99zd-layar-muat.js -->
+<div id="muat" role="button" tabindex="0" aria-label="Laga Nusantara" data-jumlah="0">
+  <div class="mu-bara" aria-hidden="true"><b style="left:8%;animation-duration:7s;animation-delay:0s;--gx:30px"></b><b style="left:21%;animation-duration:9s;animation-delay:2s;--gx:-24px"></b><b style="left:34%;animation-duration:6.5s;animation-delay:3.4s;--gx:18px"></b><b style="left:52%;animation-duration:8s;animation-delay:1s;--gx:-30px"></b><b style="left:66%;animation-duration:7.5s;animation-delay:4.2s;--gx:26px"></b><b style="left:79%;animation-duration:9.5s;animation-delay:0.6s;--gx:-18px"></b><b style="left:91%;animation-duration:6.8s;animation-delay:2.8s;--gx:22px"></b></div>
+  <div class="mu-isi">
+    <svg class="mu-gunungan" viewBox="0 0 100 130" aria-hidden="true">
+      <path d="M50 4C66 26 92 58 92 92c0 18-14 28-42 28S8 110 8 92C8 58 34 26 50 4Z" fill="#2a1840" stroke="#f4b942" stroke-width="3"/>
+      <path d="M50 22v84M50 46c-8-6-18-6-24 2M50 46c8-6 18-6 24 2M50 64c-10-6-22-4-28 6M50 64c10-6 22-4 28 6M50 82c-10-4-20 0-26 8M50 82c10-4 20 0 26 8" fill="none" stroke="#f4b942" stroke-width="2.4" stroke-linecap="round"/>
+      <circle cx="50" cy="36" r="5" fill="#e5484d"/><path d="M36 120h28l-4-10H40Z" fill="#f4b942"/>
+    </svg>
+    <h1 class="mu-judul">Laga Nusantara</h1>
+    <p class="mu-sub" id="muatSub">Kisah dari Tanah Wanasari</p>
+    <div class="mu-bar"><i id="muatIsi"></i></div>
+    <p class="mu-label" id="muatLabel">0%</p>
+    <p class="mu-kiat" id="muatKiat"></p>
+  </div>
+  <span class="mu-versi" id="muatVersi"></span>
+</div>
+<script>
+// Penghitung muat: tiap <script src> selesai dimuat → bar maju. Bahasa mengikuti pilihan tersimpan
+// (sama seperti 02-bahasa.js: belum memilih → punya save = Indonesia, pemain baru = Inggris).
+(function () {
+  var box = document.getElementById("muat"), isi = document.getElementById("muatIsi"), label = document.getElementById("muatLabel");
+  var total = +box.dataset.jumlah || 150, n = 0, selesai = false, en = false;
+  try { var b = JSON.parse(localStorage.getItem("laga.bahasa")); en = b ? b === "en" : !localStorage.getItem("laga.rpg.save"); } catch (e) {}
+  document.getElementById("muatSub").textContent = en ? "A Tale from the Land of Wanasari" : "Kisah dari Tanah Wanasari";
+  function tulis(p) { isi.style.width = p + "%"; if (!selesai) label.textContent = (en ? "Loading… " : "Memuat… ") + p + "%"; }
+  tulis(0);
+  document.addEventListener("load", function (e) { if (!selesai && e.target.tagName === "SCRIPT") { n++; tulis(Math.min(99, Math.round(100 * n / total))); } }, true);
+  window.muatSelesai = function () { tulis(100); selesai = true; };
+  // script game gagal → tutup layar muat supaya layar galat (00-galat.js) terlihat
+  addEventListener("error", function () { if (!selesai && box.parentNode) box.remove(); });
+  // jaga-jaga: kalau setelah 20 detik belum siap, tetap bisa masuk
+  setTimeout(function () { if (!selesai && box.parentNode) { window.muatSelesai(); label.textContent = en ? "Tap to start" : "Ketuk untuk mulai"; box.classList.add("siap"); box.addEventListener("pointerup", function () { box.remove(); }); } }, 20000);
+})();
+</script>
 
 <div class="stage">
   <canvas id="cv" data-ta="h.petaPetualangan" aria-label="Peta petualangan Laga Nusantara"></canvas>
@@ -1502,4 +1564,5 @@ h1 span { color: var(--gold); }
 <script src="js/99za-teman.js"></script>
 <script src="js/99zb-pohon-jurus.js"></script>
 <script src="js/99zc-info-pendukung.js"></script>
+<script src="js/99zd-layar-muat.js"></script>
 <script src="js/100-main.js"></script>

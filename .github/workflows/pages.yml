@@ -1,5 +1,9 @@
 # Setiap push ke main: upload folder public/ ke GitHub Pages.
 # Ingat jalankan ./build.sh sebelum commit supaya public/ ikut terbaru.
+#
+# Dibagi 2 job (susunan resmi GitHub): "build" mengunggah artefak, lalu "deploy" (job terpisah)
+# memasangnya. Dulu keduanya satu job dan deploy kadang gagal "No artifacts named github-pages"
+# karena artefak yang baru diunggah belum terbaca oleh GitHub.
 name: Deploy ke GitHub Pages
 
 on:
@@ -14,19 +18,24 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v7
       - uses: actions/configure-pages@v6
       - uses: actions/upload-pages-artifact@v5
         with:
           path: public
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - id: deployment
         uses: actions/deploy-pages@v5

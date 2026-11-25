@@ -39,6 +39,8 @@ BUILD_ID="$(date +%Y%m%d%H%M%S)"
   echo '<script>if("serviceWorker" in navigator){addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}</script>'
   echo '</body></html>'
 } > public/index.html
+# layar muat: jumlah script game, supaya bar progres tahu kapan 100%
+sed -i "s|data-jumlah=\"0\"|data-jumlah=\"$(grep -c '<script src=' src/game.html)\"|" public/index.html
 cp src/config.js public/config.js
 rm -rf public/js && cp -r src/js public/js
 rm -rf public/cerita && cp -r src/cerita public/cerita
