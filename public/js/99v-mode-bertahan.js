@@ -117,7 +117,9 @@ SAAT_MASUK_AREA.push(() => { if (bt) akhiriBertahan("kalah"); });
   const h = document.createElement("div");
   h.id = "btHud"; h.hidden = true;
   h.innerHTML = `<span id="btInfo"></span><button type="button" id="btnBtKeluar"></button>`;
-  document.querySelector(".stage").appendChild(h);
+  // ditaruh di kiri, tepat di bawah kotak misi, supaya tidak menutupi layar tengah
+  const me = $("questBox").closest(".me"), kiri = document.createElement("div");
+  kiri.className = "hud-kiri"; me.before(kiri); kiri.append(me, h);
   $("btnBtKeluar").addEventListener("click", () => { sfx.click(); akhiriBertahan("menang"); });
 }
 function segarkanHudBertahan(sisa) {

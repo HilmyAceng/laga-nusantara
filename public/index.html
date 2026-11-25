@@ -23,7 +23,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://hilmyaceng.github.io/laga-nusantara/icons/og.jpg">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);box-sizing:border-box;height:100%}[hidden]{display:none!important}</style>
-<script>window.LAGA_BUILD="20261125160908";</script>
+<script>window.LAGA_BUILD="20261125195637";</script>
 </head><body>
 <title>Laga Nusantara</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -210,7 +210,11 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 .map-legend b { font-weight: inherit; }
 .map-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
 .map-hint { margin: 0; font-size: 0.75rem; color: var(--ink-dim); }
-.boss { position: absolute; left: 50%; top: 10px; transform: translateX(-50%); width: min(360px, 40vw); text-align: center; pointer-events: none; }
+.boss { position: absolute; left: 50%; top: calc(max(10px, env(safe-area-inset-top, 0px)) + 50px); transform: translateX(-50%); width: min(380px, calc(100% - 2 * (min(275px, 42vw) + 50px))); text-align: center; pointer-events: none; display: grid; gap: 2px; }
+#bossLemah { font: 800 0.72rem Nunito, sans-serif; color: #ffd27a; text-shadow: 0 1px 2px rgba(0,0,0,0.8); }
+#bossLemah:empty { display: none; }
+/* bar bos tampil → notif tengah turun sedikit supaya tidak menimpa bar */
+.boss:not([hidden]) ~ .toasts { top: calc(clamp(70px, 12vh, 150px) + 52px + env(safe-area-inset-top, 0px)); }
 /* notif "Dukung Kami" tiap bab selesai (js/28-dukung.js): atas tengah, sejajar kotak misi */
 .dukung-notif { position: absolute; left: 50%; top: calc(10px + env(safe-area-inset-top, 0px)); transform: translateX(-50%); width: min(340px, 42vw); z-index: 16;
   display: grid; grid-template-columns: 1fr auto; gap: 4px 8px; align-items: center; padding: 8px 10px 10px 12px; border-radius: 12px; overflow: hidden;
@@ -228,7 +232,9 @@ button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
   .dukung-notif { top: calc(72px + env(safe-area-inset-top, 0px)); width: min(300px, calc(100vw - 32px)); }
   .stage.dn-on .toasts { top: calc(clamp(70px, 12vh, 150px) + 76px + env(safe-area-inset-top, 0px)); }
 }
-.boss b { font-family: var(--font-display); font-size: 1.3rem; color: #ff8b8e; letter-spacing: 0.02em; }
+.boss b { font-family: var(--font-display); font-size: 1.3rem; line-height: 1; color: #ff8b8e; letter-spacing: 0.02em; text-shadow: 0 1px 3px rgba(0,0,0,0.85); overflow-wrap: anywhere; }
+/* HP mendatar: kotak misi lebih sempit (min(235px, 40vw)) → bar bos menyesuaikan, tidak menyentuh kotak misi */
+@media (max-height: 520px) { .boss { top: calc(max(10px, env(safe-area-inset-top, 0px)) + 42px); width: min(380px, calc(100% - 2 * (min(235px, 40vw) + 44px))); } .boss b { font-size: 1.05rem; } }
 .boss .bar i { background: var(--red); }
 /* notif tengah: di atas, tepat di bawah bar bos, supaya tidak menutupi karakter */
 .toasts { position: absolute; left: 50%; top: calc(clamp(70px, 12vh, 150px) + env(safe-area-inset-top, 0px)); transform: translateX(-50%); display: grid; gap: 6px; justify-items: center; pointer-events: none; }
@@ -761,8 +767,11 @@ h1 span { color: var(--gold); }
 .hr-tugas.siap { border-color: #5ad17a; } .hr-tugas.klaim { opacity: 0.6; }
 .hr-tugas .cp-prog { margin: 4px 0 2px; }
 /* mode bertahan (js/99v-mode-bertahan.js) */
-#btHud { position: absolute; top: calc(max(10px, env(safe-area-inset-top)) + 54px); left: 50%; transform: translateX(-50%); z-index: 9; display: flex; align-items: center; gap: 10px; padding: 6px 8px 6px 14px; border-radius: 999px; background: rgba(20, 13, 36, 0.88); border: 2px solid #9a6bd6; color: var(--ink); box-shadow: 0 4px 14px rgba(0,0,0,0.4); }
-#btInfo { display: grid; line-height: 1.1; } #btInfo b { font: 600 1.15rem Teko, sans-serif; color: #d9c8ff; } #btInfo small { font-size: 0.65rem; color: var(--ink-dim); font-weight: 800; }
+/* kolom kiri HUD: kotak misi + HUD bertahan di bawahnya */
+.hud-kiri { display: grid; gap: 6px; justify-items: start; align-content: start; pointer-events: none; }
+#btHud { pointer-events: auto; display: flex; align-items: center; gap: 10px; padding: 5px 6px 5px 12px; border-radius: 12px; background: rgba(20, 13, 36, 0.88); border: 2px solid #9a6bd6; color: var(--ink); box-shadow: 0 4px 14px rgba(0,0,0,0.4); }
+#btHud[hidden] { display: none; }
+#btInfo { display: grid; line-height: 1.1; } #btInfo b { font: 600 1.05rem Teko, sans-serif; color: #d9c8ff; } #btInfo small { font-size: 0.65rem; color: var(--ink-dim); font-weight: 800; }
 #btnBtKeluar { padding: 6px 12px; border-radius: 999px; border: 0; background: #e5484d; color: #fff; font: 800 0.75rem Nunito, sans-serif; cursor: pointer; }
 /* sulit+ (js/99w-sulit-plus.js) */
 .kes-kunci { opacity: 0.5; cursor: not-allowed; }
@@ -811,7 +820,7 @@ h1 span { color: var(--gold); }
       <span class="area-name" id="areaName">Desa Wanasari</span>
     </div>
   </div>
-  <div class="boss" id="bossBar" hidden><b id="bossName">Genderuwo</b><div class="bar"><i id="bossFill"></i></div></div>
+  <div class="boss" id="bossBar" hidden><b id="bossName">Genderuwo</b><small id="bossLemah"></small><div class="bar"><i id="bossFill"></i></div></div>
   <div class="toasts" id="toasts"></div>
   <!-- notif Dukung Kami tiap bab selesai (js/28-dukung.js) -->
   <div class="dukung-notif" id="dukungNotif" role="status" hidden>

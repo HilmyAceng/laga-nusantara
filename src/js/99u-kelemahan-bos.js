@@ -87,8 +87,10 @@ function teksKelemahan(k, panjang) {
 {
   const asli = hudFaseBos;
   hudFaseBos = function (boss) {
-    const s = asli(boss), c = S && S.kelemahan && S.kelemahan[boss.type];
-    return c && (c.lemah || c.kebal) ? `${s}   ${teksKelemahan(boss.type, false)}` : s;
+    // kelemahan tampil di baris sendiri (#bossLemah) supaya nama bos tidak terlalu panjang
+    const c = S && S.kelemahan && S.kelemahan[boss.type];
+    setText($("bossLemah"), "bossLemah", c && (c.lemah || c.kebal) ? teksKelemahan(boss.type, false) : "");
+    return asli(boss).replace(/ (\d+\/\d+)/g, "\u00a0$1");   // "Fase 1/3" tidak terpotong ke baris baru
   };
 }
 {
