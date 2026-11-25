@@ -28,6 +28,15 @@ function bacaKodeSave(kode) {
   } catch (e) { return null; }
 }
 
+// Setelah kode dimuat, simpan-otomatis dimatikan sampai halaman dimuat ulang.
+// Tanpa ini, memuat kode dari Menu (saat game berjalan) tidak berpengaruh: autosave,
+// saveSoon, atau "pagehide" saat reload menimpa save baru dengan progres yang sedang dimainkan.
+let kodeBaruDimuat = false;
+{
+  const saveAsli = save;
+  save = function () { if (!kodeBaruDimuat) saveAsli(); };
+}
+
 let kodeDariJeda = false;
 function bukaKodeSave() {
   kodeDariJeda = mode === "pause";
@@ -57,6 +66,7 @@ $("btnKodeMuat").addEventListener("click", () => {
   const data = bacaKodeSave($("kodeImpor").value);
   if (!data) return pesanKode(t("kode.salah"), false);
   if (!confirm(t("kode.yakin", { kelas: CLASSES[data.cls].name, lv: data.lv }))) return;
+  kodeBaruDimuat = true;
   store.set(SAVE_KEY, data);
   pesanKode(t("kode.berhasil"), true);
   setTimeout(() => location.reload(), 700);
