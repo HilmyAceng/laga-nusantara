@@ -183,8 +183,7 @@ let tabGaya = "baju";
   v.className = "pview"; v.dataset.view = "gaya"; v.hidden = true;
   v.innerHTML = `<p class="eyebrow" id="gayaEyebrow"></p><h1 id="gayaJudul"></h1>
     <div class="gaya-atas"><canvas id="gayaPratinjau" width="200" height="200"></canvas>
-      <div class="gaya-info"><p id="gayaKet"></p><div class="gaya-tab" id="gayaTab"></div></div></div>
-    <div class="gaya-grid" id="gayaGrid"></div>
+      <div class="gaya-info"><p id="gayaKet"></p><div class="gaya-tab" id="gayaTab"></div><div class="gaya-grid" id="gayaGrid"></div></div></div>
     <div class="menu"><button class="go alt back go-dinamis" type="button" data-go="gameplay" id="gayaKembali"></button></div>`;
   document.querySelector('#pausePanel .pview[data-view="capai"]').after(v);
   const b = document.createElement("button");

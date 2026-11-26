@@ -7,6 +7,11 @@
 // =====================================================================
 "use strict";
 
+// ---------- Peta dunia (18-peta-besar.js): area baru ikut disusun; area pertama tiap dunia = pusat ----------
+WORLD_ORDER.push("sumurCandi", "mercusuar", "tamanGantung", "pustakaKala",
+  "labuhan", "gangLabuhan", "gudang", "sabana", "kampungBatu", "lembahTugu", "tuguAgung",
+  "rumahPanjang", "rimba", "beringin", "lereng", "pondok", "guaEs", "puncak", "kelir");
+
 // ---------- Barang cerita ----------
 const BARANG_ARC2 = {
   kendiSuara: ["Kendi suara", "Voice jar"], simpulCandi: ["Simpul benang candi", "Temple thread knot"], simpulMercu: ["Simpul benang mercusuar", "Lighthouse thread knot"],

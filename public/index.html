@@ -23,7 +23,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://hilmyaceng.github.io/laga-nusantara/icons/og.jpg">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);box-sizing:border-box;height:100%}[hidden]{display:none!important}</style>
-<script>window.LAGA_BUILD="20261126174239";</script>
+<script>window.LAGA_BUILD="20261126195535";</script>
 </head><body>
 <title>Laga Nusantara</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -730,13 +730,27 @@ h1 span { color: var(--gold); }
 .pn-box .ev-lacak:empty { display: none; }
 .pn-box .ev-detail { padding-right: 8px; box-sizing: border-box; }
 /* kosmetik & gelar (js/99q-kosmetik.js) */
-.gaya-atas { display: flex; gap: 14px; align-items: center; }
+/* kosmetik: pratinjau di kiri, keterangan + tab + daftar pilihan di kanan (daftar bisa digulir sendiri) */
+.gaya-atas { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 16px; align-items: start; }
 #gayaPratinjau { width: 150px; height: 150px; flex: none; border-radius: 16px; background: radial-gradient(circle at 50% 60%, rgba(244,185,66,0.18), rgba(20,13,36,0.6)); border: 1px solid var(--line); }
-.gaya-info { display: grid; gap: 8px; } .gaya-info p { margin: 0; font-size: 0.85rem; color: var(--ink-dim); }
+.gaya-info { display: grid; gap: 8px; min-width: 0; } .gaya-info p { margin: 0; font-size: 0.85rem; color: var(--ink-dim); }
 .gaya-tab { display: flex; flex-wrap: wrap; gap: 6px; }
 .gaya-tab button { padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); background: rgba(255,255,255,0.05); color: var(--ink); font: 800 0.8rem Nunito, sans-serif; cursor: pointer; }
 .gaya-tab button.pilih { border-color: var(--gold); background: rgba(244,185,66,0.18); color: var(--gold); }
-.gaya-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 8px; margin: 10px 0; max-height: 40vh; overflow-y: auto; }
+.gaya-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; margin: 2px 0 0; max-height: min(52vh, 420px); overflow-y: auto; padding-right: 2px; align-content: start; }
+#gayaPratinjau { position: sticky; top: 0; }
+@media (max-height: 520px) {
+  #gayaPratinjau { width: 128px; height: 128px; }
+  .gaya-atas { gap: 12px; }
+  .gaya-info p { font-size: 0.75rem; }
+  .gaya-tab button { padding: 5px 10px; font-size: 0.74rem; }
+  .gaya-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); max-height: calc(100dvh - 196px); min-height: 120px; }
+  .pview[data-view="gaya"] h1 { font-size: 1.9rem; margin: 0; line-height: 1; }
+  .pview[data-view="gaya"] .eyebrow { margin: 0; }
+  .pview[data-view="gaya"] .menu { margin-top: 6px; }
+  .pview[data-view="gaya"] .menu .go { padding-block: 8px; }
+  .gaya-kartu { padding: 6px 8px; gap: 8px; }
+}
 .gaya-kartu { display: grid; grid-template-columns: auto 1fr auto; gap: 10px; align-items: center; padding: 8px 10px; border-radius: 12px; border: 1px solid var(--line); background: rgba(255,255,255,0.04); text-align: left; }
 .gaya-kartu.dipakai { border-color: var(--gold); background: rgba(244,185,66,0.12); } .gaya-kartu.terkunci { opacity: 0.6; }
 .gaya-kartu b { display: block; font-size: 0.85rem; } .gaya-kartu small { color: var(--ink-dim); font-size: 0.7rem; }
