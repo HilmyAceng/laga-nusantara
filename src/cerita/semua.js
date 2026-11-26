@@ -1,5 +1,5 @@
 // =====================================================================
-// CERITA UTAMA: "Kabut dari Gunung Geni" — 10 bab × 10 episode
+// CERITA UTAMA: "Kabut dari Gunung Geni" (bab 1-10) + "Benang Sepi" (bab 11-20)
 // Tiap bab ada di file sendiri (bab-1.js ... bab-10.js). File ini menggabungkannya.
 //
 // Bentuk satu langkah:
@@ -21,4 +21,9 @@
 "use strict";
 
 const CERITA = [...CERITA_BAB1, ...CERITA_BAB2, ...CERITA_BAB3, ...CERITA_BAB4, ...CERITA_BAB5,
-  ...CERITA_BAB6, ...CERITA_BAB7, ...CERITA_BAB8, ...CERITA_BAB9, ...CERITA_BAB10];
+  ...CERITA_BAB6, ...CERITA_BAB7, ...CERITA_BAB8, ...CERITA_BAB9, ...CERITA_BAB10,
+  // arc 2 "Benang Sepi" (bab 11-20); simpanan yang sudah tamat bab 10 langsung lanjut ke bab 11
+  ...CERITA_BAB11, ...CERITA_BAB12, ...CERITA_BAB13, ...CERITA_BAB14, ...CERITA_BAB15,
+  ...CERITA_BAB16, ...CERITA_BAB17, ...CERITA_BAB18, ...CERITA_BAB19, ...CERITA_BAB20];
+// langkah pertama arc 2 = akhir cerita pertama ("Kabut dari Gunung Geni")
+const AKHIR_ARC1 = CERITA.findIndex((l) => l.bab.startsWith("Bab 11"));

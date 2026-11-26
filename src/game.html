@@ -795,6 +795,8 @@ h1 span { color: var(--gold); }
 @keyframes muBara { 0% { transform: translate(0, 0); opacity: 0; } 10% { opacity: 0.9; } 100% { transform: translate(var(--gx, 20px), -105vh); opacity: 0; } }
 @media (max-height: 420px) { .mu-kiat { font-size: 0.7rem; min-height: 2.4em; } .mu-isi { gap: 3px; } }
 @media (prefers-reduced-motion: reduce) { .mu-gunungan, .mu-bara b, #muat.siap .mu-label { animation: none; } }
+/* tombol ulang puzzle es (js/99zj-teka-seluncur.js) */
+#btnUlangEs { position: absolute; left: 50%; bottom: calc(max(14px, env(safe-area-inset-bottom, 0px)) + 120px); transform: translateX(-50%); z-index: 12; padding: 8px 16px; border-radius: 999px; border: 2px solid #bfe8ff; background: rgba(20, 40, 70, 0.88); color: #e6f6ff; font: 800 0.85rem Nunito, sans-serif; cursor: pointer; }
 </style>
 
 <!-- LAYAR MUAT: tampil seketika, bar maju tiap script game termuat (data-jumlah diisi build.sh). Sisanya: js/99zd-layar-muat.js -->
@@ -1439,10 +1441,23 @@ h1 span { color: var(--gold); }
 <script src="cerita/bab-8.js"></script>
 <script src="cerita/bab-9.js"></script>
 <script src="cerita/bab-10.js"></script>
+<script src="cerita/bab-11.js"></script>
+<script src="cerita/bab-12.js"></script>
+<script src="cerita/bab-13.js"></script>
+<script src="cerita/bab-14.js"></script>
+<script src="cerita/bab-15.js"></script>
+<script src="cerita/bab-16.js"></script>
+<script src="cerita/bab-17.js"></script>
+<script src="cerita/bab-18.js"></script>
+<script src="cerita/bab-19.js"></script>
+<script src="cerita/bab-20.js"></script>
 <script src="cerita/semua.js"></script>
 <script src="cerita/adegan.js"></script>
 <script src="cerita/tanya.js"></script>
 <script src="cerita/kisah.js"></script>
+<script src="cerita/kisah-bos-lama.js"></script>
+<script src="cerita/kisah-bos-baru.js"></script>
+<script src="cerita/arc2.js"></script>
 <!-- Kode game dipecah per fitur di folder js/. Urutan penting: file atas dimuat lebih dulu. -->
 <script src="js/01-alat.js"></script>
 <script src="js/02-bahasa.js"></script>
@@ -1453,7 +1468,13 @@ h1 span { color: var(--gold); }
 <script src="js/04b-dunia-awan.js"></script>
 <script src="js/04c-area-tambahan.js"></script>
 <script src="js/04d-dunia-bayang.js"></script>
+<script src="js/04e-dunia-baru.js"></script>
+<script src="js/04f-dunia-sabana.js"></script>
+<script src="js/04g-dunia-rimba.js"></script>
+<script src="js/04h-area-gema.js"></script>
+<script src="js/04i-monster-arc2.js"></script>
 <script src="js/05-status.js"></script>
+<script src="js/05a-npc-arc2.js"></script>
 <script src="js/06-area.js"></script>
 <script src="js/07-audio.js"></script>
 <script src="js/08-musik.js"></script>
@@ -1493,6 +1514,7 @@ h1 span { color: var(--gold); }
 <script src="js/44-teka-tebak.js"></script>
 <script src="js/45-monster-bayang.js"></script>
 <script src="js/46-kalamurka.js"></script>
+<script src="js/47-gambar-dunia-baru.js"></script>
 <script src="js/48-jurus.js"></script>
 <script src="js/49-pamungkas.js"></script>
 <script src="js/50-hindar-tangkis.js"></script>
@@ -1565,4 +1587,15 @@ h1 span { color: var(--gold); }
 <script src="js/99zb-pohon-jurus.js"></script>
 <script src="js/99zc-info-pendukung.js"></script>
 <script src="js/99zd-layar-muat.js"></script>
+<script src="js/99ze-teka-arc2.js"></script>
+<script src="js/99zf-teka-nada.js"></script>
+<script src="js/99zg-teka-cermin.js"></script>
+<script src="js/99zh-teka-putar.js"></script>
+<script src="js/99zi-teka-lantai.js"></script>
+<script src="js/99zj-teka-seluncur.js"></script>
+<script src="js/99zk-npc-hidup.js"></script>
+<script src="js/99zl-langkah-gerak.js"></script>
+<script src="js/99zm-bantuan-bos.js"></script>
+<script src="js/99zn-jimat-legenda-baru.js"></script>
+<script src="js/99zp-arc2-lain.js"></script>
 <script src="js/100-main.js"></script>

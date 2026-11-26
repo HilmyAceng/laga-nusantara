@@ -1,0 +1,401 @@
+// Bab 18 · Gua Es Bernyanyi (cerita utama, arc 2 "Benang Sepi"). Dibuat untuk Laga Nusantara.
+"use strict";
+const CERITA_BAB18 = [
+  // ===== EP 1 =====
+  { bab: "Bab 18 · Gua Es Bernyanyi", ep: 1, judul: "Lagu yang Sumbang", tipe: "datang", area: "guaEs",
+    tujuan: "Masuki Gua Es Bernyanyi",
+    teks: [
+      ["narasi", "Pintu batu yang digali Pak Tenggo membawamu ke dalam gua yang berkilau biru. Dinding, lantai, dan langit-langitnya es bening, setebal rumah."],
+      ["narasi", "Lalu kau mendengarnya. Gua ini bernyanyi. Nada-nada panjang bergaung dari dalam es, tinggi dan rendah, seperti gamelan yang dimainkan oleh angin."],
+      ["narasi", "Tapi Nini Embun benar: lagunya sumbang. Sesekali nadanya patah, lalu terdengar desis tipis, seperti benang yang ditarik terlalu kencang."],
+      ["hero", "Taji tanduk terpasang, Pelita Salju menyala. Benang-benang hitam itu masuk lebih dalam. Ayo."],
+    ],
+    hadiah: { exp: 10000, gold: 250 },
+    en: { bab: "Chapter 18 · The Singing Ice Cave", judul: "An Off-Key Song", tujuan: "Enter the Singing Ice Cave",
+      teks: [
+        "The stone gate Pak Tenggo dug out leads you into a cave glittering blue. Its walls, floor, and ceiling are clear ice, as thick as a house.",
+        "Then you hear it. The cave is singing. Long notes echo from within the ice, high and low, like a gamelan played by the wind.",
+        "But Nini Embun was right: the song is off-key. Now and then a note breaks, followed by a thin hiss, like a thread pulled too tight.",
+        "Horn spikes on, Snow Lantern lit. Those black threads go deeper. Let's go.",
+      ] } },
+  { bab: "Bab 18 · Gua Es Bernyanyi", ep: 1, judul: "Lagu yang Sumbang", tipe: "kill", target: "arcaEs", need: 7,
+    tujuan: "Kalahkan 7 Arca Es di bagian depan gua",
+    teks: [
+      ["narasi", "Arca es ketujuh retak dari kepala sampai kaki, lalu runtuh menjadi bongkahan berkilau. Di sinar Pelita Salju, benang hitam yang menggerakkannya putus dan menggeliat seperti cacing."],
+      ["narasi", "Patung-patung itu bukan makhluk hidup. Mereka es yang dipahat menyerupai prajurit, lalu digerakkan dari jauh seperti wayang di tangan dalang."],
+      ["hero", "Prajurit tanpa jiwa untuk menjaga jalan. Dalang ini tidak suka membuang tenaganya sendiri."],
+      ["narasi", "Di ujung ruangan, lantai berubah menjadi hamparan es licin sebening kaca, dihiasi bongkah batu dan tiang es di sana-sini. Pintu keluar ada jauh di seberang."],
+    ],
+    hadiah: { exp: 10200, gold: 260 },
+    en: { bab: "Chapter 18 · The Singing Ice Cave", judul: "An Off-Key Song", tujuan: "Defeat 7 Ice Statues in the front of the cave",
+      teks: [
+        "The seventh ice statue cracks from head to foot, then collapses into glittering chunks. In the Snow Lantern's light, the black thread that moved it snaps and writhes like a worm.",
+        "Those statues aren't living things. They're ice carved to look like soldiers, then moved from afar like puppets in a puppeteer's hands.",
+        "Soulless soldiers to guard the road. This Puppeteer doesn't like wasting his own strength.",
+        "At the end of the chamber, the floor becomes a sheet of slick ice clear as glass, dotted here and there with boulders and ice pillars. The exit lies far across.",
+      ] } },
+
+  // ===== EP 2 =====
+  { bab: "Bab 18 · Gua Es Bernyanyi", ep: 2, judul: "Jalan Seluncur", tipe: "teka", id: "esSeluncur",
+    tujuan: "Meluncurlah di atas es dan capai pintu keluar di seberang",
+    teks: [
+      ["narasi", "Kau meluncur untuk terakhir kalinya, menabrak tiang es tepat di depan lempeng batu di seberang. Pintu keluar terbuka dengan bunyi gemeretak."],
+      ["narasi", "Di lantai es seperti ini, sekali kau melangkah, kau tak bisa berhenti sampai membentur sesuatu. Kata-kata Pak Tenggo terngiang: batu dan tiang es itu bukan penghalang, tapi rem."],
+      ["hero", "Kakek Pak Tenggo pasti tertawa melihatku berputar-putar tadi. Untung tidak ada yang lihat."],
+      ["narasi", "Gua di depan bergema sedikit lebih jernih, seolah es itu lega ada yang berhasil lewat tanpa dibekukan."],
+    ],
+    hadiah: { exp: 10500, gold: 300 },
+    en: { bab: "Chapter 18 · The Singing Ice Cave", judul: "The Sliding Road", tujuan: "Slide across the ice and reach the exit on the far side",
+      teks: [
+        "You slide one last time, bumping into an ice pillar right in front of the stone plate on the far side. The exit opens with a grinding rumble.",
+        "On ice like this, once you step, you can't stop until you hit something. Pak Tenggo's words echo in your head: the rocks and ice pillars aren't obstacles, they're brakes.",
+        "Pak Tenggo's grandfather would have laughed watching me spin around back there. Good thing no one saw.",
+        "The cave ahead echoes a little clearer, as if the ice is relieved someone made it through without being frozen.",
+      ] } },
+
+  // ===== EP 3 =====
+  { bab: "Bab 18 · Gua Es Bernyanyi", ep: 3, judul: "Kendi di Dada Arca", tipe: "kill", target: "rohSalju", need: 7,
+    tujuan: "Kalahkan 7 Roh Salju di lorong gua",
+    teks: [
+      ["narasi", "Roh salju terakhir di lorong ini buyar menjadi kabut. Potongan suara yang ia bawa, sebuah panggilan 'Ibu!', melayang sebentar, lalu terserap ke dinding es."],
+      ["narasi", "Di balik tirai es, kau melihat sesuatu yang membuat dadamu sesak: arca-arca es yang berbaris, dan di rongga dada masing-masing tersimpan sebuah kendi tanah liat."],
+      ["hero", "Jadi di sinilah sebagian kendi itu disimpan. Arca-arca ini bukan cuma penjaga. Mereka gudang berjalan."],
+    ],
+    hadiah: { exp: 10500, gold: 280, potion: 1 },
+    en: { bab: "Chapter 18 · The Singing Ice Cave", judul: "Jars in the Statues' Chests", tujuan: "Defeat 7 Snow Spirits in the cave passages",
+      teks: [
+        "The last snow spirit in this passage dissolves into mist. The scrap of voice it carried, a cry of 'Mother!', hovers for a moment, then sinks into the ice wall.",
+        "Behind a curtain of ice, you see something that tightens your chest: ice statues in a row, and in the hollow of each one's chest sits a clay jar.",
+        "So this is where some of the jars are kept. These statues aren't just guards. They're walking storehouses.",
+      ] } },
+  { bab: "Bab 18 · Gua Es Bernyanyi", ep: 3, judul: "Kendi di Dada Arca", tipe: "collect", item: "kendiSuara", need: 5, dari: "arcaEs", peluang: 0.45,
+    tujuan: "Ambil 5 Kendi Suara dari dada Arca Es",
+    teks: [
+      ["narasi", "Kendi kelima pecah di tanganmu. Lima untai suara terbang keluar, berputar sekali di langit-langit gua seperti burung yang baru lepas dari sangkar."],
+      ["narasi", "Kau mengenali salah satunya: tawa nyaring seorang bocah dari kampung rumah panjang. Lalu suara-suara itu melesat ke arah pintu gua, pulang ke pemiliknya masing-masing."],
+      ["hero", "Lima pulang. Tapi kereta luncur itu membawa ribuan. Sisanya pasti sudah sampai ke puncak."],
+      ["narasi", "Dari kedalaman gua terdengar bunyi lain: dentingan es yang teratur, seperti bilah-bilah gamelan yang menunggu dipukul."],
+    ],
+    hadiah: { exp: 10800, gold: 320 },
+    en: { bab: "Chapter 18 · The Singing Ice Cave", judul: "Jars in the Statues' Chests", tujuan: "Take 5 Voice Jars from the chests of Ice Statues",
+      teks: [
+        "The fifth jar breaks in your hands. Five strands of voice fly out, circling once around the cave ceiling like birds freed from a cage.",
+        "You recognize one of them: the bright laugh of a child from the longhouse village. Then the voices dart toward the cave mouth, home to their owners.",
+        "Five have gone home. But that sledge carried thousands. The rest must have reached the summit already.",
+        "From deep in the cave comes another sound: a steady chime of ice, like gamelan keys waiting to be struck.",
+      ] } },
+
+  // ===== EP 4 =====
+  { bab: "Bab 18 · Gua Es Bernyanyi", ep: 4, judul: "Porter yang Gemetar", tipe: "bicara", npc: "tenggo",
+    tujuan: "Temui Pak Tenggo yang menyusul ke dalam gua",
+    teks: [
+      ["tenggo", "AAAH! Oh. Kau. Syukurlah. Kukira kau arca es yang bisa bicara. Atau hantu yang meminjam wajahmu."],
+      ["hero", "Pak Tenggo! Bapak benar-benar menyusul?"],
+      ["tenggo", "Kopi kedua habis, lalu yang ketiga. Lalu aku sadar aku cuma menunda. Kakekku tidak pernah menunda. Jadi... ya. Aku di sini. Gemetar, tapi di sini."],
+      ["narasi", "Pak Tenggo menurunkan pikulan kecil dari pundaknya: termos kopi, tali, dan sepotong kue gula aren yang dibungkus daun. Tangannya masih bergetar saat menyodorkannya."],
+      ["tenggo", "Dengar, di depan sana ada ruang gamelan es. Kakekku cerita, dulu Yaksa memainkannya untuk membuka jalan ke perut gua. Bilah-bilahnya dari es murni."],
+      ["tenggo", "Notasinya terukir di batu prasasti di depannya. Tapi lihat... separuhnya sudah tergores, seperti sengaja dirusak. Tinggal separuh angka yang masih terbaca."],
+      ["hero", "Lalu bagaimana aku tahu nada yang hilang?"],
+      ["tenggo", "Kakekku bilang, 'Kalau batu lupa, tanyakan pada es.' Es di gua ini masih menyanyikan lagu itu. Diam dan dengarkan baik-baik, Nak. Nada yang hilang ada di nyanyiannya."],
+    ],
+    hadiah: { exp: 11000, gold: 320, potion: 2 },
+    en: { bab: "Chapter 18 · The Singing Ice Cave", judul: "The Trembling Porter", tujuan: "Meet Pak Tenggo, who has followed you into the cave",
+      teks: [
+        "AAAH! Oh. You. Thank goodness. I thought you were a talking ice statue. Or a ghost borrowing your face.",
+        "Pak Tenggo! You really came after me?",
+        "The second coffee ran out, then the third. Then I realized I was only putting it off. My grandfather never put things off. So... yes. I'm here. Shaking, but here.",
+        "Pak Tenggo sets down a small load from his shoulder: a flask of coffee, a rope, and a slice of palm-sugar cake wrapped in a leaf. His hand still trembles as he offers it.",
+        "Listen, up ahead there's an ice gamelan chamber. My grandfather said the Yaksa used to play it to open the way into the cave's belly. The keys are made of pure ice.",
+        "The notation is carved on a stone tablet in front of it. But look... half of it has been scratched away, as if on purpose. Only half the numbers can still be read.",
+        "Then how do I know the missing notes?",
+        "My grandfather said, 'When stone forgets, ask the ice.' The ice in this cave still sings that song. Be still and listen closely, child. The missing notes are in its singing.",
+      ] } },
+  { bab: "Bab 18 · Gua Es Bernyanyi", ep: 4, judul: "Porter yang Gemetar", tipe: "teka", id: "gamelanEs",
+    tujuan: "Pukul bilah gamelan es sesuai notasi di prasasti dan nyanyian es",
+    teks: [
+      ["narasi", "Kau memukul bilah terakhir. Nada itu bergaung panjang, lalu seluruh gua menyahut: dinding-dinding es menyanyikan lagu yang sama, kali ini utuh dan merdu."],
+      ["narasi", "Separuh notasi dari batu prasasti, separuh lagi dari bisikan es yang bernyanyi. Ketika keduanya bertemu, lagu itu akhirnya selesai."],
+      ["tenggo", "Kau dengar itu? Itu lagu yang dulu dinyanyikan kakekku di perapian! Aku kira dia mengarangnya sendiri!"],
+      ["narasi", "Dinding es di belakang gamelan bergeser, membuka lorong yang menurun. Dan dari ujungnya, terdengar raungan panjang yang membuat es di langit-langit bergetar."],
+    ],
+    hadiah: { exp: 11000, gold: 350 },
+    en: { bab: "Chapter 18 · The Singing Ice Cave", judul: "The Trembling Porter", tujuan: "Strike the ice gamelan keys following the stone's notation and the ice's song",
+      teks: [
+        "You strike the final key. The note rings long, then the whole cave answers: the ice walls sing the same song, whole and sweet this time.",
+        "Half the notation from the stone tablet, the other half from the whisper of the singing ice. When the two met, the song was finally complete.",
+        "Did you hear that? That's the song my grandfather used to sing by the fire! I thought he made it up himself!",
+        "The ice wall behind the gamelan slides aside, revealing a passage sloping down. And from its end comes a long roar that makes the ice on the ceiling tremble.",
+      ] } },
+
+  // ===== EP 5 =====
+  { bab: "Bab 18 · Gua Es Bernyanyi", ep: 5, judul: "Tamu di Mulut Gua", tipe: "bicara", npc: "embun",
+    tujuan: "Temui Nini Embun di mulut gua",
+    teks: [
+      ["embun", "Hihihi! Jangan kaget begitu. Kau pikir nenek tua tidak bisa mendaki? Aku sudah naik turun gunung ini sebelum kakeknya Tenggo belajar berjalan."],
+      ["hero", "Nini! Bapak Tenggo hampir pingsan waktu mendengar raungan tadi."],
+      ["embun", "Raungan itu yang membuatku datang. Dengarkan baik-baik, Nak. Itu bukan raungan marah. Itu raungan makhluk yang mendengar lagunya dimainkan lagi, dan ingin ikut bernyanyi, tapi tidak bisa."],
+      ["embun", "Lagu gamelan tadi menembus benang-benang Dalang. Sesaat, Yaksa Es teringat siapa dirinya. Tapi benang itu menariknya kembali. Makanya ia menjerit."],
+      ["embun", "Nyanyian es yang kau dengar sejak masuk gua ini? Itu suaranya sendiri, Nak. Yaksa Es menyenandungkan lagunya dari dalam es, diam-diam, supaya Dalang tidak tahu. Supaya ada yang bisa menemukannya."],
+      ["hero", "Jadi dia yang membantuku menyelesaikan gamelan itu. Dia ingin dibebaskan."],
+      ["embun", "Tepat. Tapi Dalang juga mendengar lagu itu. Ia akan mengirim lebih banyak arca untuk menghalangimu. Bersihkan jalannya dulu. Aku dan Tenggo menunggu di sini, menjaga pintu."],
+    ],
+    hadiah: { exp: 11000, gold: 350 },
+    en: { bab: "Chapter 18 · The Singing Ice Cave", judul: "A Guest at the Cave Mouth", tujuan: "Meet Nini Embun at the mouth of the cave",
+      teks: [
+        "Heehee! Don't look so surprised. You think an old granny can't climb? I was going up and down this mountain before Tenggo's grandfather learned to walk.",
+        "Nini! Pak Tenggo nearly fainted when he heard that roar.",
+        "That roar is why I came. Listen closely, child. That wasn't an angry roar. It was the roar of a creature hearing its song played again, wanting to sing along, but unable to.",
+        "That gamelan song pierced the Puppeteer's threads. For a moment, the Ice Yaksa remembered who it is. But the threads pulled it back. That's why it cried out.",
+        "The ice singing you've heard since you entered this cave? That's its own voice, child. The Ice Yaksa has been humming its song from inside the ice, quietly, so the Puppeteer wouldn't know. So someone could find it.",
+        "So it was helping me solve that gamelan. It wants to be freed.",
+        "Exactly. But the Puppeteer heard that song too. He'll send more statues to block you. Clear the way first. Tenggo and I will wait here, guarding the door.",
+      ] } },
+
+  // ===== EP 6 =====
+  { bab: "Bab 18 · Gua Es Bernyanyi", ep: 6, judul: "Barisan Arca", tipe: "kill", target: "arcaEs", need: 8,
+    tujuan: "Kalahkan 8 Arca Es yang dikirim Dalang",
+    teks: [
+      ["narasi", "Arca kedelapan tumbang dan pecah berhamburan. Lorong menurun kini sunyi, kecuali bunyi napasmu dan dengung lembut es di sekitarmu."],
+      ["narasi", "Benang-benang hitam yang tadi menggerakkan arca-arca itu tergeletak di lantai, lalu mengerut, merayap mundur ke dalam gelap seperti akar yang ditarik."],
+      ["hero", "Mereka kembali ke tuannya. Ke jantung gua."],
+      ["tenggo", "Hei! Hei, kau masih utuh? Aku dengar bunyi pecah-pecah dari mulut gua. Kukira... ah, sudahlah. Lorong bawah itu bercabang-cabang. Biar aku yang memandu."],
+    ],
+    hadiah: { exp: 11200, gold: 360, potion: 1 },
+    en: { bab: "Chapter 18 · The Singing Ice Cave", judul: "Ranks of Statues", tujuan: "Defeat 8 Ice Statues sent by the Puppeteer",
+      teks: [
+        "The eighth statue topples and shatters everywhere. The sloping passage is quiet now, except for your breathing and the soft hum of the ice around you.",
+        "The black threads that moved the statues lie on the floor, then shrivel and creep back into the dark like roots being pulled.",
+        "They're returning to their master. To the heart of the cave.",
+        "Hey! Hey, are you still in one piece? I heard smashing sounds from the cave mouth. I thought... ah, never mind. That lower passage branches all over. Let me guide you.",
+      ] } },
+
+  // ===== EP 7 =====
+  { bab: "Bab 18 · Gua Es Bernyanyi", ep: 7, judul: "Jalan Porter Tua", tipe: "pandu", npc: "tenggo", area: "guaEs",
+    mulai: [6, 33],
+    ajak: ["Ikuti aku. Jalan porter tua lewat sini. Kakekku menandainya dengan goresan tiga garis di dinding. Kalau aku berhenti mendadak, itu bukan karena takut. Itu... memeriksa tanda.",
+      "Follow me. The old porters' path goes this way. My grandfather marked it with three scratches on the wall. If I stop suddenly, it's not because I'm scared. It's... checking the marks."],
+    titik: [
+      { di: [22, 36], baris: [
+        ["tenggo", ["Lihat! Tiga garis. Kakekku menggoresnya waktu umurnya lebih muda dariku sekarang. Aku pernah ke sini sekali, waktu kecil, digendong di punggungnya.", "Look! Three lines. My grandfather scratched them when he was younger than I am now. I came here once, as a child, carried on his back."]],
+        ["tenggo", ["Waktu itu aku menangis karena gelap. Kakek bilang, 'Gua ini bernyanyi supaya kita tidak pernah sendirian di dalamnya.' Sekarang lagunya sedih... tapi masih ada.", "Back then I cried because it was dark. Grandfather said, 'This cave sings so we're never alone inside it.' Now the song is sad... but it's still there."]],
+      ] },
+      { di: [21, 22], sergap: { monster: "rohSalju", jumlah: 3 }, baris: [
+        ["tenggo", ["Hhh... hhh... Sudah? Sudah pergi semua? Aku tidak lari tadi, ya. Aku berdiri di belakang batu. Itu taktik.", "Huff... huff... Done? All gone? I didn't run back there, you know. I stood behind a rock. That's tactics."]],
+        ["hero", ["Bapak bahkan melempar termos kopi ke salah satunya.", "You even threw your coffee flask at one of them."]],
+        ["tenggo", ["...Termosnya penyok. Kopinya tumpah. Itu pengorbanan terbesar dalam hidupku. Ayo jalan, sebelum aku menangis.", "...The flask is dented. The coffee spilled. That's the greatest sacrifice of my life. Let's go, before I cry."]],
+      ] },
+      { di: [24, 15], baris: [
+        ["narasi", ["Lorong terbuka ke sebuah ruang raksasa berkubah es. Di tengahnya, ribuan benang hitam terentang dari langit-langit ke lantai seperti jaring laba-laba raksasa.", "The passage opens into a vast chamber domed in ice. In its center, thousands of black threads stretch from ceiling to floor like a giant spider's web."]],
+        ["tenggo", ["Itu dia... di tengah jaring. Kakek benar. Dia besar sekali, Nak. Lebih besar dari pondok Nini.", "There it is... in the middle of the web. Grandfather was right. It's huge, child. Bigger than Nini's lodge."]],
+        ["tenggo", ["Aku sampai di sini saja. Bukan karena takut. ...Baiklah, karena takut. Tapi juga karena aku harus memberi tahu Nini. Bebaskan dia, ya? Untuk kakekku.", "I'll stop here. Not because I'm scared. ...All right, because I'm scared. But also because I have to tell Nini. Free it, will you? For my grandfather."]],
+      ] },
+    ],
+    tujuan: "Ikuti Pak Tenggo menyusuri jalan porter tua",
+    teks: [
+      ["narasi", "Pak Tenggo berbalik dan berlari kecil ke arah mulut gua, sesekali menoleh dan melambai. Taji tanduknya berdecit di atas es."],
+      ["narasi", "Di dalam ruang kubah, sosok raksasa itu bergerak sedikit. Benang-benang yang menembus tubuhnya bergetar, dan dengung es di seluruh gua berubah menjadi rintihan."],
+      ["hero", "Sebentar lagi. Bertahanlah."],
+    ],
+    hadiah: { exp: 11500, gold: 380 },
+    en: { bab: "Chapter 18 · The Singing Ice Cave", judul: "The Old Porters' Path", tujuan: "Follow Pak Tenggo along the old porters' path",
+      teks: [
+        "Pak Tenggo turns and jogs back toward the cave mouth, glancing back and waving now and then. His horn spikes squeak on the ice.",
+        "Inside the domed chamber, the giant figure stirs slightly. The threads piercing its body tremble, and the hum of ice throughout the cave turns into a moan.",
+        "Not much longer. Hold on.",
+      ] } },
+
+  // ===== EP 8 =====
+  { bab: "Bab 18 · Gua Es Bernyanyi", ep: 8, judul: "Sebelum Lagu Terakhir", tipe: "bicara", npc: "embun",
+    tujuan: "Laporkan kepada Nini Embun di mulut gua",
+    teks: [
+      ["embun", "Tenggo sudah cerita. Dengan suara bergetar, tiga kali diulang, dan setiap kali Yaksa-nya bertambah besar. Hihi. Jadi kau sudah melihatnya sendiri."],
+      ["hero", "Benangnya ada di mana-mana, Nini. Menembus tubuhnya, menembus es. Bagaimana aku bisa memutus semuanya?"],
+      ["embun", "Tidak perlu semuanya. Benang Dalang itu seperti tali wayang: banyak, tapi semua berkumpul di beberapa simpul. Pelita Salju akan menunjukkan simpul-simpul yang paling terang."],
+      ["embun", "Saat kau menyerangnya, Yaksa itu akan melawan. Bukan karena ia mau, tapi karena benang yang menggerakkan tangannya. Ia akan memukul tanah, menyemburkan es, menghujanimu dengan bongkahan beku."],
+      ["embun", "Dan ia akan memanggil roh-roh salju. Jangan biarkan mereka mengepungmu. Perhatikan gerakannya; penjaga besar selalu mengambil ancang-ancang sebelum memukul."],
+      ["embun", "Setiap kali kau melukai benangnya, ia akan sadar sedikit lebih lama. Lalu pada akhirnya, ia sendiri yang akan memutus sisanya. Penjaga yang ingat siapa dirinya tidak bisa dijadikan wayang."],
+      ["hero", "Aku akan membebaskannya, Nini. Bukan mengalahkannya."],
+      ["embun", "Itu jawaban yang ingin kudengar. Pergilah, Nak. Dan kalau sudah selesai, aku mau dengar lagunya lagi sebelum aku mati. Yah, yang itu masih lama. Hihihi."],
+    ],
+    hadiah: { exp: 11500, gold: 400, potion: 2 },
+    en: { bab: "Chapter 18 · The Singing Ice Cave", judul: "Before the Last Song", tujuan: "Report to Nini Embun at the cave mouth",
+      teks: [
+        "Tenggo already told me. In a trembling voice, repeated three times, and each time the Yaksa got bigger. Heehee. So you've seen it yourself.",
+        "The threads are everywhere, Nini. Through its body, through the ice. How can I cut them all?",
+        "You don't need to cut all of them. The Puppeteer's threads are like puppet strings: many, but they all gather at a few knots. The Snow Lantern will show you the brightest knots.",
+        "When you attack, the Yaksa will fight back. Not because it wants to, but because of the threads moving its arms. It will pound the ground, spew ice, rain frozen chunks down on you.",
+        "And it will call snow spirits. Don't let them surround you. Watch its movements; great guardians always wind up before they strike.",
+        "Each time you wound its threads, it will come to itself a little longer. Then in the end, it will break the rest itself. A guardian who remembers who it is can't be made a puppet.",
+        "I'll free it, Nini. Not defeat it.",
+        "That's the answer I wanted to hear. Go, child. And when it's done, I want to hear its song again before I die. Well, that's still a long way off. Heehee.",
+      ] } },
+
+  // ===== EP 9 =====
+  { bab: "Bab 18 · Gua Es Bernyanyi", ep: 9, judul: "Yaksa Es", tipe: "bos", monster: "yaksaEs",
+    tujuan: "Bebaskan Yaksa Es dari benang sepi",
+    teks: [
+      ["narasi", "Simpul benang terakhir putus dengan bunyi seperti senar kecapi yang patah. Yaksa Es terhuyung, lalu dengan kedua tangannya sendiri, ia merenggut sisa benang dari tubuhnya."],
+      ["narasi", "Benang-benang hitam itu jatuh, mengerut, dan menghilang. Raksasa itu duduk bersila perlahan, persis seperti di relief di halaman pondok Nini Embun."],
+      ["yaksaEs", "Hhhmm... Kau... yang membunyikan gamelanku. Yang mendengar laguku dari dalam es. Terima kasih, anak manusia. Aku sudah lupa rasanya bergerak atas kehendakku sendiri."],
+      ["yaksaEs", "Dalang itu datang dengan kereta penuh suara yang menangis. Ia menyebut lagu-laguku 'kata-kata yang belajar menari', lalu mengikatku agar aku menjaga pintunya."],
+      ["yaksaEs", "Ia sudah lewat. Membawa kendi-kendinya ke puncak, ke kelir dari es yang tak pernah mencair. Dan di puncak ada penjaga lain, Macan Putih. Kurasa benang itu akan mencarinya juga."],
+      ["narasi", "Yaksa Es mengangkat tangannya yang besar dan memukul dinding es dengan lembut. Seluruh gua bernyanyi, merdu dan utuh, untuk pertama kalinya dalam sepuluh malam."],
+    ],
+    hadiah: { exp: 33000, gold: 1500, potion: 3 },
+    en: { bab: "Chapter 18 · The Singing Ice Cave", judul: "The Ice Yaksa", tujuan: "Free the Ice Yaksa from the silent threads",
+      teks: [
+        "The last thread knot snaps with a sound like a breaking zither string. The Ice Yaksa staggers, then with its own two hands, it tears the remaining threads from its body.",
+        "The black threads fall, shrivel, and vanish. The giant slowly sits cross-legged, exactly like the relief in the yard of Nini Embun's lodge.",
+        "Hhhmm... You... who sounded my gamelan. Who heard my song from within the ice. Thank you, child of humans. I had forgotten what it feels like to move by my own will.",
+        "That Puppeteer came with a sledge full of weeping voices. He called my songs 'words that learned to dance', then bound me to guard his door.",
+        "He has passed. He carried his jars to the summit, to a screen of ice that never melts. And on the summit dwells another guardian, the White Tiger. I fear his threads will seek it too.",
+        "The Ice Yaksa raises its great hand and taps the ice wall gently. The whole cave sings, sweet and whole, for the first time in ten nights.",
+      ] } },
+
+  // ===== EP 10 =====
+  { bab: "Bab 18 · Gua Es Bernyanyi", ep: 10, judul: "Lagu Gunung Kembali", tipe: "bicara", npc: "embun", buka: "puncak",
+    tujuan: "Kembali kepada Nini Embun",
+    teks: [
+      ["embun", "Kau dengar itu, Nak? Itu dia. Itu lagu yang kudengar waktu aku tersesat di badai, ratusan tahun... eh, bertahun-tahun yang lalu."],
+      ["narasi", "Mata Nini Embun berkaca-kaca. Ia menyeka sudutnya dengan ujung selendang, lalu buru-buru tertawa seperti tak terjadi apa-apa."],
+      ["embun", "Salju masuk mata. Itu saja. Nenek tua tidak menangis karena lagu. Hihi... hik."],
+      ["hero", "Yaksa Es bilang Dalang sudah sampai ke puncak, ke Kelir Beku. Dan ada Macan Putih di sana."],
+      ["embun", "Macan Putih. Penjaga puncak, lebih tua dari Yaksa, lebih tua dari aku. Kalau benang itu sampai padanya, ia akan jadi pintu terakhir Dalang. Dan pintu yang paling kuat."],
+      ["embun", "Yaksa Es sudah membuka jalan di belakang ruang kubah. Tangga es yang naik terus sampai ke atap dunia. Puncak Salju Abadi."],
+      ["embun", "Aku akan naik duluan. Jangan protes. Nenek-nenek punya jalan pintas sendiri. Kita bertemu di puncak, Nak."],
+    ],
+    hadiah: { exp: 12000, gold: 450 },
+    en: { bab: "Chapter 18 · The Singing Ice Cave", judul: "The Mountain's Song Returns", tujuan: "Return to Nini Embun",
+      teks: [
+        "Do you hear that, child? That's it. That's the song I heard when I was lost in the storm, hundreds of years... er, many years ago.",
+        "Nini Embun's eyes glisten. She dabs their corners with the end of her shawl, then quickly laughs as if nothing happened.",
+        "Snow in my eye. That's all. Old grannies don't cry over songs. Heehee... sniff.",
+        "The Ice Yaksa said the Puppeteer has already reached the summit, the Frozen Screen. And the White Tiger is there.",
+        "The White Tiger. Guardian of the peak, older than the Yaksa, older than me. If those threads reach it, it'll become the Puppeteer's last door. And the strongest one.",
+        "The Ice Yaksa has opened the way behind the domed chamber. An ice stairway climbing all the way to the roof of the world. The Everlasting Snow Peak.",
+        "I'll go up first. Don't argue. Grannies have their own shortcuts. We'll meet at the summit, child.",
+      ] } },
+  { bab: "Bab 18 · Gua Es Bernyanyi", ep: 10, judul: "Lagu Gunung Kembali", tipe: "bicara", npc: "tenggo",
+    tujuan: "Bicara dengan Pak Tenggo",
+    teks: [
+      ["tenggo", "Kau berhasil! Kau BERHASIL! Aku mendengar lagunya dari mulut gua, dan aku... aku menari. Jangan bilang siapa-siapa. Nini sudah melihat, tapi Nini tidak dihitung."],
+      ["tenggo", "Lagu kakekku. Dia bilang lagu itu diajarkan penjaga gua padanya, waktu ia diselamatkan dari badai. Ternyata benar. Semuanya benar."],
+      ["hero", "Bapak juga ikut menyelamatkannya. Tanpa jalan porter dan taji tanduk Bapak, aku masih berputar-putar di atas es."],
+      ["tenggo", "Hehe... Aku? Aku cuma memikul barang dan berteriak. Tapi... terima kasih sudah bilang begitu. Pundakku rasanya ringan sekali."],
+      ["tenggo", "Aku tidak akan ikut ke puncak, Nak. Di sana bukan tempat porter penakut. Tapi aku akan menjaga pondok, menyalakan perapian setiap malam, supaya kau tahu ke mana harus pulang."],
+      ["tenggo", "Dan aku akan menyeduh kopi. Kopi terbaik yang pernah kubuat. Jadi kau harus pulang untuk meminumnya, mengerti? Itu bukan permintaan. Itu perintah porter."],
+    ],
+    hadiah: { exp: 12000, gold: 450, potion: 2 },
+    en: { bab: "Chapter 18 · The Singing Ice Cave", judul: "The Mountain's Song Returns", tujuan: "Talk to Pak Tenggo",
+      teks: [
+        "You did it! You DID it! I heard the song from the cave mouth, and I... I danced. Don't tell anyone. Nini saw, but Nini doesn't count.",
+        "My grandfather's song. He said the cave's guardian taught it to him when it saved him from the storm. It was true. All of it was true.",
+        "You helped free it too. Without your porters' path and your horn spikes, I'd still be spinning around on the ice.",
+        "Heh... Me? I just carried stuff and screamed. But... thank you for saying that. My shoulders feel so light.",
+        "I won't come to the summit, child. That's no place for a cowardly porter. But I'll guard the lodge and light the fire every night, so you'll know where to come home to.",
+        "And I'll brew coffee. The best coffee I've ever made. So you have to come back to drink it, understand? That's not a request. That's a porter's order.",
+      ] } },
+];
+
+const ADEGAN_BAB18 = {
+  "b18e4:teka": [
+    { guncang: 0.4 },
+    { aktor: "tenggo", di: [2, 0.5] },
+    { emosi: "tenggo", ikon: "!" },
+    { narasi: ["Lagu gamelan es masih bergaung saat seluruh gua berguncang. Dari kedalaman, raungan panjang menjawab, setengah amarah, setengah tangis.", "The ice gamelan's song still echoes when the whole cave shakes. From the depths, a long roar answers, half fury, half weeping."] },
+    { kata: "yaksaEs", teks: ["HHHRRRAAAH... la... gu... ku...", "HHHRRRAAAH... my... song..."] },
+    { guncang: 0.7 },
+    { kata: "tenggo", teks: ["I-i-itu bukan hantu, kan? Bilang itu bukan hantu!", "Th-th-that's not a ghost, right? Tell me that's not a ghost!"] },
+    { kata: "hero", teks: ["Bukan hantu, Pak. Itu Yaksa Es. Dia mengenali lagunya.", "Not a ghost, Pak. That's the Ice Yaksa. It recognized its song."] },
+    { kata: "tenggo", teks: ["Oh. Baiklah. Itu... jauh lebih besar dari hantu. Aku perlu duduk. Di mulut gua. Jauh dari sini.", "Oh. All right. That's... much bigger than a ghost. I need to sit down. At the cave mouth. Far from here."] },
+    { jalan: "tenggo", ke: [-4, 2], lama: 1.2 },
+    { hapus: "tenggo" },
+  ],
+  "b18e9:bos": [
+    { gelap: 0.5, lama: 0.8 },
+    { narasi: ["Dengung gua mereda menjadi nada panjang yang lembut. Yaksa Es menundukkan kepalanya yang besar hingga sejajar dengan wajahmu.", "The cave's hum settles into a long, gentle note. The Ice Yaksa lowers its great head until it is level with your face."] },
+    { gelap: 0, lama: 0.8 },
+    { kata: "yaksaEs", teks: ["Dalang itu... saat ia mengikatku, ia hanya berbicara dengan suara-suara curian dari kendinya. Tak satu pun suaranya sendiri. Ia tidak punya suara lagi, anak manusia. Ia kehilangannya lama sekali.", "That Puppeteer... as he bound me, he spoke only with stolen voices from his jars. Not one of them his own. He has no voice left, child of humans. He lost it long ago."] },
+    { kata: "yaksaEs", teks: ["Orang yang kehilangan suaranya kadang ingin semua orang ikut diam, supaya ia tidak sendirian dalam sunyi.", "One who has lost their voice sometimes wants everyone to fall silent too, so they need not be alone in the quiet."] },
+    { emosi: "pemain", ikon: "…" },
+    { kata: "hero", teks: ["Ki Lirih... jadi itu yang ia rasakan.", "Ki Lirih... so that's what he feels."] },
+    { kata: "yaksaEs", teks: ["Ambillah ini, tanda terima kasihku. Dan bila kau bertemu dengannya, jangan hanya memutus benangnya. Dengarkan dia.", "Take this, a token of my thanks. And when you meet him, don't only cut his threads. Listen to him."] },
+  ],
+  akhir18: [
+    { aktor: "embun", di: [-2, 0] },
+    { aktor: "tenggo", di: [2, 0] },
+    { narasi: ["Di mulut gua, matahari sore memantul di salju. Lagu gunung mengalun dari dalam gua, terbawa angin sampai ke lembah-lembah di bawah.", "At the cave mouth, the afternoon sun reflects off the snow. The mountain's song drifts out of the cave, carried by the wind down to the valleys below."] },
+    { kata: "tenggo", teks: ["Nini, dengar! Burung salju datang lagi! Tiga... lima... sepuluh ekor!", "Nini, listen! The snow birds are back! Three... five... ten of them!"] },
+    { kata: "embun", teks: ["Mereka tidak pernah pergi jauh, Tenggo. Mereka cuma menunggu lagu yang pantas didengar.", "They never went far, Tenggo. They were only waiting for a song worth hearing."] },
+    { hadap: "embun", ke: "pemain" },
+    { kata: "embun", teks: ["Satu penjaga sudah bebas. Satu lagi di puncak. Lalu... dalang tanpa suara itu.", "One guardian is free. One more on the summit. And then... that voiceless puppeteer."] },
+    { kata: "hero", teks: ["Aku siap, Nini.", "I'm ready, Nini."] },
+    { kata: "tenggo", teks: ["Dan ingat perintah porter: pulang untuk minum kopi!", "And remember the porter's order: come home for coffee!"] },
+    { emosi: "pemain", ikon: "♥" },
+    { jalan: "embun", ke: [-4, -3], lama: 1.6, bareng: true },
+    { hapus: "embun" }, { hapus: "tenggo" },
+    { kamera: [0, -5], lama: 1.6 },
+    { narasi: ["Di atas sana, puncak gunung tersingkap sejenak dari awan. Putih, sunyi, dan di tengahnya, sesuatu yang berkilau seperti layar kaca raksasa.", "Up above, the mountain's peak is unveiled from the clouds for a moment. White, silent, and in its midst, something glittering like a giant glass screen."] },
+    { kamera: "pemain", lama: 1 },
+    { gelap: 1, lama: 1 },
+    { judul: ["Sementara itu...", "Meanwhile..."], sub: ["Puncak Salju Abadi", "The Everlasting Snow Peak"], lama: 2 },
+    { suara: "thunder" }, { kilat: true },
+    { narasi: ["Seekor harimau putih raksasa berjalan mondar-mandir di antara tugu-tugu angin, ekornya mengibas gelisah. Benang hitam tipis melilit kaki depannya.", "A giant white tiger paces among the wind pillars, its tail lashing restlessly. A thin black thread is wound around its foreleg."] },
+    { kata: "macanPutih", teks: ["(Ia membuka mulut untuk menggeram, tapi tak ada suara yang keluar. Hanya uap napas yang membeku.)", "(It opens its jaws to growl, but no sound comes out. Only its breath, freezing in the air.)"] },
+    { kata: "dalangSepi", teks: ["(Suara curian seorang lelaki gagah keluar dari kendi:) Bagus, Penjaga. Satu babak lagi, lalu layar dibuka. Dan dunia akhirnya akan beristirahat.", "(A strong man's stolen voice comes from a jar:) Good, Guardian. One more act, then the screen opens. And the world will finally rest."] },
+    { gelap: 0, lama: 1 },
+  ],
+};
+
+const TANYA_BAB18 = {
+  "b18e4:tenggo": [
+    { tanya: ["Kenapa Bapak akhirnya berani masuk?", "What finally made you brave enough to come in?"], jawab: [
+      ["tenggo", ["Berani? Aku tidak berani. Aku cuma lebih takut menyesal daripada takut hantu. Ternyata itu bisa dipakai untuk berjalan juga.", "Brave? I'm not brave. I'm just more scared of regret than of ghosts. Turns out that works for walking too."]],
+      ["tenggo", ["Lagi pula, Nini bilang orang yang takut tapi tetap melangkah itu pemberani. Jadi aku pemberani. Pemberani yang gemetar.", "Besides, Nini says someone who's scared but keeps walking is brave. So I'm brave. A trembling brave."]],
+    ] },
+    { tanya: ["Bagaimana bunyi lagu kakek Bapak?", "How does your grandfather's song go?"], jawab: [
+      ["tenggo", ["Hmm-hmm-hmmm, naik, lalu turun pelan, lalu ada nada tinggi yang panjang seperti angin di celah batu. Aku tidak hafal angkanya.", "Hmm-hmm-hmmm, up, then slowly down, then a long high note like wind through a crack in the rocks. I don't know the numbers."]],
+      ["tenggo", ["Tapi kalau kau dengar es di sini bernyanyi, kurasa kau akan mengenalinya. Es di sini ingatannya lebih bagus daripada aku.", "But if you listen to the ice singing here, I think you'll recognize it. The ice here has a better memory than me."]],
+    ] },
+  ],
+  "b18e5:embun": [
+    { tanya: ["Bagaimana Nini bisa sampai secepat ini?", "How did you get here so fast, Nini?"], jawab: [
+      ["embun", ["Rahasia. Kalau kuberitahu, nanti semua nenek-nenek di dunia naik gunung, dan tempat ini jadi ramai seperti pasar.", "Secret. If I told you, every granny in the world would climb mountains, and this place would be crowded as a market."]],
+      ["embun", ["Baiklah, sedikit petunjuk: salju itu teman lama. Teman lama suka memberi tumpangan. Hihihi.", "All right, a small hint: snow is an old friend. Old friends like to give you a ride. Heehee."]],
+    ] },
+    { tanya: ["Apakah Yaksa Es masih mengingat Nini?", "Does the Ice Yaksa still remember you?"], jawab: [
+      ["embun", ["Mungkin. Mungkin juga tidak. Penjaga melihat begitu banyak orang lewat. Aku hanya satu gadis kecil yang menangis di badai.", "Maybe. Maybe not. Guardians see so many people pass. I was only one little girl crying in a storm."]],
+      ["embun", ["Tapi aku mengingatnya. Dan kadang itu cukup, Nak. Kita tidak berbuat baik supaya diingat.", "But I remember it. And sometimes that's enough, child. We don't do good to be remembered."]],
+    ] },
+  ],
+  "b18e8:embun": [
+    { tanya: ["Apa yang terjadi kalau aku gagal?", "What happens if I fail?"], jawab: [
+      ["embun", ["Kalau kau gagal, kau bangun lagi, minum kopi Tenggo, lalu mencoba lagi. Itu saja. Gunung tidak pergi ke mana-mana.", "If you fail, you get up, drink Tenggo's coffee, and try again. That's all. The mountain isn't going anywhere."]],
+      ["embun", ["Yang kutakutkan bukan kau gagal. Yang kutakutkan kau menyerah. Dan wajahmu tidak terlihat seperti wajah orang yang suka menyerah.", "What I fear isn't you failing. It's you giving up. And your face doesn't look like the face of someone who gives up."]],
+    ] },
+    { tanya: ["Kenapa Dalang memilih makhluk penjaga untuk diikat?", "Why does the Puppeteer choose guardians to bind?"], jawab: [
+      ["embun", ["Karena penjaga itu setia, Nak. Kesetiaan itu seperti benang yang sudah terpasang. Dalang tinggal menarik ujungnya ke arah lain.", "Because guardians are loyal, child. Loyalty is like a thread already in place. The Puppeteer only has to pull its end in another direction."]],
+      ["embun", ["Kuda Sembrani menjaga kawanan, Wewe menjaga anak-anak, Yaksa menjaga lagu. Semua yang menjaga sesuatu bisa dibelokkan. Itu yang paling menyedihkan.", "The Sembrani guards its herd, Wewe guards children, the Yaksa guards a song. Anything that guards something can be turned. That's the saddest part."]],
+    ] },
+  ],
+  "b18e10:embun": [
+    { tanya: ["Seperti apa Macan Putih itu?", "What is the White Tiger like?"], jawab: [
+      ["embun", ["Putih seperti salju pertama, dengan loreng abu-abu seperti bayang awan. Ia tidak bicara banyak. Ia penjaga yang menilai, bukan yang menyambut.", "White as first snow, with gray stripes like cloud shadows. It doesn't say much. It's a guardian that judges, not one that welcomes."]],
+      ["embun", ["Dalam cerita lama, ia hanya membiarkan lewat orang yang datang dengan hati bersih. Kalau benang itu menutup matanya... ia tak akan bisa membedakan siapa pun.", "In the old tales, it only lets pass those who come with a clean heart. If that thread covers its eyes... it won't be able to tell anyone apart."]],
+    ] },
+    { tanya: ["Nini benar-benar berumur ratusan tahun?", "Are you really hundreds of years old, Nini?"], jawab: [
+      ["embun", ["Ratusan? Siapa yang bilang ratusan? Aku bilang 'bertahun-tahun'. Telingamu yang salah dengar. Hihihi.", "Hundreds? Who said hundreds? I said 'many years'. Your ears misheard. Heehee."]],
+      ["embun", ["Begini saja, Nak: ada hal-hal yang lebih enak jadi rahasia. Umur perempuan tua salah satunya. Gunung ini juga tidak pernah bilang umurnya, kan?", "Let's put it this way, child: some things are nicer kept secret. An old woman's age is one of them. This mountain never tells its age either, does it?"]],
+    ] },
+  ],
+  "b18e10:tenggo": [
+    { tanya: ["Bapak benar-benar menari tadi?", "Did you really dance back there?"], jawab: [
+      ["tenggo", ["...Sedikit. Goyang-goyang kaki. Mungkin juga putar badan. Dua kali. Nini tertawa sampai batuk.", "...A little. Shuffled my feet. Maybe spun around too. Twice. Nini laughed until she coughed."]],
+      ["tenggo", ["Tapi lagu itu memang bikin orang ingin menari, Nak. Rasanya seperti kakekku ada di sebelahku, menepuk pundakku.", "But that song really makes you want to dance, child. It felt like my grandfather was right beside me, patting my shoulder."]],
+    ] },
+    { tanya: ["Apa Bapak masih takut hantu?", "Are you still afraid of ghosts?"], jawab: [
+      ["tenggo", ["Masih! Tentu saja masih. Satu raksasa es yang baik hati tidak menghapus semua hantu di dunia.", "Still! Of course still. One kind-hearted ice giant doesn't erase every ghost in the world."]],
+      ["tenggo", ["Tapi sekarang aku tahu, kadang yang menakutkan itu justru sedang butuh pertolongan. Jadi lain kali... aku akan lari lebih pelan. Sedikit.", "But now I know that sometimes the scary thing is the one that needs help. So next time... I'll run a bit slower. A little."]],
+    ] },
+  ],
+};

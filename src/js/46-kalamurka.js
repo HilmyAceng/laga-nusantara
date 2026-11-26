@@ -34,7 +34,7 @@ AI_BOS.kalamurka = function (m, dt, dp, toP) {
     }
     if (s === "gelombang") { m.state = "ancang"; m.serang = "hantam"; m.st = 1; sfx.growl(); return; }
     if (s === "kembar") {
-      for (let i = 0; i < 2; i++) { const a = rand(0, 6.28), spot = { x: m.x + Math.cos(a) * 100, y: m.y + Math.sin(a) * 100 }; if (!solidAt(spot.x, spot.y)) { const c = makeMonster(d.anak, spot); c.aggro = true; c.state = "chase"; monsters.push(c); spark(spot.x, spot.y - 20, "#b88cff", 12); } }
+      panggilAnakBos(m, d.anak, 2, 100, "#b88cff");   // paling banyak 3 bayangan sekaligus
       sfx.summon(); m.cd = 1.2 / cepat; return;
     }
     if (s === "kedip") { m.state = "hilang"; m.st = 0.7; m.kebal = true; spark(m.x, m.y - 50, "#b88cff", 20); sfx.roll(); return; }

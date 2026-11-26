@@ -41,12 +41,7 @@ function naikFaseBos(m) {
   toast(t("fase.mulai", { nama: m.d.name, n: m.fase, judul: t("fase.nama" + m.fase) }), true);
   // anak buah
   const anak = F.anak && (m.d.anak || { buayaPutih: "buaya", rajaBanaspati: "banaspati", genderuwo: "kera", dwarapala: "arcaHidup" }[m.type]);
-  if (anak && MONSTERS[anak] && monsters.filter((x) => !x.dead && x.type === anak).length < 4) {
-    for (let i = 0; i < 2; i++) {
-      const a = rand(0, 6.28), spot = { x: m.x + Math.cos(a) * 110, y: m.y + Math.sin(a) * 110 };
-      if (!solidAt(spot.x, spot.y)) { const c = makeMonster(anak, spot); c.aggro = true; c.state = "chase"; monsters.push(c); spark(spot.x, spot.y - 20, "#c9bfd6", 12); }
-    }
-  }
+  panggilAnakBos(m, anak, 2, 110);   // batas & aturan anak buah: 26-monster-baru.js
   saveSoon();
   return true;
 }

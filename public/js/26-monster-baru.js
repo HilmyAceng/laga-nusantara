@@ -93,7 +93,7 @@ function bosUmum(m, dt, dp, toP) {
     const a = Math.atan2(m.home.y - m.y, m.home.x - m.x);
     moveEnt(m, Math.cos(a) * d.speed * 1.5 * dt, Math.sin(a) * d.speed * 1.5 * dt, d.fly);
     m.hp = Math.min(d.hp, m.hp + d.hp * 0.5 * dt);
-    if (dist(m, m.home) < 20) { m.state = "idle"; m.aggro = false; m.hp = d.hp; m.fase2 = m.f2 = m.fase3 = false; m.urut = -1; }
+    if (dist(m, m.home) < 20) { m.state = "idle"; m.aggro = false; m.hp = d.hp; m.fase2 = m.f2 = m.fase3 = false; m.urut = -1; monsters = monsters.filter((x) => x.induk !== m); }
     return true;
   }
   if (P.dead || pAman || dist(m, m.home) > jarakAreaBos(d, d.jarakPulang || 520)) { m.state = "pulang"; return true; }
@@ -103,13 +103,32 @@ function bosUmum(m, dt, dp, toP) {
 }
 function fase2(m) {
   shake = 0.6; sfx.growl(); toast(t("toast.bosMarah", { nama: m.d.name }), true);
-  const anak = m.d.anak || { buayaPutih: "buaya", rajaBanaspati: "banaspati" }[m.type];
-  const hidup = monsters.filter((x) => !x.dead && x.type === anak).length;   // jangan menumpuk anak buah
-  if (anak && hidup < 4) for (let i = 0; i < 2; i++) {
-    const a = rand(0, 6.28), spot = { x: m.x + Math.cos(a) * 90, y: m.y + Math.sin(a) * 90 };
-    if (!solidAt(spot.x, spot.y)) { const c = makeMonster(anak, spot); c.aggro = true; c.state = "chase"; monsters.push(c); spark(spot.x, spot.y - 20, "#c9bfd6", 12); }
-  }
+  panggilAnakBos(m, m.d.anak || { buayaPutih: "buaya", rajaBanaspati: "banaspati" }[m.type], 2, 90);
 }
+// ---------- Anak buah bos ----------
+// Semua panggilan anak buah bos lewat sini (fase 2, kebangkitan fase, jurus "kembar" Kalamurka):
+//  - paling banyak ANAK_BOS_MAKS anak buah hidup sekaligus per bos (semua jenis dihitung);
+//  - anak buah TIDAK hidup kembali setelah mati (monster biasa hidup kembali, anak buah tidak);
+//  - bos pulang ke sarangnya (pemain pergi) → anak buahnya ikut hilang.
+const ANAK_BOS_MAKS = 3;
+function panggilAnakBos(bos, jenis, jumlah, jarak, warna = "#c9bfd6") {
+  if (!jenis || !MONSTERS[jenis]) return 0;
+  const hidup = monsters.filter((x) => !x.dead && x.induk === bos).length;
+  let dipanggil = 0;
+  for (let i = 0; i < 6 && dipanggil < Math.min(jumlah, ANAK_BOS_MAKS - hidup); i++) {
+    const a = rand(0, 6.28), spot = { x: bos.x + Math.cos(a) * jarak, y: bos.y + Math.sin(a) * jarak };
+    if (solidAt(spot.x, spot.y)) continue;
+    const c = makeMonster(jenis, spot); c.aggro = true; c.state = "chase"; c.induk = bos; c.anakBos = true;
+    monsters.push(c); spark(spot.x, spot.y - 20, warna, 12); dipanggil++;
+  }
+  return dipanggil;
+}
+// anak buah yang sudah mati dibuang dari daftar setelah animasinya selesai
+UPDATE_TAMBAHAN.push((dt) => {
+  let buang = false;
+  for (const x of monsters) if (x.anakBos && x.dead) { x.hilangT = (x.hilangT || 0) + dt; if (x.hilangT > 2) buang = true; }
+  if (buang) monsters = monsters.filter((x) => !(x.anakBos && x.dead && x.hilangT > 2));
+});
 function kejar(m, dt, toP, jarakIdeal, kali = 1) {
   const dp = dist(m, P);
   const arah = dp > jarakIdeal ? 1 : dp < jarakIdeal - 40 ? -0.6 : 0;

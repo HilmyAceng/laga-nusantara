@@ -61,7 +61,7 @@ const ATURAN = {
   // jeda = jarak minimal antar-gulingan supaya 2 lapis bisa dipakai beruntun.
   // versi game (tampil di layar judul & menu jeda) & halaman laporan masukan (74-versi-masukan.js).
   // Kirim Masukan membuka aplikasi email pemain dengan subjek & isi laporan yang sudah terisi.
-  versi: "0.9.3-beta",
+  versi: "0.10.0-beta",
   masukan: { email: "laganusantara28@gmail.com" },
   // tingkat kesulitan (71-kesulitan.js): keMusuh = damage pemain ke musuh, dariMusuh = damage musuh
   // ke pemain, exp & koin = hadiah dari monster

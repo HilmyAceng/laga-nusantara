@@ -275,6 +275,16 @@ Semua nama di bawah ini dibuat sementara. Ganti di tempat yang disebut, lalu jal
 | Benda cerita | Mustika Bumi / Tirta / Bayu, kantong curian, sisik buaya | `TEKS` (`item.*`) di `02-bahasa.js` |
 | Teka-teki | Prasasti & obor, Batu Pitutur, Altar Mustika | `TEKS` (`teka.*`) di `02-bahasa.js` |
 | Gunung | Gunung Geni | teks di `CERITA` |
+| Judul cerita kedua | Benang Sepi (The Silent Thread) | `bab` di `src/cerita/bab-11.js` … `bab-20.js`, layar tamat di `99zp-arc2-lain.js` |
+| Bab 11-20 | Kapal dari Timur · Gema yang Dicuri · Padang Tanpa Hujan · Tugu yang Bernyanyi · Rimba Raya · Beringin Tua · Jalan ke Atap Dunia · Gua Es Bernyanyi · Penjaga Puncak · Kelir Beku | `bab` di `src/cerita/bab-N.js` |
+| Dunia 5 & 6 | Sabana Timur · Rimba Raya | `DUNIA` di `04e-dunia-baru.js` |
+| Area dunia 5 & 6 | Kota Labuhan Lama, Gang & Atap Labuhan, Gudang Labuhan, Padang Sabana, Kampung Megalit, Lembah Tugu, Tugu Agung, Kampung Rumah Panjang, Rimba Raya, Beringin Tua, Lereng Kabut Dingin, Pondok Nini Embun, Gua Es Bernyanyi, Puncak Salju Abadi, Kelir Beku | `04f-dunia-sabana.js`, `04g-dunia-rimba.js` |
+| Area tambahan dunia lama | Sumur Tua Candi, Mercusuar Tua, Taman Gantung, Pustaka Kala | `04h-area-gema.js` |
+| NPC arc 2 | Syahbandar Kadir, Nyonya Mei, Galang, Nyi Merdu, Ina Seli, Ama Doko, Lewa, Tetua Rangkai, Saka, Bu Inai, Upik, Nini Embun, Pak Tenggo, Ki Lirih (+ penjaga warung & tukang pahat di `99zp-arc2-lain.js`) | `NPC_ARC2` di `05a-npc-arc2.js` |
+| Monster arc 2 | Begal Bertopeng, Kucing Garong, Wayang Hidup, Kalajengking Sabana, Kerbau Amuk, Kuda Liar, Arwah Tugu, Harimau Dahan, Laba-laba Hutan, Kalong Raksasa, Kambing Gunung, Roh Salju, Arca Es | `MONSTERS` di `04i-monster-arc2.js` |
+| Bos arc 2 | Juragan Topeng, Kuda Sembrani Hitam, Watu Gede, Wewe Gombel, Yaksa Es, Macan Putih, Dalang Sepi | `MONSTERS` di `04i-monster-arc2.js` |
+| Jimat legenda arc 2 | Topeng Juragan, Tapal Sembrani, Inti Watu Gede, Selendang Wewe, Taring Yaksa Es, Kumis Macan Putih, Wayang Sepi, Tugu Mini Leluhur, Kalung Salju Abadi | `JIMAT` di `04i-monster-arc2.js` |
+| Puzzle arc 2 | gamelan, cermin cahaya, putar arca/tugu/wayang, lantai nyala, seluncur es, sandi Kala | `TEKA_BARU` di `99ze-teka-arc2.js` |
 
 ## Build & jalankan
 
