@@ -20,11 +20,11 @@ BUILD_ID="$(date +%Y%m%d%H%M%S)"
   echo '<meta name="apple-mobile-web-app-title" content="Laga Nusantara">'
   echo '<meta name="application-name" content="Laga Nusantara">'
   # pratinjau link (WhatsApp, Instagram, Discord, Facebook, X) & deskripsi mesin pencari
-  echo '<meta name="description" content="RPG aksi bertema Nusantara: 7 hero, 13 bos, 4 negeri. Main gratis di browser & HP, bisa offline. An original Indonesian-folklore action RPG.">'
+  echo '<meta name="description" content="RPG aksi bertema Nusantara: 7 hero, 20 bos, 6 negeri, 2 cerita. Main gratis di browser & HP, bisa offline. An original Indonesian-folklore action RPG.">'
   echo '<meta property="og:type" content="website">'
   echo '<meta property="og:site_name" content="Laga Nusantara">'
   echo '<meta property="og:title" content="Laga Nusantara — RPG aksi bertema Nusantara">'
-  echo '<meta property="og:description" content="7 hero, 13 bos, 4 negeri, cerita 10 bab. Main gratis langsung di browser atau pasang di HP. Versi beta — ayo coba &amp; kirim masukanmu!">'
+  echo '<meta property="og:description" content="7 hero, 20 bos, 6 negeri, cerita 20 bab. Main gratis langsung di browser atau pasang di HP. Versi beta — ayo coba &amp; kirim masukanmu!">'
   echo '<meta property="og:url" content="https://hilmyaceng.github.io/laga-nusantara/">'
   echo '<meta property="og:image" content="https://hilmyaceng.github.io/laga-nusantara/icons/og.jpg">'
   echo '<meta property="og:image:width" content="1200">'

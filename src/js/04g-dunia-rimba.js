@@ -23,7 +23,7 @@ Object.assign(AREAS, {
     lagu: "desa", tepi: TREE, w: 44, h: 30, aman: true, rimba: true,
     zona: { kampung: { x0: 6, y0: 3, x1: 41, y1: 26 } },
     gerbang: [
-      { x0: 0, y0: 14, x1: 0, y1: 16, ke: "lembahTugu", masuk: { x: 48.5, y: 19.5 }, label: "← Rakit ke Lembah", labelEn: "← Raft to the Valley" },
+      { x0: 1, y0: 14, x1: 2, y1: 16, ke: "lembahTugu", masuk: { x: 48.5, y: 19.5 }, label: "← Rakit ke Lembah", labelEn: "← Raft to the Valley" },
       { x0: 43, y0: 14, x1: 43, y1: 16, ke: "rimba", masuk: { x: 2.5, y: 20.5 }, label: "Rimba →", labelEn: "Jungle →" },
     ],
     teleport: { id: "rumahPanjang", x: 36.5, y: 12.5 },
@@ -33,7 +33,7 @@ Object.assign(AREAS, {
         else if (x < 5) setT(x, y, WATER);
         else { const v = r(); setT(x, y, v < 0.04 ? FLOWER : v < 0.07 ? TREE : G); }
       }
-      fillRect(0, 14, 5, 16, BRIDGE);                  // dermaga rakit
+      fillRect(1, 14, 5, 16, BRIDGE);                  // dermaga kecil + petak rakit di x1-2 (99zr-rupa-gerbang.js)
       fillRect(6, 14, MW - 1, 16, PATH);
       fillRect(9, 8, 31, 11, PATH);                    // halaman depan rumah panjang
       fillRect(20, 11, 21, 26, PATH);

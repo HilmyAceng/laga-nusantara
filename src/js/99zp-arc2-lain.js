@@ -107,6 +107,7 @@ CATATAN_RILIS.unshift({
     ["Kisah untuk semua bos (17 kisah baru), termasuk asal-usul bos dari cerita rakyat Nusantara.", "Tales for every boss (17 new tales), including the folklore origins of bosses from Indonesian legend."],
     ["13 monster baru, 7 bos baru, 9 jimat legenda baru. Batas level naik menjadi 100.", "13 new monsters, 7 new bosses, 9 new legendary charms. Level cap raised to 100."],
     ["Layar muat saat membuka game.", "A loading screen when opening the game."],
+    ["Pintu antar-area kini sesuai caranya: perahu untuk berlayar, rakit di sungai, tangga untuk naik-turun, pintu, gapura, dan mulut gua.", "Area exits now match how you travel: boats for sailing, rafts on rivers, stairs for going up or down, doors, gateways, and cave mouths."],
   ],
   baik: [
     ["Anak buah yang dipanggil bos tidak lagi hidup kembali setelah dikalahkan, paling banyak 3 sekaligus per bos, dan ikut hilang saat bos kembali ke sarangnya.", "Minions summoned by bosses no longer respawn after being defeated, there are at most 3 at a time per boss, and they vanish when the boss returns to its lair."],

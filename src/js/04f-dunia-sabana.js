@@ -165,7 +165,7 @@ Object.assign(AREAS, {
     gerbang: [
       { x0: 0, y0: 19, x1: 0, y1: 21, ke: "kampungBatu", masuk: { x: 37.5, y: 14.5 }, label: "← Kampung", labelEn: "← Village" },
       { x0: 24, y0: 0, x1: 26, y1: 0, ke: "tuguAgung", masuk: { x: 22.5, y: 33.5 }, label: "Tugu Agung", labelEn: "Great Pillar", kunci: "teka:lantaiTugu" },
-      { x0: 51, y0: 18, x1: 51, y1: 20, ke: "rumahPanjang", masuk: { x: 3.5, y: 15.5 }, label: "Rakit ke Rimba →", labelEn: "Raft to the Jungle →", kunci: "rimba" },
+      { x0: 49, y0: 18, x1: 50, y1: 20, ke: "rumahPanjang", masuk: { x: 3.5, y: 15.5 }, label: "Rakit ke Rimba →", labelEn: "Raft to the Jungle →", kunci: "rimba" },
     ],
     objek: [
       // tugu matahari: 4 tugu di sekeliling batu tengah (putar ke arah yang benar)
@@ -198,7 +198,7 @@ Object.assign(AREAS, {
       // ceruk tugu rahasia (timur laut), masuk lewat celah sempit
       fillRect(36, 3, 47, 13, ROCK); fillRect(37, 4, 46, 12, RUMPUT_KERING); fillRect(41, 13, 41, 18, RUMPUT_KERING);
       // sungai di timur (rakit menunggu di tepinya)
-      fillRect(49, 2, 50, MH - 3, WATER); fillRect(49, 18, 50, 20, BRIDGE);
+      fillRect(49, 2, 50, MH - 3, WATER); fillRect(49, 18, 50, 20, BRIDGE);   // petak rakit (digambar sebagai rakit di sungai, 99zr-rupa-gerbang.js)
       bersihkan([[2, 20], [49, 19], [25, 2], [13, 22], [41, 15]], RUMPUT_KERING);
     },
   },
