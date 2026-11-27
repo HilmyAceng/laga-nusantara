@@ -222,8 +222,8 @@ function drawMonster(m, time) {
     ctx.fillStyle = "#e9d3a9"; ctx.beginPath(); ctx.moveTo(6, -50 - b); ctx.lineTo(9, -44 - b); ctx.lineTo(12, -50 - b); ctx.fill();
   }
   ctx.restore();
-  if ((m.seen > 0 || m.hp < d.hp) && !d.boss) {
-    const y = m.y - d.h - 14;
+  if ((m.seen > 0 || m.hp < d.hp) && !d.boss && !sembunyikanBarKepala()) {
+    const y = m.y - d.h - 22;   // sedikit di atas kepala
     ctx.fillStyle = "rgba(0,0,0,0.55)"; ctx.fillRect(m.x - 21, y, 42, 5);
     ctx.fillStyle = "#e5484d"; ctx.fillRect(m.x - 20, y + 1, 40 * clamp(m.hp / d.hp, 0, 1), 3);
     // warna level: abu-abu = jauh lebih lemah, putih = setara, jingga = sedikit lebih kuat, merah = jauh lebih kuat
@@ -259,6 +259,10 @@ function drawNpc(n, time) {
 // Digambar dalam ukuran layar (tidak ikut zoom) supaya selalu terbaca.
 // tampilan hero pemain (warna baju, ikat kepala, senjata). Kosmetik (99p-kosmetik.js) membungkus fungsi ini.
 function lookPemain() { const C = CLASSES[S.cls]; return { color: C.color, accent: C.accent, weapon: C.weapon }; }
+// Bar nama/nyawa di atas kepala hero: setinggi TINGGI_TAG piksel di atas kakinya.
+// Disembunyikan selama percakapan & cutscene supaya emote (! ? … ♥) di atas kepala terlihat.
+const TINGGI_TAG = 76;
+const sembunyikanBarKepala = () => mode === "dialog" || mode === "adegan";
 function drawPlayerTag(px, py) {
   const mh = maxHp(), hp = Math.max(0, Math.ceil(P.hp)), w = 104, x = Math.round(px - w / 2);
   let y = Math.round(py);
@@ -440,12 +444,12 @@ function render(now) {
     g.addColorStop(0, "rgba(255,80,20,0.04)"); g.addColorStop(1, `rgba(255,80,20,${0.16 + 0.04 * Math.sin(time * 2)})`);
     ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
   }
-  if (P && !P.dead && mode !== "select") {
+  if (P && !P.dead && mode !== "select" && !sembunyikanBarKepala()) {
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-    drawPlayerTag(W / 2 + (P.x - cx + sx) * scale, H / 2 + (P.y - 64 - cy + sy) * scale);
-    drawIkonDebuff(W / 2 + (P.x - cx + sx) * scale, H / 2 + (P.y - 64 - cy + sy) * scale);   // 32-debuff.js
-    drawIkonRamuan(W / 2 + (P.x - cx + sx) * scale, H / 2 + (P.y - 64 - cy + sy) * scale);   // 52-jimat.js
-    drawTenaga(W / 2 + (P.x - cx + sx) * scale, H / 2 + (P.y - 64 - cy + sy) * scale);       // 49-pamungkas.js
+    drawPlayerTag(W / 2 + (P.x - cx + sx) * scale, H / 2 + (P.y - TINGGI_TAG - cy + sy) * scale);
+    drawIkonDebuff(W / 2 + (P.x - cx + sx) * scale, H / 2 + (P.y - TINGGI_TAG - cy + sy) * scale);   // 32-debuff.js
+    drawIkonRamuan(W / 2 + (P.x - cx + sx) * scale, H / 2 + (P.y - TINGGI_TAG - cy + sy) * scale);   // 52-jimat.js
+    drawTenaga(W / 2 + (P.x - cx + sx) * scale, H / 2 + (P.y - TINGGI_TAG - cy + sy) * scale);       // 49-pamungkas.js
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
     drawLayarLambat();                                                                      // 50-hindar-tangkis.js
     // panah penunjuk tujuan (27-navigasi.js)

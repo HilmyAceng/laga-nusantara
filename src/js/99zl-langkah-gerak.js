@@ -246,9 +246,9 @@ GAMBAR_ATAS.push(function () {
   const g = gerakCerita;
   if (!g || !g.npc) return;
   const n = g.npc;
-  if (g.tipe === "kawal" && g.mulai) {
-    ctx.fillStyle = "rgba(0,0,0,0.6)"; ctx.fillRect(n.x - 22, n.y - 72, 44, 6);
-    ctx.fillStyle = g.nyawa > 40 ? "#5ad17a" : "#e5484d"; ctx.fillRect(n.x - 21, n.y - 71, 42 * Math.max(0, g.nyawa) / 100, 4);
+  if (g.tipe === "kawal" && g.mulai && !sembunyikanBarKepala()) {
+    ctx.fillStyle = "rgba(0,0,0,0.6)"; ctx.fillRect(n.x - 22, n.y - 82, 44, 6);
+    ctx.fillStyle = g.nyawa > 40 ? "#5ad17a" : "#e5484d"; ctx.fillRect(n.x - 21, n.y - 81, 42 * Math.max(0, g.nyawa) / 100, 4);
   }
   if (g.tipe === "buntuti") {
     ctx.save(); ctx.globalAlpha = 0.18; ctx.fillStyle = g.lihat > 0 ? "#e5484d" : "#f4b942";
