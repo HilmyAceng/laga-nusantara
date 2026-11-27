@@ -33,13 +33,15 @@ Object.assign(AREAS, {
   mercusuar: {
     dunia: 2, nama: "Mercusuar Tua", sub: "Mercusuar padam di pulau karang · Lv 53+", namaEn: "Old Lighthouse", subEn: "A dark lighthouse on a rocky isle · Lv 53+",
     lagu: "pesisir", tepi: WATER, w: 30, h: 40,
-    zona: { mercuZona: { x0: 4, y0: 22, x1: 25, y1: 34 } },
+    zona: { mercuZona: { x0: 4, y0: 27, x1: 25, y1: 34 } },
     gerbang: [{ x0: 14, y0: 39, x1: 16, y1: 39, ke: "bandar", masuk: { x: 25.5, y: 27.5 }, label: "↓ Bandar", labelEn: "↓ Harbor" }],
+    // ruang cermin: rancangan 9×7 (dicek pemecah: 2 solusi, 5 dari 6 cermin terpakai) dibuat 2× lebih lega:
+    // tiap kotak rancangan = 2×2 petak (x6-23, y10-23); cermin/sumber/target di petak kiri-atas kotaknya,
+    // jadi jalur sinar & jawabannya sama persis dengan rancangan aslinya.
     objek: [
-      // cermin mercusuar (9×7 di x10-18, y12-18; dicek pemecah: 2 solusi, 5 dari 6 cermin terpakai)
-      { kind: "sumberCahaya", id: "cerminMercu", x: 10.5, y: 14.5, arah: 0 },
-      { kind: "targetCahaya", id: "cerminMercu", x: 17.5, y: 17.5 },
-      ...[[13, 13], [13, 14], [14, 14], [17, 14], [13, 16], [14, 16]].map(([x, y], i) => ({ kind: "cerminCahaya", id: "cerminMercu", i, x: x + 0.5, y: y + 0.5, awal: "101001"[i] === "1" ? 1 : 0 })),
+      { kind: "sumberCahaya", id: "cerminMercu", x: 6.5, y: 14.5, arah: 0 },
+      { kind: "targetCahaya", id: "cerminMercu", x: 20.5, y: 20.5 },
+      ...[[3, 1], [3, 2], [4, 2], [7, 2], [3, 4], [4, 4]].map(([lx, ly], i) => ({ kind: "cerminCahaya", id: "cerminMercu", i, x: 6 + lx * 2 + 0.5, y: 10 + ly * 2 + 0.5, awal: "101001"[i] === "1" ? 1 : 0 })),
     ],
     build(r) {
       for (let y = 0; y < MH; y++) for (let x = 0; x < MW; x++) {
@@ -47,20 +49,21 @@ Object.assign(AREAS, {
         else if (x < 4 || x >= MW - 4 || y < 4) setT(x, y, r() < 0.4 ? ROCK : SAND);
         else { const v = r(); setT(x, y, v < 0.06 ? ROCK : v < 0.3 ? SAND : G); }
       }
-      fillRect(14, 20, 16, MH - 1, PATH); fillRect(14, MH - 2, 16, MH - 1, BRIDGE);
-      fillRect(11, 4, 18, 9, WALL); fillRect(13, 5, 16, 8, STONE);   // menara
-      if (tekaBeres("cerminMercu")) fillRect(14, 9, 15, 9, STONE);
+      fillRect(14, 24, 16, MH - 1, PATH); fillRect(14, MH - 2, 16, MH - 1, BRIDGE);
+      fillRect(11, 2, 18, 7, WALL); fillRect(13, 3, 16, 6, STONE);   // menara
+      if (tekaBeres("cerminMercu")) fillRect(14, 7, 15, 7, STONE);
+      fillRect(5, 8, 24, 9, SAND);                                   // pelataran depan menara
       const peta = [
         "#########",
-        "##.....##",   // tembok ruang cermin; cermin, sumber & target adalah benda di atas lantai
+        "##.....##",
         "S.......#",
         "##......#",
         "##......#",
         "#.......#",
         "###..####"];
-      peta.forEach((baris, ly) => [...baris].forEach((c, lx) => setT(10 + lx, 12 + ly, c === "#" ? WALL : STONE)));
-      fillRect(13, 19, 14, 19, STONE);
-      bersihkan([[15, 37], [15, 21], [14, 10]], SAND);
+      peta.forEach((baris, ly) => [...baris].forEach((c, lx) => fillRect(6 + lx * 2, 10 + ly * 2, 7 + lx * 2, 11 + ly * 2, c === "#" ? WALL : STONE)));
+      fillRect(4, 14, 5, 15, SAND);                                  // tempat berdiri di samping pelita
+      bersihkan([[15, 37], [15, 25], [14, 8], [4, 14]], SAND);
     },
   },
   tamanGantung: {

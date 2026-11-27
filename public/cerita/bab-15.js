@@ -293,8 +293,8 @@ const CERITA_BAB15 = [
       ] } },
 
   // ===== EP 9 =====
-  { bab: "Bab 15 · Rimba Raya", ep: 9, judul: "Jalan Pulang", tipe: "kawal", npc: "upik", area: "beringin", mulai: [36, 22], ke: [24, 37],
-    sergap: [{ di: [24, 25], monster: "kalongRaksasa", jumlah: 2 }, { di: [24, 32], monster: "labaHutan", jumlah: 3 }],
+  { bab: "Bab 15 · Rimba Raya", ep: 9, judul: "Jalan Pulang", tipe: "kawal", npc: "upik", area: "beringin", mulai: [36, 22], ke: [11, 47],
+    sergap: [{ di: [24, 25], monster: "kalongRaksasa", jumlah: 2 }, { di: [16, 29], monster: "labaHutan", jumlah: 3 }],
     ajak: ["Kakak mau antar aku pulang? ...Boleh pegang ujung baju Kakak? Gelap.", "Will you take me home? ...Can I hold the edge of your shirt? It's dark."],
     gagal: ["Aduh! Kak... aku takut... Kita mulai lagi dari sarang, ya?", "Ow! I'm scared... Can we start again from the nest?"],
     tujuan: "Antar Upik keluar dari Beringin Tua dengan selamat",

@@ -52,7 +52,7 @@ Object.assign(AREAS, {
     },
     gerbang: [
       { x0: 0, y0: 19, x1: 0, y1: 21, ke: "rumahPanjang", masuk: { x: 41.5, y: 15.5 }, label: "← Kampung", labelEn: "← Village" },
-      { x0: 27, y0: 0, x1: 29, y1: 0, ke: "beringin", masuk: { x: 24.5, y: 37.5 }, label: "Beringin Tua", labelEn: "Old Banyan" },
+      { x0: 27, y0: 0, x1: 29, y1: 0, ke: "beringin", masuk: { x: 11.5, y: 49.5 }, label: "Beringin Tua", labelEn: "Old Banyan" },
       { x0: 55, y0: 8, x1: 55, y1: 10, ke: "lereng", masuk: { x: 2.5, y: 45.5 }, label: "Lereng →", labelEn: "Slopes →", kunci: "lereng" },
     ],
     build(r) {
@@ -70,16 +70,17 @@ Object.assign(AREAS, {
   },
   beringin: {
     dunia: 6, nama: "Beringin Tua", sub: "Pohon beringin raksasa yang tak pernah tersentuh cahaya · Lv 67+", namaEn: "The Old Banyan", subEn: "A giant banyan never touched by light · Lv 67+",
-    lagu: "gua", tepi: TREE, w: 48, h: 40, rimba: true, gelap: true,
-    zona: { beringinSelatan: { x0: 20, y0: 29, x1: 44, y1: 37 }, beringinTengah: { x0: 31, y0: 17, x1: 45, y1: 25 } },
-    gerbang: [{ x0: 23, y0: 39, x1: 25, y1: 39, ke: "rimba", masuk: { x: 28.5, y: 2.5 }, label: "↓ Rimba", labelEn: "↓ Jungle" }],
+    lagu: "gua", tepi: TREE, w: 48, h: 52, rimba: true, gelap: true,
+    zona: { beringinSelatan: { x0: 3, y0: 31, x1: 19, y1: 47 }, beringinTengah: { x0: 31, y0: 17, x1: 45, y1: 25 } },
+    gerbang: [{ x0: 10, y0: 51, x1: 12, y1: 51, ke: "rimba", masuk: { x: 28.5, y: 2.5 }, label: "↓ Rimba", labelEn: "↓ Jungle" }],
     bos: { x: 24, y: 10.5, monster: "weweGombel" },
     objek: [
-      // cahaya beringin (cermin, 11×9 di x6-16, y29-37; dicek pemecah: 2 solusi, 8 cermin terpakai)
-      { kind: "sumberCahaya", id: "cahayaBeringin", x: 6.5, y: 34.5, arah: 0 },
-      { kind: "targetCahaya", id: "cahayaBeringin", x: 15.5, y: 35.5 },
-      { kind: "kristalCahaya", id: "cahayaBeringin", x: 12.5, y: 33.5 },
-      ...[[8, 31], [12, 31], [7, 32], [10, 32], [12, 34], [15, 34], [7, 35], [8, 35], [10, 35]].map(([x, y], i) => ({ kind: "cerminCahaya", id: "cahayaBeringin", i, x: x + 0.5, y: y + 0.5, awal: "101011010"[i] === "1" ? 1 : 0 })),
+      // cahaya beringin: rancangan 11×9 (dicek pemecah: 2 solusi, 8 cermin terpakai) dibuat 2× lebih lega:
+      // tiap kotak rancangan = 2×2 petak (x22-43, y30-47); benda di petak kiri-atas kotaknya → jawaban sama
+      { kind: "sumberCahaya", id: "cahayaBeringin", x: 22.5, y: 40.5, arah: 0 },
+      { kind: "targetCahaya", id: "cahayaBeringin", x: 40.5, y: 42.5 },
+      { kind: "kristalCahaya", id: "cahayaBeringin", x: 34.5, y: 38.5 },
+      ...[[2, 2], [6, 2], [1, 3], [4, 3], [6, 5], [9, 5], [1, 6], [2, 6], [4, 6]].map(([lx, ly], i) => ({ kind: "cerminCahaya", id: "cahayaBeringin", i, x: 22 + lx * 2 + 0.5, y: 30 + ly * 2 + 0.5, awal: "101011010"[i] === "1" ? 1 : 0 })),
       // jamur bercahaya (lantai 4×4)
       { kind: "lantai", id: "jamurBeringin", x: 34, y: 19, n: 4, gaya: "jamur" },
       { kind: "pilarLantai", id: "jamurBeringin", x: 32.5, y: 18.6, gaya: "jamur" },
@@ -89,12 +90,13 @@ Object.assign(AREAS, {
         if (y < 2 || y >= MH - 1 || x < 1 || x >= MW - 1) setT(x, y, TREE);
         else setT(x, y, r() < 0.1 ? TREE : r() < 0.05 ? FLOWER : G);
       }
-      fillRect(23, 28, 25, MH - 1, PATH); fillRect(22, 28, 26, 29, PATH);
       // tiga bagian dipisah dinding pohon: selatan (cermin) | tengah (jamur) | utara (beringin & bos)
       fillRect(1, 27, MW - 2, 27, TREE); if (tekaBeres("cahayaBeringin")) fillRect(22, 27, 26, 27, PATH);
       fillRect(1, 15, MW - 2, 15, TREE); if (tekaBeres("jamurBeringin")) fillRect(22, 15, 26, 15, PATH);
       fillRect(22, 16, 26, 26, PATH);
-      // ruang cermin
+      // bagian selatan: jalan dari gerbang naik di sisi kiri, lalu ke timur menuju celah dinding pohon
+      fillRect(10, 28, 12, MH - 1, PATH); fillRect(10, 28, 26, 29, PATH);
+      // ruang cermin (sisi kanan), masuk dari celah di bawahnya
       const peta = [
         "###########",
         "#......#.##",
@@ -105,13 +107,14 @@ Object.assign(AREAS, {
         "#.........#",
         "#........##",
         "####..#####"];
-      peta.forEach((baris, ly) => [...baris].forEach((c, lx) => setT(6 + lx, 29 + ly, c === "#" ? ROCK : G)));
-      fillRect(10, 38, 11, 38, G); fillRect(12, 38, 22, 38, PATH);
+      peta.forEach((baris, ly) => [...baris].forEach((c, lx) => fillRect(22 + lx * 2, 30 + ly * 2, 23 + lx * 2, 31 + ly * 2, c === "#" ? ROCK : G)));
+      fillRect(19, 40, 21, 41, G);                    // tempat berdiri di samping pelita
+      fillRect(30, 48, 33, 49, PATH); fillRect(12, 48, 33, 49, PATH);
       // ruang jamur & pelataran bos
       fillRect(33, 18, 39, 24, G);
       fillRect(4, 3, MW - 5, 13, G);
       for (let y = 2; y <= 6; y++) for (let x = 19; x <= 29; x++) if ((x - 24) ** 2 / 25 + (y - 3) ** 2 / 9 < 1) setT(x, y, TREE);   // batang & akar beringin
-      bersihkan([[24, 38], [8, 33], [33, 18], [24, 10]], G);
+      bersihkan([[11, 50], [20, 40], [13, 44], [33, 18], [24, 10]], G);
     },
   },
   lereng: {

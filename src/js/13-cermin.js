@@ -139,7 +139,7 @@ function drawCermin(n, time) {
   ctx.font = "800 11px Nunito, sans-serif"; ctx.textAlign = "center"; ctx.fillStyle = "#c9b6ff";
   ctx.fillText(n.name, n.x, cy - 42);
   if (jeda > 0) { ctx.font = "700 16px Teko, sans-serif"; ctx.fillStyle = "#c9bfd6"; ctx.fillText(t("cermin.detik", { detik: Math.ceil(jeda) }), n.x, cy - 56); }
-  if (nearNpc === n && !isTouch) { ctx.font = "800 11px Nunito, sans-serif"; ctx.fillStyle = "#f7efe3"; ctx.fillText(t("cermin.sentuh"), n.x, n.y + 18); }
+  // tanda "[E] Bicara / Periksa" di bawah benda terdekat: 99zs-tanda-interaksi.js
   ctx.restore();
 }
 // efek pemanggilan & petir (dipanggil dari render)

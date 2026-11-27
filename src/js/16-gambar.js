@@ -252,7 +252,7 @@ function drawNpc(n, time) {
     ctx.fillStyle = tanda.warna; ctx.beginPath(); ctx.arc(n.x, by, 10, 0, 6.28); ctx.fill();
     ctx.fillStyle = "#1b1208"; ctx.font = "700 18px Teko, sans-serif"; ctx.fillText(tanda.mark, n.x, by + 6);
   }
-  if (nearNpc === n && !isTouch) { ctx.font = "800 11px Nunito, sans-serif"; ctx.fillStyle = "#f7efe3"; ctx.fillText(t("npc.bicara"), n.x, n.y + 18); }
+  // tanda "[E] Bicara / Periksa" di bawah benda terdekat: 99zs-tanda-interaksi.js
 }
 
 // Status hero di atas kepalanya: nama + level, bar nyawa (dengan angka), bar EXP tipis.

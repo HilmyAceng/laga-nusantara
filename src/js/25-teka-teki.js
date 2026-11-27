@@ -114,7 +114,7 @@ function setelahBosKalah(jenis) {
 function labelObjek(n, warna, dy) {
   ctx.font = "800 11px Nunito, sans-serif"; ctx.textAlign = "center"; ctx.fillStyle = warna;
   ctx.fillText(n.name, n.x, n.y - dy);
-  if (nearNpc === n && !isTouch) { ctx.fillStyle = "#f7efe3"; ctx.fillText(t("teka.periksa"), n.x, n.y + 18); }
+  // tanda "[E] Bicara / Periksa" di bawah benda terdekat: 99zs-tanda-interaksi.js
 }
 function ikonSimbol(simbol, x, y) {
   ctx.save(); ctx.translate(x, y);

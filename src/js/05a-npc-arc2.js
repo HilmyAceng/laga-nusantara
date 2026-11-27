@@ -45,7 +45,7 @@ const NPC_ARC2 = [
     obrolanEn: ["The jungle isn't cruel. It's only honest.", "These tattoos on my hands are a map. Each line, one journey.", "Our children are roots. Lose the roots, and the tree falls."] },
   { id: "saka", name: "Saka", area: "rumahPanjang", x: 30.5, y: 13.4, color: "#2f5a3a", accent: "#c9a26b", hair: "#1f1a24", face: Math.PI,
     jadwal: { pagi: [38.5, 15.4], siang: [30.5, 13.4], sore: [30.5, 13.4], malam: [27.5, 9.4] },
-    pindah: [{ sejak: [16, 1], area: "beringin", x: 24.5, y: 36.4 }, { sejak: [17, 1], area: "rumahPanjang", x: 30.5, y: 13.4 }],
+    pindah: [{ sejak: [16, 1], area: "beringin", x: 13.5, y: 44.4 }, { sejak: [17, 1], area: "rumahPanjang", x: 30.5, y: 13.4 }],
     obrolan: ["...", "Jejak tidak pernah bohong.", "Sumpit ini warisan kakek. Belum pernah meleset. Kecuali sekali. Jangan tanya."],
     obrolanEn: ["...", "Tracks never lie.", "This blowpipe was my grandfather's. Never missed. Except once. Don't ask."] },
   { id: "inai", name: "Bu Inai", area: "rumahPanjang", x: 9.5, y: 19.4, color: "#8f3a5a", accent: "#e9d3a9", hair: "#2a1a1a", face: 0,
