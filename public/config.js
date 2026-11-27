@@ -452,6 +452,13 @@ const QUESTS = [
 // gong    = gong otomatis setiap berapa ketukan (0 = tanpa gong)
 // ulang   = false → lagu dimainkan sekali saja (untuk musik kemenangan)
 // keras   = pengali volume lagu ini saja (1 = biasa, 0.5 = setengah, 2 = dua kali)
+// bagian  = bagian lain lagu (B, C, ...) berisi melodi/isian/bas/kendang/perkusi sendiri.
+//           Baris yang tidak diisi memakai baris bagian A (= baris utama lagu).
+// bentuk  = urutan bagian yang dimainkan, lalu diulang dari awal. Contoh "A A~ B A C".
+//           Akhiran variasi: ~ = melodi dihias (nada berikutnya diambil lebih awal)
+//                            ^ = melodi naik satu oktaf (puncak lagu)
+//                            - = isian & kendang diam (jeda tenang)
+//           Tanpa bentuk, tiap baris berulang sendiri-sendiri seperti biasa.
 // Semua lagu di bawah ini ciptaan sendiri untuk game ini.
 // ---------------------------------------------------------------------
 const LAGU = {
@@ -463,6 +470,17 @@ const LAGU = {
     bas: "1,, . 1, . 5,, . 5, . 6,, . 6, . 2,, . 2, .", suaraBas: "bas",
     kendang: "D . t . D t . t D . t . D t t t",
     perkusi: ". k . k . k . k",
+    bentuk: "A A~ B B~ A C C~ B^ A~ A",
+    bagian: {
+      B: {
+        melodi: "6 1' 2' 3' 2' 1' 6 1' 5 . 6 5 3 5 6 . 1' 2' 1' 6 5 6 1' . 6 5 3 2 3 5 6 .",
+        bas: "6,, . 6, . 5,, . 5, . 3,, . 3, . 5,, . 5, .",
+      },
+      C: {
+        melodi: "1 . 1 2 3 . 3 5 6 5 3 . 2 . 1 . 2 . 2 3 5 . 5 6 1' 6 5 . 3 2 1 .",
+        bas: "1,, . . 1, 2,, . . 2, 3,, . . 3, 5,, . 6,, .",
+      },
+    },
   },
   // TEGANG: sangat cepat, bas menderu terus, kecrek tanpa henti
   luar: {
@@ -472,6 +490,16 @@ const LAGU = {
     bas: "6,, 6,, 6, 6,, 1, 6,, 3,, 5,,", suaraBas: "bas",
     kendang: "D . t D . t D . D . t D . t t t",
     perkusi: "x . x x x . x x",
+    bentuk: "A A B B~ A~ C C A B^ C~ A",
+    bagian: {
+      B: {
+        melodi: "1' 6 5 6 1' 6 5 3 2 3 5 3 2 1 6, 1 2 . 2 3 5 . 6 5 3 . 2 1 6, 5, 6, .",
+      },
+      C: {
+        melodi: "6, 6, 1 6, 2 2 3 2 5 5 6 5 3 2 1 2 6, 6, 1 6, 3 3 5 3 6 6 1' 6 5 3 2 3",
+        bas: "6,, 6,, 6,, 6, 2,, 2,, 2,, 2, 5,, 5,, 5,, 5, 3,, 3,, 3,, 3,",
+      },
+    },
   },
   // SERAM: pelog, pelan & jarang, dengung panjang, bisikan sumbang,
   // detak jantung (D D), dan tetesan air (k) yang tidak beraturan
@@ -482,6 +510,18 @@ const LAGU = {
     bas: "1,, . . . . . . . . . . . . . . . 2,, . . . . . . . . . . . . . . .", suaraBas: "dengung",
     kendang: "D D . . . . . . . . . . D D . . . . . . . . . . . . . . . . . . . . . .",
     perkusi: ". . . . . . . k . . . . . . . . . . . . . . . . . . k . . . . . . . . . . . . . B . . . . . . . . . . . . . . . . . . . . . . .",
+    bentuk: "A B A C B- A",
+    bagian: {
+      B: {
+        melodi: "4, . . . . . 5, . . . . . 4, . . . 2, . . . . . 1, . . . . . 7,, . . . . . 1, . . . . . . . . . . .",
+        isian: ". . . . . . . . . . 5' . . . . . . . . . . . . . 4' . . . . . . . . . . . . . . 2' . . . . . . . . . .",
+        bas: "5,, . . . . . . . . . . . . . . . . . . . . . . . 1,, . . . . . . . . . . . . . . . . . . . . . . .",
+      },
+      C: {
+        melodi: "1, 2, . . 1, . . . 2, 3, . . 2, . . . 4, . 3, . 2, . 1, . . . . . 7,, . 1, . . . . . . . . . . . . . . . . .",
+        kendang: "D D . . . . D D . . . . D D . . . . . . . . . . D D . . . . . . . . . . . . . . . . . . . . . .",
+      },
+    },
   },
   // PALING TEGANG (bos): pelog, sangat cepat, gendang & kecrek rapat, gong tiap 8 ketukan
   bos: {
@@ -491,6 +531,16 @@ const LAGU = {
     bas: "1,, 1,, 1, 1,, 2,, 1,, 7,,, 7,,,", suaraBas: "bas",
     kendang: "D t D t D D t . D t D t D t t t",
     perkusi: "x x x . x x x .",
+    bentuk: "A A B B~ A~ C C B A^ C~ B A",
+    bagian: {
+      B: {
+        melodi: "5 4 5 6 5 4 2 4 5 6 7 6 5 4 2 1 2 4 5 4 2 1 7, 1 2 1 7, 5, 7, 1 2 .",
+      },
+      C: {
+        melodi: "1 1 2 1 1 1 4 2 1 1 2 1 7, 7, 1 . 4 4 5 4 4 4 6 5 4 4 5 4 2 2 1 .",
+        bas: "1,, 1,, 1,, 1, 1,, 1,, 7,,, 7,,, 4,, 4,, 4,, 4, 2,, 2,, 1,, 1,,",
+      },
+    },
   },
   // PESISIR (Kampung Nelayan): riang, berayun seperti ombak, suling di atas bas yang santai
   pesisir: {
@@ -500,6 +550,16 @@ const LAGU = {
     bas: "5,, . . 5, 1,, . . 1, 6,, . . 6, 2,, . 3,, .", suaraBas: "bas",
     kendang: "D . . t . . D . D . t . . t . .",
     perkusi: ". . k . . . k . . . k . . k k .",
+    bentuk: "A A~ B B~ A C C~ B A~ A",
+    bagian: {
+      B: {
+        melodi: "1' . 2' 3' . 2' 1' 6 1' . 6 5 . 6 1' . 2' . 1' 6 5 3 5 6 1' . 6 5 3 . 5 .",
+      },
+      C: {
+        melodi: "3 . 2 3 . 5 6 . 5 . 3 2 . 1 2 . 3 . 5 . 6 5 3 . 2 3 5 . 2 . 1 .",
+        bas: "1,, . . 1, 5,, . . 5, 2,, . . 2, 5,, . 1,, .",
+      },
+    },
   },
   // KAWAH (Kawah Geni): pelog, menghentak berat, dentum besar & kecrek panas
   kawah: {
@@ -509,6 +569,16 @@ const LAGU = {
     bas: "1,, . 1,, 1, 7,,, . 7,,, 1,,", suaraBas: "bas",
     kendang: "B . t . D . t D B . t . D t D t",
     perkusi: "x . x . x x x . x . x . x x x x",
+    bentuk: "A A B A~ C C B~ A^ C A",
+    bagian: {
+      B: {
+        melodi: "4 . 5 4 2 . 4 5 6 . 5 4 5 . 6 7 6 . 5 4 2 . 4 5 6 5 4 2 1 . 2 .",
+      },
+      C: {
+        melodi: "1 1 . 7, 1 . 2 . 1 1 . 7, 5, . 7, . 2 2 . 1 2 . 4 . 5 4 2 1 7, . 1 .",
+        bas: "1,, . 1,, . 5,,, . 5,,, . 2,, . 2,, . 7,,, . 1,, .",
+      },
+    },
   },
   // ---- Lagu desa tiap dunia (masing-masing punya suasana sendiri) ----
   // SEGARA (Bandar Segara & Desa Apung): kota pelabuhan, berayun seperti ombak, bonang & suling
@@ -519,6 +589,16 @@ const LAGU = {
     bas: "6,, . . 6, 5,, . . 5, 3,, . . 3, 2,, . 5,, .", suaraBas: "bas",
     kendang: "D . . t D . t . D . . t D t t .",
     perkusi: ". k . . . k . . . k . . . k k .",
+    bentuk: "A A~ B B~ A C C~ B A~ A",
+    bagian: {
+      B: {
+        melodi: "2' . 3' 5' . 3' 2' 1' . 2' 1' 6 . 5 6 1' . 2' 3' . 2' 1' 6 5 . 6 1' 2' . 1' 6 .",
+        bas: "2,, . . 2, 1,, . . 1, 6,, . . 6, 5,, . 6,, .",
+      },
+      C: {
+        melodi: "5 . 3 2 . 3 5 . 6 . 5 3 . 2 1 . 2 . 3 5 . 6 5 3 . 2 3 5 . 6 . .",
+      },
+    },
   },
   // AWAN (Kampung Awan): ringan & melayang, peking berdenting di nada tinggi, dengung lembut di bawah
   awan: {
@@ -528,24 +608,54 @@ const LAGU = {
     bas: "1, . . . . . . . 6,, . . . . . . . 5,, . . . . . . . 6,, . . . 1, . . .", suaraBas: "dengung",
     kendang: "D . . . . . t . . . . . D . . . t . . . . . . .",
     perkusi: ". . k . . . . . . . k . . . . .",
+    bentuk: "A B A~ C B~ A C~ A",
+    bagian: {
+      B: {
+        melodi: "3' . 5' 6' . 5' 3' . 2' . 1' 2' 3' . . . 5' . 3' 2' . 1' 6 . 1' . 2' 3' 2' . . .",
+      },
+      C: {
+        melodi: "6 . 1' 2' . 1' 6 . 5 . 3 5 6 . . . 1' . 6 5 . 3 2 . 3 . 5 6 1' . . .",
+      },
+    },
   },
-  // BAYANG (Perkemahan Cahaya): pelog pelan & sendu, suling di dekat api unggun, kayu berderak
+  // BAYANG (Perkemahan Cahaya): hangat & penuh harapan, seperti duduk di dekat api unggun
+  // di tengah negeri gelap. Bonang lembut, suling menyahut, kayu api berderak pelan.
   bayang: {
-    semangat: 0.35, ayun: 0.06, tempo: 200, tangga: "pelog", suara: "suling", gong: 48, keras: 1.3,
-    melodi: "3 . 4 . 3 1 . . 7, . 1 . 3 . . . 4 . 5 . 4 3 . . 1 . 7, . 6, . . .",
-    isian: ". . . . 1' . . . . . . . 7 . . . . . . . 3' . . . . . . . 1' . . .", suaraIsian: "bonang",
-    bas: "1,, . . . . . . . 6,,, . . . . . . . 4,, . . . . . . . 5,, . . . . . . .", suaraBas: "dengung",
-    kendang: "",
-    perkusi: ". . k . . . . k . . . . . k . . . . . . k . . .",
+    semangat: 0.5, ayun: 0.12, tempo: 240, suara: "bonang", gong: 32, keras: 1.1,
+    melodi: "1 . 2 3 . 5 3 2 . 1 2 . 6, . 1 . 2 . 3 5 . 6 5 3 . 2 3 5 . 3 2 .",
+    isian: ". . . . 5' . . . . . 3' . . . . . . . 6' . . . 5' . . . 2' . . . 3' .", suaraIsian: "suling",
+    bas: "1,, . . . 1, . . . 6,,, . . . 6,, . . . 2,, . . . 2, . . . 5,,, . . . 5,, . . .", suaraBas: "bas",
+    kendang: "D . . t . . D . . . t . D . t .",
+    perkusi: ". . k . . . . . . . k . . . . k",
+    bentuk: "A A~ B A C B~ A~ A",
+    bagian: {
+      B: {
+        melodi: "5 . 6 1' . 6 5 3 . 5 6 . 3 . 2 . 3 . 5 6 . 1' 2' 1' . 6 5 3 . 5 6 .",
+        bas: "5,, . . . 5, . . . 3,, . . . 3, . . . 6,,, . . . 6,, . . . 1,, . . . 1, . . .",
+      },
+      C: {
+        melodi: "2 . 3 . 5 . 3 2 1 . . . 6, . 1 . 2 . 3 . 2 1 6, . 5, . 6, 1 2 . . .",
+      },
+    },
   },
-  // TIMUR (Kota Labuhan & Kampung Megalit): menghentak, kendang & kecrek seperti derap kuda di sabana
+  // TIMUR (Kota Labuhan & Kampung Megalit): pasar pelabuhan kuno yang ramai di tepi sabana.
+  // Suling memimpin, saron menimpali, bas berjalan, kecrek & kayu bersahutan.
   timur: {
-    semangat: 0.9, ayun: 0.1, tempo: 345, suara: "saron", gong: 16, keras: 0.85,
-    melodi: "2 3 5 . 3 2 1 2 . 6, 1 2 3 . 2 1 6, . 1 2 3 5 6 . 5 3 2 3 5 . 3 .",
-    isian: "5 . 6 . 5 . 3 . 2 . 3 . 5 . 6 .", suaraIsian: "peking",
-    bas: "2,, 2, . 2,, 6,,, 6,, . 6,,, 1,, 1, . 1,, 5,,, 5,, . 5,,,", suaraBas: "bas",
-    kendang: "D . D t . t D . D t . t D t t t",
-    perkusi: "x . x x . x x . x x . x x x x .",
+    semangat: 0.7, ayun: 0.14, tempo: 280, suara: "suling", gong: 32, keras: 1,
+    melodi: "6 . 5 6 1' . 6 5 3 . 5 6 5 3 2 . 3 5 6 . 1' 2' 1' 6 5 3 5 6 5 . . .",
+    isian: "3 . 5 . 6 . 5 . 2 . 3 . 5 . 3 .", suaraIsian: "saron",
+    bas: "6,, . 3, . 5,, . 2, . 3,, . 6,, . 5,, . 1, .", suaraBas: "bas",
+    kendang: "D . t k D . t . D k t . D t k t",
+    perkusi: ". x . . . x . k . x . . . x k .",
+    bentuk: "A A~ B B~ A C C~ A^ B A",
+    bagian: {
+      B: {
+        melodi: "1' . 2' 3' 2' . 1' 6 5 . 6 1' 6 5 3 . 5 6 1' . 6 5 3 2 3 . 5 6 1' . . .",
+      },
+      C: {
+        melodi: "3 3 . 2 3 5 . 3 2 2 . 1 2 3 . 2 6, . 1 2 3 . 5 6 5 3 2 3 6, . . .",
+      },
+    },
   },
   // RIMBA (Kampung Rumah Panjang): pelog, ketuk kayu rapat bersahutan seperti suara hutan
   rimba: {
@@ -555,6 +665,15 @@ const LAGU = {
     bas: "1,, . 1,, . 6,,, . 6,,, . 5,,, . 5,,, . 6,,, . 1,, .", suaraBas: "bas",
     kendang: "D . k . t . k . D . k D t . k .",
     perkusi: "k . . k . k . . k . . k . k k .",
+    bentuk: "A A~ B B~ A C C~ B A~ A",
+    bagian: {
+      B: {
+        melodi: "5 6 1' . 6 5 3 . 5 6 1' 2' 1' 6 5 . 3 5 6 . 5 3 2 . 3 5 6 5 3 2 1 .",
+      },
+      C: {
+        melodi: "1 . 1 2 . 1 6, . 5, . 5, 6, . 1 2 . 3 . 3 5 . 3 2 . 1 2 3 . 2 1 . .",
+      },
+    },
   },
   // SALJU (Pondok Nini Embun): jarang & berdenting seperti kristal es, sunyi di antara nada
   salju: {
@@ -564,6 +683,15 @@ const LAGU = {
     bas: "1, . . . . . . . . . . . . . . . 5,, . . . . . . . . . . . . . . .", suaraBas: "dengung",
     kendang: "",
     perkusi: ". . . . . . . . . . . k . . . . . . . . . . . . . . . . . . . k",
+    bentuk: "A B A- C B A C A",
+    bagian: {
+      B: {
+        melodi: "6' . . 5' . . 3' . . 2' . . . . . . 3' . . 5' . . 6' . . 1'' . . . . . .",
+      },
+      C: {
+        melodi: "2' . . 1' . . 6 . . 5 . . . . . . 6 . . 1' . . 2' . . 3' . . . . . .",
+      },
+    },
   },
   // KEMENANGAN: naik bertahap ke nada tinggi, gendang makin rapat, ditutup gong
   menang: {

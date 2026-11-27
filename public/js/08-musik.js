@@ -37,14 +37,45 @@ function parseNote(tok, tangga = "slendro") {
 }
 const line = (txt, tg) => (txt ? txt.trim().split(/\s+/).map((t) => parseNote(t, tg)) : []);
 const beat = (txt) => (txt || "").replace(/\s+/g, "");
+// ---------- Bagian lagu (bentuk) ----------
+// Lagu dengan `bentuk` disusun jadi satu urutan panjang: bagian demi bagian (A, B, C...)
+// beserta variasinya, supaya lagu lama baru berulang. Panjang tiap bagian = panjang melodinya;
+// baris lain (isian, bas, kendang) diulang/dipotong agar pas dengan bagian itu.
+const GARIS_LAGU = [["melodi", "notes"], ["isian", "fill"], ["bas", "bass"], ["kendang", "drums"], ["perkusi", "perc"]];
+const potongNada = (txt) => (txt ? txt.trim().split(/\s+/) : []);
+function variasiBagian(tk, op, nama) {
+  if (op.includes("~") && nama === "melodi")   // dihias: diam di sela dua nada → nada berikutnya dimainkan lebih awal
+    tk = tk.map((t, k) => (t === "." && k % 2 === 1 && tk[k - 1] && tk[k - 1] !== "." && tk[k + 1] && tk[k + 1] !== "." ? tk[k + 1] : t));
+  if (op.includes("^") && nama === "melodi") tk = tk.map((t) => (t === "." ? t : t + "'"));   // naik satu oktaf
+  if (op.includes("-") && (nama === "isian" || nama === "kendang")) tk = [];                  // jeda tenang
+  return tk;
+}
+function susunBentuk(s, tg) {
+  const bag = { A: s, ...(s.bagian || {}) }, hasil = { notes: [], fill: [], bass: [], drums: [], perc: [] };
+  for (const kode of s.bentuk.trim().split(/\s+/)) {
+    const b = bag[kode[0]] || s, op = kode.slice(1);
+    const L = potongNada(b.melodi || s.melodi).length;
+    for (const [nama, kunci] of GARIS_LAGU) {
+      const ketukan = kunci === "drums" || kunci === "perc", teks = b[nama] !== undefined ? b[nama] : s[nama];
+      const tk = variasiBagian(ketukan ? beat(teks).split("") : potongNada(teks), op, nama);
+      for (let j = 0; j < L; j++) {
+        const t = tk.length ? tk[j % tk.length] : null;
+        hasil[kunci].push(t === null ? null : ketukan ? t : parseNote(t, tg));
+      }
+    }
+  }
+  return hasil;
+}
 const SONGS = {};
 for (const [id, s] of Object.entries(LAGU)) {
   const tg = s.tangga || "slendro";
-  SONGS[id] = {
+  SONGS[id] = s.bentuk ? { ...s, ...susunBentuk(s, tg), once: s.ulang === false } : {
     ...s, notes: line(s.melodi, tg), fill: line(s.isian, tg), bass: line(s.bas, tg),
     drums: beat(s.kendang), perc: beat(s.perkusi), once: s.ulang === false,
   };
 }
+// berapa detik satu putaran penuh lagu (tanpa percepatan saat bertarung)
+const durasiLagu = (id) => { const s = SONGS[id]; return s ? Math.max(s.notes.length, s.fill.length, s.bass.length, s.drums.length, s.perc.length) * 60 / s.tempo : 0; };
 const music = { cur: null, gain: null, step: 0, next: 0 };
 
 // Ganti lagu dengan crossfade: lagu lama memudar, lagu baru masuk pelan.
