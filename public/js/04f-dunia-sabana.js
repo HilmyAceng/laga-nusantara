@@ -11,7 +11,7 @@
 Object.assign(AREAS, {
   labuhan: {
     dunia: 5, nama: "Kota Labuhan Lama", sub: "Kota pelabuhan tua di timur — zona aman · Lv 48+", namaEn: "Old Harbor City", subEn: "An old eastern port town — safe zone · Lv 48+",
-    lagu: "pesisir", tepi: WATER, w: 40, h: 32, aman: true,
+    lagu: "timur", tepi: WATER, w: 40, h: 32, aman: true,
     zona: { kota: { x0: 3, y0: 3, x1: 36, y1: 24 } },
     gerbang: [
       { x0: 0, y0: 15, x1: 0, y1: 16, ke: "bandar", masuk: { x: 13.5, y: 27.5 }, label: "← Bandar Segara", labelEn: "← Segara Harbor" },
@@ -138,7 +138,7 @@ Object.assign(AREAS, {
   },
   kampungBatu: {
     dunia: 5, nama: "Kampung Megalit", sub: "Kampung kubur batu & rumah berkolong — zona aman · Lv 56+", namaEn: "Megalith Village", subEn: "Stone tombs & stilt houses — safe zone · Lv 56+",
-    lagu: "desa", tepi: TREE, w: 40, h: 30, aman: true, sabana: true,
+    lagu: "timur", tepi: TREE, w: 40, h: 30, aman: true, sabana: true,
     zona: { kampung: { x0: 3, y0: 3, x1: 36, y1: 26 } },
     gerbang: [
       { x0: 0, y0: 13, x1: 0, y1: 15, ke: "sabana", masuk: { x: 57.5, y: 25.5 }, label: "← Sabana", labelEn: "← Savanna" },

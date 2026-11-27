@@ -8,7 +8,7 @@
 Object.assign(AREAS, {
   awan: {
     dunia: 3, nama: "Kampung Awan", sub: "Desa di atas awan — zona aman · Lv 19+", namaEn: "Cloud Village", subEn: "A village above the clouds — safe zone · Lv 19+",
-    lagu: "desa", tepi: CLOUD, w: 36, h: 28, aman: true,
+    lagu: "awan", tepi: CLOUD, w: 36, h: 28, aman: true,
     zona: { kampung: { x0: 3, y0: 3, x1: 32, y1: 24 } },
     gerbang: [
       { x0: 16, y0: 27, x1: 18, y1: 27, ke: "kuil", masuk: { x: 17.5, y: 3.5 }, label: "Tangga Pelangi", labelEn: "Rainbow Stair" },

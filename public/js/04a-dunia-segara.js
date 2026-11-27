@@ -27,7 +27,7 @@ function jalanKelok(r, x0, y0, x1, y1, lebar, v) {
 Object.assign(AREAS, {
   bandar: {
     dunia: 2, nama: "Bandar Segara", sub: "Kota pelabuhan — zona aman · Lv 12+", namaEn: "Segara Harbor", subEn: "Harbor town — safe zone · Lv 12+",
-    lagu: "pesisir", tepi: WATER, w: 40, h: 30, aman: true,
+    lagu: "segara", tepi: WATER, w: 40, h: 30, aman: true,
     zona: { kota: { x0: 3, y0: 3, x1: 36, y1: 25 } },
     gerbang: [
       { x0: 0, y0: 14, x1: 0, y1: 15, ke: "pesisir", masuk: { x: 40.5, y: 12.5 }, label: "← Pulang", labelEn: "← Sail home" },

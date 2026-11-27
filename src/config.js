@@ -510,6 +510,61 @@ const LAGU = {
     kendang: "B . t . D . t D B . t . D t D t",
     perkusi: "x . x . x x x . x . x . x x x x",
   },
+  // ---- Lagu desa tiap dunia (masing-masing punya suasana sendiri) ----
+  // SEGARA (Bandar Segara & Desa Apung): kota pelabuhan, berayun seperti ombak, bonang & suling
+  segara: {
+    semangat: 0.75, ayun: 0.16, tempo: 300, suara: "bonang", gong: 32, keras: 0.9,
+    melodi: "6 . 1' 2' . 1' 6 5 . 6 5 3 . 2 3 5 . 6 1' . 6 5 3 2 . 3 5 6 . 5 3 .",
+    isian: ". . . . 6' . . . . . 5' . . . . . 2'' . . . 1'' . . . . . . 6' . . . .", suaraIsian: "suling",
+    bas: "6,, . . 6, 5,, . . 5, 3,, . . 3, 2,, . 5,, .", suaraBas: "bas",
+    kendang: "D . . t D . t . D . . t D t t .",
+    perkusi: ". k . . . k . . . k . . . k k .",
+  },
+  // AWAN (Kampung Awan): ringan & melayang, peking berdenting di nada tinggi, dengung lembut di bawah
+  awan: {
+    semangat: 0.45, ayun: 0.05, tempo: 250, suara: "peking", gong: 32, keras: 1,
+    melodi: "1' . 2' 3' . 2' 1' . 6 . 5 6 1' . . . 2' . 3' 5' . 3' 2' . 1' . 6 5 6 . . .",
+    isian: "5' . . . . . 3' . . . . . 6' . . . . . 5' . . . 2' . . . . . 1'' . . .", suaraIsian: "suling",
+    bas: "1, . . . . . . . 6,, . . . . . . . 5,, . . . . . . . 6,, . . . 1, . . .", suaraBas: "dengung",
+    kendang: "D . . . . . t . . . . . D . . . t . . . . . . .",
+    perkusi: ". . k . . . . . . . k . . . . .",
+  },
+  // BAYANG (Perkemahan Cahaya): pelog pelan & sendu, suling di dekat api unggun, kayu berderak
+  bayang: {
+    semangat: 0.35, ayun: 0.06, tempo: 200, tangga: "pelog", suara: "suling", gong: 48, keras: 1.3,
+    melodi: "3 . 4 . 3 1 . . 7, . 1 . 3 . . . 4 . 5 . 4 3 . . 1 . 7, . 6, . . .",
+    isian: ". . . . 1' . . . . . . . 7 . . . . . . . 3' . . . . . . . 1' . . .", suaraIsian: "bonang",
+    bas: "1,, . . . . . . . 6,,, . . . . . . . 4,, . . . . . . . 5,, . . . . . . .", suaraBas: "dengung",
+    kendang: "",
+    perkusi: ". . k . . . . k . . . . . k . . . . . . k . . .",
+  },
+  // TIMUR (Kota Labuhan & Kampung Megalit): menghentak, kendang & kecrek seperti derap kuda di sabana
+  timur: {
+    semangat: 0.9, ayun: 0.1, tempo: 345, suara: "saron", gong: 16, keras: 0.85,
+    melodi: "2 3 5 . 3 2 1 2 . 6, 1 2 3 . 2 1 6, . 1 2 3 5 6 . 5 3 2 3 5 . 3 .",
+    isian: "5 . 6 . 5 . 3 . 2 . 3 . 5 . 6 .", suaraIsian: "peking",
+    bas: "2,, 2, . 2,, 6,,, 6,, . 6,,, 1,, 1, . 1,, 5,,, 5,, . 5,,,", suaraBas: "bas",
+    kendang: "D . D t . t D . D t . t D t t t",
+    perkusi: "x . x x . x x . x x . x x x x .",
+  },
+  // RIMBA (Kampung Rumah Panjang): pelog, ketuk kayu rapat bersahutan seperti suara hutan
+  rimba: {
+    semangat: 0.7, ayun: 0.1, tempo: 285, tangga: "pelog", suara: "bonang", gong: 32, keras: 0.95,
+    melodi: "1 2 3 . 2 1 6, . 1 2 3 5 3 2 1 . 3 5 6 . 5 3 2 . 1 2 3 2 1 6, 1 .",
+    isian: ". 5 . 3 . 5 . 6 . 5 . 3 . 2 . 1", suaraIsian: "peking",
+    bas: "1,, . 1,, . 6,,, . 6,,, . 5,,, . 5,,, . 6,,, . 1,, .", suaraBas: "bas",
+    kendang: "D . k . t . k . D . k D t . k .",
+    perkusi: "k . . k . k . . k . . k . k k .",
+  },
+  // SALJU (Pondok Nini Embun): jarang & berdenting seperti kristal es, sunyi di antara nada
+  salju: {
+    semangat: 0.25, ayun: 0, tempo: 210, suara: "peking", gong: 48, keras: 1.2,
+    melodi: "5' . . 3' . . 2' . . 1' . . . . . . 2' . . 3' . . 5' . . 6' . . . . . .",
+    isian: ". . . . . . . . 1' . . . . . . . . . . . . . . . 3' . . . . . . .", suaraIsian: "suling",
+    bas: "1, . . . . . . . . . . . . . . . 5,, . . . . . . . . . . . . . . .", suaraBas: "dengung",
+    kendang: "",
+    perkusi: ". . . . . . . . . . . k . . . . . . . . . . . . . . . . . . . k",
+  },
   // KEMENANGAN: naik bertahap ke nada tinggi, gendang makin rapat, ditutup gong
   menang: {
     semangat: 0.2, tempo: 330, suara: "saron", ulang: false,

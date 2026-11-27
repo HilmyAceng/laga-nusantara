@@ -12,7 +12,7 @@ DUNIA.push({ id: 4, nama: "Negeri Bayang", namaEn: "Shadow Realm" });
 Object.assign(AREAS, {
   perkemahan: {
     dunia: 4, nama: "Perkemahan Cahaya", sub: "Api unggun yang tak pernah padam — zona aman · Lv 36+", namaEn: "Camp of Light", subEn: "A fire that never dies — safe zone · Lv 36+",
-    lagu: "desa", tepi: ROCK, w: 34, h: 26, aman: true, bayang: true, alasBatu: "#2e2a38",
+    lagu: "bayang", tepi: ROCK, w: 34, h: 26, aman: true, bayang: true, alasBatu: "#2e2a38",
     zona: { kemah: { x0: 3, y0: 3, x1: 30, y1: 22 } },
     gerbang: [
       { x0: 15, y0: 25, x1: 17, y1: 25, ke: "makam", masuk: { x: 30.5, y: 2.5 }, label: "Gerbang Bayang", labelEn: "Shadow Gate" },

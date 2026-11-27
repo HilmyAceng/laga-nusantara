@@ -20,7 +20,7 @@ function sungaiKelok(r, x0, y0, y1, lebar) {
 Object.assign(AREAS, {
   rumahPanjang: {
     dunia: 6, nama: "Kampung Rumah Panjang", sub: "Satu rumah panjang untuk satu kampung — zona aman · Lv 64+", namaEn: "Longhouse Village", subEn: "One long house for a whole village — safe zone · Lv 64+",
-    lagu: "desa", tepi: TREE, w: 44, h: 30, aman: true, rimba: true,
+    lagu: "rimba", tepi: TREE, w: 44, h: 30, aman: true, rimba: true,
     zona: { kampung: { x0: 6, y0: 3, x1: 41, y1: 26 } },
     gerbang: [
       { x0: 1, y0: 14, x1: 2, y1: 16, ke: "lembahTugu", masuk: { x: 48.5, y: 19.5 }, label: "← Rakit ke Lembah", labelEn: "← Raft to the Valley" },
@@ -139,7 +139,7 @@ Object.assign(AREAS, {
   },
   pondok: {
     dunia: 6, nama: "Pondok Nini Embun", sub: "Api unggun di tengah salju — zona aman · Lv 69+", namaEn: "Nini Embun's Lodge", subEn: "A campfire amid the snow — safe zone · Lv 69+",
-    lagu: "desa", tepi: ROCK, w: 32, h: 26, aman: true, salju: true,
+    lagu: "salju", tepi: ROCK, w: 32, h: 26, aman: true, salju: true,
     zona: { pondok: { x0: 3, y0: 3, x1: 28, y1: 22 } },
     gerbang: [
       { x0: 15, y0: 25, x1: 17, y1: 25, ke: "lereng", masuk: { x: 20.5, y: 2.5 }, label: "↓ Lereng", labelEn: "↓ Slopes" },

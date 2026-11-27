@@ -71,7 +71,7 @@ Object.assign(AREAS, {
   // ---------------- Dunia 2 ----------------
   desaApung: {
     dunia: 2, nama: "Desa Apung", sub: "Rumah panggung di atas laut — zona aman · Lv 31+", namaEn: "Floating Village", subEn: "Stilt houses over the sea — safe zone · Lv 31+",
-    lagu: "pesisir", tepi: WATER, w: 36, h: 28, aman: true,
+    lagu: "segara", tepi: WATER, w: 36, h: 28, aman: true,
     zona: { desa: { x0: 2, y0: 2, x1: 33, y1: 25 } },
     gerbang: [
       { x0: 17, y0: 0, x1: 19, y1: 0, ke: "bandar", masuk: { x: 19.5, y: 23.5 }, label: "Ke Bandar", labelEn: "To Harbor" },
