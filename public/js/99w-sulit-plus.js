@@ -1,6 +1,6 @@
 // =====================================================================
-// SULIT+ (PENDEKAR SEJATI) — tingkat kesulitan setelah tamat
-// Terbuka setelah cerita tamat (pencapaian "tamat"); tersimpan juga per perangkat
+// SULIT+ (PENDEKAR SEJATI) — tingkat kesulitan setelah Bab 10 selesai
+// Terbuka setelah Bab 10 selesai (SULIT_PLUS_BAB); tersimpan juga per perangkat
 // (laga.sulitPlus) supaya bisa dipilih untuk permainan baru di layar judul.
 //  - Musuh lebih tebal & jauh lebih sakit (ATURAN.kesulitan.sulitPlus).
 //  - TANDA SERANGAN DIHILANGKAN: tidak ada area merah sebelum musuh/bos menyerang.
@@ -15,19 +15,21 @@ PILIHAN_KESULITAN.push("sulitPlus");
 Object.assign(TEKS.id, {
   "kes.sulitPlus": "Sulit+",
   "kes.sulitPlus.desc": "Pendekar Sejati: tanpa tanda serangan, musuh lebih cepat & sakit.",
-  "kes.sulitPlus.kunci": "Terbuka setelah cerita tamat.",
+  "kes.sulitPlus.kunci": "Terbuka setelah Bab 10 selesai.",
 });
 Object.assign(TEKS.en, {
   "kes.sulitPlus": "Hard+",
   "kes.sulitPlus.desc": "True Warrior: no attack warnings, faster & deadlier enemies.",
-  "kes.sulitPlus.kunci": "Unlocks after finishing the story.",
+  "kes.sulitPlus.kunci": "Unlocks after finishing Chapter 10.",
 });
 const SULIT_PLUS_KEY = "laga.sulitPlus";
-const sulitPlusTerbuka = () => store.get(SULIT_PLUS_KEY, false) || (S && capaiTercapai("tamat"));
+const SULIT_PLUS_BAB = 10;   // Sulit+ terbuka setelah bab ini selesai
+const sulitPlusSyarat = () => !!S && (babSelesai(SULIT_PLUS_BAB) || capaiTercapai("tamat"));
+const sulitPlusTerbuka = () => store.get(SULIT_PLUS_KEY, false) || sulitPlusSyarat();
 const sulitPlusAktif = () => kesulitanNow() === "sulitPlus";
-UPDATE_TAMBAHAN.push(() => { if (S && capaiTercapai("tamat") && !store.get(SULIT_PLUS_KEY, false)) store.set(SULIT_PLUS_KEY, true); });
+UPDATE_TAMBAHAN.push(() => { if (sulitPlusSyarat() && !store.get(SULIT_PLUS_KEY, false)) store.set(SULIT_PLUS_KEY, true); });
 
-// tombol pilihan: Sulit+ terkunci sampai tamat
+// tombol pilihan: Sulit+ terkunci sampai Bab 10 selesai
 {
   const asli = tombolKesulitan;
   tombolKesulitan = function (aktif, attr) {

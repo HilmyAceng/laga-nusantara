@@ -21,7 +21,7 @@ const CATATAN_RILIS = [
       ["Jalan Pendekar (pohon jurus): mulai Lv 10, pilih satu dari dua jalan per hero dengan bonus pasif bertingkat.", "Warrior's Path (skill tree): from Lv 10, choose one of two paths per hero with tiered passive bonuses."],
       ["Kelemahan & kekebalan bos: tiap bos lemah/kebal terhadap satu status. Temukan sendiri, lalu lihat di Ensiklopedia.", "Boss weaknesses & immunities: each boss is weak/immune to one status. Discover them yourself, then check the Bestiary."],
       ["Mode Bertahan di Cermin Gaib: lawan gelombang musuh tanpa henti dan kejar rekor.", "Survival Mode at the Mystic Mirror: fight endless enemy waves and chase your record."],
-      ["Sulit+ (Pendekar Sejati) setelah tamat: tanpa tanda serangan, musuh lebih cepat & sakit.", "Hard+ (True Warrior) after finishing the story: no attack warnings, faster and deadlier enemies."],
+      ["Sulit+ (Pendekar Sejati) setelah Bab 10 selesai: tanpa tanda serangan, musuh lebih cepat & sakit.", "Hard+ (True Warrior) after finishing Chapter 10: no attack warnings, faster and deadlier enemies."],
       ["Tombol Bagikan: kartu gambar untuk momen membanggakan (bos tumbang, ikan langka, bab tamat) & di Menu jeda.", "Share button: an image card for proud moments (boss down, rare fish, chapter cleared) & in the pause menu."],
     ],
     ubah: [

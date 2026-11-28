@@ -13,7 +13,7 @@
 
 const stat = (k) => (S && S.statistik && S.statistik[k]) || 0;
 function tambahStat(k, n = 1) { if (!S) return; S.statistik = S.statistik || {}; S.statistik[k] = (S.statistik[k] || 0) + n; cekCapaiSegera = true; }
-const nomorBab = (l) => { const m = l && /Bab (\d+)/.exec(l.bab || ""); return m ? +m[1] : 0; };
+const nomorBab = (l) => { const m = l && /(\d+)/.exec(l.bab || ""); return m ? +m[1] : 0; };   // angka pertama: "Bab 11 · …" / "Chapter 11 · …"
 const babSelesai = (n) => !!S && (S.cerita.idx >= CERITA.length || nomorBab(CERITA[S.cerita.idx]) > n);
 const daftarBos = () => Object.keys(MONSTERS).filter((k) => MONSTERS[k].boss && !MONSTERS[k].latihan);
 const jumlahBos = () => daftarBos().filter((k) => S.bos && S.bos[k]).length;
