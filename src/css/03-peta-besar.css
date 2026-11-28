@@ -1,0 +1,17 @@
+/* Peta besar */
+.map-panel { width: min(900px, 100%); gap: 10px; }
+.map-panel h1 { font-size: 2.4rem; }
+.map-panel .icon-btn { flex: none; }
+.map-panel .tabs { width: min(320px, 100%); }
+.map-wrap { position: relative; }
+.tele-ask { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(320px, 90%); box-sizing: border-box; padding: 16px; display: grid; gap: 12px; text-align: center; background: var(--panel); border: 1px solid #7dffa8; border-radius: 16px; box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6); }
+.tele-ask p { margin: 0; font-family: var(--font-display); font-size: 1.6rem; line-height: 1; }
+.tele-ask .btns { display: flex; gap: 10px; justify-content: center; }
+#bigMap { display: block; width: 100%; height: min(62vh, 560px); border-radius: 12px; background: #120d18; touch-action: none; }
+.zoom-btns { position: absolute; right: 8px; top: 8px; display: grid; gap: 6px; }
+.zoom-btns .icon-btn { width: 36px; height: 36px; font-size: 1.3rem; line-height: 1; background: rgba(20, 14, 34, 0.85); }
+.zoom-btns .icon-btn:disabled { opacity: 0.35; cursor: default; }
+.zoom-btns .ring { display: inline-block; width: 12px; height: 12px; border-radius: 50%; border: 2px solid currentColor; box-shadow: inset 0 0 0 2px rgba(20, 14, 34, 0.85), inset 0 0 0 6px currentColor; vertical-align: middle; }
+.map-tabs { display: flex; flex-wrap: wrap; gap: 8px; }
+.dunia-box { margin-left: auto; display: flex; align-items: center; gap: 8px; font-size: 0.8rem; font-weight: 800; color: var(--ink-dim); }
+.dunia-box select { min-width: 210px; padding: 8px 10px; border-radius: 10px; border: 1px solid #c9a6ff; background: #1d1630; color: var(--ink); font: inherit; font-weight: 800; cursor: pointer; }

@@ -1,0 +1,10 @@
+/* Desktop (mouse & layar cukup besar): semua tulisan diperbesar. Ukuran huruf memakai rem, jadi cukup ubah dasar ini. */
+@media (hover: hover) and (pointer: fine) and (min-width: 900px) and (min-height: 560px) {
+  html { font-size: 115%; }
+  /* percakapan, notifikasi & teks cutscene: dibesarkan lagi supaya nyaman dibaca */
+  .dlg { width: min(780px, 100%); padding: 16px 20px; gap: 10px; }
+  .dlg-name { font-size: 1.65rem; } .dlg-text { font-size: 1.1rem; line-height: 1.5; }
+  .dlg-actions button { font-size: 0.98rem; padding: 10px 16px; }
+  .toast { font-size: 1rem; padding: 7px 16px; } .toast.big { font-size: 2.1rem; }
+  .adegan-teks { width: min(92vw, 900px); padding: 14px 22px; } .adegan-teks b { font-size: 0.98rem; } .adegan-teks p { font-size: 1.22rem; }
+}

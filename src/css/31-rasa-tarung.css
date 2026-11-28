@@ -1,0 +1,6 @@
+/* rasa bertarung (js/99n-rasa-tarung.js): tepi layar merah saat kena pukul / sekarat */
+#vinyetLuka { position: fixed; inset: 0; pointer-events: none; z-index: 4; opacity: 0; box-shadow: inset 0 0 90px 30px rgba(200, 20, 30, 0.85); }
+#vinyetLuka.nyala { animation: vinyetKena 0.45s ease-out; }
+#vinyetLuka.sekarat { animation: vinyetDenyut 1.1s ease-in-out infinite; }
+@keyframes vinyetKena { 0% { opacity: var(--kuat, 0.65); } 100% { opacity: 0; } }
+@keyframes vinyetDenyut { 0%, 100% { opacity: 0.12; } 50% { opacity: 0.4; } }

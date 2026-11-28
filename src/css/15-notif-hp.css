@@ -1,0 +1,8 @@
+/* HP: notif tengah kecil & tepat di bawah baris HUD atas, supaya tidak menutupi pertempuran */
+@media (max-width: 760px), (max-height: 560px) {
+  .toasts { top: calc(8px + env(safe-area-inset-top, 0px)); width: max-content; max-width: min(36vw, 280px); gap: 3px; }
+  .toasts .toast:nth-last-child(n+3) { display: none; }   /* paling banyak 2 notif sekaligus */
+  .stage.dn-on .toasts { top: calc(8px + 64px + env(safe-area-inset-top, 0px)); }
+  .toast { font-size: 0.68rem; padding: 3px 9px; border-radius: 8px; white-space: normal; text-align: center; line-height: 1.25; opacity: 0.92; }
+  .toast.big { font-size: 1.15rem; padding: 2px 12px 0; }
+}

@@ -1,0 +1,18 @@
+/* Tantangan bos */
+.tk-card { display: grid; gap: 3px; text-align: left; padding: 10px 13px; border-radius: 12px; cursor: pointer; color: inherit; font: inherit; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--line); }
+.tk-card:hover { border-color: rgba(201, 166, 255, 0.7); }
+.tk-card.menang { border-color: rgba(90, 209, 122, 0.6); }
+.tk-card.kunci { opacity: 0.5; cursor: not-allowed; }
+.tk-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.tk-head b { font-family: var(--font-display); font-size: 1.35rem; font-weight: 600; line-height: 1; color: var(--ink); }
+.tk-titik { display: flex; gap: 3px; }
+.tk-titik i { width: 9px; height: 9px; border-radius: 50%; background: rgba(255, 255, 255, 0.15); }
+.tk-titik i.on { background: #c9a6ff; }
+.tk-saran { font-size: 0.85rem; }
+.tk-jimat { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; font-size: 0.8rem; color: var(--ink-dim); }
+.jm-chip { font-style: normal; font-weight: 800; font-size: 0.74rem; padding: 2px 8px; border-radius: 999px; color: var(--rc); border: 1px solid var(--rc); background: rgba(255, 255, 255, 0.04); }
+.tk-saran.kurang { color: #ff8b8e; }
+.tk-hadiah { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; font-weight: 700; color: var(--gold); }
+.tk-hadiah .coin { flex: none; width: 11px; height: 11px; }
+.tk-status { justify-self: end; font-size: 0.72rem; font-weight: 800; color: var(--ink-dim); }
+.tk-card.menang .tk-status { color: #5ad17a; }

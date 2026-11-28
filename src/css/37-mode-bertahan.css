@@ -1,0 +1,7 @@
+/* mode bertahan (js/99v-mode-bertahan.js) */
+/* kolom kiri HUD: kotak misi + HUD bertahan di bawahnya */
+.hud-kiri { display: grid; gap: 6px; justify-items: start; align-content: start; pointer-events: none; }
+#btHud { pointer-events: auto; display: flex; align-items: center; gap: 10px; padding: 5px 6px 5px 12px; border-radius: 12px; background: rgba(20, 13, 36, 0.88); border: 2px solid #9a6bd6; color: var(--ink); box-shadow: 0 4px 14px rgba(0,0,0,0.4); }
+#btHud[hidden] { display: none; }
+#btInfo { display: grid; line-height: 1.1; } #btInfo b { font: 600 1.05rem Teko, sans-serif; color: #d9c8ff; } #btInfo small { font-size: 0.65rem; color: var(--ink-dim); font-weight: 800; }
+#btnBtKeluar { padding: 6px 12px; border-radius: 999px; border: 0; background: #e5484d; color: #fff; font: 800 0.75rem Nunito, sans-serif; cursor: pointer; }

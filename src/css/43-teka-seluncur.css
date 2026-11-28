@@ -1,0 +1,2 @@
+/* tombol ulang puzzle es (js/99zj-teka-seluncur.js) */
+#btnUlangEs { position: absolute; left: 50%; bottom: calc(max(14px, env(safe-area-inset-bottom, 0px)) + 120px); transform: translateX(-50%); z-index: 12; padding: 8px 16px; border-radius: 999px; border: 2px solid #bfe8ff; background: rgba(20, 40, 70, 0.88); color: #e6f6ff; font: 800 0.85rem Nunito, sans-serif; cursor: pointer; }

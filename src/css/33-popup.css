@@ -1,0 +1,5 @@
+/* popup umum (js/99p-popup.js) */
+.pn-box .ev-panel { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; height: min(620px, calc(100dvh - 40px)); box-sizing: border-box; }
+.pn-box .ev-isi { min-height: 0; } .pn-box .ev-daftar { overflow-y: auto; min-height: 0; } .pn-box .ev-detail { max-height: none; height: 100%; min-height: 0; overflow-y: auto; align-content: start; }
+.pn-box .ev-lacak:empty { display: none; }
+.pn-box .ev-detail { padding-right: 8px; box-sizing: border-box; }

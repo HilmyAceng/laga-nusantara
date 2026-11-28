@@ -1,0 +1,12 @@
+/* Notifikasi barang: kiri bawah, kecil, putih */
+.item-notifs { position: absolute; left: max(16px, env(safe-area-inset-left, 0px)); top: 50%; transform: translateY(-50%); display: grid; gap: 4px; pointer-events: none; z-index: 6; }
+.item-notif { font-size: 0.95rem; font-weight: 800; color: #fff; text-shadow: 0 1px 2px #000, 0 0 3px #000; animation: notifMasuk 0.25s ease-out; transition: opacity 0.45s, transform 0.45s; }
+.item-notif.pergi { opacity: 0; transform: translateX(-10px); }
+@keyframes notifMasuk { from { opacity: 0; transform: translateX(-12px); } }
+/* Pengumuman bab */
+.bab-banner { position: absolute; left: 0; right: 0; top: 12%; display: grid; justify-items: center; gap: 2px; padding: 18px 16px; text-align: center; pointer-events: none; z-index: 15;
+  background: linear-gradient(90deg, rgba(10,6,20,0), rgba(10,6,20,0.85) 25%, rgba(10,6,20,0.85) 75%, rgba(10,6,20,0)); opacity: 0; transform: scale(0.96); transition: opacity 0.45s, transform 0.45s; }
+.bab-banner.on { opacity: 1; transform: none; }
+.bab-banner small { font-size: 0.8rem; font-weight: 800; letter-spacing: 0.3em; text-transform: uppercase; color: var(--ink-dim); }
+.bab-banner b { font-family: var(--font-display); font-size: 3rem; line-height: 0.95; color: var(--gold); }
+.bab-banner span { font-size: 1.05rem; font-weight: 700; color: var(--ink); }

@@ -1,0 +1,14 @@
+/* Pencapaian (js/99i-pencapaian.js) */
+.cp-ringkas { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 4px 12px; font-weight: 800; }
+.cp-ringkas b { font: 700 1.8rem/1 var(--font-display); color: var(--gold); margin-right: 4px; }
+.cp-bar, .cp-prog { grid-column: 1 / -1; display: block; height: 8px; border-radius: 5px; background: rgba(255, 255, 255, 0.1); overflow: hidden; }
+.cp-bar i, .cp-prog i { display: block; height: 100%; background: var(--gold); border-radius: inherit; }
+.cp-prog { height: 6px; margin-top: 4px; } .cp-prog i { background: #8fd3ff; }
+.cp-kat { margin: 12px 0 6px; color: var(--gold); font-size: 1.05rem; } .cp-kat small { color: var(--ink-dim); font-weight: 700; font-size: 0.8rem; }
+.cp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 8px; }
+.cp-kartu { display: grid; grid-template-columns: 38px 1fr; gap: 10px; align-items: start; padding: 10px; border-radius: 12px; background: rgba(255, 255, 255, 0.04); border: 1px solid var(--line); opacity: 0.75; }
+.cp-kartu.dapat { opacity: 1; border-color: rgba(244, 185, 66, 0.55); background: rgba(244, 185, 66, 0.08); }
+.cp-ikon svg { width: 38px; height: 38px; display: block; }
+.cp-kartu b { display: block; font-size: 0.95rem; } .cp-kartu p { margin: 2px 0 0; font-size: 0.78rem; line-height: 1.35; color: var(--ink-dim); }
+.cp-angka { display: block; font-size: 0.7rem; color: #8fd3ff; margin-top: 2px; font-weight: 700; }
+.cp-hadiah { display: block; margin-top: 4px; font-size: 0.72rem; color: var(--gold); font-weight: 700; }

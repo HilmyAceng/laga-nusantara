@@ -1,0 +1,12 @@
+/* Memancing di dunia game (HUD) */
+.mc-hud { position: absolute; inset: 0; pointer-events: none; z-index: 8; }
+.mc-pesan { position: absolute; left: 50%; bottom: calc(150px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); margin: 0; width: max-content; max-width: min(90vw, 560px); padding: 7px 14px; border-radius: 10px; background: rgba(12, 8, 22, 0.85); border: 1px solid var(--line); font-weight: 800; font-size: 0.9rem; text-align: center; }
+.mc-hasil { position: absolute; left: 50%; top: 22%; transform: translateX(-50%); display: grid; justify-items: center; gap: 2px; min-width: 220px; padding: 12px 20px; border-radius: 14px; background: rgba(12, 8, 22, 0.92); border: 2px solid var(--gold); text-align: center; animation: kiatMasuk 0.25s ease-out; }
+.mc-hasil small { color: var(--ink-dim); font-weight: 800; } .mc-hasil b { font: 700 2rem/1 var(--font-display); } .mc-hasil span { font-size: 0.82rem; font-weight: 700; }
+.mc-hasil i { font-style: normal; font-weight: 900; color: #5ad17a; letter-spacing: 0.06em; font-size: 0.8rem; }
+.mc-meter { position: absolute; right: max(16px, env(safe-area-inset-right, 0px)); top: 50%; transform: translateY(-50%); width: 60px; height: 240px; border-radius: 10px; border: 1px solid var(--line); }
+.mc-selesai { position: absolute; left: max(16px, env(safe-area-inset-left, 0px)); bottom: calc(24px + env(safe-area-inset-bottom, 0px)); pointer-events: auto; padding: 8px 14px; border-radius: 10px; background: var(--panel); border: 1px solid var(--line); color: var(--ink); font: 800 0.85rem/1 inherit; cursor: pointer; }
+.mc-aksi { position: absolute; right: max(26px, env(safe-area-inset-right, 0px)); bottom: calc(26px + env(safe-area-inset-bottom, 0px)); pointer-events: auto; width: 116px; height: 116px; border-radius: 50%; border: 3px solid rgba(255, 255, 255, 0.35); background: #e5484d; color: #fff; font: 700 1.5rem/1 var(--font-display); cursor: pointer; touch-action: none; user-select: none; -webkit-user-select: none; box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45); }
+.mc-aksi.mc-tunggu { background: #5d5672; }
+.mc-aksi.mc-gigit { animation: kiatKedip 0.35s ease-in-out infinite; background: #f4b942; color: #1b1208; }
+@media (max-height: 520px) { .mc-pesan { bottom: auto; top: 54px; font-size: 0.74rem; } .mc-hasil { top: 26%; padding: 8px 14px; } .mc-hasil b { font-size: 1.5rem; } .mc-meter { height: 190px; right: auto; left: max(16px, env(safe-area-inset-left, 0px)); top: 46%; } .mc-aksi { width: 100px; height: 100px; font-size: 1.3rem; } }

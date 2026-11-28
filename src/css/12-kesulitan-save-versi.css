@@ -1,0 +1,14 @@
+/* kesulitan, kode save, versi (js/71-74) */
+.kes-judul { display: flex; flex-wrap: wrap; gap: 8px; align-items: stretch; justify-content: center; margin: 10px 0 4px; }
+.kes-label { width: 100%; text-align: center; font-size: 0.75rem; font-weight: 800; color: var(--ink-dim); letter-spacing: 0.08em; text-transform: uppercase; }
+.kes-list { display: grid; gap: 8px; }
+.kes-btn { display: grid; gap: 2px; text-align: left; padding: 8px 12px; border-radius: 12px; cursor: pointer; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--line); color: var(--ink); font: inherit; min-width: 150px; flex: 1 1 150px; }
+.kes-btn b { font-size: 0.95rem; } .kes-btn small { font-size: 0.72rem; color: var(--ink-dim); line-height: 1.3; }
+.kes-btn[aria-pressed="true"] { border-color: var(--gold); background: rgba(244, 185, 66, 0.16); box-shadow: inset 0 0 0 1px var(--gold); }
+.kes-santai b { color: #8ff0a8; } .kes-normal b { color: var(--gold); } .kes-sulit b { color: #ff8080; }
+.kode-area { width: 100%; box-sizing: border-box; resize: vertical; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--line); background: rgba(5, 3, 12, 0.6); color: var(--ink); font: 0.72rem/1.35 ui-monospace, monospace; word-break: break-all; }
+.go.kecil { padding: 8px 14px; font-size: 0.85rem; }
+.kode-pesan { min-height: 1.2em; margin: 4px 0 0; font-size: 0.8rem; font-weight: 800; text-align: center; }
+.kode-pesan.bagus { color: #8ff0a8; } .kode-pesan.gagal { color: #ff8080; }
+#kodeBox { z-index: 60; }
+.versi-game { margin: 8px 0 0; text-align: center; font-size: 0.7rem; color: var(--ink-dim); letter-spacing: 0.06em; }

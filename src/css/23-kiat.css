@@ -1,0 +1,12 @@
+/* Kiat bertahap */
+.kiat { position: absolute; left: 50%; top: 26%; transform: translateX(-50%); z-index: 70; width: min(480px, calc(100% - 32px)); box-sizing: border-box; display: grid; gap: 8px; justify-items: start; padding: 14px 18px; border-radius: 16px; background: var(--panel); border: 2px solid var(--gold); box-shadow: 0 18px 50px rgba(0, 0, 0, 0.55); animation: kiatMasuk 0.25s ease-out; }
+@keyframes kiatMasuk { from { transform: translateX(-50%) scale(0.88); opacity: 0; } to { transform: translateX(-50%) scale(1); opacity: 1; } }
+.kiat .eyebrow { margin: 0; } .kiat h3 { margin: 0; font-family: var(--font-display); font-size: 1.45rem; line-height: 1; color: var(--gold); }
+.kiat p { margin: 0; font-size: 0.92rem; line-height: 1.45; } .kiat b { color: var(--gold); }
+.kiat kbd, .cara-kiat kbd { display: inline-grid; place-items: center; min-width: 22px; height: 22px; padding: 0 5px; border-radius: 6px; background: #f5efe2; color: #2b2238; border-bottom: 3px solid #b9a98a; font: 800 0.8rem/1 var(--font-display, sans-serif); vertical-align: middle; }
+.kiat .go { justify-self: end; }
+.kiat-sorot { animation: kiatKedip 0.9s ease-in-out infinite !important; }
+@keyframes kiatKedip { 0%, 100% { box-shadow: 0 0 0 0 rgba(244, 185, 66, 0.9); } 50% { box-shadow: 0 0 0 8px rgba(244, 185, 66, 0); outline: 3px solid #f4b942; } }
+.hud-tutup { display: none !important; }
+.cara-kiat p { margin: 0 0 8px; }
+@media (max-height: 520px) { .kiat { top: 8px; padding: 10px 14px; gap: 6px; } .kiat h3 { font-size: 1.2rem; } .kiat p { font-size: 0.8rem; } }

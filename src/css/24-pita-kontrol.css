@@ -1,0 +1,5 @@
+/* Pita panduan kontrol di bawah layar */
+.pk-strip { position: absolute; left: 50%; bottom: calc(118px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); display: flex; gap: 12px; align-items: center; padding: 7px 14px; border-radius: 12px; background: var(--panel); border: 1px solid var(--gold); font-weight: 800; font-size: 0.85rem; z-index: 5; pointer-events: none; white-space: nowrap; }
+.pk-strip kbd { display: inline-grid; place-items: center; min-width: 24px; height: 24px; padding: 0 5px; border-radius: 6px; background: #f5efe2; color: #2b2238; border-bottom: 3px solid #b9a98a; font: 800 0.85rem/1 var(--font-display, sans-serif); margin-right: 4px; }
+.pk-strip span.sudah { opacity: 0.45; text-decoration: line-through; } .pk-strip span.sudah::after { content: " ✓"; color: #8ff0a8; }
+@media (max-height: 560px) { .pk-isi kbd { min-width: 38px; height: 38px; font-size: 0.95rem; } .pk-panah { grid-template-columns: repeat(3, 38px); grid-template-rows: 38px 38px auto; } .pk-daftar div { font-size: 0.8rem; } }

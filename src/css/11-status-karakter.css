@@ -1,0 +1,15 @@
+/* pintasan Status / Jurus / Jimat di HUD + halaman status (js/66-status-karakter.js) */
+.hud .icon-btn.pintas { position: relative; display: grid; place-items: center; padding: 0; line-height: 0; color: var(--ink); }
+.hud .icon-btn.pintas svg { width: 62%; height: 62%; display: block; }
+.pintas-poin { position: absolute; top: -6px; right: -6px; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 8px; background: var(--gold); color: #1b1208; font: 900 0.62rem/16px var(--font-display, sans-serif); text-align: center; }
+.st-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+.st-box { padding: 8px 10px; border-radius: 10px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--line); display: grid; gap: 2px; }
+.st-box small { color: var(--ink-dim); font-size: 0.7rem; font-weight: 700; }
+.st-box b { font-size: 1.05rem; font-variant-numeric: tabular-nums; }
+.st-box em { font-style: normal; font-size: 0.68rem; color: #8ff0a8; }
+.st-bar { height: 6px; border-radius: 3px; background: rgba(255, 255, 255, 0.1); overflow: hidden; }
+.st-bar i { display: block; height: 100%; background: var(--gold); }
+.st-list { margin: 0; padding-left: 18px; font-size: 0.82rem; line-height: 1.5; }
+
+/* koleksi jimat (js/67-koleksi-jimat.js): jimat yang belum didapat tampil redup */
+.jm-card.kk-belum { opacity: 0.55; filter: grayscale(0.6); border-style: dashed; }

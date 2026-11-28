@@ -1,0 +1,12 @@
+/* kotak pesan & kode hadiah (js/99r, 99s) */
+.kt-kosong { color: var(--ink-dim); }
+.kt-semua { justify-self: end; }
+.kt-pesan { display: grid; gap: 4px; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line); background: rgba(255,255,255,0.04); }
+.kt-pesan.baru { border-color: var(--gold); } .kt-pesan.klaim { opacity: 0.7; }
+.kt-kepala { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; flex-wrap: wrap; } .kt-kepala small { color: var(--ink-dim); font-size: 0.7rem; }
+.kt-hadiah { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 0.8rem; font-weight: 800; color: var(--gold); }
+.kt-hadiah em { color: #8ff0a8; font-style: normal; }
+.kt-kode { display: grid; grid-template-columns: auto 1fr auto; gap: 6px 10px; align-items: center; width: 100%; }
+.kt-kode input { min-width: 0; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--line); background: rgba(5,3,12,0.6); color: var(--ink); font: 800 0.85rem ui-monospace, monospace; text-transform: uppercase; }
+.kt-kode-pesan { grid-column: 1 / -1; font-size: 0.72rem; font-weight: 700; color: var(--ink-dim); }
+.kt-kode-pesan.bagus { color: #8ff0a8; } .kt-kode-pesan.gagal { color: #ff8080; }

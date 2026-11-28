@@ -1,0 +1,17 @@
+/* layar transisi antar area */
+.overlay.bye { z-index: 30; background: #07050c; }
+.fade { position: absolute; inset: 0; z-index: 20; display: grid; place-items: center; background: #07050c; opacity: 0; pointer-events: none; transition: opacity 0.45s ease; }
+.fade.on { opacity: 1; pointer-events: auto; }
+.fade-card { display: grid; gap: 4px; text-align: center; transform: translateY(8px); transition: transform 0.6s ease; }
+.fade.on .fade-card { transform: none; }
+.fade-card small { font-size: 0.75rem; font-weight: 800; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-dim); }
+.fade-card b { font-family: var(--font-display); font-size: 3rem; font-weight: 700; line-height: 0.9; color: var(--gold); }
+.fade-card span { font-size: 0.9rem; color: var(--ink-dim); }
+.chips { display: flex; gap: 6px; align-items: center; }
+.chip { display: flex; align-items: center; gap: 5px; height: 32px; padding: 0 9px; border-radius: 9px; background: var(--panel); border: 1px solid var(--line); font-weight: 800; font-size: 0.85rem; font-variant-numeric: tabular-nums; }
+.coin { width: 14px; height: 14px; border-radius: 50%; background: var(--gold); box-shadow: inset -2px -2px 0 rgba(0, 0, 0, 0.25); }
+.jamu { width: 11px; height: 15px; border-radius: 3px 3px 4px 4px; background: #c0563a; box-shadow: inset 0 3px 0 #e9d3a9; }
+.icon-btn { pointer-events: auto; width: 44px; height: 44px; border-radius: 12px; cursor: pointer; background: var(--panel); border: 1px solid var(--line); font-weight: 800; font-size: 1.05rem; }
+.hud .icon-btn { width: 32px; height: 32px; border-radius: 9px; font-size: 0.8rem; }
+#mini { width: 132px; height: 90px; border-radius: 8px; border: 1px solid var(--line); background: #000; image-rendering: pixelated; pointer-events: auto; cursor: zoom-in; }
+#mini:hover { border-color: var(--gold); }

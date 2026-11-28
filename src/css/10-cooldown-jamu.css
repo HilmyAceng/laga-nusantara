@@ -1,0 +1,27 @@
+/* ---------- Cooldown jurus & hindar (keyboard/PC) ---------- */
+.skills { position: absolute; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); display: flex; gap: 10px; pointer-events: none; }
+.slot {
+  position: relative; width: 64px; height: 64px; border-radius: 14px; overflow: hidden;
+  display: grid; place-items: center; align-content: center; gap: 2px;
+  background: rgba(20, 14, 34, 0.72); border: 2px solid rgba(255, 255, 255, 0.22);
+  transition: border-color 0.15s;
+}
+.slot.skill { background: rgba(61, 139, 253, 0.45); }
+.slot.kosong { opacity: 0.4; }
+.slot.ult { background: rgba(244, 185, 66, 0.25); }
+.slot.ult.ready { background: rgba(244, 185, 66, 0.7); color: #1b1208; box-shadow: 0 0 14px rgba(244, 185, 66, 0.7); }
+.slot.ult .sec { font-size: 1.1rem; }
+.slot.ready { border-color: var(--gold); }
+.slot::after { content: ""; position: absolute; inset: 0; background: conic-gradient(rgba(5, 3, 12, 0.72) calc(var(--cd, 0) * 360deg), transparent 0); }
+.slot > * { position: relative; z-index: 1; }
+.slot kbd { font: 800 0.7rem/1 inherit; padding: 2px 6px; border-radius: 5px; background: rgba(255, 255, 255, 0.16); border: 1px solid var(--line); }
+.slot small { font-size: 0.62rem; font-weight: 800; max-width: 58px; text-align: center; line-height: 1.05; }
+.slot .sec { position: absolute; inset: 0; z-index: 2; display: grid; place-items: center; font-family: var(--font-display); font-size: 1.6rem; font-weight: 700; text-shadow: 0 2px 4px #000; }
+.slot.ready .sec { display: none; }
+.slot.pop { animation: pop 0.25s ease-out; }
+
+/* jamu: slot desktop bisa diklik; tombol HP punya lencana jumlah / hitung mundur (js/65-jamu-jeda.js) */
+.slot.jamu { pointer-events: auto; cursor: pointer; background: rgba(90, 209, 122, 0.28); }
+.slot.jamu.habis { opacity: 0.45; }
+#bPot span { transform: translateY(-6px); }
+#bPot::before { content: attr(data-jamu); position: absolute; z-index: 3; left: 50%; bottom: 5px; transform: translateX(-50%); min-width: 22px; padding: 1px 4px; border-radius: 8px; background: rgba(5, 3, 12, 0.75); border: 1px solid #5ad17a; font: 900 0.68rem/1 var(--font-display, sans-serif); color: #8ff0a8; text-align: center; }

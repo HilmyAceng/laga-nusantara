@@ -1,0 +1,47 @@
+/* Panduan debuff */
+/* ---------- Jurus, jimat, cara bermain (js/51, 52, 56) ---------- */
+.gp-list { display: grid; gap: 10px; text-align: left; max-height: 58vh; overflow-y: auto; padding-right: 4px; }
+.gp-list h3 { margin: 6px 0 0; font-family: var(--font-display); font-size: 1.35rem; font-weight: 600; color: var(--gold); }
+.jr-top { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; font-weight: 800; font-size: 0.9rem; }
+.jr-top b { color: var(--gold); font-size: 1.1rem; }
+.jr-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; }
+.jr-card, .jm-card { display: grid; gap: 4px; align-content: start; padding: 10px 12px; border-radius: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--line); }
+.jr-card.kunci { opacity: 0.55; }
+.jr-card.pam { border-color: rgba(244, 185, 66, 0.5); }
+.jr-head, .jm-head { display: flex; gap: 8px; align-items: center; justify-content: space-between; }
+.jr-head b, .jm-head b { font-size: 0.98rem; }
+.jr-card p, .jm-card p { margin: 0; font-size: 0.8rem; line-height: 1.35; }
+.jr-card small, .jm-card small { color: var(--ink-dim); font-size: 0.72rem; }
+.jr-lv { font-size: 0.72rem; font-weight: 800; color: var(--ink-dim); }
+.jr-naik { color: var(--ink-dim); opacity: 0.7; }
+.jr-naik.on { color: #7dffa8; opacity: 1; }
+.jr-aksi { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.gp-list button { padding: 6px 10px; border-radius: 9px; border: 1px solid var(--line); background: rgba(255, 255, 255, 0.08); color: var(--ink); font: inherit; font-size: 0.78rem; font-weight: 800; cursor: pointer; }
+.gp-list button:disabled { opacity: 0.4; cursor: default; }
+.gp-list button[aria-pressed="true"], .gp-list button[aria-selected="true"] { background: var(--gold); color: #1b1208; border-color: var(--gold); }
+.pips { display: inline-flex; gap: 3px; }
+.pips i { width: 7px; height: 7px; border-radius: 50%; background: rgba(255, 255, 255, 0.15); }
+.pips i.on { background: var(--gold); }
+.jr-pasifs { display: grid; gap: 6px; }
+.jr-pasif { display: grid; grid-template-columns: 1fr auto auto; gap: 10px; align-items: center; padding: 8px 10px; border-radius: 10px; background: rgba(255, 255, 255, 0.05); }
+.jr-pasif b { display: block; font-size: 0.9rem; }
+.jr-pasif small { font-size: 0.72rem; color: var(--ink-dim); }
+.jm-card { border-color: var(--rc); box-shadow: inset 3px 0 0 var(--rc); }
+.jm-rar { font-size: 0.68rem; font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase; color: var(--rc); }
+.bintang { color: var(--gold); letter-spacing: 2px; font-size: 0.85rem; }
+.jm-slots { display: flex; flex-wrap: wrap; gap: 6px; }
+.jm-slot { padding: 5px 10px; border-radius: 999px; font-size: 0.78rem; font-weight: 800; border: 1px solid var(--rc, var(--line)); color: var(--rc, var(--ink)); }
+.jm-slot.kosong { color: var(--ink-dim); border-style: dashed; }
+.jm-info { margin: 0; font-size: 0.78rem; color: var(--ink-dim); }
+.gp-list .tabs { justify-self: start; }
+.cara { padding: 8px 12px; border-radius: 10px; background: rgba(255, 255, 255, 0.05); }
+.cara h3 { margin: 0 0 4px; font-size: 1.2rem; }
+.cara p { margin: 0; font-size: 0.84rem; line-height: 1.45; }
+.cara kbd { font: 800 0.72rem/1 inherit; padding: 2px 5px; border-radius: 5px; background: rgba(255, 255, 255, 0.16); border: 1px solid var(--line); }
+.db-list { display: grid; gap: 8px; text-align: left; max-height: 52vh; overflow-y: auto; }
+.db-item { display: flex; gap: 10px; align-items: flex-start; padding: 8px 10px; border-radius: 10px; background: rgba(255, 255, 255, 0.05); }
+.db-ikon { flex: none; width: 16px; height: 16px; border-radius: 50%; margin-top: 3px; }
+.db-item b { font-size: 0.95rem; }
+.db-item p { margin: 2px 0; font-size: 0.82rem; line-height: 1.3; }
+.db-item small { font-size: 0.72rem; color: var(--ink-dim); }
+.db-obat { margin: 4px 0 0; font-size: 0.8rem; color: #7dffa8; }

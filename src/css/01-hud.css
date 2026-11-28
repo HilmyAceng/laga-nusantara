@@ -1,0 +1,17 @@
+/* ---------- HUD ---------- */
+.hud {
+  position: absolute; top: 0; left: 0; right: 0; pointer-events: none;
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;
+  padding-block: 10px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.me { display: grid; gap: 4px; width: min(275px, 42vw); padding: 8px 12px; border-radius: 12px; pointer-events: auto; cursor: pointer; background: var(--panel); border: 1px solid var(--line); }
+.bar { position: relative; height: 16px; border-radius: 6px; background: rgba(255, 255, 255, 0.1); overflow: hidden; }
+.bar i { position: absolute; inset: 0 auto 0 0; width: 100%; background: var(--hp); transition: width 0.12s linear; }
+.bar span { position: relative; display: block; font-size: 0.76rem; font-weight: 800; line-height: 16px; text-align: center; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8); font-variant-numeric: tabular-nums; }
+.quest { font-size: 0.88rem; line-height: 1.28; color: var(--ink-dim); }
+.me:hover { border-color: var(--gold); }
+.quest b { color: var(--gold); display: block; font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.right { display: grid; justify-items: end; gap: 6px; }
+.area-name { font-family: var(--font-display); font-size: 0.95rem; line-height: 1; padding: 4px 10px 1px; border-radius: 8px; background: var(--panel); color: var(--gold); }

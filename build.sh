@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 # Gabungkan src/game.html menjadi public/index.html (PWA), salin src/config.js dan folder src/js/
 # ke public/, lalu perbarui daftar file offline di public/sw.js.
+# CSS ditulis terpisah per fitur di src/css/ (urut sesuai nomor), lalu digabung jadi satu <style>
+# di tempat penanda "<!-- CSS: ..." di game.html. Jadi halaman tetap tampil seketika (tanpa
+# menunggu file CSS terpisah) dan daftar offline sw.js tidak perlu berubah.
 set -euo pipefail
 cd "$(dirname "$0")"
 # Nomor build unik (waktu build). Dipakai untuk: nama cache service worker, versi.json,
@@ -35,7 +38,15 @@ BUILD_ID="$(date +%Y%m%d%H%M%S)"
   echo '<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);box-sizing:border-box;height:100%}[hidden]{display:none!important}</style>'
   echo "<script>window.LAGA_BUILD=\"$BUILD_ID\";</script>"
   echo '</head><body>'
-  cat src/game.html
+  while IFS= read -r baris; do
+    if [[ "$baris" == "<!-- CSS:"* ]]; then
+      echo '<style>'
+      for f in src/css/*.css; do cat "$f"; done
+      echo '</style>'
+    else
+      printf '%s\n' "$baris"
+    fi
+  done < src/game.html
   echo '<script>if("serviceWorker" in navigator){addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}</script>'
   echo '</body></html>'
 } > public/index.html

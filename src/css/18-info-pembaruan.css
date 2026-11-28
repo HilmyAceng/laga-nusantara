@@ -1,0 +1,8 @@
+/* Info & catatan pembaruan */
+#infoBox .ev-panel { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; height: min(620px, calc(100dvh - 40px)); box-sizing: border-box; }
+#infoBox .ev-isi { min-height: 0; } #infoBox .ev-daftar { overflow-y: auto; min-height: 0; } #infoBox .ev-detail { max-height: none; height: 100%; min-height: 0; overflow-y: auto; }
+.info-detail h3 { color: var(--gold); font-size: 1.2rem; } .info-detail h4 { margin-top: 6px !important; font-size: 0.9rem; }
+.info-detail ul { margin: 0; padding-left: 18px; display: grid; gap: 3px; font-size: 0.84rem; line-height: 1.4; }
+.info-tgl { color: var(--ink-dim); font-size: 0.78rem; }
+.info-label { display: inline-block; padding: 1px 7px; border-radius: 6px; font-size: 0.68rem; font-weight: 900; letter-spacing: 0.04em; text-transform: uppercase; }
+.info-label.baru { background: rgba(90, 209, 122, 0.2); color: #8ff0a8; } .info-label.ubah { background: rgba(143, 211, 255, 0.18); color: #8fd3ff; } .info-label.baik { background: rgba(244, 185, 66, 0.18); color: var(--gold); }

@@ -1,0 +1,4 @@
+/* tombol bagikan momen (js/99o-bagikan.js) */
+#btnBagikanMomen { position: fixed; right: max(16px, env(safe-area-inset-right)); bottom: 42%; z-index: 30; padding: 10px 16px; border-radius: 999px; border: 2px solid #f4b942; background: rgba(20, 13, 36, 0.92); color: #f7efe3; font: 800 0.9rem Nunito, sans-serif; cursor: pointer; box-shadow: 0 6px 18px rgba(0,0,0,0.45); }
+#btnBagikanMomen.muncul { animation: bagiMuncul 0.5s cubic-bezier(.2,1.6,.4,1); }
+@keyframes bagiMuncul { 0% { transform: translateX(140%); } 100% { transform: none; } }

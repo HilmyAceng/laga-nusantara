@@ -1,0 +1,9 @@
+/* pohon jurus (js/99zb-pohon-jurus.js) */
+.jalan-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; margin: 10px 0; }
+.jalan-kartu { display: grid; gap: 6px; align-content: start; padding: 12px; border-radius: 14px; border: 1px solid var(--line); background: rgba(255,255,255,0.04); text-align: left; }
+.jalan-kartu.aktif { border-color: var(--gold); background: rgba(244,185,66,0.1); }
+.jalan-kartu h3 { margin: 0; color: var(--gold); font-size: 1.05rem; } .jalan-kartu p { margin: 0; font-size: 0.8rem; color: var(--ink-dim); }
+.jalan-kartu ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.jalan-kartu li { display: grid; grid-template-columns: 48px 1fr auto; gap: 6px; align-items: center; padding: 5px 8px; border-radius: 8px; background: rgba(255,255,255,0.05); font-size: 0.75rem; }
+.jalan-kartu li b { color: var(--gold); } .jalan-kartu li.kunci { opacity: 0.5; } .jalan-kartu li.aktif { background: rgba(90,209,122,0.15); }
+.jalan-status { color: #8ff0a8; font-weight: 800; font-size: 0.8rem; }

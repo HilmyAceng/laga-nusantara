@@ -1,0 +1,12 @@
+/* harian (js/99t-harian.js) */
+.hr-judul { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin: 6px 0 0 !important; color: var(--gold); font-size: 1rem; } .hr-judul small { color: var(--ink-dim); font-size: 0.7rem; font-weight: 700; }
+.hr-absen { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+.hr-hari { position: relative; display: grid; gap: 2px; justify-items: center; padding: 6px 2px; border-radius: 10px; border: 1px solid var(--line); background: rgba(255,255,255,0.04); font-size: 0.75rem; }
+.hr-hari small { font-size: 0.6rem; color: var(--ink-dim); } .hr-hari.besar { border-color: rgba(244,185,66,0.6); }
+.hr-hari.kini { border-color: var(--gold); background: rgba(244,185,66,0.2); animation: evDenyut 1.2s ease-in-out infinite; }
+.hr-hari.ambil { opacity: 0.55; } .hr-hari em { position: absolute; top: 2px; right: 4px; color: #8ff0a8; font-style: normal; font-weight: 900; }
+.hr-ket { margin: 0; font-size: 0.78rem !important; color: var(--ink-dim); } .hr-ket.kecil { font-size: 0.7rem !important; }
+.hr-tugas { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; padding: 8px 10px; border-radius: 12px; border: 1px solid var(--line); background: rgba(255,255,255,0.04); }
+.hr-tugas b { font-size: 0.85rem; } .hr-tugas small { display: block; color: var(--ink-dim); font-size: 0.7rem; } .hr-tugas em { color: #8ff0a8; font-style: normal; font-weight: 900; }
+.hr-tugas.siap { border-color: #5ad17a; } .hr-tugas.klaim { opacity: 0.6; }
+.hr-tugas .cp-prog { margin: 4px 0 2px; }
