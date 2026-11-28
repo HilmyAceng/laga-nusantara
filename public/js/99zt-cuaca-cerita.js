@@ -134,12 +134,15 @@ GAMBAR_ATAS.push(function (time) {
   } else { cuacaTampil = target; kuatCuaca = Math.min(1, kuatCuaca + dt / 2); }
   const e = cuacaTampil, c = e && e.cuaca;
   if (!c || kuatCuaca <= 0) { petirCuaca = null; kilatCuaca = 0; return; }
-  const ax = cam.x - W / 2, ay = cam.y - H / 2, kuat = kuatCuaca;
+  // layar yang benar-benar terlihat (kamera yang sudah dibatasi tepi peta & zoom), + sedikit lebihan untuk guncangan
+  const kk = kameraTerakhir || { cx: cam.x, cy: cam.y, scale: 1 }, lw = W / kk.scale + 40, lh = H / kk.scale + 40;
+  const ax = kk.cx - lw / 2, ay = kk.cy - lh / 2, kuat = kuatCuaca;
   ctx.save(); ctx.globalAlpha = kuat;
-  gambarCuaca(e, c, time, dt, ax, ay, kuat);
+  gambarCuaca(e, c, time, dt, ax, ay, kuat, lw, lh);
   ctx.restore();
 });
-function gambarCuaca(e, c, time, dt, ax, ay, kuat) {
+// W, H di sini = lebar & tinggi layar dalam satuan dunia (bukan W/H piksel global)
+function gambarCuaca(e, c, time, dt, ax, ay, kuat, W, H) {
   if (c === "hujan" || c === "gerimis" || c === "hujanPetir" || c === "badai") {
     const deras = c !== "gerimis", badai = c === "badai", petir = c === "hujanPetir" || badai;
     const n = badai ? 230 : petir ? 190 : deras ? 160 : 55;

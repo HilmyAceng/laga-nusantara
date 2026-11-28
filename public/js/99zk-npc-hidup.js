@@ -92,7 +92,8 @@ GAMBAR_ATAS.push(function () {
   const f = faseHari();
   if (f !== "sore" && f !== "malam") return;
   ctx.fillStyle = f === "malam" ? "rgba(20,24,70,0.22)" : "rgba(255,140,60,0.08)";
-  ctx.fillRect(cam.x - W, cam.y - H, W * 2, H * 2);
+  const kk = kameraTerakhir || { cx: cam.x, cy: cam.y, scale: 1 }, lw = W / kk.scale + 40, lh = H / kk.scale + 40;   // layar terlihat (kamera dibatasi tepi peta)
+  ctx.fillRect(kk.cx - lw / 2, kk.cy - lh / 2, lw, lh);
 });
 
 // ---------- Berjalan sesuai jadwal & menoleh ke pemain ----------

@@ -3,27 +3,46 @@
 // Progres hanya tersimpan di browser (localStorage). Supaya tidak hilang & bisa
 // pindah perangkat, pemain bisa menyalin "kode save" lalu menempelkannya lagi.
 //  - Buka dari layar judul (tombol "Kode Save") atau Menu › Pengaturan › Kode Save.
-//  - Kode = "LN1." + base64(JSON save) + "." + checksum pendek.
+//  - Kode = "LN2." + base64url(deflate(JSON save)) + "." + checksum pendek (lihat di bawah).
 //  - Memuat kode menimpa save di perangkat ini, lalu halaman dimuat ulang.
 // =====================================================================
 "use strict";
 
-const AWALAN_KODE = "LN1.";
+// Format kode:
+//  - "LN2." + base64url(deflate(JSON save)) + "." + checksum  ← dipakai sekarang (3–5× lebih pendek)
+//  - "LN1." + base64(JSON save) + "." + checksum             ← format lama, tetap bisa dimuat
+// Kode tetap memuat SELURUH progres; tanpa server isinya tidak bisa dipadatkan jauh lebih pendek lagi.
+const AWALAN_KODE = "LN1.", AWALAN_KODE2 = "LN2.";
 const cekSum = (s) => { let h = 7; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0; return h.toString(36); };
-function buatKodeSave() {
+const bisaKompres = typeof CompressionStream === "function" && typeof DecompressionStream === "function";
+// byte ↔ base64url (tanpa + / =, aman disalin lewat chat)
+const keB64url = (u8) => { let t = ""; for (let i = 0; i < u8.length; i += 0x8000) t += String.fromCharCode(...u8.subarray(i, i + 0x8000)); return btoa(t).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, ""); };
+const dariB64url = (s) => Uint8Array.from(atob(s.replace(/-/g, "+").replace(/_/g, "/")), (c) => c.charCodeAt(0));
+async function aliranBytes(bytes, stream) { return new Uint8Array(await new Response(new Blob([bytes]).stream().pipeThrough(stream)).arrayBuffer()); }
+
+async function buatKodeSave() {
   if (S && mode !== "select") save();            // simpan dulu supaya kodenya paling baru
   const data = store.get(SAVE_KEY, null);
   if (!data) return "";
-  const isi = btoa(unescape(encodeURIComponent(JSON.stringify(data))));
+  const json = JSON.stringify(data);
+  if (bisaKompres) {
+    const isi = keB64url(await aliranBytes(new TextEncoder().encode(json), new CompressionStream("deflate-raw")));
+    return AWALAN_KODE2 + isi + "." + cekSum(isi);
+  }
+  const isi = btoa(unescape(encodeURIComponent(json)));
   return AWALAN_KODE + isi + "." + cekSum(isi);
 }
-function bacaKodeSave(kode) {
+async function bacaKodeSave(kode) {
   kode = (kode || "").replace(/\s+/g, "");
-  if (!kode.startsWith(AWALAN_KODE)) return null;
-  const [isi, sum] = kode.slice(AWALAN_KODE.length).split(".");
+  const baru = kode.startsWith(AWALAN_KODE2);
+  if (!baru && !kode.startsWith(AWALAN_KODE)) return null;
+  const [isi, sum] = kode.slice(4).split(".");
   if (!isi || cekSum(isi) !== sum) return null;
   try {
-    const data = JSON.parse(decodeURIComponent(escape(atob(isi))));
+    const json = baru
+      ? new TextDecoder().decode(await aliranBytes(dariB64url(isi), new DecompressionStream("deflate-raw")))
+      : decodeURIComponent(escape(atob(isi)));
+    const data = JSON.parse(json);
     return data && CLASSES[data.cls] && typeof data.lv === "number" ? data : null;
   } catch (e) { return null; }
 }
@@ -38,9 +57,9 @@ let kodeBaruDimuat = false;
 }
 
 let kodeDariJeda = false;
-function bukaKodeSave() {
+async function bukaKodeSave() {
   kodeDariJeda = mode === "pause";
-  const kode = buatKodeSave();
+  const kode = await buatKodeSave();
   $("kodeEkspor").value = kode;
   $("kodeEkspor").placeholder = t("kode.kosong");
   $("btnKodeSalin").disabled = $("btnKodeUnduh").disabled = !kode;
@@ -62,8 +81,8 @@ $("btnKodeUnduh").addEventListener("click", () => {
   setTimeout(() => URL.revokeObjectURL(a.href), 1000);
   pesanKode(t("kode.terunduh"), true);
 });
-$("btnKodeMuat").addEventListener("click", () => {
-  const data = bacaKodeSave($("kodeImpor").value);
+$("btnKodeMuat").addEventListener("click", async () => {
+  const data = await bacaKodeSave($("kodeImpor").value);
   if (!data) return pesanKode(t("kode.salah"), false);
   if (!confirm(t("kode.yakin", { kelas: CLASSES[data.cls].name, lv: data.lv }))) return;
   kodeBaruDimuat = true;
