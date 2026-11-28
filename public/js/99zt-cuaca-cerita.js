@@ -13,8 +13,9 @@
 //      "badai"      hujan miring diterpa angin kencang, daun beterbangan, petir sering
 //      "salju"      butiran salju pelan
 //      "badaiSalju" butiran salju kencang & kabut putih
-//  - Di luar daftar: area bersalju (area.salju / bagian atas area.saljuMulai) tetap
-//    turun salju pelan; gua (area.gelap) tidak pernah kehujanan/kesaljuan.
+//  - Di luar daftar: cuaca acak dari 99zu-cuaca-acak.js (berganti tiap beberapa menit);
+//    gua (area.gelap) tidak pernah kehujanan/kesaljuan.
+//  - Pergantian cuaca memudar halus (keluar ±1,5 dtk, masuk ±2 dtk); saat pindah area langsung.
 //  - Suara hujan/angin dibuat dari desis WebAudio (ikut volume efek suara). Suaranya diatur
 //    pengatur waktu sendiri (bukan saat menggambar), jadi tetap terdengar saat jeda, peta,
 //    menu, dialog, atau cutscene; baru hilang kalau cuacanya memang reda (atau pindah ke gua).
@@ -60,8 +61,8 @@ function entriCuacaKini() {
     const c = CUACA_CERITA[n], r = rentangCuaca[n];
     if (c.area.includes(areaId) && r[0] >= 0 && idx >= r[0] && idx <= r[1]) return c;
   }
-  if (area.salju || (area.saljuMulai != null && P.y / T < area.saljuMulai)) return { cuaca: "salju" };
-  return null;
+  const acak = typeof cuacaAcak === "function" ? cuacaAcak() : null;
+  return acak ? { cuaca: acak, acak: true } : null;
 }
 function cuacaKini() { const c = entriCuacaKini(); return c ? c.cuaca : null; }
 
@@ -101,6 +102,8 @@ setInterval(() => { try { if (actx) aturSuaraCuaca(cuacaKini(), performance.now(
 
 // ---------- Gambar ----------
 let kilatCuaca = 0, kilatCuacaNanti = 6, waktuCuaca = 0, petirCuaca = null;
+// Yang sedang tampil di layar (bisa beda dengan target saat memudar) & kekuatannya 0..1
+let cuacaTampil = null, kuatCuaca = 0, areaCuaca = null;
 function warnaKilat(hex, a) {
   const n = parseInt((hex || "#e6f0ff").slice(1), 16);
   return `rgba(${n >> 16},${(n >> 8) & 255},${n & 255},${a})`;
@@ -122,10 +125,21 @@ function buatPetir() {
 function garisPetir(ax, ay, pts) { ctx.beginPath(); pts.forEach((p, i) => (i ? ctx.lineTo : ctx.moveTo).call(ctx, ax + p[0], ay + p[1])); ctx.stroke(); }
 
 GAMBAR_ATAS.push(function (time) {
-  const e = entriCuacaKini(), c = e && e.cuaca, dt = Math.min(0.1, Math.max(0, time - waktuCuaca)); waktuCuaca = time;
-  if (!c) { petirCuaca = null; kilatCuaca = 0; return; }
-  const ax = cam.x - W / 2, ay = cam.y - H / 2;
-
+  const target = entriCuacaKini(), dt = Math.min(0.1, Math.max(0, time - waktuCuaca)); waktuCuaca = time;
+  // memudar: cuaca lama surut dulu sampai habis, baru cuaca baru tumbuh
+  if (areaCuaca !== areaId) { areaCuaca = areaId; cuacaTampil = target; kuatCuaca = 1; }
+  else if ((cuacaTampil && cuacaTampil.cuaca) !== (target && target.cuaca)) {
+    kuatCuaca -= dt / 1.5;
+    if (kuatCuaca <= 0 || !cuacaTampil) { cuacaTampil = target; kuatCuaca = 0; }
+  } else { cuacaTampil = target; kuatCuaca = Math.min(1, kuatCuaca + dt / 2); }
+  const e = cuacaTampil, c = e && e.cuaca;
+  if (!c || kuatCuaca <= 0) { petirCuaca = null; kilatCuaca = 0; return; }
+  const ax = cam.x - W / 2, ay = cam.y - H / 2, kuat = kuatCuaca;
+  ctx.save(); ctx.globalAlpha = kuat;
+  gambarCuaca(e, c, time, dt, ax, ay, kuat);
+  ctx.restore();
+});
+function gambarCuaca(e, c, time, dt, ax, ay, kuat) {
   if (c === "hujan" || c === "gerimis" || c === "hujanPetir" || c === "badai") {
     const deras = c !== "gerimis", badai = c === "badai", petir = c === "hujanPetir" || badai;
     const n = badai ? 230 : petir ? 190 : deras ? 160 : 55;
@@ -144,9 +158,9 @@ GAMBAR_ATAS.push(function (time) {
     ctx.strokeStyle = "rgba(210,230,255,0.45)"; ctx.lineWidth = 1;
     for (let i = 0; i < (deras ? 26 : 8); i++) {
       const fase = (time * 2.2 + i * 0.37) % 1, sx = (i * 131.7 + Math.floor(time * 2.2 + i * 0.37) * 211) % W, sy = (i * 89.3 + Math.floor(time * 2.2 + i * 0.37) * 157) % H;
-      ctx.beginPath(); ctx.ellipse(ax + sx, ay + sy, 2 + fase * 7, 1 + fase * 2.5, 0, 0, 6.28); ctx.globalAlpha = 1 - fase; ctx.stroke();
+      ctx.beginPath(); ctx.ellipse(ax + sx, ay + sy, 2 + fase * 7, 1 + fase * 2.5, 0, 0, 6.28); ctx.globalAlpha = kuat * (1 - fase); ctx.stroke();
     }
-    ctx.globalAlpha = 1;
+    ctx.globalAlpha = kuat;
     // badai: daun & ranting beterbangan, garis angin
     if (badai) {
       for (let i = 0; i < 14; i++) {
@@ -162,7 +176,7 @@ GAMBAR_ATAS.push(function (time) {
       ctx.stroke();
     }
     // kilat: hujan deras = cahaya lembut sesekali; hujan petir & badai = sambaran + gelegar
-    if (deras) {
+    if (deras && kuat > 0.7) {
       kilatCuacaNanti -= dt;
       if (kilatCuacaNanti <= 0) {
         kilatCuaca = 1;
@@ -195,4 +209,4 @@ GAMBAR_ATAS.push(function (time) {
     ctx.fillRect(ax + sx + goyang, ay + sy, r, r);
   }
   if (badai) { ctx.fillStyle = "rgba(225,235,250,0.2)"; ctx.fillRect(ax, ay, W, H); }
-});
+}
