@@ -111,8 +111,8 @@ Object.assign(AREAS, {
     ],
     bos: { x: 30, y: 6.5, monster: "kudaSembrani" },   // Bukit Sembrani di utara
     objek: [
-      { kind: "lantai", id: "rahasiaSabana", x: 6, y: 38, n: 5 },
-      { kind: "pilarLantai", id: "rahasiaSabana", x: 8.5, y: 36.6 },
+      { kind: "lantai", id: "rahasiaSabana", x: 5, y: 37, n: 5 },   // 5×5 berjarak: petak x5-13, y37-45
+      { kind: "pilarLantai", id: "rahasiaSabana", x: 4.5, y: 36.6 },
     ],
     build(r) {
       for (let y = 0; y < MH; y++) for (let x = 0; x < MW; x++) {
@@ -130,10 +130,10 @@ Object.assign(AREAS, {
       fillRect(29, 12, 30, 20, PATH);
       fillRect(0, 8, 2, 10, PATH); fillRect(56, 24, MW - 1, 26, PATH);
       // petak puzzle opsional (pojok barat daya, tersembunyi di balik semak)
-      fillRect(5, 36, 12, 44, RUMPUT_KERING);
-      for (let x = 4; x <= 13; x++) { setT(x, 35, TREE); setT(x, 45, TREE); } for (let y = 35; y <= 45; y++) { setT(4, y, TREE); setT(13, y, TREE); }
-      setT(13, 40, RUMPUT_KERING); setT(13, 41, RUMPUT_KERING);
-      bersihkan([[2, 9], [57, 25], [30, 18], [30, 6], [8, 37], [33, 31]], RUMPUT_KERING);
+      fillRect(4, 36, 14, 45, RUMPUT_KERING);
+      for (let x = 3; x <= 15; x++) { setT(x, 35, TREE); setT(x, 46, TREE); } for (let y = 35; y <= 46; y++) { setT(3, y, TREE); setT(15, y, TREE); }
+      setT(15, 40, RUMPUT_KERING); setT(15, 41, RUMPUT_KERING); setT(16, 40, RUMPUT_KERING); setT(16, 41, RUMPUT_KERING);
+      bersihkan([[2, 9], [57, 25], [30, 18], [30, 6], [16, 40], [33, 31]], RUMPUT_KERING);
     },
   },
   kampungBatu: {
@@ -173,8 +173,8 @@ Object.assign(AREAS, {
       { kind: "arcaPutar", id: "tuguMatahari", i: 0, x: 20.5, y: 17.6 }, { kind: "arcaPutar", id: "tuguMatahari", i: 1, x: 25.5, y: 20.6 },
       { kind: "arcaPutar", id: "tuguMatahari", i: 2, x: 20.5, y: 23.6 }, { kind: "arcaPutar", id: "tuguMatahari", i: 3, x: 15.5, y: 20.6 },
       // lantai tugu 4×4 di balik pintu batu (terbuka setelah tugu matahari)
-      { kind: "lantai", id: "lantaiTugu", x: 23, y: 6, n: 4 },
-      { kind: "pilarLantai", id: "lantaiTugu", x: 21.5, y: 5.6 },
+      { kind: "lantai", id: "lantaiTugu", x: 22, y: 5, n: 4 },   // 4×4 berjarak: petak x22-28, y5-11
+      { kind: "pilarLantai", id: "lantaiTugu", x: 20.5, y: 4.6 },
       // tugu rahasia (opsional, sulit): 6 tugu di ceruk timur
       { kind: "prasastiTeka", id: "tuguRahasia", x: 41.5, y: 4.6 },
       { kind: "arcaPutar", id: "tuguRahasia", i: 0, x: 38.5, y: 7.6 }, { kind: "arcaPutar", id: "tuguRahasia", i: 1, x: 41.5, y: 7.6 }, { kind: "arcaPutar", id: "tuguRahasia", i: 2, x: 44.5, y: 7.6 },
@@ -191,9 +191,9 @@ Object.assign(AREAS, {
       // lingkaran tugu matahari
       for (let y = 16; y <= 25; y++) for (let x = 13; x <= 28; x++) if (tileAt(x, y) === ROCK) setT(x, y, RUMPUT_KERING);
       setT(20, 20, ROCK);   // batu tengah
-      // tembok batu di utara: ruang lantai (x 21-28, y 4-11), pintunya dibuka tugu matahari
-      fillRect(20, 3, 29, 12, WALL); fillRect(21, 4, 28, 11, STONE);
-      if (tekaBeres("tuguMatahari")) fillRect(24, 12, 26, 12, STONE);
+      // tembok batu di utara: ruang lantai (x 20-30, y 4-12), pintunya dibuka tugu matahari
+      fillRect(19, 3, 31, 13, WALL); fillRect(20, 4, 30, 12, STONE);
+      if (tekaBeres("tuguMatahari")) fillRect(24, 13, 26, 13, STONE);
       fillRect(24, 0, 26, 3, tekaBeres("lantaiTugu") ? PATH : WALL);
       // ceruk tugu rahasia (timur laut), masuk lewat celah sempit
       fillRect(36, 3, 47, 13, ROCK); fillRect(37, 4, 46, 12, RUMPUT_KERING); fillRect(41, 13, 41, 18, RUMPUT_KERING);

@@ -1,6 +1,6 @@
 // =====================================================================
 // GAMBAR DUNIA BARU (arc 2): petak salju/es/rumput kering, warna tanah sabana/rimba/salju,
-// pohon akasia/rimba/cemara bersalju, rumah panjang & rumah bersalju, badai salju,
+// pohon akasia/rimba/cemara bersalju, rumah panjang & rumah bersalju,
 // beringin raksasa & kelir es, serta gambar semua monster & bos arc 2.
 // Monster digambar menghadap ke kanan (dibalik otomatis oleh drawMonster, 16-gambar.js).
 // =====================================================================
@@ -160,18 +160,7 @@ function gambarTuguAgung(time) {
   ctx.fillStyle = `rgba(255,220,140,${k})`; for (let i = 0; i < 5; i++) ctx.fillRect(x - 12, y - 40 - i * 40, 24, 3);
 }
 
-// ---------- Badai salju (area.badai) & butiran salju ----------
-GAMBAR_ATAS.push(function (time) {
-  if (!area || !(area.badai || area.salju) || mode === "select") return;
-  const n = area.badai ? 70 : 30, ax = cam.x - W / 2, ay = cam.y - H / 2;
-  ctx.fillStyle = "rgba(255,255,255,0.85)";
-  for (let i = 0; i < n; i++) {
-    const sx = ((i * 97.13 + time * (area.badai ? 160 : 40) * (0.6 + (i % 5) * 0.15)) % (W + 40)) - 20;
-    const sy = ((i * 53.7 + time * (area.badai ? 90 : 55) * (0.7 + (i % 3) * 0.2)) % (H + 40)) - 20;
-    ctx.fillRect(ax + sx, ay + sy, area.badai ? 2.5 : 2, area.badai ? 2.5 : 2);
-  }
-  if (area.badai && (area.salju || P.y / T < area.saljuMulai)) { ctx.fillStyle = "rgba(225,235,250,0.16)"; ctx.fillRect(ax, ay, W, H); }
-});
+// Butiran salju & badai salju digambar oleh 99zt-cuaca-cerita.js (cuaca mengikuti cerita).
 
 // ---------- Monster ----------
 function gambarKaki4(warna, b, panjang = 10) {

@@ -1,6 +1,8 @@
 // =====================================================================
 // PUZZLE LANTAI NYALA: menginjak satu petak membalik nyala petak itu & 4 tetangganya.
-// Nyalakan semua petak. Objek `lantai` { id, x, y (pojok kiri atas), n (ukuran), gaya }.
+// Nyalakan semua petak. Objek `lantai` { id, x, y (pojok kiri atas), n (ukuran), gaya, jarak }.
+//  - Antar kotak ada celah 1 petak (jarak 2), supaya berjalan ke satu kotak tidak ikut
+//    menginjak kotak lain. Ukuran di peta = (n-1)*jarak + 1 petak; celahnya bisa dilewati.
 //  - Keadaan awal dibuat dari "semua menyala" lalu ditekan di TEKA_BARU[id].tekan,
 //    jadi selalu bisa dipecahkan (cukup tekan petak-petak yang sama).
 //  - `pilarLantai`: penjelasan + tombol ulang ke keadaan awal.
@@ -20,6 +22,7 @@ function balikLantai(g, n, x, y) {
   for (const [dx, dy] of [[0, 0], [1, 0], [-1, 0], [0, 1], [0, -1]]) { const nx = x + dx, ny = y + dy; if (nx >= 0 && ny >= 0 && nx < n && ny < n) g[ny * n + nx] = !g[ny * n + nx]; }
 }
 const objekLantai = () => (area.objek || []).filter((o) => o.kind === "lantai");
+const jarakLantai = (o) => o.jarak || 2;
 SAAT_MASUK_AREA.push(() => {
   lantaiNyala = {}; lantaiTerakhir = null;
   for (const o of objekLantai()) lantaiNyala[o.id] = tekaSelesai(o.id) ? new Array(o.n * o.n).fill(true) : keadaanAwalLantai(o.id, o.n);
@@ -29,8 +32,10 @@ UPDATE_TAMBAHAN.push(() => {
   const tx = Math.floor(P.x / T), ty = Math.floor(P.y / T);
   let kini = null;
   for (const o of objekLantai()) {
-    const lx = tx - o.x, ly = ty - o.y;
-    if (lx < 0 || ly < 0 || lx >= o.n || ly >= o.n) continue;
+    const j = jarakLantai(o), dx = tx - o.x, dy = ty - o.y;
+    if (dx < 0 || dy < 0 || dx % j || dy % j) continue;   // di celah: tidak menginjak apa-apa
+    const lx = dx / j, ly = dy / j;
+    if (lx >= o.n || ly >= o.n) continue;
     kini = o.id + ":" + lx + "," + ly;
     if (kini === lantaiTerakhir || tekaSelesai(o.id)) break;
     if (tekaBelumSaatnya(o.id)) { notifBelum("lantai:" + o.id, t("belum.benda") + " " + teksNanti(langkahTeka(o.id).l)); break; }
@@ -58,7 +63,7 @@ GAMBAR_TANAH.push(function (time) {
   for (const o of objekLantai()) {
     const g = lantaiNyala[o.id]; if (!g) continue;
     for (let ly = 0; ly < o.n; ly++) for (let lx = 0; lx < o.n; lx++) {
-      const x = (o.x + lx) * T, y = (o.y + ly) * T, on = g[ly * o.n + lx];
+      const x = (o.x + lx * jarakLantai(o)) * T, y = (o.y + ly * jarakLantai(o)) * T, on = g[ly * o.n + lx];
       ctx.fillStyle = o.gaya === "jamur" ? "#1e3322" : o.gaya === "es" ? "#6f9ab8" : "#5d5868"; ctx.fillRect(x + 3, y + 3, T - 6, T - 6);
       if (o.gaya === "jamur") {
         ctx.fillStyle = on ? `rgba(160,255,180,${0.75 + 0.2 * Math.sin(time * 3 + lx + ly)})` : "#3a5a3a";

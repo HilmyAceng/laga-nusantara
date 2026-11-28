@@ -82,7 +82,7 @@ Object.assign(AREAS, {
       { kind: "kristalCahaya", id: "cahayaBeringin", x: 34.5, y: 38.5 },
       ...[[2, 2], [6, 2], [1, 3], [4, 3], [6, 5], [9, 5], [1, 6], [2, 6], [4, 6]].map(([lx, ly], i) => ({ kind: "cerminCahaya", id: "cahayaBeringin", i, x: 22 + lx * 2 + 0.5, y: 30 + ly * 2 + 0.5, awal: "101011010"[i] === "1" ? 1 : 0 })),
       // jamur bercahaya (lantai 4×4)
-      { kind: "lantai", id: "jamurBeringin", x: 34, y: 19, n: 4, gaya: "jamur" },
+      { kind: "lantai", id: "jamurBeringin", x: 34, y: 19, n: 4, gaya: "jamur" },   // berjarak: petak x34-40, y19-25
       { kind: "pilarLantai", id: "jamurBeringin", x: 32.5, y: 18.6, gaya: "jamur" },
     ],
     build(r) {
@@ -111,7 +111,7 @@ Object.assign(AREAS, {
       fillRect(19, 40, 21, 41, G);                    // tempat berdiri di samping pelita
       fillRect(30, 48, 33, 49, PATH); fillRect(12, 48, 33, 49, PATH);
       // ruang jamur & pelataran bos
-      fillRect(33, 18, 39, 24, G);
+      fillRect(33, 18, 41, 26, G);
       fillRect(4, 3, MW - 5, 13, G);
       for (let y = 2; y <= 6; y++) for (let x = 19; x <= 29; x++) if ((x - 24) ** 2 / 25 + (y - 3) ** 2 / 9 < 1) setT(x, y, TREE);   // batang & akar beringin
       bersihkan([[11, 50], [20, 40], [13, 44], [33, 18], [24, 10]], G);
@@ -119,7 +119,7 @@ Object.assign(AREAS, {
   },
   lereng: {
     dunia: 6, nama: "Lereng Kabut Dingin", sub: "Hutan berganti salju, angin menggigit · Lv 69+", namaEn: "Cold Mist Slopes", subEn: "Forest gives way to snow, the wind bites · Lv 69+",
-    lagu: "luar", tepi: ROCK, w: 40, h: 52, rimba: true, saljuMulai: 27, badai: true,
+    lagu: "luar", tepi: ROCK, w: 40, h: 52, rimba: true, saljuMulai: 27,
     zona: { lerengBawah: { x0: 3, y0: 31, x1: 36, y1: 48 }, lerengAtas: { x0: 3, y0: 4, x1: 36, y1: 24 } },
     gerbang: [
       { x0: 0, y0: 44, x1: 0, y1: 46, ke: "rimba", masuk: { x: 53.5, y: 9.5 }, label: "← Rimba", labelEn: "← Jungle" },
@@ -225,7 +225,7 @@ Object.assign(AREAS, {
   },
   puncak: {
     dunia: 6, nama: "Puncak Salju Abadi", sub: "Atap dunia, tempat angin tidur · Lv 74+", namaEn: "Everlasting Snow Peak", subEn: "The roof of the world, where the wind sleeps · Lv 74+",
-    lagu: "kawah", tepi: ROCK, w: 48, h: 44, salju: true, badai: true,
+    lagu: "kawah", tepi: ROCK, w: 48, h: 44, salju: true,
     zona: { puncakBawah: { x0: 3, y0: 30, x1: 34, y1: 40 }, puncakTengah: { x0: 3, y0: 16, x1: 16, y1: 25 } },
     gerbang: [
       { x0: 23, y0: 43, x1: 25, y1: 43, ke: "pondok", masuk: { x: 16.5, y: 2.5 }, label: "↓ Pondok", labelEn: "↓ Lodge" },
@@ -235,8 +235,8 @@ Object.assign(AREAS, {
     objek: [
       { kind: "batuMemori", id: "tuguAngin", x: 24.5, y: 19.6 },
       ...[19, 21, 23, 25, 27, 29].map((x, i) => ({ kind: "lempengMemori", id: "tuguAngin", i, x, y: 23 })),
-      { kind: "lantai", id: "lantaiPuncak", x: 38, y: 30, n: 5, gaya: "es" },
-      { kind: "pilarLantai", id: "lantaiPuncak", x: 40.5, y: 28.6, gaya: "es" },
+      { kind: "lantai", id: "lantaiPuncak", x: 37, y: 29, n: 5, gaya: "es" },   // berjarak: petak x37-45, y29-37
+      { kind: "pilarLantai", id: "lantaiPuncak", x: 36.5, y: 28.6, gaya: "es" },
     ],
     build(r) {
       for (let y = 0; y < MH; y++) for (let x = 0; x < MW; x++) {
@@ -248,7 +248,7 @@ Object.assign(AREAS, {
       fillRect(2, 14, MW - 3, 14, ROCK); if (tekaBeres("tuguAngin")) fillRect(22, 14, 26, 14, SALJU);
       fillRect(17, 17, 31, 25, SALJU);                       // lingkaran tugu angin
       fillRect(23, 0, 25, 1, S && S.bos && S.bos.macanPutih ? SALJU : ROCK);
-      fillRect(36, 27, 45, 37, ROCK); fillRect(37, 28, 44, 36, SALJU); fillRect(36, 33, 36, 34, SALJU);   // ceruk lantai opsional
+      fillRect(35, 27, 45, 39, ROCK); fillRect(36, 28, 45, 38, SALJU); fillRect(35, 33, 35, 34, SALJU);   // ceruk lantai opsional
       for (const [x, y] of [[8, 4], [40, 4], [8, 11], [40, 11]]) setT(x, y, ROCK);
     },
   },
