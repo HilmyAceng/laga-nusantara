@@ -1,7 +1,8 @@
 // =====================================================================
 // EVENT MEMANCING (mini game)
 //  - Pak Udin, pemancing di tepi sungai Desa Wanasari, meminjamkan joran (ikan sungai).
-//  - Dermaga di Kampung Nelayan (pesisir) untuk ikan laut.
+//  - Spot memancing lain (papan pancing / lubang es) di 10 tempat: 99kb-spot-mancing.js.
+//  - Data 85 ikan & spot: 99ka-data-ikan.js. Koleksi ikan: Menu › Gameplay (99kc-koleksi-ikan.js).
 //  - Terbuka bersama event catur (akhir Bab 2) dan tampil di popup Event.
 // Memancing langsung di dunia game (hero di tepi air, pelampung di petak air sungguhan).
 // Cara main (mode "mancing"):
@@ -10,31 +11,12 @@
 //  3. Tarik-ulur: TAHAN tombol untuk menaikkan kotak hijau, lepas untuk turun.
 //     Jaga ikan tetap di dalam kotak hijau sampai bar tangkapan penuh.
 //     Ikan langka & legenda bergerak lebih liar, kotaknya lebih kecil.
-// Ikan disimpan di tas (dijual ke Pak Udin / dermaga) dan tercatat di koleksi.
+// Beberapa ikan hanya muncul pada waktu/cuaca tertentu (IKAN[id].syarat).
+// Ikan disimpan di tas (dijual ke Pak Udin / spot mana pun) dan tercatat di koleksi.
 // Simpanan: S.ikan = { tas: { id: jumlah }, koleksi: { id: { n, berat } }, total }
 // =====================================================================
 "use strict";
 
-const IKAN = {
-  // sungai (Desa Wanasari)
-  wader: { tempat: "sungai", rar: "biasa", nama: ["Ikan Wader", "Wader Fish"], harga: 12, berat: [0.05, 0.2] },
-  nila: { tempat: "sungai", rar: "biasa", nama: ["Ikan Nila", "Tilapia"], harga: 20, berat: [0.2, 0.8] },
-  lele: { tempat: "sungai", rar: "biasa", nama: ["Ikan Lele", "Catfish"], harga: 25, berat: [0.3, 1.2] },
-  gurame: { tempat: "sungai", rar: "langka", nama: ["Ikan Gurame", "Giant Gourami"], harga: 70, berat: [1, 3.5] },
-  arwana: { tempat: "sungai", rar: "legenda", nama: ["Arwana Emas", "Golden Arowana"], harga: 300, berat: [2, 6] },
-  // laut (Kampung Nelayan)
-  kembung: { tempat: "laut", rar: "biasa", nama: ["Ikan Kembung", "Mackerel"], harga: 22, berat: [0.2, 0.6] },
-  tongkol: { tempat: "laut", rar: "biasa", nama: ["Ikan Tongkol", "Little Tuna"], harga: 30, berat: [0.5, 2] },
-  kakap: { tempat: "laut", rar: "langka", nama: ["Kakap Merah", "Red Snapper"], harga: 90, berat: [1, 5] },
-  kerapu: { tempat: "laut", rar: "langka", nama: ["Ikan Kerapu", "Grouper"], harga: 110, berat: [2, 8] },
-  ikanDewa: { tempat: "laut", rar: "legenda", nama: ["Ikan Dewa", "Sacred Mahseer"], harga: 450, berat: [3, 12] },
-};
-// peluang tiap kelangkaan & kesulitan tarik-ulur
-const RAR_IKAN = {
-  biasa: { bobot: 70, zona: 0.3, cepat: 0.55, liar: 0.9, warna: "#d9d4cc" },
-  langka: { bobot: 25, zona: 0.27, cepat: 0.65, liar: 0.75, warna: "#8fd3ff" },
-  legenda: { bobot: 5, zona: 0.22, cepat: 0.8, liar: 0.6, warna: "#f4b942" },   // diuji simulasi: biasa ±95%, langka ±90%, legenda ±33% tertangkap
-};
 const dataIkan = () => (S.ikan = S.ikan || { tas: {}, koleksi: {}, total: 0 });
 const namaIkan = (id) => Lx(IKAN[id].nama);
 const isiTas = () => Object.entries(dataIkan().tas).filter(([, n]) => n > 0);
@@ -44,37 +26,22 @@ const nilaiTas = () => isiTas().reduce((a, [id, n]) => a + IKAN[id].harga * n, 0
 NPC_DATA.push({ id: "udin", name: "Pak Udin", area: "desa", x: 20.2 * T, y: 17.2 * T, color: "#3f7a8c", accent: "#e9d3a9", hat: "#c9a25a", hair: "#2b2238", face: 0,
   obrolan: ["Sungai ini dulu penuh ikan. Sejak kabut merah, ikannya bersembunyi.", "Sabar itu kunci memancing, Nak. Sama seperti bertarung."],
   obrolanEn: ["This river used to be full of fish. Since the red mist, they've been hiding.", "Patience is the key to fishing, kid. Same as fighting."] });
-SAAT_MASUK_AREA.push((id) => {
-  if (id !== "pesisir" || !S || !eventTerbuka("mancing")) return;
-  // dermaga: petak darat di tepi air yang paling dekat ke tengah area
-  let terbaik = null, jarak = 1e9;
-  for (let y = 2; y < MH - 2; y++) for (let x = 2; x < MW - 2; x++) {
-    if (SOLID.has(tileAt(x, y)) || tileAt(x, y) === BRIDGE) continue;
-    if (![[1, 0], [-1, 0], [0, 1], [0, -1]].some(([dx, dy]) => tileAt(x + dx, y + dy) === WATER)) continue;
-    const d = Math.hypot(x - MW / 2, y - MH / 2); if (d < jarak) { jarak = d; terbaik = [x, y]; }
-  }
-  if (terbaik) NPCS.push({ id: "dermaga", kind: "dermaga", name: Lx(["Dermaga Pancing", "Fishing Pier"]), x: (terbaik[0] + 0.5) * T, y: (terbaik[1] + 0.6) * T, face: 0 });
-});
-GAMBAR_OBJEK.dermaga = function (n, time) {
-  const x = n.x, y = n.y;
-  ctx.fillStyle = "rgba(0,0,0,0.3)"; ctx.beginPath(); ctx.ellipse(x, y, 16, 5, 0, 0, 6.28); ctx.fill();
-  ctx.fillStyle = "#7a4a26"; ctx.fillRect(x - 2, y - 34, 4, 34);                       // tiang
-  ctx.fillStyle = "#c9932f"; ctx.fillRect(x - 14, y - 36, 28, 12);                      // papan
-  ctx.fillStyle = "#3f7a8c"; ctx.beginPath(); ctx.ellipse(x, y - 30, 6, 3, 0, 0, 6.28); ctx.fill();   // gambar ikan
-  ctx.beginPath(); ctx.moveTo(x + 5, y - 30); ctx.lineTo(x + 9, y - 33); ctx.lineTo(x + 9, y - 27); ctx.fill();
-  labelObjek(n, "#8fd3ff", 44);
-};
-TEKA_BICARA.dermaga = (n) => menuMancing(n, "laut");
-
 function menuMancing(npc, tempat) {
   const n = isiTas().reduce((a, [, k]) => a + k, 0);
   openDialog(npc.name, Lx(tempat === "laut"
     ? ["Ombaknya tenang hari ini. Mau memancing ikan laut?", "The waves are calm today. Want to catch some sea fish?"]
-    : ["Mau memancing lagi, Nak? Joranku selalu siap.", "Fishing again, kid? My rod is always ready."]), [
+    : tempat !== "sungai" ? ["Tempat yang bagus untuk memancing. Mau melempar kail?", "A fine spot for fishing. Want to cast a line?"]
+    : ["Mau memancing lagi, Nak? Joranku selalu siap.", "Fishing again, kid? My rod is always ready."]) + infoSpotIkan(tempat), [
     { label: Lx(["Memancing", "Go fishing"]), primary: true, run: () => { closeDialog(); bukaMancing(tempat); } },
     { label: Lx([`Jual ikan (${n} ekor · ${nilaiTas()} koin)`, `Sell fish (${n} · ${nilaiTas()} coins)`]), disabled: !n, run: () => { jualIkan(); menuMancing(npc, tempat); } },
     { label: t("dlg.tutup"), run: closeDialog },
   ]);
+}
+// "Ikan di sini: 3 / 8 ditemukan" + ikan yang sedang bisa muncul (waktu/cuaca)
+function infoSpotIkan(tempat) {
+  const ids = Object.keys(IKAN).filter((id) => IKAN[id].tempat === tempat), K = dataIkan().koleksi;
+  return " " + Lx([`Ikan di ${Lx(SPOT_MANCING[tempat].nama)}: ${ids.filter((id) => K[id]).length} / ${ids.length} ditemukan.`,
+    `Fish at ${Lx(SPOT_MANCING[tempat].nama)}: ${ids.filter((id) => K[id]).length} / ${ids.length} found.`]);
 }
 function jualIkan() {
   const koin = nilaiTas(); if (!koin) return;
@@ -88,7 +55,8 @@ function bicaraUdin(npc) {
       ["udin", Lx(["Hei, pendekar! Kau yang mengusir kabut dari desa, kan? Terima kasih, ikan-ikan mulai berani muncul lagi.", "Hey, hero! You're the one who drove the mist away, right? Thanks to you, the fish are coming back."])],
       ["udin", Lx(["Mau coba memancing? Caranya gampang: lempar kail, tunggu pelampung bergoyang, lalu TARIK!", "Want to try fishing? It's easy: cast, wait for the float to bob, then PULL!"])],
       ["udin", Lx(["Waktu ikannya melawan, TAHAN tombol supaya kotak hijau naik, lepas supaya turun. Jaga ikannya tetap di kotak hijau.", "When the fish fights back, HOLD the button to raise the green box, release to let it fall. Keep the fish inside the green box."])],
-      ["udin", Lx(["Kalau di laut Kampung Nelayan, ikannya lebih besar. Ada dermaga di sana. Selamat mencoba!", "Out at sea by Fishermen's Village the fish are bigger. There's a pier there. Good luck!"])],
+      ["udin", Lx(["Tiap tempat punya ikannya sendiri. Hampir tiap desa punya tempat memancing: dermaga, teluk, kolam di Kampung Awan, sampai lubang es di Pondok Nini Embun. Lihat ikon ikan biru di peta. Ada yang cuma muncul pagi, malam hari, waktu hujan, atau waktu salju turun.", "Every place has its own fish. Nearly every village has a fishing spot: piers, a bay, a pond in the Cloud Village, even an ice hole at Nini Embun's Lodge. Check the blue fish icons on the map. Some only show up in the morning, at night, in the rain, or when it snows."])],
+      ["udin", Lx(["Semua ikan yang pernah kau tangkap tercatat di Menu › Gameplay › Koleksi Ikan. Selamat mencoba!", "Every fish you catch is recorded in Menu › Gameplay › Fish Collection. Good luck!"])],
     ], () => { D.sapa = true; saveSoon(); bukaMancing("sungai"); });
     return;
   }
@@ -148,8 +116,19 @@ function aturTombolMc() {
   b.classList.toggle("mc-tunggu", f === "tunggu" || mc.kunci > 0);
   $("mcMeter").hidden = f !== "tarik";
 }
+// syarat waktu/cuaca terpenuhi sekarang?
+function syaratIkanOk(id) {
+  const q = IKAN[id].syarat; if (!q) return true;
+  if (q.waktu && faseHari() !== q.waktu) return false;
+  if (q.cuaca) {
+    const c = typeof cuacaKini === "function" ? cuacaKini() : null;
+    if (q.cuaca === "hujan" && !["gerimis", "hujan", "hujanPetir", "badai"].includes(c)) return false;
+    if (q.cuaca === "salju" && !["salju", "badaiSalju"].includes(c)) return false;
+  }
+  return true;
+}
 function pilihIkan(tempat) {
-  const daftar = Object.keys(IKAN).filter((id) => IKAN[id].tempat === tempat);
+  const daftar = Object.keys(IKAN).filter((id) => IKAN[id].tempat === tempat && syaratIkanOk(id));
   const bobot = (id) => RAR_IKAN[IKAN[id].rar].bobot / daftar.filter((x) => IKAN[x].rar === IKAN[id].rar).length;
   let r = Math.random() * daftar.reduce((a, id) => a + bobot(id), 0);
   for (const id of daftar) { r -= bobot(id); if (r <= 0) return id; }
@@ -212,7 +191,7 @@ function dapatIkan(id) {
   $("mcHasil").innerHTML = `<small>${Lx(["Kamu mendapat", "You caught"])}</small><b style="color:${R.warna}">${namaIkan(id)}</b>
     <span>${berat} kg · ${Lx(label)} · ${Lx(["harga", "value"])} ${F.harga}</span>${baru ? `<i>${Lx(["IKAN BARU!", "NEW FISH!"])}</i>` : rekor ? `<i>${Lx(["REKOR BARU!", "NEW RECORD!"])}</i>` : ""}`;
   $("mcHasil").hidden = false;
-  pesanMc(Lx([`Tas ikan: ${isiTas().reduce((a, [, n]) => a + n, 0)} ekor · jual ke Pak Udin atau di dermaga.`, `Fish bag: ${isiTas().reduce((a, [, n]) => a + n, 0)} · sell to Pak Udin or at the pier.`]));
+  pesanMc(Lx([`Tas ikan: ${isiTas().reduce((a, [, n]) => a + n, 0)} ekor · jual ke Pak Udin atau di spot memancing mana pun.`, `Fish bag: ${isiTas().reduce((a, [, n]) => a + n, 0)} · sell to Pak Udin or at any fishing spot.`]));
   if (F.rar !== "biasa") toast(`${F.rar === "legenda" ? "✦ " : ""}${namaIkan(id)}!`, true);
   sfx.level ? sfx.level() : sfx.coin(); tambahStat("ikan"); aturTombolMc(); saveSoon();
 }
@@ -237,7 +216,7 @@ GAMBAR_ATAS.push(function (time) {
   // ikan terangkat dari air ke tangan hero
   if (m.terbang > 0 && m.hasil) {
     const k = 1 - m.terbang / 0.8, x = m.bx + (P.x - m.bx) * k, y = m.by + (P.y - 50 - m.by) * k - Math.sin(k * Math.PI) * 60;
-    gambarIkan(ctx, x, y, 1.1, IKAN[m.hasil.id].rar, time);
+    gambarIkan(ctx, x, y, 1.1, m.hasil.id, time);
   }
 });
 // meter tarik-ulur (HUD, kanvas kecil di kanan layar)
@@ -250,11 +229,13 @@ function gambarMeter(time) {
   const R = RAR_IKAN[IKAN[m.ikan].rar], zy = my + (1 - m.zonaY) * mh, zh = R.zona * mh;
   const masuk = Math.abs(m.ikanY - m.zonaY) < R.zona / 2;
   c.fillStyle = masuk ? "rgba(90,209,122,0.9)" : "rgba(90,209,122,0.5)"; c.fillRect(mx, zy - zh / 2, 26, zh);
-  gambarIkan(c, mx + 13, my + (1 - m.ikanY) * mh, 0.75, IKAN[m.ikan].rar, time);
+  gambarIkan(c, mx + 13, my + (1 - m.ikanY) * mh, 0.75, m.ikan, time);
   c.fillStyle = "#2b2238"; c.fillRect(mx + 34, my, 10, mh);
   c.fillStyle = m.progres > 0.66 ? "#5ad17a" : m.progres > 0.33 ? "#f4b942" : "#e5484d"; c.fillRect(mx + 34, my + mh * (1 - m.progres), 10, mh * m.progres);
 }
+// id ikan → digambar sesuai rupanya (99kc-koleksi-ikan.js); "biasa"/"langka"/"legenda" → ikan umum
 function gambarIkan(c, x, y, s, rar, time) {
+  if (IKAN[rar] && typeof gambarRupaIkan === "function") return gambarRupaIkan(c, x, y, s, rar, time);
   c.save(); c.translate(x, y); c.scale(s, s); c.rotate(Math.sin(time * 6) * 0.12);
   c.fillStyle = rar === "legenda" ? "#f4b942" : rar === "langka" ? "#e86a5a" : "#9fb4c8";
   c.beginPath(); c.ellipse(0, 0, 14, 7, 0, 0, 6.28); c.fill();
@@ -287,16 +268,20 @@ function gambarIkan(c, x, y, s, rar, time) {
 // ---------- Event & pencapaian ----------
 daftarkanEvent({
   id: "mancing", npc: "udin", area: "desa", titik: { x: 19.2, y: 17.4 },
-  judul: ["Memancing", "Fishing"], sub: ["Bersama Pak Udin · Sungai & Laut", "With Pak Udin · River & Sea"],
+  judul: ["Memancing", "Fishing"], sub: ["Bersama Pak Udin · 10 spot memancing", "With Pak Udin · 10 fishing spots"],
   ringkas: ["Lempar kail, tunggu gigitan, lalu menangkan tarik-ulur!", "Cast, wait for a bite, then win the tug-of-war!"],
   isi: [
-    "Pak Udin, pemancing Desa Wanasari, meminjamkan jorannya. Tangkap 10 jenis ikan di sungai desa dan di dermaga Kampung Nelayan, dari Wader sampai Ikan Dewa yang legendaris. Jual tangkapanmu untuk koin dan lengkapi koleksimu.",
-    "Pak Udin, Wanasari's fisherman, lends you his rod. Catch 10 kinds of fish in the village river and at the Fishermen's Village pier, from Wader to the legendary Sacred Mahseer. Sell your catch for coins and complete your collection.",
+    "Pak Udin, pemancing Desa Wanasari, meminjamkan jorannya. Ada 85 jenis ikan (50 biasa, 25 langka, 10 legenda) di 10 spot memancing, tersebar di desa-desa Dunia 1–6, dari sungai Wanasari sampai lubang es di Pondok Nini Embun (ditandai ikon ikan biru di peta). Sebagian hanya muncul pagi, malam hari, saat hujan, atau saat salju turun. Jual tangkapanmu untuk koin dan lengkapi koleksimu di Menu › Gameplay › Koleksi Ikan.",
+    "Pak Udin, Wanasari's fisherman, lends you his rod. There are 85 kinds of fish (50 common, 25 rare, 10 legendary) across 10 fishing spots, spread across the villages of Worlds 1–6, from the Wanasari river to an ice hole at Nini Embun's Lodge (marked with blue fish icons on the map). Some only appear in the morning, at night, in the rain, or when it snows. Sell your catch for coins and complete your collection in Menu › Gameplay › Fish Collection.",
   ],
   syarat: () => { const i = CERITA.findIndex((l) => l.buka === "kapal"); return S.cerita.idx > i; },
   syaratTeks: ["Selesaikan cerita Dunia 1 (Bab 2)", "Finish the World 1 story (Chapter 2)"],
   judulHadiah: ["Koleksi ikan", "Fish collection"],
-  hadiah: () => { const K = (S.ikan && S.ikan.koleksi) || {}; return Object.keys(IKAN).map((id) => { const k = K[id]; return `<li class="${k ? "dapat" : ""}">${k ? `✓ <b>${namaIkan(id)}</b> — ${Lx(["rekor", "record"])} ${k.berat} kg` : `??? <small>(${Lx(IKAN[id].tempat === "laut" ? ["laut", "sea"] : ["sungai", "river"])} · ${Lx(IKAN[id].rar === "biasa" ? ["biasa", "common"] : IKAN[id].rar === "langka" ? ["langka", "rare"] : ["legenda", "legendary"])})</small>`}</li>`; }).join(""); },
+  hadiah: () => {   // daftar lengkap ada di Menu › Gameplay › Koleksi Ikan (99kc)
+    const K = (S.ikan && S.ikan.koleksi) || {}, ids = Object.keys(IKAN);
+    const baris = ["biasa", "langka", "legenda"].map((r) => { const d = ids.filter((id) => IKAN[id].rar === r); return `<li class="${d.every((id) => K[id]) ? "dapat" : ""}">${t("rarity." + r)}: <b>${d.filter((id) => K[id]).length} / ${d.length}</b></li>`; });
+    return baris.join("") + `<li>${Lx(["Lihat semua ikan di Menu › Gameplay › Koleksi Ikan.", "See every fish in Menu › Gameplay › Fish Collection."])}</li>`;
+  },
   trailer: (c, tm) => {
     const W2 = 480, H2 = 240, g = c.createLinearGradient(0, 0, 0, H2);
     g.addColorStop(0, "#8fd3ff"); g.addColorStop(0.4, "#cfe9ff"); g.addColorStop(0.41, "#2d6a96"); g.addColorStop(1, "#123a5c");
@@ -313,5 +298,5 @@ daftarkanEvent({
 const jumlahJenisIkan = () => Object.keys((S.ikan && S.ikan.koleksi) || {}).length;
 daftarkanCapai({ id: "ikanPertama", kat: "koleksi", judul: ["Strike!", "Strike!"], desc: ["Tangkap ikan pertamamu.", "Catch your first fish."], hadiah: HDH(50), progres: () => [(S.ikan && S.ikan.total) || 0, 1] });
 daftarkanCapai({ id: "ikan50", kat: "koleksi", judul: ["Pemancing Sabar", "Patient Angler"], desc: ["Tangkap 50 ikan.", "Catch 50 fish."], hadiah: HDH(250, 3), progres: () => [(S.ikan && S.ikan.total) || 0, 50] });
-daftarkanCapai({ id: "ikanLengkap", kat: "koleksi", judul: ["Ensiklopedia Ikan", "Fish Encyclopedia"], desc: ["Tangkap semua 10 jenis ikan.", "Catch all 10 kinds of fish."], hadiah: HDH(600, 6), progres: () => [jumlahJenisIkan(), Object.keys(IKAN).length] });
-daftarkanCapai({ id: "ikanLegenda", kat: "rahasia", rahasia: true, judul: ["Penakluk Legenda Air", "Legend of the Waters"], desc: ["Tangkap ikan legenda (Arwana Emas atau Ikan Dewa).", "Catch a legendary fish (Golden Arowana or Sacred Mahseer)."], hadiah: HDH(300, 5), syarat: () => ["arwana", "ikanDewa"].some((id) => S.ikan && S.ikan.koleksi[id]) });
+daftarkanCapai({ id: "ikanLengkap", kat: "koleksi", judul: ["Ensiklopedia Ikan", "Fish Encyclopedia"], desc: ["Tangkap semua 85 jenis ikan.", "Catch all 85 kinds of fish."], hadiah: HDH(600, 6), progres: () => [jumlahJenisIkan(), Object.keys(IKAN).length] });
+daftarkanCapai({ id: "ikanLegenda", kat: "rahasia", rahasia: true, judul: ["Penakluk Legenda Air", "Legend of the Waters"], desc: ["Tangkap seekor ikan legenda.", "Catch a legendary fish."], hadiah: HDH(300, 5), syarat: () => Object.keys(IKAN).some((id) => IKAN[id].rar === "legenda" && S.ikan && S.ikan.koleksi[id]) });

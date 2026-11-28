@@ -101,8 +101,10 @@ function drawAreaMap(time) {
     }
     if (n.kind === "cermin") { cerminDiPetaArea(c, X(n.x), Y(n.y), time, label); continue; }   // 64-cermin-peta.js
     if (n.kind === "warga") { dot(X(n.x), Y(n.y), "#b9b2c6", 3); continue; }                  // warga keliling: titik kecil tanpa nama (69-warga-keliling.js)
+    if (KIND_SPOT.includes(n.kind)) continue;                                        // spot memancing: digambar spotDiPetaArea (99kd-spot-peta.js)
     dot(X(n.x), Y(n.y), "#f4b942", 5); label(n.name, X(n.x), Y(n.y) - 9 * DPR, "#f4b942");
   }
+  spotDiPetaArea(c, X, Y, time, label);   // spot memancing (99kd-spot-peta.js)
   // tujuan cerita di area ini (atau gerbang menuju tujuan)
   const tj = tujuanDiArea();
   if (tj) {
@@ -160,6 +162,7 @@ function buildWorld(dunia) {
   const ids = WORLD_ORDER.filter((id) => AREAS[id].dunia === dunia);
   for (const id of ids) {
     buildArea(id);
+    catatSpotArea(id);   // posisi spot memancing di area ini (99kd-spot-peta.js)
     const cv = document.createElement("canvas");
     paintTiles(cv, MW, MH, map);
     parts[id] = { id, a: AREAS[id], cv, w: MW, h: MH, x: 0, y: 0 };
@@ -294,7 +297,8 @@ function drawWorldMap(time) {
     drawTeleportIcon(c, tx, ty, DPR * fs, time);
     mapHits.push({ x: tx, y: ty, r: 20 * DPR, tele: tp });
   }
-  cerminDiPetaDunia(c, X, Y, fs, time);   // cermin gaib yang sudah muncul (64-cermin-peta.js)
+  cerminDiPetaDunia(c, X, Y, fs, time);
+  spotDiPetaDunia(c, X, Y, fs, time);     // spot memancing (99kd-spot-peta.js)   // cermin gaib yang sudah muncul (64-cermin-peta.js)
   for (const [t, x, y, col, uk] of names) text(t, x, y, col, uk, 900);
   // tujuan cerita ada di dunia lain
   if (goal0 && !goal) text(t("peta.tujuanDunia", { dunia: DUNIA.find((x) => x.id === AREAS[goal0].dunia).nama }), cw / 2, ch - 10 * DPR, "#f4b942", 13);

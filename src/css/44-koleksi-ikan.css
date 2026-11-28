@@ -1,0 +1,34 @@
+/* ===== Koleksi ikan (Menu › Gameplay › Koleksi Ikan) · js/99kc-koleksi-ikan.js ===== */
+.ik-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; }
+.ik-kotak {
+  position: relative; display: grid; justify-items: center; align-content: start; gap: 2px;
+  padding: 18px 6px 8px; border-radius: 12px; cursor: pointer; font: inherit; color: var(--ink);
+  background: rgba(255, 255, 255, 0.05); border: 1px solid var(--rc, var(--line)); min-height: 118px;
+}
+.ik-kotak.ik-biasa { --rc: rgba(217, 212, 204, 0.45); }
+.ik-kotak.ik-langka { --rc: rgba(143, 211, 255, 0.6); background: rgba(143, 211, 255, 0.07); }
+.ik-kotak.ik-legenda { --rc: rgba(244, 185, 66, 0.75); background: rgba(244, 185, 66, 0.09); box-shadow: inset 0 0 12px rgba(244, 185, 66, 0.18); }
+.ik-kotak.ik-belum { border-style: dashed; background: rgba(255, 255, 255, 0.025); box-shadow: none; }
+.ik-kotak.ik-belum b { color: var(--ink-dim); }
+.ik-kotak.dipilih { outline: 2px solid var(--gold); outline-offset: 1px; }
+.ik-kotak img { width: 84px; height: 56px; image-rendering: auto; }
+.ik-kotak b { font-size: 0.74rem; line-height: 1.15; text-align: center; }
+.ik-kotak small { font-size: 0.64rem; color: var(--ink-dim); text-align: center; line-height: 1.15; }
+.ik-no { position: absolute; top: 4px; left: 7px; font-size: 0.62rem; font-weight: 800; color: var(--ink-dim); }
+.ik-syarat { position: absolute; top: 3px; right: 6px; font-size: 0.72rem; }
+.ik-detail {
+  display: flex; gap: 12px; align-items: center; padding: 10px 12px; border-radius: 12px; margin: 8px 0;
+  background: rgba(255, 255, 255, 0.05); border: 1px solid var(--line);
+}
+.ik-detail img { width: 126px; height: 84px; flex: none; }
+.ik-detail div { display: grid; gap: 2px; min-width: 0; }
+.ik-detail b { font-family: var(--font-display); font-size: 1.5rem; line-height: 1; }
+.ik-detail small { font-size: 0.72rem; font-weight: 800; color: var(--ink-dim); }
+.ik-detail p { margin: 0; font-size: 0.78rem; line-height: 1.3; }
+.ik-detail i { color: var(--ink-dim); font-style: normal; }
+.ik-detail .ik-kosong { color: var(--ink-dim); }
+@media (max-width: 520px) {
+  .ik-grid { grid-template-columns: repeat(auto-fill, minmax(82px, 1fr)); gap: 6px; }
+  .ik-kotak img { width: 70px; height: 47px; }
+  .ik-detail img { width: 96px; height: 64px; }
+}

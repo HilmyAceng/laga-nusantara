@@ -23,7 +23,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://hilmyaceng.github.io/laga-nusantara/icons/og.jpg">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);box-sizing:border-box;height:100%}[hidden]{display:none!important}</style>
-<script>window.LAGA_BUILD="20261128124415";</script>
+<script>window.LAGA_BUILD="20261128144817";</script>
 </head><body>
 <title>Laga Nusantara</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -826,10 +826,44 @@ h1 span { color: var(--gold); }
 @media (prefers-reduced-motion: reduce) { .mu-gunungan, .mu-bara b, #muat.siap .mu-label { animation: none; } }
 /* tombol ulang puzzle es (js/99zj-teka-seluncur.js) */
 #btnUlangEs { position: absolute; left: 50%; bottom: calc(max(14px, env(safe-area-inset-bottom, 0px)) + 120px); transform: translateX(-50%); z-index: 12; padding: 8px 16px; border-radius: 999px; border: 2px solid #bfe8ff; background: rgba(20, 40, 70, 0.88); color: #e6f6ff; font: 800 0.85rem Nunito, sans-serif; cursor: pointer; }
+/* ===== Koleksi ikan (Menu › Gameplay › Koleksi Ikan) · js/99kc-koleksi-ikan.js ===== */
+.ik-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; }
+.ik-kotak {
+  position: relative; display: grid; justify-items: center; align-content: start; gap: 2px;
+  padding: 18px 6px 8px; border-radius: 12px; cursor: pointer; font: inherit; color: var(--ink);
+  background: rgba(255, 255, 255, 0.05); border: 1px solid var(--rc, var(--line)); min-height: 118px;
+}
+.ik-kotak.ik-biasa { --rc: rgba(217, 212, 204, 0.45); }
+.ik-kotak.ik-langka { --rc: rgba(143, 211, 255, 0.6); background: rgba(143, 211, 255, 0.07); }
+.ik-kotak.ik-legenda { --rc: rgba(244, 185, 66, 0.75); background: rgba(244, 185, 66, 0.09); box-shadow: inset 0 0 12px rgba(244, 185, 66, 0.18); }
+.ik-kotak.ik-belum { border-style: dashed; background: rgba(255, 255, 255, 0.025); box-shadow: none; }
+.ik-kotak.ik-belum b { color: var(--ink-dim); }
+.ik-kotak.dipilih { outline: 2px solid var(--gold); outline-offset: 1px; }
+.ik-kotak img { width: 84px; height: 56px; image-rendering: auto; }
+.ik-kotak b { font-size: 0.74rem; line-height: 1.15; text-align: center; }
+.ik-kotak small { font-size: 0.64rem; color: var(--ink-dim); text-align: center; line-height: 1.15; }
+.ik-no { position: absolute; top: 4px; left: 7px; font-size: 0.62rem; font-weight: 800; color: var(--ink-dim); }
+.ik-syarat { position: absolute; top: 3px; right: 6px; font-size: 0.72rem; }
+.ik-detail {
+  display: flex; gap: 12px; align-items: center; padding: 10px 12px; border-radius: 12px; margin: 8px 0;
+  background: rgba(255, 255, 255, 0.05); border: 1px solid var(--line);
+}
+.ik-detail img { width: 126px; height: 84px; flex: none; }
+.ik-detail div { display: grid; gap: 2px; min-width: 0; }
+.ik-detail b { font-family: var(--font-display); font-size: 1.5rem; line-height: 1; }
+.ik-detail small { font-size: 0.72rem; font-weight: 800; color: var(--ink-dim); }
+.ik-detail p { margin: 0; font-size: 0.78rem; line-height: 1.3; }
+.ik-detail i { color: var(--ink-dim); font-style: normal; }
+.ik-detail .ik-kosong { color: var(--ink-dim); }
+@media (max-width: 520px) {
+  .ik-grid { grid-template-columns: repeat(auto-fill, minmax(82px, 1fr)); gap: 6px; }
+  .ik-kotak img { width: 70px; height: 47px; }
+  .ik-detail img { width: 96px; height: 64px; }
+}
 </style>
 
 <!-- LAYAR MUAT: tampil seketika, bar maju tiap script game termuat (data-jumlah diisi build.sh). Sisanya: js/99zd-layar-muat.js -->
-<div id="muat" role="button" tabindex="0" aria-label="Laga Nusantara" data-jumlah="174">
+<div id="muat" role="button" tabindex="0" aria-label="Laga Nusantara" data-jumlah="178">
   <div class="mu-bara" aria-hidden="true"><b style="left:8%;animation-duration:7s;animation-delay:0s;--gx:30px"></b><b style="left:21%;animation-duration:9s;animation-delay:2s;--gx:-24px"></b><b style="left:34%;animation-duration:6.5s;animation-delay:3.4s;--gx:18px"></b><b style="left:52%;animation-duration:8s;animation-delay:1s;--gx:-30px"></b><b style="left:66%;animation-duration:7.5s;animation-delay:4.2s;--gx:26px"></b><b style="left:79%;animation-duration:9.5s;animation-delay:0.6s;--gx:-18px"></b><b style="left:91%;animation-duration:6.8s;animation-delay:2.8s;--gx:22px"></b></div>
   <div class="mu-isi">
     <svg class="mu-gunungan" viewBox="0 0 100 130" aria-hidden="true">
@@ -1424,6 +1458,7 @@ h1 span { color: var(--gold); }
         <span><i style="background:#ff3b3b"></i><b data-t="h.lgBos">Bos</b></span>
         <span><i style="background:#7dffa8"></i><b data-t="h.lgTele">Mesin teleport (klik)</b></span>
         <span><i style="background:#c9a6ff"></i><b data-t="h.lgCermin">Cermin Gaib (klik)</b></span>
+        <span><i style="background:#4fc3e8"></i><b data-t="h.lgMancing">Spot memancing</b></span>
       </div>
       <div class="map-legend" id="legendWorld" hidden>
         <span><i style="background:#fff"></i><b data-t="h.lgKamu">Kamu</b></span>
@@ -1431,6 +1466,7 @@ h1 span { color: var(--gold); }
         <span><i style="background:#f4b942"></i><b data-t="h.lgMisi">Tujuan misi</b></span>
         <span><i style="background:#7dffa8"></i><b data-t="h.lgTele">Mesin teleport (klik)</b></span>
         <span><i style="background:#c9a6ff"></i><b data-t="h.lgCermin">Cermin Gaib (klik)</b></span>
+        <span><i style="background:#4fc3e8"></i><b data-t="h.lgMancing">Spot memancing</b></span>
       </div>
       <p class="map-hint" id="mapHint"></p>
     </div>
@@ -1596,7 +1632,11 @@ h1 span { color: var(--gold); }
 <script src="js/99h-kiat.js"></script>
 <script src="js/99i-pencapaian.js"></script>
 <script src="js/99j-harta.js"></script>
+<script src="js/99ka-data-ikan.js"></script>
 <script src="js/99k-memancing.js"></script>
+<script src="js/99kb-spot-mancing.js"></script>
+<script src="js/99kc-koleksi-ikan.js"></script>
+<script src="js/99kd-spot-peta.js"></script>
 <script src="js/99l-catur-dunia.js"></script>
 <script src="js/99m-mode-fokus.js"></script>
 <script src="js/99n-rasa-tarung.js"></script>

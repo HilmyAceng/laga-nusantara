@@ -132,6 +132,7 @@ Object.assign(TEKS.id, {
   "cermin.tanya": "Pindah ke Cermin Gaib di {area}?",
   "cermin.peta": "Cermin · {bos}",
   "h.lgCermin": "Cermin Gaib (klik)",
+  "h.lgMancing": "Spot memancing",
   // jeda jamu (65-jamu-jeda.js)
   "jamu.jeda": "Jamu belum bisa diminum lagi ({detik} dtk)",
   "jamu.slot": "Jamu",
@@ -413,6 +414,7 @@ Object.assign(TEKS.en, {
   "cermin.tanya": "Travel to the Magic Mirror in {area}?",
   "cermin.peta": "Mirror · {bos}",
   "h.lgCermin": "Magic Mirror (click)",
+  "h.lgMancing": "Fishing spot",
   "jamu.jeda": "You can't drink jamu again yet ({detik}s)",
   "jamu.slot": "Jamu",
   "jurus.slotKosong": "Skill slot 2 is empty. Your second skill unlocks at Lv {lv}",
