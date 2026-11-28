@@ -531,16 +531,6 @@ const LAGU = {
     bas: "1,, 1,, 1, 1,, 2,, 1,, 7,,, 7,,,", suaraBas: "bas",
     kendang: "D t D t D D t . D t D t D t t t",
     perkusi: "x x x . x x x .",
-    bentuk: "A A B B~ A~ C C B A^ C~ B A",
-    bagian: {
-      B: {
-        melodi: "5 4 5 6 5 4 2 4 5 6 7 6 5 4 2 1 2 4 5 4 2 1 7, 1 2 1 7, 5, 7, 1 2 .",
-      },
-      C: {
-        melodi: "1 1 2 1 1 1 4 2 1 1 2 1 7, 7, 1 . 4 4 5 4 4 4 6 5 4 4 5 4 2 2 1 .",
-        bas: "1,, 1,, 1,, 1, 1,, 1,, 7,,, 7,,, 4,, 4,, 4,, 4, 2,, 2,, 1,, 1,,",
-      },
-    },
   },
   // PESISIR (Kampung Nelayan): riang, berayun seperti ombak, suling di atas bas yang santai
   pesisir: {
